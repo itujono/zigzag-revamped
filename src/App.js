@@ -7,6 +7,7 @@ import { Section } from "components"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
+const Category = React.lazy(() => import("pages/Category"))
 
 const fallback = (
 	<Section>
@@ -23,6 +24,7 @@ const App = () => {
 						{/* <Redirect exact from="/" to="/dashboard" /> */}
 						<Route exact path="/" component={Home} />
 						<Route path="/product/:name" component={ProductDetail} />
+						<Route path="/category/:name" component={Category} />
 					</Switch>
 				</Suspense>
 			</BrowserRouter>

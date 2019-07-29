@@ -11,7 +11,6 @@ const SelengkapButton = styled(ButtonLink)`
 		padding-left: 0;
 	`}
 	margin-right: 0;
-	/* padding-right: 0; */
 `
 
 function Home(props) {
@@ -34,19 +33,19 @@ function Home(props) {
 					style={{ marginBottom: "2em" }}
 				>
 					<div>
-						<img src="https://source.unsplash.com/600x300" alt="Disclaimer" width="100%" />
+						<img src="https://source.unsplash.com/600x300" alt="Disclaimer" />
 					</div>
 					<div>
-						<img src="https://source.unsplash.com/600x299" alt="Welcome to Zigzag" width="100%" />
+						<img src="https://source.unsplash.com/600x299" alt="Welcome to Zigzag" />
 					</div>
 					<div>
-						<img src="https://source.unsplash.com/599x299" alt="Welcome to Zigzag" width="100%" />
+						<img src="https://source.unsplash.com/599x299" alt="Welcome to Zigzag" />
 					</div>
 					<div>
-						<img src="https://source.unsplash.com/599x300" alt="Welcome to Zigzag" width="100%" />
+						<img src="https://source.unsplash.com/599x300" alt="Welcome to Zigzag" />
 					</div>
 					<div>
-						<img src="https://source.unsplash.com/599x301" alt="599x301" width="100%" />
+						<img src="https://source.unsplash.com/599x301" alt="599x301" />
 					</div>
 				</Carousel>
 				<Row style={{ marginTop: "4em" }} gutter={64}>
