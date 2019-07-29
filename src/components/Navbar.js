@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
-import { Row, Col, Menu, Icon, Typography, Button } from "antd"
-import { Logo, Heading } from "components"
+import { Row, Col, Menu, Icon, Typography } from "antd"
+import { Logo, Heading, Button } from "components"
 import styled from "styled-components"
 import { Link, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
@@ -9,7 +9,7 @@ const Nav = styled.nav`
 	width: inherit;
 `
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(props => <Button {...props} />)`
 	&& {
 		.anticon {
 			margin-right: 0;
@@ -64,7 +64,7 @@ function Navbar({ user, role, ...props }) {
 									<Typography.Paragraph strong>Hi, Mulyawan!</Typography.Paragraph>
 								</Menu.Item>
 								<Menu.Item key="profile">
-									<Link to="/dashboard/profile">View profile</Link>
+									<Link to="/profile">View profile</Link>
 								</Menu.Item>
 								<Menu.Divider />
 								<Menu.Item key="logout" onClick={handleLogout}>

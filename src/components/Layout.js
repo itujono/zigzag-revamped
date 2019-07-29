@@ -4,7 +4,8 @@ import { Navbar, Logo, Heading } from "components"
 import styled from "styled-components"
 import { withRouter, NavLink } from "react-router-dom"
 import { media, mobile } from "helpers"
-import { BagIcon, ShoesIcon, LingerieIcon, WalletIcon, HomewareIcon } from "components/Icons"
+
+import SidebarMenu from "./_SidebarMenu"
 
 const Header = styled(PageLayout.Header)`
 	&& {
@@ -63,11 +64,6 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 	const loc = location && location.pathname.split("/")
 	const bread = loc.map((item, idx) => (idx === 0 ? ["Home", ...item] : [...item]))
 
-	const handleSubscribe = (values, { resetForm }) => {
-		resetForm({})
-		console.log(values)
-	}
-
 	return (
 		<PageLayout>
 			{!basic && (
@@ -80,62 +76,7 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 				<PageLayout>
 					{sidebar && (
 						<Sidebar breakpoint="lg" reverseArrow collapsible collapsedWidth={0} width="200">
-							<Heading
-								content="Produk kami"
-								reverse
-								marginBottom="0"
-								style={{ paddingLeft: "1em", paddingTop: "2em" }}
-							/>
-							<Menu>
-								<Menu.Item key="tas">
-									<NavLink to="/category/tas">
-										<BagIcon /> Tas
-									</NavLink>
-								</Menu.Item>
-								<Menu.Item key="sepatu">
-									<NavLink to="/category/sepatu">
-										<ShoesIcon /> Sepatu
-									</NavLink>
-								</Menu.Item>
-								<Menu.Item key="lingerie">
-									<NavLink to="/category/lingerie">
-										<LingerieIcon /> Lingerie
-									</NavLink>
-								</Menu.Item>
-								<Menu.Item key="dompet">
-									<NavLink to="/category/dompet">
-										<WalletIcon /> Dompet
-									</NavLink>
-								</Menu.Item>
-								<Menu.Item key="homeware">
-									<NavLink to="/category/homeware">
-										<HomewareIcon /> Homeware
-									</NavLink>
-								</Menu.Item>
-							</Menu>
-							<Heading
-								content="Cari cepat"
-								reverse
-								marginBottom="0"
-								style={{ paddingLeft: "1em", paddingTop: "2em" }}
-							/>
-							<Menu>
-								<Menu.Item key="latest">
-									<NavLink to="/products/latest">
-										<BagIcon /> Produk terbaru
-									</NavLink>
-								</Menu.Item>
-								<Menu.Item key="best-seller">
-									<NavLink to="/products/best-seller">
-										<ShoesIcon /> Paling laris
-									</NavLink>
-								</Menu.Item>
-								<Menu.Item key="lingerie">
-									<NavLink to="/category/lingerie">
-										<LingerieIcon /> Lingerie
-									</NavLink>
-								</Menu.Item>
-							</Menu>
+							<SidebarMenu page={props.page || ""} />
 						</Sidebar>
 					)}
 
