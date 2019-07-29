@@ -6,5 +6,6 @@ import Card from "./Card"
 import Navbar from "./Navbar"
 import ProductCard from "./ProductCard"
 import ButtonLink from "./ButtonLink"
+import Button from "./Button"
 
-export { Heading, Section, Layout, Logo, Card, Navbar, ProductCard, ButtonLink }
+export { Heading, Section, Layout, Logo, Card, Navbar, ProductCard, ButtonLink, Button }

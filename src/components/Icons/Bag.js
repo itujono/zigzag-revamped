@@ -5,7 +5,7 @@ export default function BagIcon(props) {
 	const Bag = () => (
 		<svg
 			t="1562864249478"
-			class="icon"
+			className="icon"
 			viewBox="0 0 1024 1024"
 			version="1.1"
 			xmlns="http://www.w3.org/2000/svg"

@@ -5,7 +5,7 @@ export default function HomewareIcon(props) {
 	const Homeware = () => (
 		<svg
 			t="1562867099351"
-			class="icon"
+			className="icon"
 			viewBox="0 0 1073 1024"
 			version="1.1"
 			xmlns="http://www.w3.org/2000/svg"

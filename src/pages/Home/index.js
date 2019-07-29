@@ -1,10 +1,10 @@
 import React from "react"
 import { Section, Heading, Layout, ProductCard, ButtonLink } from "components"
+import { connect } from "react-redux"
+import { fetchProductItem } from "store/actions/productActions"
 import { Carousel, Row, Col, Icon } from "antd"
 import { mobile, media } from "helpers"
 import styled from "styled-components"
-import disclaimer from "assets/images/disclaimer.png"
-import welcome from "assets/images/welcome.png"
 
 const SelengkapButton = styled(ButtonLink)`
 	${media.mobile`
@@ -14,7 +14,11 @@ const SelengkapButton = styled(ButtonLink)`
 	/* padding-right: 0; */
 `
 
-function Home() {
+function Home(props) {
+	const handleFetchProduct = () => {
+		props.fetchProductItem()
+	}
+
 	return (
 		<Layout sidebar>
 			<Section paddingHorizontal="2.5em">
@@ -73,7 +77,8 @@ function Home() {
 									data={{
 										src: "http://source.unsplash.com/300x500",
 										title: "Sempardak",
-										price: 75000
+										price: 75000,
+										to: "/product/Sempardak"
 									}}
 								/>
 							</Col>
@@ -218,4 +223,11 @@ function Home() {
 	)
 }
 
-export default Home
+const mapState = ({ product }) => ({
+	product: product.product
+})
+
+export default connect(
+	mapState,
+	{ fetchProductItem }
+)(Home)

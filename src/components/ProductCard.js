@@ -2,6 +2,7 @@ import React from "react"
 import { Card, Row, Col, Icon, Tag } from "antd"
 import styled from "styled-components"
 import { pricer } from "helpers"
+import { Link } from "react-router-dom"
 
 const Cardee = styled(Card)`
 	&& {
@@ -38,18 +39,20 @@ const tagStyle = {
 
 function ProductCard({ data, mode, ...props }) {
 	return (
-		<Cardee {...props} mode={mode} hoverable cover={<img alt={data.title} src={data.src} />}>
-			<Row gutter={16} type="flex" justify="space-between" align="middle">
-				<Col lg={18}>
-					<Card.Meta title={data.title} description={`Rp ${pricer(data.price)}`} />
-				</Col>
-				<Col lg={6} style={{ textAlign: "right" }}>
-					<Tag style={tagStyle} color="magenta">
-						Tas
-					</Tag>
-				</Col>
-			</Row>
-		</Cardee>
+		<Link to={data.to}>
+			<Cardee {...props} mode={mode} hoverable cover={<img alt={data.title} src={data.src} />}>
+				<Row gutter={16} type="flex" justify="space-between" align="middle">
+					<Col lg={18}>
+						<Card.Meta title={data.title} description={`Rp ${pricer(data.price)}`} />
+					</Col>
+					<Col lg={6} style={{ textAlign: "right" }}>
+						<Tag style={tagStyle} color="magenta">
+							Tas
+						</Tag>
+					</Col>
+				</Row>
+			</Cardee>
+		</Link>
 	)
 }
 

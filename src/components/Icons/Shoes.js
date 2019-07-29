@@ -5,7 +5,7 @@ export default function ShoesIcon(props) {
 	const Shoes = () => (
 		<svg
 			t="1562867244551"
-			class="icon"
+			className="icon"
 			viewBox="0 0 1063 1024"
 			version="1.1"
 			xmlns="http://www.w3.org/2000/svg"
