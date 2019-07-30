@@ -24,7 +24,8 @@ li.ant-menu-item {
 }
 
 .ant-menu-item-selected > a,
-.ant-menu-item-selected > a:hover {
+.ant-menu-item-selected > a:hover,
+.ant-tabs-nav .ant-tabs-tab:hover {
 	color: @primaryColor !important;
 }
 
@@ -42,6 +43,14 @@ li.ant-menu-item {
 	background: @primaryColor !important;
 }
 
+.ant-menu-item:hover,
+.ant-menu-item-active,
+.ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-submenu-active,
+.ant-menu-submenu-title:hover {
+	color: @primaryColor !important;
+}
+
 .ant-layout,
 .ant-layout-footer {
 	background: inherit !important;
@@ -52,6 +61,10 @@ li.ant-menu-item {
 	color: @primaryColor !important;
 	background-color: transparent;
 	border-color: @primaryColor !important;
+}
+
+li.ant-menu-item {
+	// margin-left: 8px;
 }
 
 .iconfontyyy {

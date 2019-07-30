@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import { Section, Heading, Button } from "components"
-import { List, Icon, Avatar, Row, Col } from "antd"
+import { List, Icon, Avatar, Row, Col, Menu, Tabs } from "antd"
 import styled from "styled-components"
 import { historyData } from "helpers/dummy"
 import { pricer, mobile, media } from "helpers"
 import { theme } from "styles"
+import OrderItems from "./OrderItems"
 
 const ListItem = styled(List.Item)`
 	&&& {
@@ -75,24 +76,38 @@ function HistoryOrder(props) {
 							</ListItem>
 							{isSelected && (
 								<ContentDetail>
-									<Row gutter={32}>
-										<Col lg={8}>
-											<Heading reverse content="Metode pembayaran" subheader="Transfer" />
-											<Heading reverse content="Alamat pengiriman" subheader="Jalan Tandak 89" />
-										</Col>
-										<Col lg={8}>
-											<Heading
-												reverse
-												content="Penerima"
-												subheader="Rina Mustika - 08234828833"
-											/>
-											<Heading reverse content="Nomor resi" subheader="GT9943000HY" />
-										</Col>
-										<Col lg={8}>
-											<Heading reverse content="Status orderan" subheader="Dibatalkan" />
-											<Heading reverse content="Ekspedisi" subheader="JNE" />
-										</Col>
-									</Row>
+									<Tabs tabPosition={mobile ? "top" : "left"}>
+										<Tabs.TabPane key="details" tab="Detail">
+											<Row gutter={32}>
+												<Col lg={8}>
+													<Heading reverse content="Metode pembayaran" subheader="Transfer" />
+													<Heading
+														reverse
+														content="Alamat pengiriman"
+														subheader="Jalan Tandak 89"
+													/>
+												</Col>
+												<Col lg={8}>
+													<Heading
+														reverse
+														content="Penerima"
+														subheader="Rina Mustika - 08234828833"
+													/>
+													<Heading reverse content="Nomor resi" subheader="GT9943000HY" />
+												</Col>
+												<Col lg={8}>
+													<Heading reverse content="Status orderan" subheader="Dibatalkan" />
+													<Heading reverse content="Ekspedisi" subheader="JNE" />
+												</Col>
+											</Row>
+										</Tabs.TabPane>
+										<Tabs.TabPane key="items" tab="Barang belanjaan">
+											<OrderItems />
+										</Tabs.TabPane>
+										<Tabs.TabPane key="status" tab="Status barang">
+											Status barang
+										</Tabs.TabPane>
+									</Tabs>
 								</ContentDetail>
 							)}
 						</div>

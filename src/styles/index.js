@@ -1,4 +1,4 @@
 export const theme = {
 	color: ["#66ceb2"],
-	greyColor: ["#777", "#999", "#bbb", "#f3f3f3"]
+	greyColor: ["#777", "#999", "#bbb", "#f9f9f9"]
 }
