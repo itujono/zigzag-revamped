@@ -1,8 +1,13 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import moment from "moment"
 import "./styles/index.less"
 import App from "./App"
 import * as serviceWorker from "./serviceWorker"
+import "antd/dist/antd.css"
+import "moment/locale/id"
+
+moment.locale("id")
 
 ReactDOM.render(<App />, document.getElementById("root"))
 

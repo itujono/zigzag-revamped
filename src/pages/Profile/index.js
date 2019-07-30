@@ -1,9 +1,9 @@
 import React, { Suspense } from "react"
-import { Section, Layout } from "components"
+import { Section, Layout, Loading } from "components"
 import { Switch, Route } from "react-router-dom"
 
 const Basic = React.lazy(() => import("./Basic"))
-const HistoryOrder = React.lazy(() => import("./Basic"))
+const HistoryOrder = React.lazy(() => import("./HistoryOrder"))
 const Deposit = React.lazy(() => import("./Deposit"))
 const Settings = React.lazy(() => import("./Settings"))
 
@@ -11,7 +11,7 @@ function Profile() {
 	return (
 		<Layout sidebar page="profile">
 			<Section paddingHorizontal="0">
-				<Suspense fallback="Loading...">
+				<Suspense fallback={<Loading />}>
 					<Switch>
 						<Route path="/profile/basic" component={Basic} />
 						<Route path="/profile/history" component={HistoryOrder} />

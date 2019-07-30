@@ -1,3 +1,5 @@
+@primaryColor: #66ceb2;
+
 li.ant-menu-item {
 	transition: 0ms;
 	margin-right: 8px;
@@ -13,9 +15,43 @@ li.ant-menu-item {
 	}
 }
 
+.ant-tabs-ink-bar {
+	background-color: @primaryColor !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active {
+	color: @primaryColor !important;
+}
+
+.ant-menu-item-selected > a,
+.ant-menu-item-selected > a:hover {
+	color: @primaryColor !important;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+	background-color: rgba(102, 206, 178, 0.17) !important;
+}
+
+.ant-input-number:hover {
+	border-color: @primaryColor !important;
+	border-right-width: 1px !important;
+}
+
+::selection {
+	color: #fff;
+	background: @primaryColor !important;
+}
+
 .ant-layout,
 .ant-layout-footer {
 	background: inherit !important;
+}
+
+.ant-btn-ghost:hover,
+.ant-btn-ghost:focus {
+	color: @primaryColor !important;
+	background-color: transparent;
+	border-color: @primaryColor !important;
 }
 
 .iconfontyyy {

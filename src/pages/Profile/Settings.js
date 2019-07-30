@@ -1,9 +1,10 @@
 import React from "react"
 import { Section, Heading } from "components"
 import { TextInput } from "components/Fields"
-import { Tabs, Form, Row, Col } from "antd"
+import { Tabs, Form, Row, Col, Divider } from "antd"
 import { Formik } from "formik"
 import styled from "styled-components"
+import { SubmitButton, ResetButton } from "@jbuschke/formik-antd"
 
 const Tab = styled(Tabs)`
 	.ant-tabs-bar {
@@ -16,7 +17,7 @@ function Settings() {
 		<Section>
 			<Heading content="Settings" bold />
 			<Tab>
-				<Tabs.TabPane key="change-password" tab="Change password">
+				<Tabs.TabPane key="change-password" tab="Ubah password">
 					<Row>
 						<Col lg={10}>
 							<Formik
@@ -40,6 +41,11 @@ function Settings() {
 											label="Masukkan password lama kamu"
 											placeholder="Eheheh..."
 										/>
+										<Divider />
+										<SubmitButton type="primary" icon="check">
+											Ubah password sekarang
+										</SubmitButton>{" "}
+										&nbsp; <ResetButton type="link">Reset</ResetButton>
 									</Form>
 								)}
 							/>
