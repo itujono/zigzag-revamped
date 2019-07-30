@@ -30,3 +30,26 @@ export const depositData = [
 		amount: 79000
 	}
 ]
+
+export const historyData = [
+	{
+		orderNumber: "ORDER-234202",
+		time: "22 Desember 2019",
+		total: 80000
+	},
+	{
+		orderNumber: "ORDER-2342993",
+		time: "22 Juli 2019",
+		total: 180000
+	},
+	{
+		orderNumber: "ORDER-89949349",
+		time: "17 Oktober 2019",
+		total: 450000
+	},
+	{
+		orderNumber: "ORDER-4378348",
+		time: "9 Januari 2019",
+		total: 230000
+	}
+]

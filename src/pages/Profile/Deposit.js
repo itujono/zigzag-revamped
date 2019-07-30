@@ -53,7 +53,7 @@ const ListItem = styled(List.Item)`
 function Deposit({ amount = 350000 }) {
 	return (
 		<Section>
-			<Heading content="Deposit" bold />
+			<Heading content="Deposit" bold marginBottom="3em" />
 			<Row gutter={64}>
 				<Col lg={8}>
 					<PriceSection paddingHorizontal="0">
@@ -79,7 +79,7 @@ function Deposit({ amount = 350000 }) {
 						/>
 					</Section>
 				</Col>
-				<Col lg={16}>
+				<Col lg={16} style={{ borderLeft: "1px solid #ddd" }}>
 					<List
 						itemLayout="horizontal"
 						dataSource={depositData}
@@ -95,7 +95,7 @@ function Deposit({ amount = 350000 }) {
 										/>
 									</div>
 								</Col>
-								<Col lg={22}>
+								<Col lg={23}>
 									<List.Item.Meta
 										title={
 											<span>
