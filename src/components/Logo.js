@@ -1,11 +1,15 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import logo from "assets/images/zigzag-logo.png"
 
-function Logo({ width }) {
+function Logo({ width, type = "solid" }) {
+	const src =
+		type === "solid"
+			? "data:image/png;base64,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"
+			: "https://www.cudy.co/wp-content/uploads/2018/09/cropped-cudy.png"
+
 	return (
 		<Link to="/">
-			<img src={logo} width={width || "40"} alt="Logo Zigzag" />
+			<img src={src} width={width || "40"} alt="Logo Cudy" />
 		</Link>
 	)
 }

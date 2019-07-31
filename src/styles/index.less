@@ -1,3 +1,5 @@
+@primaryColor: #7fb800;
+
 li.ant-menu-item {
 	transition: 0ms;
 	margin-right: 8px;
@@ -13,9 +15,59 @@ li.ant-menu-item {
 	}
 }
 
+.ant-tabs-ink-bar {
+	background-color: @primaryColor !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active {
+	color: @primaryColor !important;
+}
+
+.ant-menu-item-selected > a,
+.ant-menu-item-selected > a:hover,
+.ant-tabs-nav .ant-tabs-tab:hover,
+.ant-btn-link:hover,
+.ant-btn-link:focus {
+	color: @primaryColor !important;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+	border-radius: 4px;
+	background-color: rgba(127, 184, 0, 0.14901960784313725) !important;
+}
+
+.ant-input-number:hover {
+	border-color: @primaryColor !important;
+	border-right-width: 1px !important;
+}
+
+::selection {
+	color: #fff;
+	background: @primaryColor !important;
+}
+
+.ant-menu-item:hover,
+.ant-menu-item-active,
+.ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-submenu-active,
+.ant-menu-submenu-title:hover {
+	color: @primaryColor !important;
+}
+
 .ant-layout,
 .ant-layout-footer {
 	background: inherit !important;
+}
+
+.ant-btn-ghost:hover,
+.ant-btn-ghost:focus {
+	color: @primaryColor !important;
+	background-color: transparent;
+	border-color: @primaryColor !important;
+}
+
+li.ant-menu-item {
+	// margin-left: 8px;
 }
 
 .iconfontyyy {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Row, Col, Menu, Icon, Typography } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components"
@@ -48,7 +48,7 @@ function Navbar({ user, role, ...props }) {
 					<span>
 						<Heading
 							bold
-							content="Zigzag Batam"
+							content="Cudy KPI Dashboard"
 							style={{ display: "inline-block", verticalAlign: "sub" }}
 						/>
 					</span>

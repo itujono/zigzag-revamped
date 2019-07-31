@@ -1,9 +1,9 @@
 import React from "react"
-import { Layout as PageLayout, Breadcrumb, Menu } from "antd"
-import { Navbar, Logo, Heading } from "components"
+import { Layout as PageLayout, Breadcrumb } from "antd"
+import { Navbar, Logo } from "components"
 import styled from "styled-components"
-import { withRouter, NavLink } from "react-router-dom"
-import { media, mobile } from "helpers"
+import { withRouter } from "react-router-dom"
+import { media } from "helpers"
 
 import SidebarMenu from "./_SidebarMenu"
 
@@ -75,7 +75,7 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 			<PageLayout.Content>
 				<PageLayout>
 					{sidebar && (
-						<Sidebar breakpoint="lg" reverseArrow collapsible collapsedWidth={0} width="200">
+						<Sidebar breakpoint="lg" reverseArrow collapsible collapsedWidth={0} width="250">
 							<SidebarMenu page={props.page || ""} />
 						</Sidebar>
 					)}
@@ -96,9 +96,9 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 						{sidebar && (
 							<Footer>
 								<div>
-									<Logo width="80" /> <br />
+									<Logo width="80" type="text" /> <br /> <br />
 									<p>
-										<strong>The CCS</strong> &middot; all rights reserved 2019
+										<strong>Cudy Pte Ltd</strong> &middot; all rights reserved 2019
 									</p>
 								</div>
 							</Footer>
@@ -110,10 +110,10 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 			{!basic && !sidebar && (
 				<Footer>
 					<div>
-						<Logo width="80" /> <br />
-						<br />
+						<Logo width="80" type="text" /> <br />
+						<br /> <br />
 						<p>
-							<strong>The CCS</strong> &middot; all rights reserved 2019
+							<strong>Cudy Pte Ltd</strong> &middot; all rights reserved 2019
 						</p>
 					</div>
 				</Footer>
