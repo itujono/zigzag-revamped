@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { Typography } from "antd"
+import { theme } from "styles"
 
 const Typo = styled(Typography)`
 	margin-bottom: ${({ marginBottom }) => (marginBottom ? marginBottom : "1.5em")};
@@ -15,7 +16,7 @@ const Title = styled(Typography.Title)`
 
 const Paragraph = styled(Typography.Paragraph)`
 	&& {
-		color: ${({ bold }) => bold && "#999"};
+		color: ${({ bold }) => (bold && theme.greyColor[1]) || theme.greyColor[1]};
 	}
 `
 
@@ -23,7 +24,7 @@ const reverseStyle = {
 	fontSize: 11,
 	textTransform: "uppercase",
 	lineHeight: 1.4,
-	color: "#bbb"
+	color: theme.greyColor[2]
 }
 
 function Heading({ bold, reverse, level, content, subheader, ...props }) {
