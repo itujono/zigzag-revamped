@@ -1,8 +1,23 @@
 export const theme = {
 	color: ["#7fb800"],
-	greyColor: ["#777", "#999", "#bbb", "#f9f9f9"],
+	greyColor: ["#777", "#999", "#aaa", "#bbb", "#f9f9f9", "#eee"],
 	transition: ["all .15s ease"],
-	boxShadow: ["2px 7px 10px rgba(0, 0, 0, 0.13)"]
+	boxShadow: ["2px 7px 10px rgba(0, 0, 0, 0.13)"],
+	fontFamily: [
+		"-apple - system",
+		"BlinkMacSystemFont",
+		"Segoe UI",
+		"PingFang SC",
+		"Hiragino Sans GB",
+		"Microsoft YaHei",
+		"Helvetica Neue",
+		"Helvetica",
+		"Arial",
+		"sans - serif",
+		"Apple Color Emoji",
+		"Segoe UI Emoji",
+		"Segoe UI Symbol"
+	]
 }
 
 ///////////////////////////////////////--Victory Theme--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -20,8 +35,6 @@ const blueGrey300 = "#90A4AE"
 const blueGrey700 = "#455A64"
 const grey900 = "#212121"
 
-// Typography
-const sansSerif = "'Roboto', 'Helvetica Neue', Helvetica, sans-serif"
 const letterSpacing = "normal"
 const fontSize = 10
 
@@ -35,7 +48,7 @@ const baseProps = {
 
 // * Labels
 const baseLabelStyles = {
-	fontFamily: sansSerif,
+	fontFamily: theme.fontFamily[0],
 	fontSize,
 	letterSpacing,
 	padding,
@@ -254,14 +267,14 @@ export const victoryTheme = {
 			padding: 5,
 			pointerEvents: "none"
 		}),
-		flyoutStyle: {
-			stroke: grey900,
-			strokeWidth: 1,
-			fill: "#f0f0f0",
-			pointerEvents: "none"
-		},
-		cornerRadius: 5,
-		pointerLength: 10
+		// flyoutStyle: {
+		// 	stroke: grey900,
+		// 	strokeWidth: 1,
+		// 	fill: "#f0f0f0",
+		// 	pointerEvents: "none"
+		// },
+		cornerRadius: 5
+		// pointerLength: 10
 	},
 	voronoi: Object.assign(
 		{

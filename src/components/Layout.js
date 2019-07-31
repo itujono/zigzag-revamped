@@ -12,6 +12,7 @@ const Header = styled(PageLayout.Header)`
 		${media.mobile`
             padding-left: 1em;
             padding-right: 1em;
+			background-color: #fff;
         `}
 	}
 

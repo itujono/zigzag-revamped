@@ -43,7 +43,7 @@ function Navbar({ user, role, ...props }) {
 	return (
 		<Nav>
 			<Row type="flex" justify="space-between">
-				<Col>
+				<Col lg={8} xs={16}>
 					<Logo /> &nbsp;{" "}
 					<span>
 						<Heading
@@ -53,7 +53,7 @@ function Navbar({ user, role, ...props }) {
 						/>
 					</span>
 				</Col>
-				<Col style={{ textAlign: "right" }}>
+				<Col lg={8} xs={8} style={{ textAlign: "right" }}>
 					{user ? (
 						<StyledMenu mode="horizontal">
 							<Menu.Item key="notifications" style={{ paddingLeft: "2em", paddingRight: 0 }}>
