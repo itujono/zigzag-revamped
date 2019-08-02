@@ -70,8 +70,23 @@ li.ant-menu-item {
 	border-color: @primaryColor !important;
 }
 
-li.ant-menu-item {
-	// margin-left: 8px;
+button.mode {
+	// animation: modeButton 3s;
+	// animation-direction: alternate;
+	// visibility: hidden;
+	// animation-delay: 2s;
+	animation: 0.35s ease-in 2s forwards modeButton;
+}
+
+@keyframes modeButton {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .iconfontyyy {
