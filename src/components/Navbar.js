@@ -4,6 +4,18 @@ import { Logo, Heading, Button } from "components"
 import styled from "styled-components"
 import { Link, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
+import theming from "styled-theming"
+import { theme } from "styles"
+
+const backgroundColor = theming("mode", {
+	dark: theme.darkColor[0],
+	light: "#fff"
+})
+
+const fontColor = theming("mode", {
+	dark: "#eee",
+	light: "inherit"
+})
 
 const Nav = styled.nav`
 	width: inherit;
@@ -22,6 +34,10 @@ const StyledMenu = styled(Menu)`
 		border-bottom: transparent;
 		padding-top: 5px;
 		line-height: 4;
+		background-color: ${backgroundColor};
+		.anticon {
+			color: ${fontColor};
+		}
 		> .ant-menu-submenu,
 		.ant-menu-item,
 		.ant-menu-submenu-selected {

@@ -29,7 +29,7 @@
     "build": "gatsby build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "docz:dev": "docz dev",
+    "docz": "docz dev",
     "docz:build": "docz build",
     "dev": "gatsby develop",
     "serve": "gatsby serve"

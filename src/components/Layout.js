@@ -1,31 +1,53 @@
 import React from "react"
 import { Layout as PageLayout, Breadcrumb } from "antd"
 import { Navbar, Logo } from "components"
-import styled from "styled-components"
+import styled, { withTheme } from "styled-components"
 import { withRouter } from "react-router-dom"
 import { media } from "helpers"
+import theming from "styled-theming"
 
 import SidebarMenu from "./_SidebarMenu"
+import { theme as themeStyles } from "styles"
+
+const backgroundColor = theming("mode", {
+	dark: themeStyles.darkColor[0],
+	light: "#fff"
+})
+
+const fontColor = theming("mode", {
+	light: themeStyles.darkColor[0],
+	dark: "#fff"
+})
+
+const StyledLayout = styled(PageLayout)`
+	&& {
+		background: ${backgroundColor};
+		color: ${fontColor};
+	}
+`
 
 const Header = styled(PageLayout.Header)`
 	&& {
 		${media.mobile`
             padding-left: 1em;
             padding-right: 1em;
-			background-color: #fff;
         `}
 	}
 
 	&& {
 		padding: 0 35px;
-		background-color: #fff;
+		background-color: ${backgroundColor};
 		height: 5em;
 		border-bottom: 1px solid #eee;
 	}
 `
 const Footer = styled(PageLayout.Footer)`
-	text-align: center;
-	padding: 3em;
+	&& {
+		text-align: center;
+		padding: 3em;
+		background-color: ${backgroundColor};
+		color: ${fontColor};
+	}
 `
 
 const Section = styled.section`
@@ -61,12 +83,13 @@ const Sidebar = styled(PageLayout.Sider)`
 	}
 `
 
-function Layout({ basic = false, sidebar = false, children, breadcrumb = false, location = {}, history, ...props }) {
+function Layout({ children, location = {}, history, theme, ...props }) {
+	const { basic = false, sidebar = false, breadcrumb = false } = props
 	const loc = location && location.pathname.split("/")
 	const bread = loc.map((item, idx) => (idx === 0 ? ["Home", ...item] : [...item]))
 
 	return (
-		<PageLayout>
+		<StyledLayout>
 			{!basic && (
 				<Header>
 					<Navbar />
@@ -74,14 +97,14 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 			)}
 
 			<PageLayout.Content>
-				<PageLayout>
+				<StyledLayout>
 					{sidebar && (
 						<Sidebar breakpoint="lg" reverseArrow collapsible collapsedWidth={0} width="250">
-							<SidebarMenu page={props.page || ""} />
+							<SidebarMenu page={props.page || ""} theme={theme} />
 						</Sidebar>
 					)}
 
-					<PageLayout>
+					<StyledLayout>
 						<PageLayout.Content>
 							{breadcrumb && (
 								<Section>
@@ -104,8 +127,8 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 								</div>
 							</Footer>
 						)}
-					</PageLayout>
-				</PageLayout>
+					</StyledLayout>
+				</StyledLayout>
 			</PageLayout.Content>
 
 			{!basic && !sidebar && (
@@ -119,8 +142,8 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 					</div>
 				</Footer>
 			)}
-		</PageLayout>
+		</StyledLayout>
 	)
 }
 
-export default withRouter(Layout)
+export default withRouter(withTheme(Layout))

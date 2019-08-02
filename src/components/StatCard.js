@@ -4,8 +4,19 @@ import { Card } from "components"
 import { Statistic, Divider, Row, Col, Select } from "antd"
 import { reverseStyle } from "./Heading"
 import { pricer, media } from "helpers"
-import { theme } from "styles"
+import { theme as themeStyle } from "styles"
 import { range } from "helpers/dummy"
+import theme from "styled-theming"
+
+const backgroundColor = theme("mode", {
+	dark: themeStyle.darkColor[0],
+	light: "#fff"
+})
+
+const fontColor = theme("mode", {
+	dark: "#eee",
+	light: "inherit"
+})
 
 const StyledChartCard = styled(Card)`
 	&& {
@@ -14,13 +25,15 @@ const StyledChartCard = styled(Card)`
         `}
 	}
 	&& {
+		background-color: ${backgroundColor};
+		color: ${fontColor};
 		margin-bottom: 1em;
 		border-radius: 8px;
-		transition: ${theme.transition[0]};
+		transition: ${themeStyle.transition[0]};
 		&:hover {
-			box-shadow: ${theme.boxShadow[0]};
+			box-shadow: ${themeStyle.boxShadow[0]};
 			transform: unset;
-			border: 1px solid ${theme.border};
+			border: 1px solid ${themeStyle.border[0]};
 		}
 		.ant-card-head {
 			.ant-card-head-title {
@@ -35,20 +48,27 @@ const StyledChartCard = styled(Card)`
 
 const MainStat = styled.h3`
 	font-size: 2em;
+	color: ${fontColor};
 	span {
 		font-size: initial;
 		font-weight: normal;
-		color: ${theme.greyColor[1]};
+		color: ${fontColor};
 	}
 `
 
 const StyledStat = styled(Statistic)`
 	.ant-statistic-title {
+		color: ${fontColor};
 		margin-bottom: 0;
 	}
 	.ant-statistic-content-value-int {
+		color: ${fontColor};
 		font-size: 0.8em;
 	}
+`
+
+const StyledThree = styled.h3`
+	color: ${fontColor};
 `
 
 function StatCard({ title = "", value = 0, roleData = {} }) {
@@ -57,12 +77,12 @@ function StatCard({ title = "", value = 0, roleData = {} }) {
 	const mainTitle = (
 		<Row type="flex" justify="space-between" align="middle">
 			<Col>
-				<h3 style={{ ...reverseStyle, marginBottom: 0 }}>{title}</h3>
+				<StyledThree style={{ ...reverseStyle, marginBottom: 0 }}>{title}</StyledThree>
 			</Col>
-			<Col lg={8}>
-				<Select name="range">
+			<Col lg={10}>
+				<Select name="range" defaultValue={range[0].value}>
 					{range.map(({ value, label }) => (
-						<Select.Option key={value} defaultValue={range[0].value} value={value}>
+						<Select.Option key={value} value={value}>
 							{label}
 						</Select.Option>
 					))}
@@ -74,7 +94,7 @@ function StatCard({ title = "", value = 0, roleData = {} }) {
 	return (
 		<StyledChartCard title={mainTitle}>
 			<MainStat>
-				{pricer(value)} &nbsp; <span>{title.toLowerCase()}</span>
+				{pricer(value)} <span>{title.toLowerCase()}</span>
 			</MainStat>
 			<Divider />
 			<Row type="flex" justify="space-between">

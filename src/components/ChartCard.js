@@ -1,9 +1,20 @@
 import React, { useState } from "react"
 import { Card, Row, Col } from "antd"
 import styled from "styled-components"
-import { theme } from "styles"
+import { theme as themeStyle } from "styles"
 import ButtonLink from "./ButtonLink"
 import { media } from "helpers"
+import theme from "styled-theming"
+
+const backgroundColor = theme("mode", {
+	dark: themeStyle.darkColor[0],
+	light: "#fff"
+})
+
+const fontColor = theme("mode", {
+	dark: "#fff",
+	light: "inherit"
+})
 
 const StyledCard = styled(Card)`
 	&& {
@@ -13,9 +24,11 @@ const StyledCard = styled(Card)`
 	}
 	&& {
 		border-radius: 8px;
-		transition: ${theme.transition[0]};
+		color: ${fontColor};
+		background-color: ${backgroundColor};
+		transition: ${themeStyle.transition[0]};
 		&:hover {
-			box-shadow: ${theme.boxShadow[0]};
+			box-shadow: ${themeStyle.boxShadow[0]};
 		}
 		.ant-card-head {
 			.ant-card-head-title {
@@ -35,8 +48,14 @@ const LinkButton = styled(ButtonLink)`
 		top: -5px;
 		right: -20px;
 		&:hover {
-			background-color: ${theme.greyColor[5]};
+			background-color: ${themeStyle.greyColor[5]};
 		}
+	}
+`
+
+const StyledRow = styled(Row)`
+	.ant-col {
+		color: ${fontColor};
 	}
 `
 
@@ -44,10 +63,10 @@ function ChartCard({ children, expander = true, ...props }) {
 	const [showButton, setShowButton] = useState(false)
 
 	const title = (
-		<Row type="flex" justify="space-between">
+		<StyledRow type="flex" justify="space-between">
 			<Col>{props.title}</Col>
 			{expander && <Col>{showButton && <LinkButton icon="arrows-alt">Expand</LinkButton>}</Col>}
-		</Row>
+		</StyledRow>
 	)
 
 	return (

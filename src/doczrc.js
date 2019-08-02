@@ -1,3 +1,9 @@
 export default {
-	base: "/docs/"
+	base: "src",
+	dest: "/docs/dist",
+	themeConfig: {
+		fonts: {
+			monospace: "Inconsolata"
+		}
+	}
 }

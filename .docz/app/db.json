@@ -222,40 +222,6 @@
       ]
     },
     {
-      "key": "src/components/StatCard.js",
-      "value": [
-        {
-          "description": "",
-          "displayName": "StatCard",
-          "methods": [],
-          "actualName": "StatCard",
-          "props": {
-            "title": {
-              "defaultValue": {
-                "value": "\"\"",
-                "computed": false
-              },
-              "required": false
-            },
-            "value": {
-              "defaultValue": {
-                "value": "0",
-                "computed": false
-              },
-              "required": false
-            },
-            "roleData": {
-              "defaultValue": {
-                "value": "{}",
-                "computed": false
-              },
-              "required": false
-            }
-          }
-        }
-      ]
-    },
-    {
       "key": "src/components/Fields/SelectInput.js",
       "value": [
         {
@@ -349,6 +315,40 @@
           "displayName": "WalletIcon",
           "methods": [],
           "actualName": "WalletIcon"
+        }
+      ]
+    },
+    {
+      "key": "src/components/StatCard.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "StatCard",
+          "methods": [],
+          "actualName": "StatCard",
+          "props": {
+            "title": {
+              "defaultValue": {
+                "value": "\"\"",
+                "computed": false
+              },
+              "required": false
+            },
+            "value": {
+              "defaultValue": {
+                "value": "0",
+                "computed": false
+              },
+              "required": false
+            },
+            "roleData": {
+              "defaultValue": {
+                "value": "{}",
+                "computed": false
+              },
+              "required": false
+            }
+          }
         }
       ]
     }

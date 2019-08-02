@@ -19,10 +19,10 @@ function TutorSMS() {
 					<StatCard title="Total users" value={8000} roleData={{ parent: 560, tutor: 900 }} />
 				</Col>
 				<Col lg={8}>
-					<StatCard title="Total users" value={8000} roleData={{ parent: 560, tutor: 900 }} />
+					<StatCard title="Active users" value={4500} roleData={{ parent: 1200, tutor: 900 }} />
 				</Col>
 				<Col lg={8}>
-					<StatCard title="Total users" value={8000} roleData={{ parent: 560, tutor: 900 }} />
+					<StatCard title="Number of logins" value={400} roleData={{ parent: 600, tutor: 288 }} />
 				</Col>
 			</Row>
 			<Row gutter={16}>
