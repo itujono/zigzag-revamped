@@ -20,7 +20,7 @@ const Paragraph = styled(Typography.Paragraph)`
 	}
 `
 
-const reverseStyle = {
+export const reverseStyle = {
 	fontSize: 11,
 	textTransform: "uppercase",
 	lineHeight: 1.4,

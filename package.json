@@ -28,7 +28,9 @@
 		"start": "react-app-rewired start",
 		"build": "react-app-rewired build",
 		"test": "react-app-rewired test",
-		"eject": "react-app-rewired eject"
+		"eject": "react-app-rewired eject",
+		"docz:dev": "docz dev",
+		"docz:build": "docz build"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -38,5 +40,8 @@
 		"not dead",
 		"not ie <= 11",
 		"not op_mini all"
-	]
+	],
+	"devDependencies": {
+		"docz": "^2.0.0-rc.1"
+	}
 }

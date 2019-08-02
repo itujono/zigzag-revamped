@@ -1,0 +1,53 @@
+{
+  "name": "kpi-dashboard",
+  "version": "0.1.1",
+  "author": "Cudy Pte Ltd",
+  "private": false,
+  "dependencies": {
+    "@jbuschke/formik-antd": "^1.2.1",
+    "antd": "^3.13.4",
+    "axios": "^0.19.0",
+    "babel-plugin-import": "^1.11.0",
+    "customize-cra": "^0.2.11",
+    "formik": "^1.5.7",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "moment": "^2.24.0",
+    "react": "^16.8.2",
+    "react-app-rewired": "^2.1.0",
+    "react-dom": "^16.8.2",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "2.1.5",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^4.3.2",
+    "victory": "^32.3.3"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "gatsby build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "docz:dev": "docz dev",
+    "docz:build": "docz build",
+    "dev": "gatsby develop",
+    "serve": "gatsby serve"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "docz": "^2.0.0-rc.1",
+    "gatsby": "2.13.50",
+    "gatsby-plugin-typescript": "2.1.2",
+    "gatsby-plugin-eslint": "2.0.5",
+    "gatsby-theme-docz": "^2.0.0-rc.1"
+  }
+}

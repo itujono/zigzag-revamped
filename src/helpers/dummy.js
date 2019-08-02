@@ -18,3 +18,10 @@ export const revenue = [
 	{ quarter: "Q3", earnings: 14250 },
 	{ quarter: "Q4", earnings: 19000 }
 ]
+
+export const range = [
+	{ value: "daily", label: "Daily" },
+	{ value: "weekly", label: "Weekly" },
+	{ value: "monthly", label: "Monthly" },
+	{ value: "annual", label: "Annual" }
+]

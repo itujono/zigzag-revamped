@@ -40,13 +40,13 @@ const LinkButton = styled(ButtonLink)`
 	}
 `
 
-function ChartCard({ children, ...props }) {
+function ChartCard({ children, expander = true, ...props }) {
 	const [showButton, setShowButton] = useState(false)
 
 	const title = (
 		<Row type="flex" justify="space-between">
 			<Col>{props.title}</Col>
-			<Col>{showButton && <LinkButton icon="arrows-alt">Expand</LinkButton>}</Col>
+			{expander && <Col>{showButton && <LinkButton icon="arrows-alt">Expand</LinkButton>}</Col>}
 		</Row>
 	)
 
