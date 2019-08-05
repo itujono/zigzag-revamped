@@ -5,6 +5,10 @@ import styled from "styled-components"
 const FormItem = styled(Item)`
 	&& {
 		margin-bottom: 1em;
+		.ant-input-number,
+		input {
+			width: 100%;
+		}
 		.ant-input-prefix {
 			color: rgba(0, 0, 0, 0.25);
 		}
