@@ -1,22 +1,20 @@
 import React from "react"
-import { VictoryChart, VictoryBar, VictoryLabel } from "victory"
-import { victoryTheme } from "styles"
-import { ChartCard } from "components"
+import { BarChart as Chartee, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from "recharts"
 
-function BarChart({ data, domainPadding = 10, axis: { x, y }, labels, title, ...props }) {
+function BarChart({ data, domainPadding = 10, dataKey, xDataKey = "", title, width, ...props }) {
+	const { x, y, z } = dataKey
+
 	return (
-		<ChartCard title={title}>
-			<VictoryChart {...props} theme={victoryTheme} domainPadding={domainPadding}>
-				<VictoryBar
-					data={data}
-					labels={labels}
-					labelComponent={<VictoryLabel dx={20} />}
-					alignment="start"
-					x={x}
-					y={y}
-				/>
-			</VictoryChart>
-		</ChartCard>
+		<Chartee {...props} width={width || 320} height={300} data={data} margin={{ top: 20 }}>
+			<CartesianGrid strokeDasharray="3 3" />
+			<XAxis dataKey={xDataKey} />
+			<YAxis dataKey={y} />
+			<Tooltip />
+			<Legend />
+			<Bar dataKey={x} fill="#8884d8" />
+			<Bar dataKey={y} fill="#82ca9d" />
+			<Bar dataKey={z} fill="#fed501" />
+		</Chartee>
 	)
 }
 
