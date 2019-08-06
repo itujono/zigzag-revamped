@@ -71,12 +71,8 @@ const StyledThree = styled.h3`
 	color: ${fontColor};
 `
 
-function StatCard({ title = "", value = 0, suffix = "", roleData = {}, range = [] }) {
-	const [option, setOption] = useState(range[0].value)
-	const { annual = {}, monthly = {}, weekly = {}, daily = {} } = roleData
-	const theData = option === "daily" ? daily : option === "annual" ? annual : option === "monthly" ? monthly : weekly
-	const total = Object.values(theData).reduce((acc, curr) => acc + curr, 0)
-	const splitted = title.split(" ")
+function StatCard({ title = "", value = 0, roleData = {} }) {
+	const { tutor = 0, parent = 0, student = 0 } = roleData
 
 	const mainTitle = (
 		<Row type="flex" justify="space-between" align="middle">
@@ -98,8 +94,7 @@ function StatCard({ title = "", value = 0, suffix = "", roleData = {}, range = [
 	return (
 		<StyledChartCard title={mainTitle}>
 			<MainStat>
-				{pricer(total)} <span>{suffix || splitted[splitted.length - 1].toLowerCase()}</span> &nbsp;
-				<ButtonLink icon="arrows-alt">Expand</ButtonLink>
+				{pricer(value)} <span>{title.toLowerCase()}</span>
 			</MainStat>
 			<Divider />
 			<Row type="flex" justify="space-between">
