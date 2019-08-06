@@ -1,7 +1,8 @@
 import React from "react"
-import { Section, Heading, BarChart, ChartCard } from "components"
+import { Section, Heading, BarChart } from "components"
 import { Row, Col } from "antd"
-import { dataPv, range, rawData } from "helpers/dummy"
+import { revenue } from "helpers/dummy"
+import { pricer } from "helpers"
 import StatCard from "components/StatCard"
 
 function TutorSMS() {
@@ -15,20 +16,47 @@ function TutorSMS() {
 			/>
 			<Row gutter={16}>
 				<Col lg={8}>
-					<StatCard title="Total users" range={range} roleData={rawData} />
+					<StatCard title="Total users" value={8000} roleData={{ parent: 560, tutor: 900 }} />
 				</Col>
 				<Col lg={8}>
-					<StatCard title="Active users" range={range} roleData={rawData} />
+					<StatCard title="Active users" value={4500} roleData={{ parent: 1200, tutor: 900 }} />
 				</Col>
 				<Col lg={8}>
-					<StatCard title="Number of logins" range={range} roleData={rawData} />
+					<StatCard title="Number of logins" value={400} roleData={{ parent: 600, tutor: 288 }} />
 				</Col>
 			</Row>
 			<Row gutter={16}>
-				<Col lg={8}>
-					<ChartCard title="Active users">
-						<BarChart data={dataPv} dataKey={{ x: "student", y: "tutor", z: "agency" }} xDataKey="name" />
-					</ChartCard>
+				<Col lg={6}>
+					<BarChart
+						title="Revenue"
+						data={revenue}
+						axis={{ x: "quarter", y: "earnings" }}
+						labels={d => `$${pricer(d.earnings)}`}
+					/>
+				</Col>
+				<Col lg={6}>
+					<BarChart
+						title="Revenue"
+						data={revenue}
+						axis={{ x: "quarter", y: "earnings" }}
+						labels={d => `$${pricer(d.earnings)}`}
+					/>
+				</Col>
+				<Col lg={6}>
+					<BarChart
+						title="Revenue"
+						data={revenue}
+						axis={{ x: "quarter", y: "earnings" }}
+						labels={d => `$${pricer(d.earnings)}`}
+					/>
+				</Col>
+				<Col lg={6}>
+					<BarChart
+						title="Revenue"
+						data={revenue}
+						axis={{ x: "quarter", y: "earnings" }}
+						labels={d => `$${pricer(d.earnings)}`}
+					/>
 				</Col>
 			</Row>
 		</Section>

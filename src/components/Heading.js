@@ -31,13 +31,13 @@ export const reverseStyle = {
 	fontSize: 11,
 	textTransform: "uppercase",
 	lineHeight: 1.4,
-	color: theme.greyColor[3]
+	color: fontColor
 }
 
 function Heading({ bold, reverse, level, content, subheader, ...props }) {
 	return (
 		<Typo {...props}>
-			<Title bold={bold} style={reverse ? reverseStyle : undefined} level={level || 4}>
+			<Title bold={bold} style={reverse ? reverseStyle : ""} level={level || 4}>
 				{content}
 			</Title>
 			<Paragraph bold={bold}>{subheader}</Paragraph>

@@ -14,11 +14,6 @@ const backgroundColor = theming("mode", {
 	light: "#fff"
 })
 
-const borderColor = theming("mode", {
-	dark: themeStyles.semiTransparentColor[0],
-	light: "#eee"
-})
-
 const fontColor = theming("mode", {
 	light: themeStyles.darkColor[0],
 	dark: "#fff"
@@ -43,7 +38,7 @@ const Header = styled(PageLayout.Header)`
 		padding: 0 35px;
 		background-color: ${backgroundColor};
 		height: 5em;
-		border-bottom: 1px solid ${borderColor};
+		border-bottom: 1px solid #eee;
 	}
 `
 const Footer = styled(PageLayout.Footer)`
@@ -75,7 +70,7 @@ const Sidebar = styled(PageLayout.Sider)`
 		min-height: 100vh;
 		background: transparent;
 		padding-left: 2em;
-		border-right: 1px solid ${borderColor};
+		border-right: 1px solid #eee;
 		.ant-menu-vertical {
 			border-right: none;
 		}

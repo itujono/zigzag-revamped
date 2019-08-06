@@ -16,11 +16,6 @@ const fontColor = theme("mode", {
 	light: "inherit"
 })
 
-const borderColor = theme("mode", {
-	dark: themeStyle.semiTransparentColor[0],
-	light: "#eee"
-})
-
 const StyledCard = styled(Card)`
 	&& {
 		${media.mobile`
@@ -30,21 +25,19 @@ const StyledCard = styled(Card)`
 	&& {
 		border-radius: 8px;
 		color: ${fontColor};
-		border: 1px solid ${borderColor};
 		background-color: ${backgroundColor};
 		transition: ${themeStyle.transition[0]};
 		&:hover {
 			box-shadow: ${themeStyle.boxShadow[0]};
 		}
 		.ant-card-head {
-			border-bottom: 1px solid ${borderColor};
 			.ant-card-head-title {
 				overflow: visible;
 			}
 		}
 		.ant-card-body {
 			padding: 0;
-			/* padding-left: 1.5em; */
+			padding-left: 1.5em;
 		}
 	}
 `

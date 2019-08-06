@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import styled from "styled-components"
-import { Card, ButtonLink } from "components"
+import { Card } from "components"
 import { Statistic, Divider, Row, Col, Select } from "antd"
 import { reverseStyle } from "./Heading"
 import { pricer, media } from "helpers"
 import { theme as themeStyle } from "styles"
+import { range } from "helpers/dummy"
 import theme from "styled-theming"
 
 const backgroundColor = theme("mode", {
@@ -17,11 +18,6 @@ const fontColor = theme("mode", {
 	light: "inherit"
 })
 
-const borderColor = theme("mode", {
-	dark: themeStyle.semiTransparentColor[0],
-	light: "#eee"
-})
-
 const StyledChartCard = styled(Card)`
 	&& {
 		${media.mobile`
@@ -32,7 +28,6 @@ const StyledChartCard = styled(Card)`
 		background-color: ${backgroundColor};
 		color: ${fontColor};
 		margin-bottom: 1em;
-		border: 1px solid ${borderColor};
 		border-radius: 8px;
 		transition: ${themeStyle.transition[0]};
 		&:hover {
@@ -41,13 +36,9 @@ const StyledChartCard = styled(Card)`
 			border: 1px solid ${themeStyle.border[0]};
 		}
 		.ant-card-head {
-			border-bottom: 1px solid ${borderColor};
 			.ant-card-head-title {
 				overflow: visible;
 			}
-		}
-		.ant-divider {
-			background-color: ${borderColor};
 		}
 		.ant-card-body {
 			padding: 1.5em;
@@ -56,7 +47,7 @@ const StyledChartCard = styled(Card)`
 `
 
 const MainStat = styled.h3`
-	font-size: 1.6em;
+	font-size: 2em;
 	color: ${fontColor};
 	span {
 		font-size: initial;
@@ -93,7 +84,7 @@ function StatCard({ title = "", value = 0, suffix = "", roleData = {}, range = [
 				<StyledThree style={{ ...reverseStyle, marginBottom: 0 }}>{title}</StyledThree>
 			</Col>
 			<Col lg={10}>
-				<Select name="range" defaultValue={range[0].value} onChange={value => setOption(value)}>
+				<Select name="range" defaultValue={range[0].value}>
 					{range.map(({ value, label }) => (
 						<Select.Option key={value} value={value}>
 							{label}
@@ -113,13 +104,13 @@ function StatCard({ title = "", value = 0, suffix = "", roleData = {}, range = [
 			<Divider />
 			<Row type="flex" justify="space-between">
 				<Col>
-					<StyledStat title="Tutor" value={theData.tutor} />
+					<StyledStat title="Tutor" value={tutor} />
 				</Col>
 				<Col>
-					<StyledStat title="Parent/student" value={theData.parent} />
+					<StyledStat title="Parent" value={parent} />
 				</Col>
 				<Col>
-					<StyledStat title="Agency" value={theData.agency} />
+					<StyledStat title="Student" value={student} />
 				</Col>
 			</Row>
 		</StyledChartCard>

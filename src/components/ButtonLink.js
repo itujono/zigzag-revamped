@@ -7,7 +7,7 @@ const StyledButton = styled(Button)`
 	transition: 0ms;
 	margin-right: 8px;
 	&:hover {
-		background: ${theme.greyColor[5]};
+		background: ${theme.greyColor[3]};
 		border-radius: 5px;
 		color: #777;
 		a {

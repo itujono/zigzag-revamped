@@ -1,11 +1,10 @@
 export const theme = {
 	color: ["#7fb800"],
 	greyColor: ["#777", "#999", "#aaa", "#bbb", "#f9f9f9", "#eee"],
-	darkColor: ["#343c6f", "#384376"],
+	darkColor: ["#211e2b", "#333"],
 	transition: ["all .15s ease"],
 	boxShadow: ["2px 7px 10px rgba(0, 0, 0, 0.3)", "0 5px 9px rgba(0, 0, 0, 0.1)"],
 	border: ["rgba(127, 184, 0, 0.42)"],
-	semiTransparentColor: ["rgba(255, 255, 255, 0.2)"],
 	fontFamily: [
 		"-apple - system",
 		"BlinkMacSystemFont",
