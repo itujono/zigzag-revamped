@@ -39,8 +39,8 @@ function ProductDetail() {
 	return (
 		<Layout sidebar>
 			<Section>
-				<Row gutter={32}>
-					<Col lg={10}>
+				<Row gutter={64}>
+					<Col lg={14}>
 						<Carousel autoplay infinite style={{ marginBottom: "2em" }}>
 							<div>
 								<img src="https://source.unsplash.com/600x300" alt="Disclaimer" width="100%" />
@@ -59,7 +59,7 @@ function ProductDetail() {
 							</div>
 						</Carousel>
 					</Col>
-					<Col lg={14}>
+					<Col lg={10}>
 						<Heading
 							bold
 							content="SP-008"
@@ -97,7 +97,7 @@ function ProductDetail() {
 						</StyledSection>
 						<Divider />
 						<StyledSection paddingHorizontal="0" marginBottom="0">
-							<Button type="primary" icon="plus">
+							<Button type="primary" icon="shopping-cart">
 								Tambahkan ke cart
 							</Button>{" "}
 							&nbsp; <ButtonLink icon="heart">Wishlist</ButtonLink>

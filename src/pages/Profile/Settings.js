@@ -14,7 +14,7 @@ const Tab = styled(Tabs)`
 
 function Settings() {
 	return (
-		<Section>
+		<Section width="70%" centered>
 			<Heading content="Settings" bold />
 			<Tab>
 				<Tabs.TabPane key="change-password" tab="Ubah password">

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Section, Heading, Button } from "components"
+import { Section, Heading, Button, ButtonLink } from "components"
 import { List, Icon, Avatar, Row, Col, Menu, Tabs } from "antd"
 import styled from "styled-components"
 import { historyData } from "helpers/dummy"
@@ -31,7 +31,7 @@ function HistoryOrder(props) {
 	}
 
 	return (
-		<Section>
+		<Section width="70%" centered>
 			<Heading content="History Order" marginBottom="3em" bold />
 			<List
 				itemLayout="horizontal"
@@ -45,13 +45,12 @@ function HistoryOrder(props) {
 								selectedItem={selectedItem}
 								orderNumber={orderNumber}
 								actions={[
-									<Button
-										type="link"
+									<ButtonLink
 										icon={isSelected ? "up" : "down"}
 										onClick={() => handleSelect(orderNumber)}
 									>
 										{isSelected ? "Tutup detail" : "Lihat detail"}
-									</Button>
+									</ButtonLink>
 								]}
 							>
 								<List.Item.Meta

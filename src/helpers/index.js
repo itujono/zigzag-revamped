@@ -3,15 +3,15 @@ import { useState } from "react"
 import { css } from "styled-components"
 
 const instance = axios.create({
-	baseURL: "https://zigzagbatam.com/api/",
+	baseURL: "http://128.199.129.142:8080/api/",
 	headers: {
-		"x-api-key": "953ab333-c05a-zigzag-4abf-b3db-6a8c25c0031e",
+		"api-key": "953ab333-c05a-zigzag-4abf-b3db-6a8c25c0031e",
 		Accept: "application/json"
 	}
 })
 
 instance.interceptors.request.use(config => {
-	config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`
+	config.headers["x-access-token"] = `Bearer ${localStorage.getItem("token")}`
 	return config
 })
 

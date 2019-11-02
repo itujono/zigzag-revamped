@@ -12,3 +12,13 @@ export const fetchProductItem = id => async dispatch => {
 		return console.error(err.response)
 	}
 }
+
+export const fetchProducts = () => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.get("product/list")
+		.then(response => {
+			dispatch({ type: types.FETCH_PRODUCTS, payload: response.data.result })
+		})
+		.catch(err => console.error(err.response))
+}

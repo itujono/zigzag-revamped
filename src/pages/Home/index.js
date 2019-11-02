@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Section, Heading, Layout, ProductCard, ButtonLink } from "components"
 import { connect } from "react-redux"
-import { fetchProductItem } from "store/actions/productActions"
+import { fetchProductItem, fetchProducts } from "store/actions/productActions"
 import { Carousel, Row, Col, Icon } from "antd"
 import { mobile, media } from "helpers"
 import styled from "styled-components"
@@ -16,7 +16,10 @@ const SelengkapButton = styled(ButtonLink)`
 function Home(props) {
 	const handleFetchProduct = () => {
 		props.fetchProductItem()
+		props.fetchProducts()
 	}
+
+	useEffect(() => {}, [])
 
 	return (
 		<Layout sidebar>
@@ -223,10 +226,9 @@ function Home(props) {
 }
 
 const mapState = ({ product }) => ({
-	product: product.product
+	product: product.product,
+	products: product.products
 })
 
-export default connect(
-	mapState,
-	{ fetchProductItem }
-)(Home)
+// prettier-ignore
+export default connect(mapState, { fetchProductItem, fetchProducts } )(Home)

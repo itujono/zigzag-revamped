@@ -1,7 +1,7 @@
 import React from "react"
 import { Section, Heading, Button } from "components"
 import { Row, Col, Typography, Divider, Form, List, Icon, Badge } from "antd"
-import { pricer, media } from "helpers"
+import { pricer, media, mobile } from "helpers"
 import styled from "styled-components"
 import moment from "moment"
 import { theme } from "styles"
@@ -20,7 +20,7 @@ const PriceSection = styled(Section)`
 		}
 	`}
 	&& {
-		font-size: 5em;
+		font-size: 3em;
 		padding-top: 0;
 		padding-bottom: 0;
 		margin-bottom: 0;
@@ -31,7 +31,7 @@ const PriceSection = styled(Section)`
 	}
 	.rp {
 		font-size: initial;
-		vertical-align: top;
+		vertical-align: super;
 		color: ${theme.greyColor[0]};
 	}
 `
@@ -52,10 +52,10 @@ const ListItem = styled(List.Item)`
 
 function Deposit({ amount = 350000 }) {
 	return (
-		<Section>
+		<Section width="70%" centered>
 			<Heading content="Deposit" bold marginBottom="3em" />
 			<Row gutter={64}>
-				<Col lg={8}>
+				<Col lg={10}>
 					<PriceSection paddingHorizontal="0">
 						<Text className="rp">Rp</Text> <Text>{pricer(amount)}</Text>
 					</PriceSection>
@@ -71,42 +71,44 @@ function Deposit({ amount = 350000 }) {
 										label="Saya mau deposit"
 										placeholder="Minimal Rp 50.000 ya"
 									/>
-									<Button submit type="primary" icon="check">
+									<SubmitButton submit type="primary" icon="check">
 										Oke, deposit sekarang
-									</Button>
+									</SubmitButton>
 								</Form>
 							)}
 						/>
 					</Section>
 				</Col>
-				<Col lg={16} style={{ borderLeft: "1px solid #ddd" }}>
+				<Col lg={14} style={{ borderLeft: !mobile && "1px solid #ddd" }}>
 					<List
 						itemLayout="horizontal"
 						dataSource={depositData}
 						renderItem={item => (
 							<ListItem>
-								<Col lg={1}>
-									<div>
-										<Icon
-											type="check-circle"
-											theme="twoTone"
-											twoToneColor="#52c41a"
-											style={{ fontSize: 20 }}
+								<Row>
+									<Col lg={1}>
+										<div>
+											<Icon
+												type="check-circle"
+												theme="twoTone"
+												twoToneColor="#52c41a"
+												style={{ fontSize: 20 }}
+											/>
+										</div>
+									</Col>
+									<Col lg={23}>
+										<List.Item.Meta
+											title={
+												<span>
+													Kamu deposit sebesar{" "}
+													<span className="amount">Rp {pricer(item.amount)}</span> &nbsp;{" "}
+													<span className="time">{moment().fromNow()}</span>
+												</span>
+											}
+											description={<Badge text="Sukses" status="success" />}
 										/>
-									</div>
-								</Col>
-								<Col lg={23}>
-									<List.Item.Meta
-										title={
-											<span>
-												Kamu deposit sebesar{" "}
-												<span className="amount">Rp {pricer(item.amount)}</span> &nbsp;{" "}
-												<span className="time">{moment().fromNow()}</span>
-											</span>
-										}
-										description={<Badge text="Sukses" status="success" />}
-									/>
-								</Col>
+									</Col>
+								</Row>
 							</ListItem>
 						)}
 					/>
