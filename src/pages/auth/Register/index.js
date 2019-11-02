@@ -27,7 +27,46 @@ const LeftSide = styled(Col)`
 	z-index: 1;
 `
 
-const accountTypeOptions = [{ value: "reguler", label: "Reguler" }, { value: "vip", label: "VIP" }]
+const AccountCard = styled(Card)`
+	&& {
+		cursor: pointer;
+		background-color: ${({ bg, value, accountType }) => accountType === value && "#f3f3f3"};
+		.ant-card-body {
+			padding: 2em;
+		}
+	}
+`
+
+const accountTypeOptions = [
+	{
+		value: "reguler",
+		title: "Reguler",
+		description: (
+			<p>
+				Dengan jadi Reguler member, kamu dapat:
+				<ul>
+					<li>Dapat belanja di sini</li>
+					<li>Dapat update barang terbaru pertama kali</li>
+					<li>Dapat pahala dan amal jariyah</li>
+				</ul>
+			</p>
+		)
+	},
+	{
+		value: "vip",
+		title: "VIP",
+		description: (
+			<p>
+				Dengan jadi VIP member, kamu dapat:
+				<ul>
+					<li>Semua kelebihan di tipe Reguler</li>
+					<li>Dapat diskon melimpah</li>
+					<li>Dapat pahala dan amal jariyah</li>
+				</ul>
+			</p>
+		)
+	}
+]
 const csOptions = [
 	{ value: "si won", label: "Si Won" },
 	{ value: "pipeh", label: "Pipeh" },
@@ -36,6 +75,7 @@ const csOptions = [
 
 export default function Register() {
 	const [section, setSection] = useState("credentials")
+	const [accountType, setAccountType] = useState("reguler")
 	const handleNext = section => setSection(section)
 
 	const renderForm = () => {
@@ -75,7 +115,20 @@ export default function Register() {
 		} else if (section === "accountType") {
 			return (
 				<>
-					<RadioInput name="account_type" label="Pilih tipe akun" options={accountTypeOptions} />
+					{/* <RadioInput name="acc_type" label="Pilih tipe akun" options={accountTypeOptions} /> */}
+					<Row gutter={16} style={{ marginBottom: "2em" }}>
+						{accountTypeOptions.map(item => (
+							<Col lg={12}>
+								<AccountCard
+									onClick={() => setAccountType(item.value)}
+									value={item.value}
+									accountType={accountType}
+								>
+									<Heading content={item.title} subheader={item.description} />
+								</AccountCard>
+							</Col>
+						))}
+					</Row>
 					<Button onClick={() => handleNext("cs")}>
 						Selanjutnya <Icon type="right" />
 					</Button>
@@ -84,7 +137,7 @@ export default function Register() {
 		} else if (section === "cs") {
 			return (
 				<>
-					<SelectInput name="customer_service" label="Pilih CS kamu" options={csOptions} />
+					<SelectInput name="customer_service_id" label="Pilih CS kamu" options={csOptions} />
 					<Button onClick={() => handleNext("address")}>
 						Selanjutnya <Icon type="right" />
 					</Button>
@@ -97,7 +150,7 @@ export default function Register() {
 					<SelectInput name="city" label="Kota kamu" options={csOptions} />
 					<Row gutter={16}>
 						<Col lg={18}>
-							<SelectInput name="district" label="Kecamatan kamu" options={csOptions} />
+							<SelectInput name="subdistrict" label="Kecamatan kamu" options={csOptions} />
 						</Col>
 						<Col lg={6}>
 							<TextInput name="zip" label="Kode pos" />
@@ -110,6 +163,7 @@ export default function Register() {
 	}
 
 	const handleRegister = (values, { setSubmitting }) => {
+		values = { ...values, acc_type: accountType }
 		console.log({ values })
 		setSubmitting(false)
 	}
