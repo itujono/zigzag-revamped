@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Section, Heading, Card, Button, Logo } from "components"
+import { Section, Heading, Card, Button, Logo, ButtonLink } from "components"
 import { Row, Col, Form, Icon } from "antd"
 import { Link } from "react-router-dom"
 import { Formik } from "formik"
@@ -78,7 +78,7 @@ export default function Register() {
 	const [accountType, setAccountType] = useState("reguler")
 	const handleNext = section => setSection(section)
 
-	const renderForm = () => {
+	const renderForm = values => {
 		if (section === "credentials") {
 			return (
 				<>
@@ -107,9 +107,23 @@ export default function Register() {
 						label="Ulangi password kamu"
 						placeholder="Harus sama ama password di atas ya..."
 					/>
-					<Button onClick={() => handleNext("accountType")}>
-						Selanjutnya <Icon type="right" />
-					</Button>
+					<Row type="flex" justify="space-between">
+						<Col lg={12}></Col>
+						<Col lg={12} style={{ textAlign: "right" }}>
+							<Button
+								disabled={
+									!values.first_name ||
+									!values.last_name ||
+									!values.email ||
+									!values.password ||
+									!values.repeat_password
+								}
+								onClick={() => handleNext("accountType")}
+							>
+								Selanjutnya <Icon type="right" />
+							</Button>
+						</Col>
+					</Row>
 				</>
 			)
 		} else if (section === "accountType") {
@@ -129,18 +143,39 @@ export default function Register() {
 							</Col>
 						))}
 					</Row>
-					<Button onClick={() => handleNext("cs")}>
-						Selanjutnya <Icon type="right" />
-					</Button>
+					<Row type="flex" justify="space-between">
+						<Col lg={12}>
+							<ButtonLink icon="left" onClick={() => handleNext("credentials")}>
+								Kembali
+							</ButtonLink>
+						</Col>
+						<Col lg={12} style={{ textAlign: "right" }}>
+							<Button onClick={() => handleNext("cs")}>
+								Selanjutnya <Icon type="right" />
+							</Button>
+						</Col>
+					</Row>
 				</>
 			)
 		} else if (section === "cs") {
 			return (
 				<>
 					<SelectInput name="customer_service_id" label="Pilih CS kamu" options={csOptions} />
-					<Button onClick={() => handleNext("address")}>
-						Selanjutnya <Icon type="right" />
-					</Button>
+					<Row type="flex" justify="space-between">
+						<Col lg={12}>
+							<ButtonLink icon="left" onClick={() => handleNext("accountType")}>
+								Kembali
+							</ButtonLink>
+						</Col>
+						<Col lg={12} style={{ textAlign: "right" }}>
+							<Button
+								disabled={values.customer_service_id === "Pilih CS nya"}
+								onClick={() => handleNext("address")}
+							>
+								Selanjutnya <Icon type="right" />
+							</Button>
+						</Col>
+					</Row>
 				</>
 			)
 		} else {
@@ -156,7 +191,16 @@ export default function Register() {
 							<TextInput name="zip" label="Kode pos" />
 						</Col>
 					</Row>
-					<Button submit>Oke, registrasi sekarang</Button>
+					<Row type="flex" justify="space-between">
+						<Col lg={12}>
+							<ButtonLink icon="left" onClick={() => handleNext("address")}>
+								Kembali
+							</ButtonLink>
+						</Col>
+						<Col lg={12} style={{ textAlign: "right" }}>
+							<Button submit>Oke, register sekarang</Button>
+						</Col>
+					</Row>
 				</>
 			)
 		}
@@ -189,11 +233,11 @@ export default function Register() {
 					/>
 					<TheCard noHover>
 						<Formik
+							initialValues={{ customer_service_id: "Pilih CS nya" }}
 							onSubmit={handleRegister}
-							render={({ handleSubmit }) => (
+							render={({ handleSubmit, values }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
-									{renderForm()}
-									<FormikDebug />
+									{renderForm(values)}
 								</Form>
 							)}
 						/>
