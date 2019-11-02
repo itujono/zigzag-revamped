@@ -30,7 +30,7 @@ const LeftSide = styled(Col)`
 	z-index: 1;
 `
 
-export default function Login() {
+export default function Forgot() {
 	return (
 		<Section centered>
 			<Row style={{ marginBottom: "2em" }}>
@@ -42,12 +42,12 @@ export default function Login() {
 				<LeftSide lg={10}>
 					<Heading
 						bold
-						content="Login"
+						content="Lupa password?"
 						level={1}
 						marginBottom="3em"
 						subheader={
 							<p>
-								Atau <Link to="/register">register dulu</Link>
+								Atau <Link to="/login">login saja</Link> langsung
 							</p>
 						}
 					/>
@@ -58,22 +58,11 @@ export default function Login() {
 									<TextInput
 										type="email"
 										name="email"
-										label="Email"
-										placeholder="Masukkan email kamu..."
+										label="Email kamu pas register kemaren"
+										placeholder="Masukkan email yang kamu pake pas registrasi..."
 									/>
-									<TextInput
-										type="password"
-										name="password"
-										label="Password"
-										placeholder="Masukkan password kamu..."
-									/>
-									<Row type="flex" justify="end" style={{ marginBottom: "2em" }}>
-										<Col lg={12} style={{ textAlign: "right" }}>
-											<Link to="/forgot_password">Lupa password?</Link>
-										</Col>
-									</Row>
 									<Button submit size="large">
-										Login sekarang
+										Kirim password saya sekarang
 									</Button>
 								</Form>
 							)}

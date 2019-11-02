@@ -5,6 +5,7 @@ import { createAppStore } from "./store"
 import { Loading } from "components"
 import Login from "pages/auth/Login"
 import Register from "pages/auth/Register"
+import Forgot from "pages/auth/Forgot"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -24,6 +25,7 @@ const App = () => {
 						<Route path="/profile" component={Profile} />
 						<Route path="/login" component={Login} />
 						<Route path="/register" component={Register} />
+						<Route path="/forgot_password" component={Forgot} />
 					</Switch>
 				</Suspense>
 			</BrowserRouter>

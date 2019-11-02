@@ -16,9 +16,13 @@ const TheImage = styled.section`
 `
 
 const TheCard = styled(Card)`
-	box-shadow: ${theme.boxShadow.main};
-	.ant-card-body {
-		padding: 4em;
+	&& {
+		border: none;
+		border-radius: 15px;
+		box-shadow: ${theme.boxShadow.main};
+		.ant-card-body {
+			padding: 4em;
+		}
 	}
 `
 
@@ -222,6 +226,7 @@ export default function Register() {
 			<Row type="flex" align="middle" justify="center">
 				<LeftSide lg={10}>
 					<Heading
+						bold
 						content="Register"
 						level={1}
 						marginBottom="3em"
@@ -246,7 +251,7 @@ export default function Register() {
 				<Col lg={12}>
 					<TheImage>
 						<img
-							src="https://assets.website-files.com/5ccc8aa73871f9d0b1c81c04/5ced7f5fe2e0591aebdd3fba_sign-in.jpg"
+							src="https://assets.website-files.com/5ccc8aa73871f9d0b1c81c04/5ced813ed73b74c8b6b95728_sign-up-compressor.jpg"
 							width="100%"
 						/>
 					</TheImage>
