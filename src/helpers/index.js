@@ -3,10 +3,10 @@ import { useState } from "react"
 import { css } from "styled-components"
 
 const instance = axios.create({
-	baseURL: "http://128.199.129.142:8080/api/",
+	baseURL: "https://zigzagbatam.com:9000/api/v1/frontend",
 	headers: {
-		"api-key": "953ab333-c05a-zigzag-4abf-b3db-6a8c25c0031e",
-		Accept: "application/json"
+		"api-key": "3c72dde0-c72f-ZIGZAG-4656-8143-ee95e52f58b4"
+		// Accept: "application/json"
 	}
 })
 

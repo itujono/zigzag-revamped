@@ -14,12 +14,9 @@ const SelengkapButton = styled(ButtonLink)`
 `
 
 function Home(props) {
-	const handleFetchProduct = () => {
-		props.fetchProductItem()
+	useEffect(() => {
 		props.fetchProducts()
-	}
-
-	useEffect(() => {}, [])
+	}, [])
 
 	return (
 		<Layout sidebar>

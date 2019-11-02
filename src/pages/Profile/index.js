@@ -11,7 +11,13 @@ function Profile() {
 	return (
 		<Layout sidebar page="profile">
 			<Section paddingHorizontal="0">
-				<Suspense fallback={<Loading />}>
+				<Suspense
+					fallback={
+						<Section centered>
+							<Loading />
+						</Section>
+					}
+				>
 					<Switch>
 						<Route path="/profile/basic" component={Basic} />
 						<Route path="/profile/history" component={HistoryOrder} />

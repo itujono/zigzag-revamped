@@ -16,9 +16,19 @@ export const fetchProductItem = id => async dispatch => {
 export const fetchProducts = () => dispatch => {
 	dispatch(loadingProduct())
 	instance
-		.get("product/list")
+		.get(`product/list`)
 		.then(response => {
 			dispatch({ type: types.FETCH_PRODUCTS, payload: response.data.result })
 		})
 		.catch(err => console.error(err.response))
 }
+
+// export const fetchProducts = (category = 1, limit = 0) => dispatch => {
+// 	dispatch(loadingProduct())
+// 	instance
+// 		.get(`product/list?category=${category}&limit=${limit}`)
+// 		.then(response => {
+// 			dispatch({ type: types.FETCH_PRODUCTS, payload: response.data.result })
+// 		})
+// 		.catch(err => console.error(err.response))
+// }

@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { Provider } from "react-redux"
 import { createAppStore } from "./store"
 import { Loading } from "components"
+import Login from "pages/auth/Login"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -20,6 +21,7 @@ const App = () => {
 						<Route path="/product/:name" component={ProductDetail} />
 						<Route path="/category/:name" component={Category} />
 						<Route path="/profile" component={Profile} />
+						<Route path="/login" component={Login} />
 					</Switch>
 				</Suspense>
 			</BrowserRouter>
