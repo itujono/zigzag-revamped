@@ -164,7 +164,12 @@ export default function Register() {
 		} else if (section === "cs") {
 			return (
 				<>
-					<SelectInput name="customer_service_id" label="Pilih CS kamu" options={csOptions} />
+					<SelectInput
+						name="customer_service_id"
+						label="Pilih CS kamu"
+						options={csOptions}
+						helpText="CS kamu adalah orang yg kamu pilih untuk selalu memandu kamu selama menggunakan website Zigzag. Atau dengan kata lain, CS adalah asisten pribadi kamu."
+					/>
 					<Row type="flex" justify="space-between">
 						<Col lg={12}>
 							<ButtonLink icon="left" onClick={() => handleNext("accountType")}>
@@ -197,7 +202,7 @@ export default function Register() {
 					</Row>
 					<Row type="flex" justify="space-between">
 						<Col lg={12}>
-							<ButtonLink icon="left" onClick={() => handleNext("address")}>
+							<ButtonLink icon="left" onClick={() => handleNext("cs")}>
 								Kembali
 							</ButtonLink>
 						</Col>

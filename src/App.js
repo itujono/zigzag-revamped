@@ -25,7 +25,8 @@ const App = () => {
 						<Route path="/profile" component={Profile} />
 						<Route path="/login" component={Login} />
 						<Route path="/register" component={Register} />
-						<Route path="/forgot_password" component={Forgot} />
+						<Route exact path="/forgot_password" component={Forgot} />
+						<Route path="/forgot_password/success" component={Forgot} />
 					</Switch>
 				</Suspense>
 			</BrowserRouter>

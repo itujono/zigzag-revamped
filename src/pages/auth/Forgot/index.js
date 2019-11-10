@@ -1,7 +1,7 @@
 import React from "react"
 import { Section, Heading, Card, Button, Logo } from "components"
 import { Row, Col, Form } from "antd"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { Formik } from "formik"
 import { TextInput } from "components/Fields"
 import styled from "styled-components"
@@ -31,6 +31,14 @@ const LeftSide = styled(Col)`
 `
 
 export default function Forgot() {
+	const { push } = useHistory()
+
+	const handleForgot = (values, { setSubmitting }) => {
+		console.log({ values })
+		setSubmitting(false)
+		push("/forgot_password/success")
+	}
+
 	return (
 		<Section centered>
 			<Row style={{ marginBottom: "2em" }}>
@@ -53,6 +61,7 @@ export default function Forgot() {
 					/>
 					<TheCard>
 						<Formik
+							onSubmit={handleForgot}
 							render={({ handleSubmit }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
 									<TextInput

@@ -12,6 +12,10 @@ const StyledButton = styled(Buttonee).attrs(({ type, shape }) => ({
 		transition: all 0.1s ease;
 		background-color: ${({ type }) => type === "primary" && theme.color[0]};
 		border-color: ${({ type }) => type === "primary" && theme.color[0]};
+		&[disabled] {
+			background-color: #f5f5f5;
+			border-color: #d9d9d9;
+		}
 	}
 `
 
@@ -23,6 +27,10 @@ const StyledSubmit = styled(SubmitButton).attrs(({ type, shape }) => ({
 		transition: all 0.1s ease;
 		background-color: ${({ type }) => type === "primary" && theme.color[0]};
 		border-color: ${({ type }) => type === "primary" && theme.color[0]};
+		&[disabled] {
+			background-color: #f5f5f5;
+			border-color: #d9d9d9;
+		}
 	}
 `
 

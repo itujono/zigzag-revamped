@@ -16,6 +16,8 @@ const Item = styled(FormItem)`
 		.help-text {
 			font-size: 12px;
 			color: #999;
+			line-height: 1.4;
+			margin-top: 10px;
 		}
 	}
 `
@@ -31,7 +33,7 @@ function SelectInput({ reverse, options, helpText, ...props }) {
 						</Select.Option>
 					))}
 			</Select>
-			{helpText && <span className="help-text">{helpText}</span>}
+			{helpText && <p className="help-text">{helpText}</p>}
 		</Item>
 	)
 }

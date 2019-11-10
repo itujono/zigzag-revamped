@@ -8,5 +8,6 @@ import ProductCard from "./ProductCard"
 import ButtonLink from "./ButtonLink"
 import Button from "./Button"
 import Loading from "./Loading"
+import Success from "./Success"
 
-export { Heading, Section, Layout, Logo, Card, Navbar, ProductCard, ButtonLink, Button, Loading }
+export { Heading, Section, Layout, Logo, Card, Navbar, ProductCard, ButtonLink, Button, Loading, Success }

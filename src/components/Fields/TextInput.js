@@ -24,6 +24,8 @@ const FormItem = styled(Item)`
 		.help-text {
 			font-size: 12px;
 			color: #999;
+			line-height: 1.4;
+			margin-top: 10px;
 		}
 	}
 `
@@ -34,22 +36,22 @@ function TextInput({ helpText, ...props }) {
 			{props.textarea ? (
 				<>
 					<Input.TextArea {...props} />
-					{helpText && <span className="help-text">{helpText}</span>}
+					{helpText && <p className="help-text">{helpText}</p>}
 				</>
 			) : props.number ? (
 				<>
 					<InputNumber {...props} />
-					{helpText && <span className="help-text">{helpText}</span>}
+					{helpText && <p className="help-text">{helpText}</p>}
 				</>
 			) : props.password ? (
 				<>
 					<Input.Password {...props} />
-					{helpText && <span className="help-text">{helpText}</span>}
+					{helpText && <p className="help-text">{helpText}</p>}
 				</>
 			) : (
 				<>
 					<Input {...props} />
-					{helpText && <span className="help-text">{helpText}</span>}
+					{helpText && <p className="help-text">{helpText}</p>}
 				</>
 			)}
 		</FormItem>
