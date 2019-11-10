@@ -1,9 +1,12 @@
-import React, { useEffect } from "react"
-import { Row, Col, Menu, Icon, Typography } from "antd"
+import React, { useEffect, useState } from "react"
+import { Row, Col, Menu, Icon, Typography, List, Avatar } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components"
 import { Link, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
+import Drawer from "./Drawer"
+import Section from "./Section"
+import { cartItems } from "helpers/dummy"
 
 const Nav = styled.nav`
 	width: inherit;
@@ -34,6 +37,8 @@ const StyledMenu = styled(Menu)`
 `
 
 function Navbar({ user, role, ...props }) {
+	const [cartDrawer, setCartDrawer] = useState(false)
+
 	const handleLogout = () => {
 		props.unauthUser()
 	}
@@ -42,6 +47,37 @@ function Navbar({ user, role, ...props }) {
 
 	return (
 		<Nav>
+			<Drawer
+				placement="right"
+				closable={false}
+				width={400}
+				onClose={() => setCartDrawer(false)}
+				visible={cartDrawer}
+			>
+				{/* <Section> */}
+				<Heading content="Cart kamu" level={4} bold />
+				<List
+					itemLayout="horizontal"
+					dataSource={cartItems}
+					renderItem={item => (
+						<List.Item>
+							<List.Item.Meta
+								avatar={<Avatar src={item.photo} />}
+								title={
+									<p style={{ marginBottom: 0 }}>
+										<a href="https://ant.design">{item.name}</a> &middot;{" "}
+										<span>
+											{item.price} x {item.quantity}
+										</span>
+									</p>
+								}
+								description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+							/>
+						</List.Item>
+					)}
+				/>
+				{/* </Section> */}
+			</Drawer>
 			<Row type="flex" justify="space-between">
 				<Col>
 					<Logo /> &nbsp;{" "}
@@ -56,7 +92,11 @@ function Navbar({ user, role, ...props }) {
 				<Col style={{ textAlign: "right" }}>
 					{user ? (
 						<StyledMenu mode="horizontal">
-							<Menu.Item key="notifications" style={{ paddingLeft: "2em", paddingRight: 0 }}>
+							<Menu.Item
+								key="notifications"
+								style={{ paddingLeft: "2em", paddingRight: 0 }}
+								onClick={() => setCartDrawer(true)}
+							>
 								<Icon type="bell" theme="filled" />
 							</Menu.Item>
 							<Menu.SubMenu title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}>

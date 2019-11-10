@@ -1,8 +1,12 @@
 import React from "react"
-import { Card as Cardee } from "antd"
+import Cardee from "antd/lib/card"
 import styled from "styled-components"
 
 const StyledCard = styled(Cardee)`
+	padding: ${({ padding }) => padding || "2em"};
+	.ant-card-body {
+		padding: ${({ padding }) => padding || "2em"};
+	}
 	&:hover {
 		transform: ${({ noHover }) => !noHover && "translateY(-3px)"};
 		box-shadow: ${({ noHover }) => !noHover && "0 5px 9px rgba(0, 0, 0, 0.1)"};
@@ -10,8 +14,8 @@ const StyledCard = styled(Cardee)`
 	}
 `
 
-function Card(props) {
-	return <StyledCard {...props}>{props.children}</StyledCard>
+function Card({ children, ...props }) {
+	return <StyledCard {...props}>{children}</StyledCard>
 }
 
 export default Card

@@ -6,6 +6,7 @@ import { Loading } from "components"
 import Login from "pages/auth/Login"
 import Register from "pages/auth/Register"
 import Forgot from "pages/auth/Forgot"
+import ForgotSuccess from "pages/auth/Forgot/ForgotSuccess"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -26,7 +27,7 @@ const App = () => {
 						<Route path="/login" component={Login} />
 						<Route path="/register" component={Register} />
 						<Route exact path="/forgot_password" component={Forgot} />
-						<Route path="/forgot_password/success" component={Forgot} />
+						<Route path="/forgot_password/success" component={ForgotSuccess} />
 					</Switch>
 				</Suspense>
 			</BrowserRouter>
