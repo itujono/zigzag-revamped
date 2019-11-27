@@ -1,12 +1,14 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Button, Logo, ButtonLink } from "components"
 import { Row, Col, Form, Icon } from "antd"
+import { connect } from "react-redux"
 import { Link } from "react-router-dom"
+
+import { fetchProvinces, fetchCities } from "store/actions/rajaOngkirActions"
 import { Formik } from "formik"
 import { TextInput, RadioInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
-import { FormikDebug } from "@jbuschke/formik-antd"
 
 const TheImage = styled.section`
 	width: 100%;
@@ -77,10 +79,16 @@ const csOptions = [
 	{ value: "pujay", label: "Pujay" }
 ]
 
-export default function Register() {
+function Register({ fetchProvinces, provinceOptions, cityOptions }) {
 	const [section, setSection] = useState("credentials")
 	const [accountType, setAccountType] = useState("reguler")
+	const [selectedProvince, setSelectedProvince] = useState("")
 	const handleNext = section => setSection(section)
+
+	useEffect(() => {
+		fetchProvinces()
+		fetchCities(selectedProvince)
+	}, [selectedProvince])
 
 	const renderForm = values => {
 		if (section === "credentials") {
@@ -190,8 +198,8 @@ export default function Register() {
 		} else {
 			return (
 				<>
-					<SelectInput name="province" label="Provinsi kamu" options={csOptions} />
-					<SelectInput name="city" label="Kota kamu" options={csOptions} />
+					<SelectInput name="province" label="Provinsi kamu" options={provinceOptions} />
+					<SelectInput name="city" label="Kota kamu" options={cityOptions} />
 					<Row gutter={16}>
 						<Col lg={18}>
 							<SelectInput name="subdistrict" label="Kecamatan kamu" options={csOptions} />
@@ -265,3 +273,19 @@ export default function Register() {
 		</Section>
 	)
 }
+
+const mapState = ({ rajaOngkir }) => {
+	const provinces = rajaOngkir.provinces || []
+	const cities = rajaOngkir.cities || []
+	const provinceOptions = provinces.map(item => ({ value: item.province_id, label: item.province }))
+	const cityOptions = cities.map(item => ({ value: item.city_id, label: item.city }))
+
+	return {
+		provinces: rajaOngkir.provinces,
+		cities,
+		cityOptions,
+		provinceOptions
+	}
+}
+
+export default connect(mapState, { fetchProvinces, fetchCities })(Register)

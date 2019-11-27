@@ -13,10 +13,10 @@ export const fetchProductItem = id => async dispatch => {
 	}
 }
 
-export const fetchProducts = () => dispatch => {
+export const fetchProducts = (category = 1, limit = 10) => dispatch => {
 	dispatch(loadingProduct())
 	instance
-		.get(`product/list`)
+		.get(`/product/list?category=${category}&limit=${limit}`)
 		.then(response => {
 			dispatch({ type: types.FETCH_PRODUCTS, payload: response.data.result })
 		})

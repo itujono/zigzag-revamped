@@ -1,12 +1,11 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Section, Heading } from "components"
 import { TextInput } from "components/Fields"
 import { Tabs, Form, Row, Col, Divider } from "antd"
-import { useSelector, useDispatch, connect } from "react-redux"
+import { connect } from "react-redux"
 import { Formik } from "formik"
 import styled from "styled-components"
 import { SubmitButton, ResetButton } from "@jbuschke/formik-antd"
-import { FETCH_PROVINCES } from "store/types"
 import { fetchProvinces } from "store/actions/rajaOngkirActions"
 
 const Tab = styled(Tabs)`
@@ -15,16 +14,7 @@ const Tab = styled(Tabs)`
 	}
 `
 
-function Settings({ fetchProvinces }) {
-	const provinces = useSelector(({ provinces }) => provinces)
-	const dispatch = useDispatch()
-
-	useEffect(() => {
-		fetchProvinces()
-	}, [])
-
-	console.log({ provinces })
-
+function Settings() {
 	return (
 		<Section width="70%" centered>
 			<Heading content="Settings" bold />
@@ -69,7 +59,5 @@ function Settings({ fetchProvinces }) {
 	)
 }
 
-export default connect(
-	null,
-	{ fetchProvinces }
-)(Settings)
+// prettier-ignore
+export default connect( null, { fetchProvinces } )(Settings)

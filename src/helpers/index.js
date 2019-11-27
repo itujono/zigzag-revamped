@@ -5,8 +5,8 @@ import { css } from "styled-components"
 const instance = axios.create({
 	baseURL: "https://zigzagbatam.com:9000/api/v1/frontend",
 	headers: {
-		"api-key": "3c72dde0-c72f-ZIGZAG-4656-8143-ee95e52f58b4"
-		// Accept: "application/json"
+		api_key: "3c72dde0-c72f-ZIGZAG-4656-8143-ee95e52f58b4",
+		Accept: "*/*"
 	}
 })
 
