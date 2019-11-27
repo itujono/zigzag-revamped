@@ -40,7 +40,8 @@ function Navbar({ user, role, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(false)
 
 	const handleLogout = () => {
-		props.unauthUser()
+		// props.unauthUser()
+		console.log("Logged out...")
 	}
 
 	user = "Muksin"
