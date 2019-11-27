@@ -17,7 +17,7 @@ export const fetchProducts = (category = 1, limit = 10) => dispatch => {
 	dispatch(loadingProduct())
 	instance
 		.get(`/product/list?category=${category}&limit=${limit}`)
-		.then(response => dispatch({ type: types.FETCH_PRODUCTS, payload: response.data.result }))
+		.then(({ data }) => dispatch({ type: types.FETCH_PRODUCTS, payload: data.data.product_data }))
 		.catch(err => console.error(err.response))
 }
 
@@ -28,13 +28,3 @@ export const fetchProductCategories = () => dispatch => {
 		.then(({ data }) => dispatch({ type: types.FETCH_PRODUCT_CATEGORIES, payload: data.data.category_data }))
 		.catch(err => console.error(err.response))
 }
-
-// export const fetchProducts = (category = 1, limit = 0) => dispatch => {
-// 	dispatch(loadingProduct())
-// 	instance
-// 		.get(`product/list?category=${category}&limit=${limit}`)
-// 		.then(response => {
-// 			dispatch({ type: types.FETCH_PRODUCTS, payload: response.data.result })
-// 		})
-// 		.catch(err => console.error(err.response))
-// }

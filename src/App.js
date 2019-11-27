@@ -21,8 +21,8 @@ const App = () => {
 					<Switch>
 						<Redirect exact from="/profile" to="/profile/basic" />
 						<Route exact path="/" component={Home} />
-						<Route path="/product/:name" component={ProductDetail} />
-						<Route path="/category/:name" component={Category} />
+						<Route path="/product/:id-:name" component={ProductDetail} />
+						<Route path="/category/:id-:name" component={Category} />
 						<Route path="/profile" component={Profile} />
 						<Route path="/login" component={Login} />
 						<Route path="/register" component={Register} />

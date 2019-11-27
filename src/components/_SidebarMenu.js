@@ -69,7 +69,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 
 							return (
 								<Menu.Item key={item.id}>
-									<NavLink to={`/category/${item.name.toLowerCase()}`}>
+									<NavLink to={`/category/${item.id}-${item.name.toLowerCase()}`}>
 										{theIcon} {item.name}
 									</NavLink>
 								</Menu.Item>

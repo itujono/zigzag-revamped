@@ -47,7 +47,7 @@ function ProductCard({ data, mode, ...props }) {
 					</Col>
 					<Col lg={6} style={{ textAlign: "right" }}>
 						<Tag style={tagStyle} color="magenta">
-							Tas
+							{data.category}
 						</Tag>
 					</Col>
 				</Row>

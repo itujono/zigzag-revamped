@@ -2,7 +2,8 @@ import * as types from "../types"
 
 const initialState = {
 	user: {},
-	categories: []
+	categories: [],
+	products: []
 }
 
 function reducer(state = initialState, action) {
