@@ -1,5 +1,5 @@
 import React from "react"
-import { Select, FormItem } from "@jbuschke/formik-antd"
+import { Select, FormItem } from "formik-antd"
 import styled from "styled-components"
 
 const Item = styled(FormItem)`

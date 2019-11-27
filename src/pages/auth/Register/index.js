@@ -4,7 +4,7 @@ import { Row, Col, Form, Icon } from "antd"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 
-import { fetchProvinces, fetchCities } from "store/actions/rajaOngkirActions"
+import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
 import { Formik } from "formik"
 import { TextInput, RadioInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
@@ -79,16 +79,22 @@ const csOptions = [
 	{ value: "pujay", label: "Pujay" }
 ]
 
-function Register({ fetchProvinces, provinceOptions, cityOptions }) {
+function Register({
+	fetchProvinces,
+	provinceOptions,
+	cityOptions,
+	fetchCities,
+	subdistrictOptions,
+	fetchSubdistricts
+}) {
 	const [section, setSection] = useState("credentials")
 	const [accountType, setAccountType] = useState("reguler")
 	const [selectedProvince, setSelectedProvince] = useState("")
+	const [selectedCity, setSelectedCity] = useState("")
 	const handleNext = section => setSection(section)
 
-	useEffect(() => {
-		fetchProvinces()
-		fetchCities(selectedProvince)
-	}, [selectedProvince])
+	const handleRenderCities = values => setSelectedProvince(values.province)
+	const handleRenderSubdistricts = values => setSelectedCity(values.city)
 
 	const renderForm = values => {
 		if (section === "credentials") {
@@ -196,13 +202,24 @@ function Register({ fetchProvinces, provinceOptions, cityOptions }) {
 				</>
 			)
 		} else {
+			// Address
 			return (
 				<>
-					<SelectInput name="province" label="Provinsi kamu" options={provinceOptions} />
+					<SelectInput
+						name="province"
+						label="Provinsi kamu"
+						options={provinceOptions}
+						onChange={handleRenderCities(values)}
+					/>
 					<SelectInput name="city" label="Kota kamu" options={cityOptions} />
 					<Row gutter={16}>
 						<Col lg={18}>
-							<SelectInput name="subdistrict" label="Kecamatan kamu" options={csOptions} />
+							<SelectInput
+								name="subdistrict"
+								label="Kecamatan kamu"
+								options={subdistrictOptions}
+								onChange={handleRenderSubdistricts(values)}
+							/>
 						</Col>
 						<Col lg={6}>
 							<TextInput name="zip" label="Kode pos" />
@@ -228,6 +245,12 @@ function Register({ fetchProvinces, provinceOptions, cityOptions }) {
 		console.log({ values })
 		setSubmitting(false)
 	}
+
+	useEffect(() => {
+		fetchProvinces()
+		fetchCities("", selectedProvince)
+		if (selectedCity) fetchSubdistricts(selectedCity)
+	}, [selectedProvince, selectedCity])
 
 	return (
 		<Section centered>
@@ -277,15 +300,18 @@ function Register({ fetchProvinces, provinceOptions, cityOptions }) {
 const mapState = ({ rajaOngkir }) => {
 	const provinces = rajaOngkir.provinces || []
 	const cities = rajaOngkir.cities || []
+	const subdistricts = rajaOngkir.subdistricts || []
 	const provinceOptions = provinces.map(item => ({ value: item.province_id, label: item.province }))
-	const cityOptions = cities.map(item => ({ value: item.city_id, label: item.city }))
+	const cityOptions = cities.map(item => ({ value: item.city_id, label: item.city_name }))
+	const subdistrictOptions = subdistricts.map(item => ({ value: item.subdistrict_id, label: item.subdistrict_name }))
 
 	return {
 		provinces: rajaOngkir.provinces,
 		cities,
 		cityOptions,
+		subdistrictOptions,
 		provinceOptions
 	}
 }
 
-export default connect(mapState, { fetchProvinces, fetchCities })(Register)
+export default connect(mapState, { fetchProvinces, fetchCities, fetchSubdistricts })(Register)

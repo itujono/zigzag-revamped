@@ -5,7 +5,7 @@ import { Tabs, Form, Row, Col, Divider } from "antd"
 import { connect } from "react-redux"
 import { Formik } from "formik"
 import styled from "styled-components"
-import { SubmitButton, ResetButton } from "@jbuschke/formik-antd"
+import { SubmitButton, ResetButton } from "formik-antd"
 import { fetchProvinces } from "store/actions/rajaOngkirActions"
 
 const Tab = styled(Tabs)`

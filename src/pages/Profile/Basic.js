@@ -3,7 +3,7 @@ import { Section, Heading } from "components"
 import { Formik } from "formik"
 import { TextInput } from "components/Fields"
 import { Form } from "antd"
-import { SubmitButton } from "@jbuschke/formik-antd"
+import { SubmitButton } from "formik-antd"
 
 const formItemLayout = {
 	labelCol: {

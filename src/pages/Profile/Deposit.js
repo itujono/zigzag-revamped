@@ -7,7 +7,7 @@ import moment from "moment"
 import { theme } from "styles"
 import { Formik } from "formik"
 import { TextInput } from "components/Fields"
-import { SubmitButton } from "@jbuschke/formik-antd"
+import { SubmitButton } from "formik-antd"
 import { depositData } from "helpers/dummy"
 
 const { Text } = Typography

@@ -2,7 +2,7 @@ import React from "react"
 import { Button as Buttonee } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
-import { SubmitButton } from "@jbuschke/formik-antd"
+import { SubmitButton } from "formik-antd"
 
 const StyledButton = styled(Buttonee).attrs(({ type, shape }) => ({
 	type: type || "primary",

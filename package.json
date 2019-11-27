@@ -4,12 +4,12 @@
 	"author": "Bejo Karmila",
 	"private": false,
 	"dependencies": {
-		"@jbuschke/formik-antd": "^1.2.1",
 		"antd": "^3.13.4",
 		"axios": "^0.19.0",
 		"babel-plugin-import": "^1.11.0",
 		"customize-cra": "^0.2.11",
 		"formik": "^1.5.7",
+		"formik-antd": "^1.6.0",
 		"less": "^3.9.0",
 		"less-loader": "^4.1.0",
 		"moment": "^2.24.0",

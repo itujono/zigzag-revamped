@@ -1,5 +1,5 @@
 import React from "react"
-import { Radio, FormItem } from "@jbuschke/formik-antd"
+import { Radio, FormItem } from "formik-antd"
 
 export default function RadioInput({ options, ...props }) {
 	return (

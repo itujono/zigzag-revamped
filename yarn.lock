@@ -819,13 +819,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.4.tgz#a87b4b04e5ae14a88d48ebef15015f6b7d1f5677"
   integrity sha512-kBa+cDHOR9jpRJ+kcGMsysrls0leukrm68DmFQoMIWQcXdr2cZvyvypWuGYT7U+9kAExUE7+T7r6G3C3A6L8MQ==
 
-"@jbuschke/formik-antd@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@jbuschke/formik-antd/-/formik-antd-1.2.1.tgz#c8a3b112fef70719503762a5c3733495a7681e95"
-  integrity sha512-pvgPhy40G2lM13MK4LnbF/t+COeJ70pOx6Me7ItCGTc1TKMaCQrVAQxnv6GvekiTL3EeSqTOBSyvsv5bLI/i+Q==
-  dependencies:
-    lodash.get "4.4.2"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -4289,6 +4282,11 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
+formik-antd@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/formik-antd/-/formik-antd-1.6.0.tgz#1a58b6d76ee07423c6fbdf7ba5af1f2cabfd0554"
+  integrity sha512-sEaf5glPWKvHm0/OSoR4qVzUcztu0pQo4mYULKFLu0XgP2eMBDSo/9cbgH+eZkH6seIgyBepK1D8Lo0w30Uq+g==
+
 formik@^1.5.7:
   version "1.5.7"
   resolved "https://registry.yarnpkg.com/formik/-/formik-1.5.7.tgz#2fc5fc2f0c693cdc4e8c9dad3a10eb4c4e131ff5"
@@ -6304,11 +6302,6 @@ lodash.flow@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/lodash.flow/-/lodash.flow-3.5.0.tgz#87bf40292b8cf83e4e8ce1a3ae4209e20071675a"
   integrity sha1-h79AKSuM+D5OjOGjrkIJ4gBxZ1o=
-
-lodash.get@4.4.2:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
-  integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
 
 lodash.isarguments@^3.0.0:
   version "3.1.0"
