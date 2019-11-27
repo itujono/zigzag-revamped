@@ -1,10 +1,16 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Menu } from "antd"
 import { Heading } from "components"
 import { NavLink } from "react-router-dom"
+import { connect } from "react-redux"
+import { fetchProductCategories } from "store/actions/productActions"
 import { BagIcon, ShoesIcon, LingerieIcon, WalletIcon, HomewareIcon } from "components/Icons"
 
-function SidebarMenu({ page }) {
+function SidebarMenu({ page, fetchProductCategories, categories }) {
+	useEffect(() => {
+		fetchProductCategories()
+	}, [])
+
 	return (
 		<div>
 			{page === "profile" ? (
@@ -47,31 +53,28 @@ function SidebarMenu({ page }) {
 						style={{ paddingLeft: "1em", paddingTop: "2em" }}
 					/>
 					<Menu>
-						<Menu.Item key="tas">
-							<NavLink to="/category/tas">
-								<BagIcon /> Tas
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="sepatu">
-							<NavLink to="/category/sepatu">
-								<ShoesIcon /> Sepatu
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="lingerie">
-							<NavLink to="/category/lingerie">
-								<LingerieIcon /> Lingerie
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="dompet">
-							<NavLink to="/category/dompet">
-								<WalletIcon /> Dompet
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="homeware">
-							<NavLink to="/category/homeware">
-								<HomewareIcon /> Homeware
-							</NavLink>
-						</Menu.Item>
+						{categories.map(item => {
+							const theIcon =
+								item.id === 1 ? (
+									<HomewareIcon />
+								) : item.id === 2 ? (
+									<ShoesIcon />
+								) : item.id === 3 ? (
+									<WalletIcon />
+								) : item.id === 4 ? (
+									<LingerieIcon />
+								) : (
+									<BagIcon />
+								)
+
+							return (
+								<Menu.Item key={item.id}>
+									<NavLink to={`/category/${item.name.toLowerCase()}`}>
+										{theIcon} {item.name}
+									</NavLink>
+								</Menu.Item>
+							)
+						})}
 					</Menu>
 					<Heading
 						content="Cari cepat"
@@ -102,4 +105,8 @@ function SidebarMenu({ page }) {
 	)
 }
 
-export default SidebarMenu
+const mapState = ({ product }) => ({
+	categories: product.categories.filter(item => item.parent === 0)
+})
+
+export default connect(mapState, { fetchProductCategories })(SidebarMenu)
