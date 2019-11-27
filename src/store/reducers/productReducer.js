@@ -3,7 +3,8 @@ import * as types from "../types"
 const initialState = {
 	user: {},
 	categories: [],
-	products: []
+	products: [],
+	loading: false
 }
 
 function reducer(state = initialState, action) {

@@ -1,27 +1,30 @@
 import React, { useEffect } from "react"
-import { Section, Button, Heading, ProductCard, Layout } from "components"
+import { Section, Button, Heading, ProductCard, Layout, Loading } from "components"
 import { Row, Col } from "antd"
 import { useParams } from "react-router-dom"
 import { connect } from "react-redux"
 import { fetchProducts } from "store/actions/productActions"
 
-function Category({ products, fetchProducts }) {
+function Category({ products, fetchProducts, loading }) {
 	const { name, id } = useParams()
 
 	useEffect(() => {
 		fetchProducts(id, 0)
 	}, [name, id])
 
+	// if (loading) return <Loading />
+
 	return (
 		<Layout sidebar>
 			<Section>
-				<Heading content="Tas" subheader="Liat produk tas terbaik di Zigzag" marginBottom="3em" />
+				<Heading content={name} subheader={`Liat produk ${name} terbaik di Zigzag`} marginBottom="3em" />
 				<Row gutter={16}>
 					{products.map(item => (
 						<Col xs={12} lg={6}>
 							<ProductCard
 								key={item.id}
 								mode="mini"
+								loading={loading}
 								data={{
 									src: item.product_image[0].picture,
 									title: item.name,
@@ -89,7 +92,8 @@ function Category({ products, fetchProducts }) {
 }
 
 const mapState = ({ product }) => ({
-	products: product.products
+	products: product.products,
+	loading: product.loading
 })
 
 export default connect(mapState, { fetchProducts })(Category)

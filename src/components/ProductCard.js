@@ -37,20 +37,24 @@ const tagStyle = {
 	right: 0
 }
 
-function ProductCard({ data, mode, ...props }) {
+function ProductCard({ data, mode, loading = false, ...props }) {
 	return (
 		<Link to={data.to}>
 			<Cardee {...props} mode={mode} hoverable cover={<img alt={data.title} src={data.src} />}>
-				<Row gutter={16} type="flex" justify="space-between" align="middle">
-					<Col lg={18}>
-						<Card.Meta title={data.title} description={`Rp ${pricer(data.price)}`} />
-					</Col>
-					<Col lg={6} style={{ textAlign: "right" }}>
-						<Tag style={tagStyle} color="magenta">
-							{data.category}
-						</Tag>
-					</Col>
-				</Row>
+				{loading ? (
+					<p style={{ textAlign: "center" }}>Mohon tunggu...</p>
+				) : (
+					<Row gutter={16} type="flex" justify="space-between" align="middle">
+						<Col lg={18}>
+							<Card.Meta title={data.title} description={`Rp ${pricer(data.price)}`} />
+						</Col>
+						<Col lg={6} style={{ textAlign: "right" }}>
+							<Tag style={tagStyle} color="magenta">
+								{data.category}
+							</Tag>
+						</Col>
+					</Row>
+				)}
 			</Cardee>
 		</Link>
 	)
