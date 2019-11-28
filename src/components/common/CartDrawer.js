@@ -2,6 +2,7 @@ import React from "react"
 import Drawer from "components/Drawer"
 import Heading from "components/Heading"
 import { List, Avatar, Row, Col, Icon, Form, Tooltip } from "antd"
+import { Link } from "react-router-dom"
 import styled from "styled-components/macro"
 import Button from "components/Button"
 import { pricer } from "helpers"
@@ -141,9 +142,11 @@ export default function CartDrawer({ onCartDrawer }) {
 						<Heading content="Rp 560,000" subheader="2400 gram" className="price" />
 					</Col>
 				</Row>
-				<Button block size="large">
-					Lanjut ke Checkout &nbsp; <Icon type="right" />
-				</Button>
+				<Link to="/checkout">
+					<Button block size="large">
+						Lanjut ke Checkout &nbsp; <Icon type="right" />
+					</Button>
+				</Link>
 			</SubtotalSection>
 		</Drawer>
 	)
