@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { Row, Col, Menu, Icon, Typography, List, Avatar } from "antd"
 import { Logo, Heading, Button } from "components"
-import styled from "styled-components"
+import styled from "styled-components/macro"
 import { Link, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import Drawer from "./Drawer"
 import { cartItems } from "helpers/dummy"
 import { pricer } from "helpers"
+import Section from "./Section"
+import { theme } from "styles"
 
 const Nav = styled.nav`
 	width: inherit;
@@ -46,6 +48,24 @@ const CartItem = styled(List.Item)`
 	}
 `
 
+const SubtotalSection = styled(Section).attrs({
+	paddingHorizontal: "0"
+})`
+	border-top: 1px solid ${theme.greyColor[2]};
+	.ant-typography {
+		h4 {
+			font-size: 1em;
+		}
+		> div {
+			font-size: 0.9em;
+			color: ${theme.greyColor[1]};
+		}
+	}
+	.price {
+		font-weight: bold;
+	}
+`
+
 function Navbar({ user, role, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(false)
 
@@ -64,6 +84,11 @@ function Navbar({ user, role, ...props }) {
 				width={540}
 				onClose={() => setCartDrawer(false)}
 				visible={cartDrawer}
+				css={`
+					.ant-drawer-body {
+						padding: 2em 3em;
+					}
+				`}
 			>
 				<Heading content="Cart kamu" level={4} bold />
 				<List
@@ -77,7 +102,10 @@ function Navbar({ user, role, ...props }) {
 									<p style={{ marginBottom: 0 }}>
 										<a href="https://ant.design">{item.name}</a> &middot;{" "}
 										<span>
-											Rp {pricer(item.price)} x {item.quantity}
+											Rp {pricer(item.price)} x {item.quantity} &nbsp;{" "}
+											<span className="delete">
+												<Icon type="delete" />
+											</span>
 										</span>
 									</p>
 								}
@@ -86,6 +114,22 @@ function Navbar({ user, role, ...props }) {
 						</CartItem>
 					)}
 				/>
+				<SubtotalSection>
+					<Row type="flex" justify="space-between" gutter={32}>
+						<Col lg={16}>
+							<Heading
+								content="Subtotal"
+								subheader="Ongkir dan biaya lainnya akan dikalkulasikan di bagian Checkout"
+							/>
+						</Col>
+						<Col lg={8} style={{ textAlign: "right" }}>
+							<p className="price">Rp 560,000</p>
+						</Col>
+					</Row>
+					<Button block size="large">
+						Lanjut ke Checkout &nbsp; <Icon type="right" />
+					</Button>
+				</SubtotalSection>
 			</Drawer>
 			<Row type="flex" justify="space-between">
 				<Col>
