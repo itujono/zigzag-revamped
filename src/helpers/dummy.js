@@ -55,7 +55,31 @@ export const historyData = [
 ]
 
 export const cartItems = [
-	{ id: 1, name: "SP-808", price: 90000, quantity: 2, total: 180000, photo: "https://source.unsplash.com/random" },
-	{ id: 2, name: "SP-333", price: 120000, quantity: 2, total: 240000, photo: "https://source.unsplash.com/300x300" },
-	{ id: 1, name: "SP-176", price: 145000, quantity: 1, total: 145000, photo: "https://source.unsplash.com/301x301" }
+	{
+		id: 1,
+		name: "SP-808",
+		price: 90000,
+		quantity: 2,
+		total: 180000,
+		weight: 1200,
+		photo: "https://source.unsplash.com/random"
+	},
+	{
+		id: 2,
+		name: "SP-333",
+		price: 120000,
+		quantity: 2,
+		total: 240000,
+		weight: 800,
+		photo: "https://source.unsplash.com/300x300"
+	},
+	{
+		id: 1,
+		name: "SP-176",
+		price: 145000,
+		quantity: 1,
+		total: 145000,
+		weight: 600,
+		photo: "https://source.unsplash.com/301x301"
+	}
 ]

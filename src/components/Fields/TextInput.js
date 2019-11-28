@@ -7,7 +7,7 @@ const FormItem = styled(Item)`
 		margin-bottom: 1em;
 		.ant-input-number,
 		input {
-			width: 100%;
+			width: ${({ width }) => width || "100%"};
 		}
 		.ant-input-prefix {
 			color: rgba(0, 0, 0, 0.25);
@@ -30,9 +30,9 @@ const FormItem = styled(Item)`
 	}
 `
 
-function TextInput({ helpText, ...props }) {
+function TextInput({ helpText, width, ...props }) {
 	return (
-		<FormItem name={props.name} style={props.style} reverse={props.reverse} label={props.label}>
+		<FormItem name={props.name} style={props.style} reverse={props.reverse} label={props.label} width={width}>
 			{props.textarea ? (
 				<>
 					<Input.TextArea {...props} />
