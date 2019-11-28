@@ -93,11 +93,6 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 								<ShoesIcon /> Paling laris
 							</NavLink>
 						</Menu.Item>
-						<Menu.Item key="lingerie">
-							<NavLink to="/category/lingerie">
-								<LingerieIcon /> Lingerie
-							</NavLink>
-						</Menu.Item>
 					</Menu>
 				</>
 			)}

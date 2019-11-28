@@ -4,6 +4,7 @@ const initialState = {
 	user: {},
 	categories: [],
 	products: [],
+	restockProducts: [],
 	loading: false
 }
 
@@ -15,6 +16,8 @@ function reducer(state = initialState, action) {
 			return { ...state, product: action.payload, loading: false }
 		case types.FETCH_PRODUCTS:
 			return { ...state, products: action.payload, loading: false }
+		case types.FETCH_RESTOCK_PRODUCTS:
+			return { ...state, restockProducts: action.payload, loading: false }
 		case types.FETCH_PRODUCT_CATEGORIES:
 			return { ...state, categories: action.payload, loading: false }
 		default:

@@ -13,11 +13,19 @@ export const fetchProductItem = id => async dispatch => {
 	}
 }
 
-export const fetchProducts = (category = 1, limit = 10) => dispatch => {
+export const fetchProducts = (category = 0, limit = 10) => dispatch => {
 	dispatch(loadingProduct())
 	instance
 		.get(`/product/list?category=${category}&limit=${limit}`)
 		.then(({ data }) => dispatch({ type: types.FETCH_PRODUCTS, payload: data.data.product_data }))
+		.catch(err => console.error(err.response))
+}
+
+export const fetchRestockProducts = (category = 0, limit = 10, restock = 1) => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.get(`/product/list?category=${category}&limit=${limit}&restock=${restock}`)
+		.then(({ data }) => dispatch({ type: types.FETCH_RESTOCK_PRODUCTS, payload: data.data.product_data }))
 		.catch(err => console.error(err.response))
 }
 

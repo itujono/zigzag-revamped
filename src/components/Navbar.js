@@ -5,8 +5,8 @@ import styled from "styled-components"
 import { Link, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import Drawer from "./Drawer"
-import Section from "./Section"
 import { cartItems } from "helpers/dummy"
+import { pricer } from "helpers"
 
 const Nav = styled.nav`
 	width: inherit;
@@ -36,6 +36,16 @@ const StyledMenu = styled(Menu)`
 	}
 `
 
+const CartItem = styled(List.Item)`
+	.ant-list-item-meta-avatar {
+		margin-right: 24px;
+		.product-photo {
+			width: 60px;
+			height: 80px;
+		}
+	}
+`
+
 function Navbar({ user, role, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(false)
 
@@ -51,33 +61,31 @@ function Navbar({ user, role, ...props }) {
 			<Drawer
 				placement="right"
 				closable={false}
-				width={400}
+				width={540}
 				onClose={() => setCartDrawer(false)}
 				visible={cartDrawer}
 			>
-				{/* <Section> */}
 				<Heading content="Cart kamu" level={4} bold />
 				<List
 					itemLayout="horizontal"
 					dataSource={cartItems}
 					renderItem={item => (
-						<List.Item>
+						<CartItem>
 							<List.Item.Meta
-								avatar={<Avatar src={item.photo} />}
+								avatar={<Avatar src={item.photo} shape="square" className="product-photo" />}
 								title={
 									<p style={{ marginBottom: 0 }}>
 										<a href="https://ant.design">{item.name}</a> &middot;{" "}
 										<span>
-											{item.price} x {item.quantity}
+											Rp {pricer(item.price)} x {item.quantity}
 										</span>
 									</p>
 								}
 								description="Ant Design, a design language for background applications, is refined by Ant UED Team"
 							/>
-						</List.Item>
+						</CartItem>
 					)}
 				/>
-				{/* </Section> */}
 			</Drawer>
 			<Row type="flex" justify="space-between">
 				<Col>
@@ -131,4 +139,4 @@ function Navbar({ user, role, ...props }) {
 const mapState = ({ user, auth }) => ({ user: user.user, role: auth.role })
 
 // prettier-ignore
-export default withRouter(connect(null, {})(Navbar))
+export default withRouter(connect(mapState, {})(Navbar))

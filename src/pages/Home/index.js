@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { Section, Heading, Layout, ProductCard, ButtonLink } from "components"
 import { connect } from "react-redux"
-import { fetchProductItem, fetchProducts, fetchProductCategories } from "store/actions/productActions"
+import { fetchProductItem, fetchProducts, fetchRestockProducts } from "store/actions/productActions"
 import { Carousel, Row, Col, Icon } from "antd"
 import { mobile, media } from "helpers"
 import styled from "styled-components"
@@ -13,10 +13,10 @@ const SelengkapButton = styled(ButtonLink)`
 	margin-right: 0;
 `
 
-function Home({ fetchProductCategories, fetchProducts }) {
+function Home({ fetchProducts, products, fetchRestockProducts, restockProducts }) {
 	useEffect(() => {
-		fetchProducts()
-		fetchProductCategories()
+		fetchProducts(0, 6)
+		fetchRestockProducts(0, 6)
 	}, [])
 
 	return (
@@ -71,67 +71,20 @@ function Home({ fetchProductCategories, fetchProducts }) {
 							</Col>
 						</Row>
 						<Row gutter={16}>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/300x500",
-										title: "Sempardak",
-										price: 75000,
-										to: "/product/Sempardak"
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/300x501",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/300x499",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/301x500",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/299x499",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/299x500",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
+							{products.map(item => (
+								<Col xs={12} lg={8}>
+									<ProductCard
+										mode="mini"
+										data={{
+											src: item.product_image[0].picture,
+											title: item.name,
+											price: item.product_price[0].price,
+											to: `/product/${item.id}-${item.name}`,
+											category: item.categories.name
+										}}
+									/>
+								</Col>
+							))}
 						</Row>
 					</Col>
 					<Col lg={12} style={{ marginBottom: mobile && "2em" }}>
@@ -144,8 +97,8 @@ function Home({ fetchProductCategories, fetchProducts }) {
 							<Col>
 								<Heading
 									bold
-									content="Produk terlaris"
-									subheader="Produk-produk idaman wanita masa kini"
+									content="Produk restock"
+									subheader="Produk-produk idaman yang baru di-update"
 								/>
 							</Col>
 							<Col>
@@ -155,66 +108,20 @@ function Home({ fetchProductCategories, fetchProducts }) {
 							</Col>
 						</Row>
 						<Row gutter={16}>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/300x500",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/300x501",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/300x499",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/301x500",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/299x499",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
-							<Col xs={12} lg={8}>
-								<ProductCard
-									mode="mini"
-									data={{
-										src: "http://source.unsplash.com/299x500",
-										title: "Sempardak",
-										price: 75000
-									}}
-								/>
-							</Col>
+							{restockProducts.map(item => (
+								<Col xs={12} lg={8}>
+									<ProductCard
+										mode="mini"
+										data={{
+											src: item.product_image[0].picture,
+											title: item.name,
+											price: item.product_price[0].price,
+											to: `/product/${item.id}-${item.name}`,
+											category: item.categories.name
+										}}
+									/>
+								</Col>
+							))}
 						</Row>
 					</Col>
 				</Row>
@@ -226,8 +133,8 @@ function Home({ fetchProductCategories, fetchProducts }) {
 const mapState = ({ product }) => ({
 	product: product.product,
 	products: product.products,
-	categories: product.categories
+	restockProducts: product.restockProducts
 })
 
 // prettier-ignore
-export default connect(mapState, { fetchProductItem, fetchProducts, fetchProductCategories } )(Home)
+export default connect(mapState, { fetchProductItem, fetchProducts, fetchRestockProducts } )(Home)

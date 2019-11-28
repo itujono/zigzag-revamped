@@ -17,7 +17,15 @@ function Category({ products, fetchProducts, loading }) {
 	return (
 		<Layout sidebar>
 			<Section>
-				<Heading content={name} subheader={`Liat produk ${name} terbaik di Zigzag`} marginBottom="3em" />
+				<Heading
+					content={
+						<div>
+							{name} <span>({products.length})</span>
+						</div>
+					}
+					subheader={`Liat produk ${name} terbaik di Zigzag`}
+					marginBottom="3em"
+				/>
 				<Row gutter={16}>
 					{products.map(item => (
 						<Col xs={12} lg={6}>
@@ -35,56 +43,6 @@ function Category({ products, fetchProducts, loading }) {
 							/>
 						</Col>
 					))}
-					{/* <Col xs={12} lg={6}>
-						<ProductCard
-							mode="mini"
-							data={{
-								src: "http://source.unsplash.com/300x501",
-								title: "Sempardak",
-								price: 75000
-							}}
-						/>
-					</Col>
-					<Col xs={12} lg={6}>
-						<ProductCard
-							mode="mini"
-							data={{
-								src: "http://source.unsplash.com/300x499",
-								title: "Sempardak",
-								price: 75000
-							}}
-						/>
-					</Col>
-					<Col xs={12} lg={6}>
-						<ProductCard
-							mode="mini"
-							data={{
-								src: "http://source.unsplash.com/301x500",
-								title: "Sempardak",
-								price: 75000
-							}}
-						/>
-					</Col>
-					<Col xs={12} lg={6}>
-						<ProductCard
-							mode="mini"
-							data={{
-								src: "http://source.unsplash.com/299x499",
-								title: "Sempardak",
-								price: 75000
-							}}
-						/>
-					</Col>
-					<Col xs={12} lg={6}>
-						<ProductCard
-							mode="mini"
-							data={{
-								src: "http://source.unsplash.com/299x500",
-								title: "Sempardak",
-								price: 75000
-							}}
-						/>
-					</Col> */}
 				</Row>
 			</Section>
 		</Layout>

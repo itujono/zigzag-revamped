@@ -40,6 +40,8 @@
 		"not op_mini all"
 	],
 	"devDependencies": {
+		"babel-plugin-macros": "^2.7.1",
+		"babel-plugin-styled-components": "^1.10.6",
 		"dotenv": "^8.2.0"
 	}
 }
