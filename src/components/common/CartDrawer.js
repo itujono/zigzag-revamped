@@ -1,7 +1,7 @@
 import React from "react"
 import Drawer from "components/Drawer"
 import Heading from "components/Heading"
-import { List, Avatar, Row, Col, Icon, Form } from "antd"
+import { List, Avatar, Row, Col, Icon, Form, Tooltip } from "antd"
 import styled from "styled-components/macro"
 import Button from "components/Button"
 import { pricer } from "helpers"
@@ -44,6 +44,17 @@ const CartItem = styled(List.Item)`
 			height: 80px;
 		}
 	}
+	.ant-list-item-meta-title {
+		.delete {
+			cursor: pointer;
+		}
+	}
+	.price-weight {
+		font-weight: bold;
+		span {
+			font-weight: normal;
+		}
+	}
 `
 
 export default function CartDrawer({ onCartDrawer }) {
@@ -76,10 +87,12 @@ export default function CartDrawer({ onCartDrawer }) {
 								<p style={{ marginBottom: 0 }}>
 									<a href="https://ant.design">{item.name}</a> &middot;{" "}
 									<span>
-										Rp {pricer(item.price)} / pcs &middot;&nbsp;
-										<span className="delete">
-											<Icon type="delete" />
-										</span>
+										Rp {pricer(item.price)} / pcs &middot; &nbsp; &nbsp;
+										<Tooltip title="Hapus" placement="right">
+											<span className="delete">
+												<Icon type="delete" />
+											</span>
+										</Tooltip>
 									</span>
 								</p>
 							}
@@ -95,6 +108,7 @@ export default function CartDrawer({ onCartDrawer }) {
 														name="quantity"
 														width={90}
 														placeholder="Jumlah..."
+														css="margin-bottom: 1.5em"
 													/>
 													<Form.Item>
 														<SubmitButton type="primary">Update</SubmitButton>
@@ -102,9 +116,9 @@ export default function CartDrawer({ onCartDrawer }) {
 												</Form>
 											)}
 										/>
-										<p>
+										<p className="price-weight">
 											Rp {pricer(item.quantity * item.price)} &middot;{" "}
-											<span>{item.weight} gram</span>
+											<span>{item.weight * item.quantity} gram</span>
 										</p>
 									</Col>
 								</Row>

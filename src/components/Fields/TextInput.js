@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 const FormItem = styled(Item)`
 	&& {
-		margin-bottom: 1em;
+		margin-bottom: ${({ marginBottom }) => marginBottom || "1em"};
 		.ant-input-number,
 		input {
 			width: ${({ width }) => width || "100%"};
@@ -30,9 +30,16 @@ const FormItem = styled(Item)`
 	}
 `
 
-function TextInput({ helpText, width, ...props }) {
+function TextInput({ helpText, width, reverse, marginBottom, ...props }) {
 	return (
-		<FormItem name={props.name} style={props.style} reverse={props.reverse} label={props.label} width={width}>
+		<FormItem
+			name={props.name}
+			style={props.style}
+			reverse={reverse}
+			label={props.label}
+			width={width}
+			marginBottom={marginBottom}
+		>
 			{props.textarea ? (
 				<>
 					<Input.TextArea {...props} />
