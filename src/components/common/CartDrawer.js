@@ -8,7 +8,6 @@ import { pricer } from "helpers"
 import { cartItems } from "helpers/dummy"
 import Section from "components/Section"
 import { theme } from "styles"
-import ButtonLink from "components/ButtonLink"
 import { TextInput } from "components/Fields"
 import { Formik } from "formik"
 import { SubmitButton } from "formik-antd"
@@ -33,6 +32,9 @@ const SubtotalSection = styled(Section).attrs({
 	}
 	.price {
 		font-weight: bold;
+		> div {
+			font-weight: normal;
+		}
 	}
 `
 
@@ -136,7 +138,7 @@ export default function CartDrawer({ onCartDrawer }) {
 						/>
 					</Col>
 					<Col lg={8} style={{ textAlign: "right" }}>
-						<p className="price">Rp 560,000</p>
+						<Heading content="Rp 560,000" subheader="2400 gram" className="price" />
 					</Col>
 				</Row>
 				<Button block size="large">
