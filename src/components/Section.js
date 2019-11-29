@@ -4,7 +4,8 @@ import { media } from "helpers"
 
 const StyledSection = styled.section`
 	&& {
-		padding: ${({ paddingHorizontal }) => (paddingHorizontal ? `2em ${paddingHorizontal}` : `2em 4em`)};
+		padding: ${({ paddingHorizontal, noPadding }) =>
+			(paddingHorizontal && `2em ${paddingHorizontal}`) || (noPadding && "0") || `2em 4em`};
 		text-align: ${({ textAlign }) => textAlign || "left"};
 		margin-bottom: ${({ marginBottom }) => marginBottom || "1em"};
 		width: ${({ width }) => width || "100%"};

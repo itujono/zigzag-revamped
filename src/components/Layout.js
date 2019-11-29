@@ -25,6 +25,7 @@ const Header = styled(PageLayout.Header)`
 const Footer = styled(PageLayout.Footer)`
 	text-align: center;
 	padding: 3em;
+	border-top: 1px solid #eee;
 `
 
 const Section = styled.section`
