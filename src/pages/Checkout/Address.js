@@ -21,10 +21,9 @@ const StyledCard = styled(Card)`
 export default function Address({ data, handlers }) {
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
-	const [formValues, setFormValues] = useState({})
 
-	const { fetchCities, fetchSubdistricts } = handlers
-	const { cityOptions, provinceOptions, subdistrictOptions } = data
+	const { fetchCities, fetchSubdistricts, setFormValues } = handlers
+	const { cityOptions, provinceOptions, subdistrictOptions, formValues } = data
 
 	const handleRenderCities = provinceId => setSelectedProvince(provinceId)
 	const handleRenderSubdistricts = cityId => setSelectedCity(cityId)
