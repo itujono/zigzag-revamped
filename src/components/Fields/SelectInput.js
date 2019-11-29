@@ -4,6 +4,7 @@ import styled from "styled-components"
 
 const Item = styled(FormItem)`
 	&& {
+		margin-bottom: 1em;
 		.ant-form-item-label {
 			label {
 				font-size: ${({ reverse }) => reverse && "11px"};

@@ -1,12 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Section, Layout, Heading } from "components"
 import { Switch, Route, Redirect } from "react-router-dom"
+import { connect } from "react-redux"
+import { Row, Col } from "antd"
+import styled from "styled-components/macro"
+
+import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
 import Address from "./Address"
 import Ongkir from "./Ongkir"
 import Payment from "./Payment"
 import Summary from "./Summary"
-import { Row, Col } from "antd"
-import styled from "styled-components/macro"
 
 const Sidebar = styled.div`
 	padding: 2em 3em;
@@ -14,7 +17,13 @@ const Sidebar = styled.div`
 	background-color: #f9f9f9;
 `
 
-export default function Checkout() {
+function Checkout({ provinceOptions, cityOptions, subdistrictOptions, ...props }) {
+	const { fetchCities, fetchSubdistricts } = props
+
+	useEffect(() => {
+		props.fetchProvinces()
+	}, [])
+
 	return (
 		<Layout sidebar page="checkout">
 			<Section
@@ -29,7 +38,15 @@ export default function Checkout() {
 					<Col lg={16}>
 						<Switch>
 							<Redirect exact from="/checkout" to="/checkout/address" />
-							<Route path="/checkout/address" component={Address} />
+							<Route
+								path="/checkout/address"
+								render={() => (
+									<Address
+										data={{ provinceOptions, cityOptions, subdistrictOptions }}
+										handlers={{ fetchCities, fetchSubdistricts }}
+									/>
+								)}
+							/>
 							<Route path="/checkout/ongkir" component={Ongkir} />
 							<Route path="/checkout/payment" component={Payment} />
 							<Route path="/checkout/summary" component={Summary} />
@@ -45,3 +62,15 @@ export default function Checkout() {
 		</Layout>
 	)
 }
+
+const mapState = ({ rajaOngkir }) => ({
+	cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, label: item.city_name })),
+	provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, label: item.province })),
+	subdistrictOptions: rajaOngkir.subdistricts.map(item => ({
+		value: item.subdistrict_id,
+		label: item.subdistrict_name
+	}))
+})
+
+// prettier-ignore
+export default connect(mapState, { fetchCities, fetchProvinces, fetchSubdistricts })(Checkout)

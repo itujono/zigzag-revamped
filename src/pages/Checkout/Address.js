@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Section, Heading, Card, Button } from "components"
 import { Formik } from "formik"
 import { Form, Row, Col, Icon } from "antd"
-import { TextInput } from "components/Fields"
+import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
 
@@ -17,12 +17,26 @@ const StyledCard = styled(Card)`
 	}
 `
 
-export default function Address() {
+export default function Address({ data, handlers }) {
+	const [selectedProvince, setSelectedProvince] = useState("")
+	const [selectedCity, setSelectedCity] = useState("")
+
+	const { fetchCities, fetchSubdistricts } = handlers
+	const { cityOptions, provinceOptions, subdistrictOptions } = data
+
+	const handleRenderCities = provinceId => setSelectedProvince(provinceId)
+	const handleRenderSubdistricts = cityId => setSelectedCity(cityId)
+
+	useEffect(() => {
+		fetchCities("", selectedProvince)
+		if (selectedCity) fetchSubdistricts(selectedCity)
+	}, [selectedProvince, selectedCity])
+
 	return (
 		<Section paddingHorizontal="0">
 			<Heading content="Alamat kamu" subheader="Isi kontak dan alamat pengiriman nya" marginBottom="3em" />
 			<Formik
-				render={({ handleSubmit }) => (
+				render={({ handleSubmit, values }) => (
 					<Form layout="vertical" onSubmit={handleSubmit}>
 						<StyledCard noHover title="Info kontak">
 							<Row gutter={16}>
@@ -40,13 +54,27 @@ export default function Address() {
 						<StyledCard noHover title="Alamat">
 							<Row gutter={16}>
 								<Col lg={12}>
-									<TextInput name="province" placeholder="Provinsi kamu..." />
+									<SelectInput
+										name="province"
+										placeholder="Provinsi kamu..."
+										options={provinceOptions}
+										onChange={handleRenderCities(values.province)}
+									/>
 								</Col>
 								<Col lg={12}>
-									<TextInput name="city" placeholder="Kota/kabupaten kamu..." />
+									<SelectInput
+										name="city"
+										placeholder="Kota/kabupaten kamu..."
+										options={cityOptions}
+										onChange={handleRenderSubdistricts(values.city)}
+									/>
 								</Col>
 								<Col lg={12}>
-									<TextInput name="subdistrict" placeholder="Kecamatan kamu..." />
+									<SelectInput
+										name="subdistrict"
+										placeholder="Kecamatan kamu..."
+										options={subdistrictOptions}
+									/>
 								</Col>
 								<Col lg={12}>
 									<TextInput name="zip" placeholder="Kode pos kamu..." />
