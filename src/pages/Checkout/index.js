@@ -10,6 +10,7 @@ import Address from "./Address"
 import Ongkir from "./Ongkir"
 import Payment from "./Payment"
 import Summary from "./Summary"
+import { pricer } from "helpers"
 
 const Sidebar = styled.div`
 	padding: 2em 3em;
@@ -28,12 +29,13 @@ const dummyData = {
 
 function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, ...props }) {
 	const [formValues, setFormValues] = useState({})
-	const [selectedCourier, setSelectedCourier] = useState({})
+	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
 
 	const { fetchCities, fetchSubdistricts, couriers } = props
 	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
 	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
 	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
+	const courierDetails = (selectedCourier.details || {}).cost || []
 
 	useEffect(() => {
 		props.fetchProvinces()
@@ -135,7 +137,21 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 							<Divider />
 							<Row gutter={16}>
 								<Col lg={12}>
-									{/* <Heading reverse content="Kurir yang dipilih" subheader={selectedCourier || "-"} /> */}
+									<Heading
+										reverse
+										content="Kurir yang dipilih"
+										subheader={
+											`${selectedCourier.details.service || ""} (${selectedCourier.details
+												.description || ""})` || "-"
+										}
+									/>
+								</Col>
+								<Col lg={12}>
+									<Heading
+										reverse
+										content="Ongkir"
+										subheader={`Rp ${pricer((courierDetails[0] || {}).value || "")}` || "Rp 0"}
+									/>
 								</Col>
 							</Row>
 						</Sidebar>
