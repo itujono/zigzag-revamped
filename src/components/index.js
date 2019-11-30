@@ -10,5 +10,20 @@ import Button from "./Button"
 import Loading from "./Loading"
 import Success from "./Success"
 import Drawer from "./Drawer"
+import Modal from "./Modal"
 
-export { Heading, Section, Layout, Logo, Card, Navbar, ProductCard, ButtonLink, Button, Loading, Success, Drawer }
+export {
+	Heading,
+	Section,
+	Layout,
+	Logo,
+	Card,
+	Navbar,
+	ProductCard,
+	ButtonLink,
+	Button,
+	Loading,
+	Success,
+	Drawer,
+	Modal
+}

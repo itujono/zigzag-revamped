@@ -4,6 +4,7 @@ import { Row, Col } from "antd"
 import { useParams } from "react-router-dom"
 import { connect } from "react-redux"
 import { fetchProducts } from "store/actions/productActions"
+import { upperCase } from "helpers"
 
 function Category({ products, fetchProducts, loading }) {
 	const { name, id } = useParams()
@@ -20,7 +21,7 @@ function Category({ products, fetchProducts, loading }) {
 				<Heading
 					content={
 						<div>
-							{name} <span>({products.length})</span>
+							{upperCase(name)} <span>({products.length})</span>
 						</div>
 					}
 					subheader={`Liat produk ${name} terbaik di Zigzag`}

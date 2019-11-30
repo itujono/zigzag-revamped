@@ -30,7 +30,7 @@ const dummyData = {
 function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, ...props }) {
 	const [formValues, setFormValues] = useState({})
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
-	const [selectedPayment, setSelectedPayment] = useState({ value: "", label: "" })
+	const [selectedPayment, setSelectedPayment] = useState({ value: "transfer", label: "ATM/Transfer bank" })
 
 	const { fetchCities, fetchSubdistricts, couriers } = props
 	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
