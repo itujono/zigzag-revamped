@@ -3,7 +3,8 @@ import * as types from "store/types"
 const initialStates = {
 	provinces: [],
 	cities: [],
-	subdistricts: []
+	subdistricts: [],
+	couriers: []
 }
 
 function reducer(state = initialStates, action) {
@@ -16,6 +17,8 @@ function reducer(state = initialStates, action) {
 			return { ...state, cities: action.payload, loading: false }
 		case types.FETCH_SUBDISTRICTS:
 			return { ...state, subdistricts: action.payload, loading: false }
+		case types.FETCH_COURIERS:
+			return { ...state, couriers: action.payload, loading: false }
 		default:
 			return state
 	}

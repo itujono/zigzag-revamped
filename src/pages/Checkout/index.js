@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { Row, Col, Divider } from "antd"
 import styled from "styled-components/macro"
 
-import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
+import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "store/actions/rajaOngkirActions"
 import Address from "./Address"
 import Ongkir from "./Ongkir"
 import Payment from "./Payment"
@@ -17,16 +17,27 @@ const Sidebar = styled.div`
 	background-color: #f9f9f9;
 `
 
+const dummyData = {
+	origin: "48",
+	destination: "574",
+	weight: 5,
+	courier: "jne",
+	originType: "city",
+	destinationType: "subdistrict"
+}
+
 function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, ...props }) {
 	const [formValues, setFormValues] = useState({})
+	const [selectedCourier, setSelectedCourier] = useState({})
 
-	const { fetchCities, fetchSubdistricts } = props
+	const { fetchCities, fetchSubdistricts, couriers } = props
 	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
 	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
 	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
 
 	useEffect(() => {
 		props.fetchProvinces()
+		props.fetchCouriers(dummyData)
 	}, [])
 
 	return (
@@ -52,7 +63,15 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 									/>
 								)}
 							/>
-							<Route path="/checkout/ongkir" component={Ongkir} />
+							<Route
+								path="/checkout/ongkir"
+								render={() => (
+									<Ongkir
+										data={{ couriers, formValues, selectedCourier }}
+										handlers={{ setSelectedCourier }}
+									/>
+								)}
+							/>
 							<Route path="/checkout/payment" component={Payment} />
 							<Route path="/checkout/summary" component={Summary} />
 						</Switch>
@@ -113,6 +132,12 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 									/>
 								</Col>
 							</Row>
+							<Divider />
+							<Row gutter={16}>
+								<Col lg={12}>
+									{/* <Heading reverse content="Kurir yang dipilih" subheader={selectedCourier || "-"} /> */}
+								</Col>
+							</Row>
 						</Sidebar>
 					</Col>
 				</Row>
@@ -128,6 +153,7 @@ const mapState = ({ rajaOngkir }) => {
 		rajaOngkir.subdistricts.find(item => item.subdistrict_id === subdistrict) || {}
 
 	return {
+		couriers: rajaOngkir.couriers,
 		dataOnSidebar: { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar },
 		cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, label: item.city_name })),
 		provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, label: item.province })),
@@ -139,4 +165,4 @@ const mapState = ({ rajaOngkir }) => {
 }
 
 // prettier-ignore
-export default connect(mapState, { fetchCities, fetchProvinces, fetchSubdistricts })(Checkout)
+export default connect(mapState, { fetchCities, fetchProvinces, fetchSubdistricts, fetchCouriers })(Checkout)
