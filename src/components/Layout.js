@@ -49,6 +49,13 @@ const Sidebar = styled(PageLayout.Sider)`
 		background: transparent;
 		padding-left: 2em;
 		border-right: 1px solid #eee;
+		.ant-layout-sider-children {
+			> div {
+				position: sticky;
+				top: 10px;
+				left: 0;
+			}
+		}
 		.ant-menu-vertical {
 			border-right: none;
 		}

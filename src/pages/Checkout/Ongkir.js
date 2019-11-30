@@ -3,6 +3,7 @@ import { Section, Heading, Card, Button } from "components"
 import { Row, Col, Badge, Icon } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
+import { useHistory } from "react-router-dom"
 import jneLogo from "assets/images/jne-logo.svg"
 import jntLogo from "assets/images/j&t-logo.jpeg"
 import sicepatLogo from "assets/images/sicepat-logo.png"
@@ -67,7 +68,9 @@ const CourierCol = styled.div`
 `
 
 export default function Ongkir({ data, handlers }) {
-	const { couriers = [], formValues, selectedCourier } = data
+	const { push } = useHistory()
+
+	const { couriers = [], selectedCourier } = data
 	const { setSelectedCourier } = handlers
 
 	const handleSelectCourier = courier => setSelectedCourier(courier)
@@ -118,7 +121,7 @@ export default function Ongkir({ data, handlers }) {
 				)
 			})}
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button>
+				<Button onClick={() => push("/checkout/payment")}>
 					Lanjut ke Pembayaran <Icon type="right" />
 				</Button>
 			</Section>
