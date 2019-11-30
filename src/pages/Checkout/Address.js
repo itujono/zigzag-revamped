@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react"
 import { Section, Heading, Card, Button } from "components"
 import { Formik } from "formik"
 import { Form, Row, Col, Icon } from "antd"
+import { useHistory } from "react-router-dom"
 import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
-import { Switch } from "formik-antd"
+import { Switch, SubmitButton } from "formik-antd"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -21,9 +22,10 @@ const StyledCard = styled(Card)`
 export default function Address({ data, handlers }) {
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
+	const { push } = useHistory()
 
 	const { fetchCities, fetchSubdistricts, setFormValues } = handlers
-	const { cityOptions, provinceOptions, subdistrictOptions, formValues } = data
+	const { cityOptions, provinceOptions, subdistrictOptions } = data
 
 	const handleRenderCities = provinceId => setSelectedProvince(provinceId)
 	const handleRenderSubdistricts = cityId => setSelectedCity(cityId)
@@ -37,6 +39,11 @@ export default function Address({ data, handlers }) {
 		<Section paddingHorizontal="0">
 			<Heading content="Alamat kamu" subheader="Isi kontak dan alamat pengiriman nya" marginBottom="3em" />
 			<Formik
+				onSubmit={(values, { setSubmitting }) => {
+					console.log({ values })
+					setSubmitting(false)
+					push("/checkout/ongkir")
+				}}
 				render={({ handleSubmit, values }) => {
 					const handleChange = e => {
 						const name = e.target.name
@@ -158,9 +165,9 @@ export default function Address({ data, handlers }) {
 								</Row>
 							</StyledCard>
 							<Section textAlign="right" paddingHorizontal="0">
-								<Button>
+								<SubmitButton type="primary">
 									Lanjut ke Ongkir <Icon type="right" />
-								</Button>
+								</SubmitButton>
 							</Section>
 						</Form>
 					)

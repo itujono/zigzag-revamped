@@ -17,10 +17,13 @@ const Sidebar = styled.div`
 	background-color: #f9f9f9;
 `
 
-function Checkout({ provinceOptions, cityOptions, subdistrictOptions, ...props }) {
+function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, ...props }) {
 	const [formValues, setFormValues] = useState({})
 
 	const { fetchCities, fetchSubdistricts } = props
+	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
+	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
+	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
 
 	useEffect(() => {
 		props.fetchProvinces()
@@ -71,13 +74,13 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, ...props }
 							<Divider />
 							<Row gutter={16}>
 								<Col lg={12}>
-									<Heading reverse content="Provinsi" subheader={formValues.province || "-"} />
+									<Heading reverse content="Provinsi" subheader={province || "-"} />
 								</Col>
 								<Col lg={12}>
-									<Heading reverse content="Kota" subheader={formValues.city || "-"} />
+									<Heading reverse content="Kota" subheader={city || "-"} />
 								</Col>
 								<Col lg={12}>
-									<Heading reverse content="Kabupaten" subheader={formValues.subdistrict || "-"} />
+									<Heading reverse content="Kabupaten" subheader={subdistrict || "-"} />
 								</Col>
 								<Col lg={12}>
 									<Heading reverse content="Kode pos" subheader={formValues.zip || "-"} />
@@ -118,14 +121,22 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, ...props }
 	)
 }
 
-const mapState = ({ rajaOngkir }) => ({
-	cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, label: item.city_name })),
-	provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, label: item.province })),
-	subdistrictOptions: rajaOngkir.subdistricts.map(item => ({
-		value: item.subdistrict_id,
-		label: item.subdistrict_name
-	}))
-})
+const mapState = ({ rajaOngkir }) => {
+	const provinceOnSidebar = province => rajaOngkir.provinces.find(item => item.province_id === province) || {}
+	const cityOnSidebar = city => rajaOngkir.cities.find(item => item.city_id === city) || {}
+	const subdistrictOnSidebar = subdistrict =>
+		rajaOngkir.subdistricts.find(item => item.subdistrict_id === subdistrict) || {}
+
+	return {
+		dataOnSidebar: { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar },
+		cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, label: item.city_name })),
+		provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, label: item.province })),
+		subdistrictOptions: rajaOngkir.subdistricts.map(item => ({
+			value: item.subdistrict_id,
+			label: item.subdistrict_name
+		}))
+	}
+}
 
 // prettier-ignore
 export default connect(mapState, { fetchCities, fetchProvinces, fetchSubdistricts })(Checkout)
