@@ -30,6 +30,7 @@ const dummyData = {
 function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, ...props }) {
 	const [formValues, setFormValues] = useState({})
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
+	const [selectedPayment, setSelectedPayment] = useState({ value: "", label: "" })
 
 	const { fetchCities, fetchSubdistricts, couriers } = props
 	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
@@ -74,7 +75,10 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 									/>
 								)}
 							/>
-							<Route path="/checkout/payment" component={Payment} />
+							<Route
+								path="/checkout/payment"
+								render={() => <Payment data={{ selectedPayment }} handlers={{ setSelectedPayment }} />}
+							/>
 							<Route path="/checkout/summary" component={Summary} />
 						</Switch>
 					</Col>
@@ -151,6 +155,15 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 										reverse
 										content="Ongkir"
 										subheader={`Rp ${pricer((courierDetails[0] || {}).value || "")}` || "Rp 0"}
+									/>
+								</Col>
+							</Row>
+							<Row gutter={16}>
+								<Col lg={24}>
+									<Heading
+										reverse
+										content="Metode pembayaran"
+										subheader={selectedPayment.label || "-"}
 									/>
 								</Col>
 							</Row>
