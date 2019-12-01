@@ -4,6 +4,7 @@ import { Row, Col } from "antd"
 import styled from "styled-components/macro"
 import { Link } from "react-router-dom"
 import { theme } from "styles"
+import { mobile, media } from "helpers"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -20,6 +21,22 @@ const StyledCard = styled(Card)`
 			}
 		}
 	}
+
+	${media.mobile`
+		&& {
+			.ant-card-body {
+				padding: 0;
+				.left {
+					padding: 1em;
+				}
+				.right {
+					padding: 1em;
+					text-align: left;
+					background-color: ${theme.greyColor[4]};
+				}
+			}
+		}
+	`}
 `
 
 const bankAccountText = (
@@ -38,7 +55,7 @@ const bankAccountText = (
 
 export default function CheckoutSuccess() {
 	return (
-		<Section centered width="75%" textAlign="center">
+		<Section centered width={mobile ? "100%" : "75%"} textAlign="center">
 			<StyledCard noHover>
 				<Row type="flex">
 					<Col lg={16} className="left">
@@ -54,8 +71,9 @@ export default function CheckoutSuccess() {
 							showIcon
 							message={
 								<span>
-									Kalo kamu belum melakukan konfirmasi order lebih dari 2 jam, maka orderan kamu akan{" "}
-									<strong>dibatalkan otomatis</strong> oleh sistem
+									Kalo kamu belum melakukan{" "}
+									<Link to="/order/confirmation">konfirmasi pembayaran</Link> lebih dari 2 jam, maka
+									orderan kamu akan <strong>dibatalkan otomatis</strong> oleh sistem
 								</span>
 							}
 						/>
