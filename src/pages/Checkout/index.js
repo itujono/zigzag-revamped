@@ -136,31 +136,14 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 													title={
 														<p style={{ marginBottom: 0 }}>
 															<a href="https://ant.design">{item.name}</a> &middot;{" "}
-															<span>Rp {pricer(item.price)} / pcs</span>
+															<span>
+																{item.quantity} x Rp {pricer(item.price)}/pcs
+															</span>
 														</p>
 													}
 													description={
 														<Row>
 															<Col lg={24}>
-																{/* <Formik
-																	initialValues={{ quantity: item.quantity }}
-																	render={({ handleSubmit }) => (
-																		<Form layout="inline" onSubmit={handleSubmit}>
-																			<TextInput
-																				number
-																				name="quantity"
-																				width={90}
-																				placeholder="Jumlah..."
-																				css="margin-bottom: 1.5em"
-																			/>
-																			<Form.Item>
-																				<SubmitButton type="primary">
-																					Update
-																				</SubmitButton>
-																			</Form.Item>
-																		</Form>
-																	)}
-																/> */}
 																<p className="price-weight">
 																	Rp {pricer(item.quantity * item.price)} &middot;{" "}
 																	<span>{item.weight * item.quantity} gram</span>

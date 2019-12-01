@@ -53,8 +53,6 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 		if (cartDrawerFromStore) setCartDrawer(true)
 	}, [cartDrawerFromStore])
 
-	console.log({ cartDrawer, cartDrawerFromStore })
-
 	user = "Muksin"
 
 	return (

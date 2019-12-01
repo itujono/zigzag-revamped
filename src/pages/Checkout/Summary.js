@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 import { Section, Heading, Card, Button, Modal } from "components"
 import styled from "styled-components"
-import { theme } from "styles"
 import { Row, Col, Tooltip, Icon } from "antd"
+import { useHistory } from "react-router-dom"
+
+import { theme } from "styles"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -22,6 +24,7 @@ const StyledRow = styled(Row).attrs({
 `
 
 export default function Summary() {
+	const { push } = useHistory()
 	const [confirmModal, setConfirmModal] = useState(false)
 
 	return (
@@ -31,7 +34,9 @@ export default function Summary() {
 					content="Place order sekarang?"
 					subheader="Apa kamu yakin mau place order sekarang? Action ini tidak bisa di-undo lagi."
 				/>
-				<Button icon="check">Ya, place order sekarang</Button>
+				<Button icon="check" onClick={() => push("/order/order_success")}>
+					Ya, place order sekarang
+				</Button>
 			</Modal>
 			<Heading
 				content="Ringkasan pemesanan"
