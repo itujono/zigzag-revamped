@@ -4,6 +4,7 @@ import { TextInput, DateInput, SelectInput } from "components/Fields"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton } from "formik-antd"
+import { mobile } from "helpers"
 
 export default function PaymentConfirmation() {
 	const props = {
@@ -24,7 +25,7 @@ export default function PaymentConfirmation() {
 
 	return (
 		<Section centered width="75%">
-			<Card noHover padding="4em">
+			<Card noHover padding={mobile ? "1.5em" : "4em"}>
 				<Row>
 					<Col lg={24}>
 						<Heading
