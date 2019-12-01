@@ -19,3 +19,6 @@ export const FETCH_COURIERS = "FETCH_COURIERS"
 export const LOADING_USER = "LOADING_USER"
 export const AUTH_USER = "AUTH_USER"
 export const UNAUTH_USER = "UNAUTH_USER"
+
+// Other types
+export const SET_CART_DRAWER_FROM_STORE = "SET_CART_DRAWER_FROM_STORE"

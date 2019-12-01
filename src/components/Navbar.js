@@ -4,6 +4,8 @@ import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
 import { Link, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
+
+import { setCartDrawerFromStore } from "store/actions/otherActions"
 import CartDrawer from "./common/CartDrawer"
 
 const Nav = styled.nav`
@@ -34,19 +36,30 @@ const StyledMenu = styled(Menu)`
 	}
 `
 
-function Navbar({ user, role, ...props }) {
-	const [cartDrawer, setCartDrawer] = useState(false)
+function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...props }) {
+	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 
 	const handleLogout = () => {
 		// props.unauthUser()
 		console.log("Logged out...")
 	}
 
+	const handleSetCardDrawer = () => {
+		setCartDrawerFromStore(true)
+		setCartDrawer(true)
+	}
+
+	useEffect(() => {
+		if (cartDrawerFromStore) setCartDrawer(true)
+	}, [cartDrawerFromStore])
+
+	console.log({ cartDrawer, cartDrawerFromStore })
+
 	user = "Muksin"
 
 	return (
 		<Nav>
-			<CartDrawer onCartDrawer={{ cartDrawer, setCartDrawer }} />
+			<CartDrawer onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }} />
 			<Row type="flex" justify="space-between">
 				<Col>
 					<Logo /> &nbsp;{" "}
@@ -64,7 +77,7 @@ function Navbar({ user, role, ...props }) {
 							<Menu.Item
 								key="notifications"
 								style={{ paddingLeft: "2em", paddingRight: 0 }}
-								onClick={() => setCartDrawer(true)}
+								onClick={handleSetCardDrawer}
 							>
 								<Icon type="bell" theme="filled" />
 							</Menu.Item>
@@ -96,7 +109,11 @@ function Navbar({ user, role, ...props }) {
 	)
 }
 
-const mapState = ({ user, auth }) => ({ user: user.user, role: auth.role })
+const mapState = ({ user, auth, other }) => ({
+	user: user.user,
+	role: auth.role,
+	cartDrawerFromStore: other.cartDrawer
+})
 
 // prettier-ignore
-export default withRouter(connect(mapState, {})(Navbar))
+export default withRouter(connect(mapState, {setCartDrawerFromStore})(Navbar))

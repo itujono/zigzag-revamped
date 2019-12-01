@@ -1,21 +1,48 @@
 import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading } from "components"
+import { Section, Layout, Heading, ButtonLink } from "components"
 import { Switch, Route, Redirect } from "react-router-dom"
 import { connect } from "react-redux"
-import { Row, Col, Divider } from "antd"
+import { Row, Col, Divider, List, Avatar, Tooltip, Icon, Form, Collapse } from "antd"
 import styled from "styled-components/macro"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "store/actions/rajaOngkirActions"
+import { setCartDrawerFromStore } from "store/actions/otherActions"
 import Address from "./Address"
 import Ongkir from "./Ongkir"
 import Payment from "./Payment"
 import Summary from "./Summary"
 import { pricer } from "helpers"
+import { cartItems } from "helpers/dummy"
+import { Formik } from "formik"
+import { TextInput } from "components/Fields"
+import { SubmitButton } from "formik-antd"
 
 const Sidebar = styled.div`
-	padding: 2em 3em;
-	height: 100%;
+	padding: 2em;
+	height: 100vh;
+	overflow-y: auto;
 	background-color: #f9f9f9;
+`
+
+const CartItem = styled(List.Item)`
+	.ant-list-item-meta-avatar {
+		margin-right: 24px;
+		.product-photo {
+			width: 60px;
+			height: 80px;
+		}
+	}
+	.ant-list-item-meta-title {
+		.delete {
+			cursor: pointer;
+		}
+	}
+	.price-weight {
+		font-weight: bold;
+		span {
+			font-weight: normal;
+		}
+	}
 `
 
 const dummyData = {
@@ -85,89 +112,159 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 					</Col>
 					<Col lg={8}>
 						<Sidebar>
-							<Heading content="Orderan kamu" subheader="Ringkasan orderan kamu ter-update di sini" />
-							<Row gutter={16}>
-								<Col lg={12}>
-									<Heading reverse content="Nama" subheader={formValues.name || "-"} />
-								</Col>
-								<Col lg={12}>
-									<Heading reverse content="Email" subheader={formValues.email || "-"} />
-								</Col>
-								<Col lg={12}>
-									<Heading reverse content="Nomor HP" subheader={formValues.tele || "-"} />
-								</Col>
-							</Row>
-							<Divider />
-							<Row gutter={16}>
-								<Col lg={12}>
-									<Heading reverse content="Provinsi" subheader={province || "-"} />
-								</Col>
-								<Col lg={12}>
-									<Heading reverse content="Kota" subheader={city || "-"} />
-								</Col>
-								<Col lg={12}>
-									<Heading reverse content="Kabupaten" subheader={subdistrict || "-"} />
-								</Col>
-								<Col lg={12}>
-									<Heading reverse content="Kode pos" subheader={formValues.zip || "-"} />
-								</Col>
-								<Col lg={24}>
-									<Heading reverse content="Alamat" subheader={formValues.address || "-"} />
-								</Col>
-							</Row>
-							<Divider />
-							<Row gutter={16}>
-								<Col lg={12}>
-									<Heading
-										reverse
-										content="Nama dropshipper"
-										subheader={formValues.dropshipper_name || "-"}
+							<Heading
+								content="Orderan kamu"
+								subheader="Ringkasan orderan kamu ter-update di sini"
+								marginBottom="3em"
+							/>
+
+							<Collapse bordered={false} defaultActiveKey={["shipping"]}>
+								<Collapse.Panel key="cartItems" header="Cart kamu">
+									<List
+										itemLayout="horizontal"
+										dataSource={cartItems}
+										renderItem={item => (
+											<CartItem>
+												<List.Item.Meta
+													avatar={
+														<Avatar
+															src={item.photo}
+															shape="square"
+															className="product-photo"
+														/>
+													}
+													title={
+														<p style={{ marginBottom: 0 }}>
+															<a href="https://ant.design">{item.name}</a> &middot;{" "}
+															<span>Rp {pricer(item.price)} / pcs</span>
+														</p>
+													}
+													description={
+														<Row>
+															<Col lg={24}>
+																{/* <Formik
+																	initialValues={{ quantity: item.quantity }}
+																	render={({ handleSubmit }) => (
+																		<Form layout="inline" onSubmit={handleSubmit}>
+																			<TextInput
+																				number
+																				name="quantity"
+																				width={90}
+																				placeholder="Jumlah..."
+																				css="margin-bottom: 1.5em"
+																			/>
+																			<Form.Item>
+																				<SubmitButton type="primary">
+																					Update
+																				</SubmitButton>
+																			</Form.Item>
+																		</Form>
+																	)}
+																/> */}
+																<p className="price-weight">
+																	Rp {pricer(item.quantity * item.price)} &middot;{" "}
+																	<span>{item.weight * item.quantity} gram</span>
+																</p>
+																<ButtonLink
+																	onClick={() => props.setCartDrawerFromStore(true)}
+																>
+																	Ubah
+																</ButtonLink>
+															</Col>
+														</Row>
+													}
+												/>
+											</CartItem>
+										)}
 									/>
-								</Col>
-								<Col lg={12}>
-									<Heading
-										reverse
-										content="Nomor HP dropshipper"
-										subheader={formValues.dropshipper_tele || "-"}
-									/>
-								</Col>
-								<Col lg={12}>
-									<Heading
-										reverse
-										content="JNE Online Booking"
-										subheader={formValues.jne_online_booking || "-"}
-									/>
-								</Col>
-							</Row>
-							<Divider />
-							<Row gutter={16}>
-								<Col lg={12}>
-									<Heading
-										reverse
-										content="Kurir yang dipilih"
-										subheader={
-											`${selectedCourier.details.service || ""} (${selectedCourier.details
-												.description || ""})` || "-"
-										}
-									/>
-								</Col>
-								<Col lg={12}>
-									<Heading
-										reverse
-										content="Ongkir"
-										subheader={`Rp ${pricer((courierDetails[0] || {}).value || "")}` || "Rp 0"}
-									/>
-								</Col>
-							</Row>
-							<Row gutter={16}>
-								<Col lg={24}>
-									<Heading
-										reverse
-										content="Metode pembayaran"
-										subheader={selectedPayment.label || "-"}
-									/>
-								</Col>
-							</Row>
+								</Collapse.Panel>
+								<Collapse.Panel key="shipping" header="Detail pengiriman">
+									<Row gutter={16}>
+										<Col lg={12}>
+											<Heading reverse content="Nama" subheader={formValues.name || "-"} />
+										</Col>
+										<Col lg={12}>
+											<Heading reverse content="Email" subheader={formValues.email || "-"} />
+										</Col>
+										<Col lg={12}>
+											<Heading reverse content="Nomor HP" subheader={formValues.tele || "-"} />
+										</Col>
+									</Row>
+									<Divider />
+									<Row gutter={16}>
+										<Col lg={12}>
+											<Heading reverse content="Provinsi" subheader={province || "-"} />
+										</Col>
+										<Col lg={12}>
+											<Heading reverse content="Kota" subheader={city || "-"} />
+										</Col>
+										<Col lg={12}>
+											<Heading reverse content="Kabupaten" subheader={subdistrict || "-"} />
+										</Col>
+										<Col lg={12}>
+											<Heading reverse content="Kode pos" subheader={formValues.zip || "-"} />
+										</Col>
+										<Col lg={24}>
+											<Heading reverse content="Alamat" subheader={formValues.address || "-"} />
+										</Col>
+									</Row>
+									<Divider />
+									<Row gutter={16}>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="Nama dropshipper"
+												subheader={formValues.dropshipper_name || "-"}
+											/>
+										</Col>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="Nomor HP dropshipper"
+												subheader={formValues.dropshipper_tele || "-"}
+											/>
+										</Col>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="JNE Online Booking"
+												subheader={formValues.jne_online_booking || "-"}
+											/>
+										</Col>
+									</Row>
+									<Divider />
+									<Row gutter={16}>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="Kurir yang dipilih"
+												subheader={
+													`${selectedCourier.details.service || ""} (${selectedCourier.details
+														.description || ""})` || "-"
+												}
+											/>
+										</Col>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="Ongkir"
+												subheader={
+													`Rp ${pricer((courierDetails[0] || {}).value || "")}` || "Rp 0"
+												}
+											/>
+										</Col>
+									</Row>
+									<Row gutter={16}>
+										<Col lg={24}>
+											<Heading
+												reverse
+												content="Metode pembayaran"
+												subheader={selectedPayment.label || "-"}
+											/>
+										</Col>
+									</Row>
+								</Collapse.Panel>
+							</Collapse>
 						</Sidebar>
 					</Col>
 				</Row>
@@ -194,5 +291,7 @@ const mapState = ({ rajaOngkir }) => {
 	}
 }
 
+const actions = { fetchCities, fetchProvinces, fetchSubdistricts, fetchCouriers, setCartDrawerFromStore }
+
 // prettier-ignore
-export default connect(mapState, { fetchCities, fetchProvinces, fetchSubdistricts, fetchCouriers })(Checkout)
+export default connect(mapState, actions)(Checkout)

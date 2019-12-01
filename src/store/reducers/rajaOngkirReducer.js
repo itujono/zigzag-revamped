@@ -10,7 +10,7 @@ const initialStates = {
 function reducer(state = initialStates, action) {
 	switch (action.type) {
 		case types.LOADING_RAJAONGKIR:
-			return { ...state, laoding: true }
+			return { ...state, loading: true }
 		case types.FETCH_PROVINCES:
 			return { ...state, provinces: action.payload, loading: false }
 		case types.FETCH_CITIES:

@@ -61,14 +61,19 @@ const CartItem = styled(List.Item)`
 `
 
 export default function CartDrawer({ onCartDrawer }) {
-	const { cartDrawer, setCartDrawer } = onCartDrawer
+	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
+
+	const handleClose = () => {
+		setCartDrawerFromStore(false)
+		setCartDrawer(false)
+	}
 
 	return (
 		<Drawer
 			placement="right"
 			closable={false}
 			width={540}
-			onClose={() => setCartDrawer(false)}
+			onClose={handleClose}
 			visible={cartDrawer}
 			css={`
 				.ant-drawer-body {
