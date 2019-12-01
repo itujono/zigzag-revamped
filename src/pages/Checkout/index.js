@@ -47,6 +47,7 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 		<Layout sidebar page="checkout">
 			<Section
 				noPadding
+				marginBottom="0"
 				css={`
 					&& {
 						padding-left: 2em;
