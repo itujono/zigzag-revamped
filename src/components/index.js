@@ -11,6 +11,7 @@ import Loading from "./Loading"
 import Success from "./Success"
 import Drawer from "./Drawer"
 import Modal from "./Modal"
+import Alert from "./Alert"
 
 export {
 	Heading,
@@ -25,5 +26,6 @@ export {
 	Loading,
 	Success,
 	Drawer,
-	Modal
+	Modal,
+	Alert
 }

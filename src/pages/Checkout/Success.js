@@ -1,19 +1,23 @@
 import React from "react"
-import { Section, Card, Success, Heading } from "components"
+import { Section, Card, Success, Heading, Alert, ButtonLink } from "components"
 import { Row, Col } from "antd"
 import styled from "styled-components/macro"
+import { Link } from "react-router-dom"
 import { theme } from "styles"
 
 const StyledCard = styled(Card)`
-	.ant-card-body {
-		padding: 0;
-		.left {
-			padding: 2em 3em;
-		}
-		.right {
-			padding: 2em 3em;
-			text-align: left;
-			background-color: ${theme.greyColor[4]};
+	&& {
+		margin-bottom: 3em;
+		.ant-card-body {
+			padding: 0;
+			.left {
+				padding: 2em 3em;
+			}
+			.right {
+				padding: 2em 3em;
+				text-align: left;
+				background-color: ${theme.greyColor[4]};
+			}
 		}
 	}
 `
@@ -45,12 +49,30 @@ export default function CheckoutSuccess() {
 							sudah ada di inbox email kamu. Namun sebelumnya, silakan lakukan pembayaran
 							terlebih dahulu ke rekening yang tertulis di samping."
 						/>
+						<Alert
+							type="info"
+							showIcon
+							message={
+								<span>
+									Kalo kamu belum melakukan konfirmasi order lebih dari 2 jam, maka orderan kamu akan{" "}
+									<strong>dibatalkan otomatis</strong> oleh sistem
+								</span>
+							}
+						/>
+						<Section textAlign="center">
+							Sudah melakukan pembayaran? <Link to="/order/confirmation">Konfirmasi pembayaran</Link>
+						</Section>
 					</Col>
 					<Col lg={8} className="right">
 						<Heading content="Rekening Zigzag" subheader={bankAccountText} />
 					</Col>
 				</Row>
 			</StyledCard>
+			<Section centered textAlign="center">
+				<Link to="/">
+					<ButtonLink icon="home">Kembali ke Home</ButtonLink>
+				</Link>
+			</Section>
 		</Section>
 	)
 }
