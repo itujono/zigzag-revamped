@@ -3,7 +3,6 @@ import Cardee from "antd/lib/card"
 import styled from "styled-components"
 
 const StyledCard = styled(Cardee)`
-	padding: ${({ padding }) => padding || "2em"};
 	.ant-card-body {
 		padding: ${({ padding }) => padding || "2em"};
 	}

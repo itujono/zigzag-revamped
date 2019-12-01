@@ -9,6 +9,7 @@ import Forgot from "pages/auth/Forgot"
 import ForgotSuccess from "pages/auth/Forgot/ForgotSuccess"
 import Checkout from "pages/Checkout"
 import CheckoutSuccess from "pages/Checkout/Success"
+import Confirmation from "pages/Checkout/Confirmation"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -30,6 +31,7 @@ const App = () => {
 						<Route path="/register" component={Register} />
 						<Route path="/checkout" component={Checkout} />
 						<Route path="/order/order_success" component={CheckoutSuccess} />
+						<Route path="/order/confirmation" component={Confirmation} />
 						<Route exact path="/forgot_password" component={Forgot} />
 						<Route path="/forgot_password/success" component={ForgotSuccess} />
 					</Switch>
