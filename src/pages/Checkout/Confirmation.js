@@ -8,7 +8,6 @@ import { SubmitButton, ResetButton } from "formik-antd"
 export default function PaymentConfirmation() {
 	const props = {
 		name: "file",
-		multiple: true,
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
 		onChange(info) {
 			const { status } = info.file
@@ -64,10 +63,11 @@ export default function PaymentConfirmation() {
 											<p className="ant-upload-drag-icon">
 												<Icon type="inbox" />
 											</p>
-											<p className="ant-upload-text">Click or drag file to this area to upload</p>
+											<p className="ant-upload-text">
+												Klik di sini atau drag file bukti transferan kamu
+											</p>
 											<p className="ant-upload-hint">
-												Support for a single or bulk upload. Strictly prohibit from uploading
-												company data or other band files
+												File yang didukung: png, jpeg, jpg, pdf, bmp
 											</p>
 										</Upload.Dragger>
 									</Form.Item>
