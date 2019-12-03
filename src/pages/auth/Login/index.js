@@ -6,12 +6,17 @@ import { Formik } from "formik"
 import { TextInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
+import { media } from "helpers"
 
 const TheImage = styled.section`
 	width: 100%;
 	height: 100%;
 	margin-left: -50px;
 	z-index: 0;
+
+	${media.mobile`
+		margin-left: initial;
+	`}
 `
 
 const TheCard = styled(Card)`
@@ -23,23 +28,36 @@ const TheCard = styled(Card)`
 			padding: 4em;
 		}
 	}
+
+	${media.mobile`
+		&& {
+			margin-bottom: 2em;
+			.ant-card-body {
+				padding: 1em;
+			}
+		}
+	`}
 `
 
 const LeftSide = styled(Col)`
 	left: 50px;
 	z-index: 1;
+
+	${media.mobile`
+		left: initial;
+	`}
 `
 
 export default function Login() {
 	return (
 		<Section centered>
-			<Row style={{ marginBottom: "2em" }}>
+			{/* <Row style={{ marginBottom: "2em" }}>
 				<Col lg={12}>
 					<Logo />
 				</Col>
-			</Row>
+			</Row> */}
 			<Row type="flex" align="middle" justify="center">
-				<LeftSide lg={10}>
+				<LeftSide lg={10} xs={24}>
 					<Heading
 						bold
 						content="Login"
