@@ -1,13 +1,19 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Section, Heading, Card, ButtonLink } from "components"
 import { TextInput, DateInput, SelectInput } from "components/Fields"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
+import { connect } from "react-redux"
+import { useHistory } from "react-router-dom"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton } from "formik-antd"
+
+import { fetchBankAccounts } from "store/actions/otherActions"
 import { mobile } from "helpers"
 
-export default function PaymentConfirmation() {
-	const props = {
+function PaymentConfirmation({ bankAccountOptions, ...props }) {
+	const { push } = useHistory()
+
+	const uploadProps = {
 		name: "file",
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
 		onChange(info) {
@@ -23,6 +29,16 @@ export default function PaymentConfirmation() {
 		}
 	}
 
+	const handleSubmitConfirmation = (values, { setSubmitting }) => {
+		console.log({ values })
+		push({ pathname: "/order/confirmation/success", state: { isSuccess: true } })
+		setSubmitting(false)
+	}
+
+	useEffect(() => {
+		props.fetchBankAccounts()
+	}, [])
+
 	return (
 		<Section centered width="75%">
 			<Card noHover padding={mobile ? "1.5em" : "4em"}>
@@ -34,6 +50,7 @@ export default function PaymentConfirmation() {
 							marginBottom="3em"
 						/>
 						<Formik
+							onSubmit={handleSubmitConfirmation}
 							render={({ handleSubmit }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
 									<SelectInput
@@ -46,9 +63,13 @@ export default function PaymentConfirmation() {
 										name="bank_receiver"
 										label="Nomor rekening Zigzag yang kamu transfer"
 										placeholder="Pilih salah satu rekening nya..."
-										options={[]}
+										options={bankAccountOptions}
 									/>
-									<TextInput name="bank_sender" label="Bank pengirim" placeholder="Misal: BCA" />
+									<TextInput
+										name="bank_sender"
+										label="Bank pengirim"
+										placeholder="Misal: BCA 111.9332.2243"
+									/>
 									<TextInput
 										name="total_transfer"
 										label="Jumlah yang ditransfer (Rp)"
@@ -59,8 +80,8 @@ export default function PaymentConfirmation() {
 										label="Tanggal ditransfer"
 										placeholder="Pilih tanggal ketika kamu transfer"
 									/>
-									<Form.Item label="Bukti transfer">
-										<Upload.Dragger {...props}>
+									<Form.Item name="evidence_file" label="Bukti transfer">
+										<Upload.Dragger {...uploadProps}>
 											<p className="ant-upload-drag-icon">
 												<Icon type="inbox" />
 											</p>
@@ -86,3 +107,17 @@ export default function PaymentConfirmation() {
 		</Section>
 	)
 }
+
+const mapState = ({ other }) => {
+	const bankAccountOptions = other.bankAccounts.map(item => ({
+		value: `${item.bank_name} ${item.bank_account}`,
+		label: `${item.bank_name} ${item.bank_account} an ${item.under_name}`
+	}))
+
+	return {
+		bankAccounts: other.bankAccounts,
+		bankAccountOptions
+	}
+}
+
+export default connect(mapState, { fetchBankAccounts })(PaymentConfirmation)
