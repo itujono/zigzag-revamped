@@ -12,6 +12,7 @@ import CheckoutSuccess from "pages/Checkout/Success"
 import Confirmation from "pages/Checkout/Confirmation"
 import ConfirmationSuccess from "pages/Checkout/ConfirmationSuccess"
 import NotFound from "pages/NotFound"
+import AccountUpgrade from "pages/Upgrade"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -37,6 +38,7 @@ const App = () => {
 						<Route path="/order/confirmation/success" component={ConfirmationSuccess} />
 						<Route exact path="/forgot_password" component={Forgot} />
 						<Route path="/forgot_password/success" component={ForgotSuccess} />
+						<Route path="/upgrade" component={AccountUpgrade} />
 						<Route component={NotFound} />
 					</Switch>
 				</Suspense>

@@ -84,7 +84,10 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 									<Typography.Paragraph strong>Hi, Mulyawan!</Typography.Paragraph>
 								</Menu.Item>
 								<Menu.Item key="profile">
-									<Link to="/profile">View profile</Link>
+									<Link to="/profile">Lihat profile</Link>
+								</Menu.Item>
+								<Menu.Item key="upgrade">
+									<Link to="/upgrade">Upgrade akun</Link>
 								</Menu.Item>
 								<Menu.Divider />
 								<Menu.Item key="logout" onClick={handleLogout}>

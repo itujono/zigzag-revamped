@@ -39,22 +39,26 @@ const StyledCard = styled(Card)`
 	`}
 `
 
-const bankAccountText = (
-	<ul>
+const usefulLinks = (
+	<ul style={{ marginTop: "3em" }}>
 		<li>
-			<Heading reverse content="Bank Mandiri" subheader={<div>109.000.243.2432 an Zigzag Online Shop</div>} />
+			<Heading reverse content="Tas" subheader={<Link to="/category/5-tas">Belanja tas</Link>} />
 		</li>
 		<li>
-			<Heading reverse content="Bank BCA" subheader={<div>109.000.243.2432 an Zigzag Online Shop</div>} />
+			<Heading reverse content="Bank BCA" subheader={<Link to="/category/3-dompet">Belanja dompet</Link>} />
 		</li>
 		<li>
-			<Heading reverse content="Bank CIMB Niaga" subheader={<div>109.000.243.2432 an Zigzag Online Shop</div>} />
+			<Heading
+				reverse
+				content="Bank CIMB Niaga"
+				subheader={<Link to="/category/4-lingerie">Belanja lingerie</Link>}
+			/>
 		</li>
 	</ul>
 )
 
 export default function ConfirmationSuccess() {
-	const { state } = useLocation()
+	const { state = {} } = useLocation()
 	const { push } = useHistory()
 
 	useEffect(() => {
@@ -69,25 +73,24 @@ export default function ConfirmationSuccess() {
 						<Success />
 						<Heading
 							content="Konfirmasi pembayaran selesai! 🎉🎉"
-							subheader="Mantap! Kamu sudah berhasil mengonfirmasi orderan kamu ini, dan kami akan segera memproses secepatnya. Harap bersabar, ya."
+							subheader="Great! Konfirmasi pembayaran kamu telah kami terima, dan email berisi detail info
+                            orderan juga sudah ada di inbox email kamu. Silakan duduk tenang, dan kami akan
+                            melakukan verifikasi terhadap konfirmasi pembayaran kamu. Tunggu notifikasi
+                            berikutnya dari kami. Have a great day!"
 						/>
 						<Alert
 							type="info"
 							showIcon
 							message={
 								<span>
-									Kalo kamu belum melakukan{" "}
-									<Link to="/order/confirmation">konfirmasi pembayaran</Link> lebih dari 2 jam, maka
-									orderan kamu akan <strong>dibatalkan otomatis</strong> oleh sistem
+									Kalo email yang berisi detail info orderan nya gak ada, jangan lupa{" "}
+									<strong>cek folder spam</strong> nya juga ya.
 								</span>
 							}
 						/>
-						<Section textAlign="center">
-							Sudah melakukan pembayaran? <Link to="/order/confirmation">Konfirmasi pembayaran</Link>
-						</Section>
 					</Col>
 					<Col lg={8} className="right">
-						<Heading content="Rekening Zigzag" subheader={bankAccountText} />
+						<Heading content="Coba belanja lagi" subheader={usefulLinks} />
 					</Col>
 				</Row>
 			</StyledCard>
