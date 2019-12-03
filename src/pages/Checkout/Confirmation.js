@@ -3,7 +3,7 @@ import { Section, Heading, Card, ButtonLink } from "components"
 import { TextInput, DateInput, SelectInput } from "components/Fields"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { connect } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton } from "formik-antd"
 
@@ -102,7 +102,9 @@ function PaymentConfirmation({ bankAccountOptions, ...props }) {
 				</Row>
 			</Card>
 			<Section centered textAlign="center">
-				<ButtonLink icon="home">Kembali ke Home</ButtonLink>
+				<Link to="/">
+					<ButtonLink icon="home">Kembali ke Home</ButtonLink>
+				</Link>
 			</Section>
 		</Section>
 	)

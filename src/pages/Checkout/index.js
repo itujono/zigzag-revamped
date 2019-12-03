@@ -13,9 +13,6 @@ import Payment from "./Payment"
 import Summary from "./Summary"
 import { pricer } from "helpers"
 import { cartItems } from "helpers/dummy"
-import { Formik } from "formik"
-import { TextInput } from "components/Fields"
-import { SubmitButton } from "formik-antd"
 
 const Sidebar = styled.div`
 	padding: 2em;
@@ -274,7 +271,13 @@ const mapState = ({ rajaOngkir }) => {
 	}
 }
 
-const actions = { fetchCities, fetchProvinces, fetchSubdistricts, fetchCouriers, setCartDrawerFromStore }
+const actions = {
+	fetchCities,
+	fetchProvinces,
+	fetchSubdistricts,
+	fetchCouriers,
+	setCartDrawerFromStore
+}
 
 // prettier-ignore
 export default connect(mapState, actions)(Checkout)

@@ -1,8 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Section, Card, Success, Heading, Alert, ButtonLink } from "components"
 import { Row, Col } from "antd"
 import styled from "styled-components/macro"
+import { connect } from "react-redux"
 import { Link } from "react-router-dom"
+
+import { fetchBankAccounts } from "store/actions/otherActions"
 import { theme } from "styles"
 import { mobile, media } from "helpers"
 
@@ -39,21 +42,25 @@ const StyledCard = styled(Card)`
 	`}
 `
 
-const bankAccountText = (
-	<ul>
-		<li>
-			<Heading reverse content="Bank Mandiri" subheader={<div>109.000.243.2432 an Zigzag Online Shop</div>} />
-		</li>
-		<li>
-			<Heading reverse content="Bank BCA" subheader={<div>109.000.243.2432 an Zigzag Online Shop</div>} />
-		</li>
-		<li>
-			<Heading reverse content="Bank CIMB Niaga" subheader={<div>109.000.243.2432 an Zigzag Online Shop</div>} />
-		</li>
+const bankAccountText = bankAccounts => (
+	<ul style={{ marginTop: "2em" }}>
+		{bankAccounts.map(item => (
+			<li key={item.id}>
+				<Heading
+					reverse
+					content={item.bank_name}
+					subheader={<div>{`${item.bank_account} an ${item.under_name}`}</div>}
+				/>
+			</li>
+		))}
 	</ul>
 )
 
-export default function CheckoutSuccess() {
+function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
+	useEffect(() => {
+		fetchBankAccounts()
+	}, [])
+
 	return (
 		<Section centered width={mobile ? "100%" : "75%"} textAlign="center">
 			<StyledCard noHover>
@@ -82,7 +89,7 @@ export default function CheckoutSuccess() {
 						</Section>
 					</Col>
 					<Col lg={8} className="right">
-						<Heading content="Rekening Zigzag" subheader={bankAccountText} />
+						<Heading content="Rekening Zigzag" subheader={bankAccountText(bankAccounts)} />
 					</Col>
 				</Row>
 			</StyledCard>
@@ -94,3 +101,9 @@ export default function CheckoutSuccess() {
 		</Section>
 	)
 }
+
+const mapState = ({ other }) => ({
+	bankAccounts: other.bankAccounts
+})
+
+export default connect(mapState, { fetchBankAccounts })(CheckoutSuccess)

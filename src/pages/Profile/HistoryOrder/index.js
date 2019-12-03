@@ -19,7 +19,7 @@ const ContentDetail = styled.div`
 	`}
 	padding: 1.5em;
 	margin-left: 3.4em;
-	background-color: ${theme.greyColor[3]};
+	background-color: ${theme.greyColor[4]};
 `
 
 function HistoryOrder(props) {
