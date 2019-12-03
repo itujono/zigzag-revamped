@@ -45,14 +45,10 @@ const usefulLinks = (
 			<Heading reverse content="Tas" subheader={<Link to="/category/5-tas">Belanja tas</Link>} />
 		</li>
 		<li>
-			<Heading reverse content="Bank BCA" subheader={<Link to="/category/3-dompet">Belanja dompet</Link>} />
+			<Heading reverse content="Dompet" subheader={<Link to="/category/3-dompet">Belanja dompet</Link>} />
 		</li>
 		<li>
-			<Heading
-				reverse
-				content="Bank CIMB Niaga"
-				subheader={<Link to="/category/4-lingerie">Belanja lingerie</Link>}
-			/>
+			<Heading reverse content="Lingerie" subheader={<Link to="/category/4-lingerie">Belanja lingerie</Link>} />
 		</li>
 	</ul>
 )
