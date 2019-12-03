@@ -6,6 +6,7 @@ const Basic = React.lazy(() => import("./Basic"))
 const HistoryOrder = React.lazy(() => import("./HistoryOrder"))
 const Deposit = React.lazy(() => import("./Deposit"))
 const Settings = React.lazy(() => import("./Settings"))
+const Wishlist = React.lazy(() => import("./Wishlist"))
 
 function Profile() {
 	return (
@@ -23,6 +24,7 @@ function Profile() {
 						<Route path="/profile/history" component={HistoryOrder} />
 						<Route path="/profile/deposit" component={Deposit} />
 						<Route path="/profile/settings" component={Settings} />
+						<Route path="/profile/wishlist" component={Wishlist} />
 					</Switch>
 				</Suspense>
 			</Section>

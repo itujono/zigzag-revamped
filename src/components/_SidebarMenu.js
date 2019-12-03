@@ -32,6 +32,11 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 								<BagIcon /> History order
 							</NavLink>
 						</Menu.Item>
+						<Menu.Item key="wishlist">
+							<NavLink to="/profile/wishlist">
+								<BagIcon /> Wishlist
+							</NavLink>
+						</Menu.Item>
 						<Menu.Item key="deposit">
 							<NavLink to="/profile/deposit">
 								<BagIcon /> Deposit
