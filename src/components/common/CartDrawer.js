@@ -5,7 +5,7 @@ import { List, Avatar, Row, Col, Icon, Form, Tooltip } from "antd"
 import { Link } from "react-router-dom"
 import styled from "styled-components/macro"
 import Button from "components/Button"
-import { pricer } from "helpers"
+import { pricer, media } from "helpers"
 import { cartItems } from "helpers/dummy"
 import Section from "components/Section"
 import { theme } from "styles"
@@ -40,6 +40,8 @@ const SubtotalSection = styled(Section).attrs({
 `
 
 const CartItem = styled(List.Item)`
+	padding-bottom: 2em;
+	padding-top: 2em;
 	.ant-list-item-meta-avatar {
 		margin-right: 24px;
 		.product-photo {

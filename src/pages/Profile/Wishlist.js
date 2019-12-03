@@ -4,10 +4,9 @@ import { Formik } from "formik"
 import styled from "styled-components"
 import { SubmitButton } from "formik-antd"
 
-import { Section, Heading, Button, ButtonLink } from "components"
+import { Section, Heading, Button } from "components"
 import { cartItems } from "helpers/dummy"
-import { pricer } from "helpers"
-import { TextInput } from "components/Fields"
+import { pricer, media, mobile } from "helpers"
 
 const CartItem = styled(List.Item)`
 	.ant-list-item-meta-avatar {
@@ -28,6 +27,12 @@ const CartItem = styled(List.Item)`
 			font-weight: normal;
 		}
 	}
+
+	${media.mobile`
+		.ant-list-item-meta {
+			margin-bottom: 20px;
+		}
+	`}
 `
 
 export default function Wishlist() {
@@ -78,7 +83,9 @@ export default function Wishlist() {
 								</Row>
 							}
 						/>
-						<Button icon="plus">Tambah ke cart</Button>
+						<Button icon="plus" block={mobile}>
+							Tambah ke cart
+						</Button>
 					</CartItem>
 				)}
 			/>
