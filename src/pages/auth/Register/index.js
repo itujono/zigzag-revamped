@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Button, Logo, ButtonLink } from "components"
-import { Row, Col, Form, Icon } from "antd"
+import { Row, Col, Form, Icon, Modal } from "antd"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
+import { fetchCustomerServices } from "store/actions/otherActions"
 import { Formik } from "formik"
-import { TextInput, RadioInput, SelectInput } from "components/Fields"
+import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
 import { media } from "helpers"
+import { validationSchema } from "./validation"
 
 const TheImage = styled.section`
 	width: 100%;
@@ -54,7 +56,8 @@ const LeftSide = styled(Col)`
 const AccountCard = styled(Card)`
 	&& {
 		cursor: pointer;
-		background-color: ${({ bg, value, accountType }) => accountType === value && "#f3f3f3"};
+		background-color: ${({ value, accountType }) => accountType === value && theme.greyColor[4]};
+		border-color: ${({ value, accountType }) => accountType === value && theme.primaryColor};
 		.ant-card-body {
 			padding: 2em;
 		}
@@ -91,24 +94,14 @@ const accountTypeOptions = [
 		)
 	}
 ]
-const csOptions = [
-	{ value: "si won", label: "Si Won" },
-	{ value: "pipeh", label: "Pipeh" },
-	{ value: "pujay", label: "Pujay" }
-]
 
-function Register({
-	fetchProvinces,
-	provinceOptions,
-	cityOptions,
-	fetchCities,
-	subdistrictOptions,
-	fetchSubdistricts
-}) {
+function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdistrictOptions, ...props }) {
 	const [section, setSection] = useState("credentials")
 	const [accountType, setAccountType] = useState("reguler")
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
+	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces } = props
+
 	const handleNext = section => setSection(section)
 
 	const handleRenderCities = values => setSelectedProvince(values.province)
@@ -131,14 +124,9 @@ function Register({
 						</Col>
 					</Row>
 					<TextInput type="email" name="email" label="Email" placeholder="Masukkan email kamu..." />
+					<TextInput password name="password" label="Password" placeholder="Masukkan password kamu..." />
 					<TextInput
-						type="password"
-						name="password"
-						label="Password"
-						placeholder="Masukkan password kamu..."
-					/>
-					<TextInput
-						type="password"
+						password
 						name="repeat_password"
 						label="Ulangi password kamu"
 						placeholder="Harus sama ama password di atas ya..."
@@ -259,14 +247,23 @@ function Register({
 	}
 
 	const handleRegister = (values, { setSubmitting }) => {
-		values = { ...values, acc_type: accountType }
-		console.log({ values })
-		setSubmitting(false)
+		values = { ...values, acc_type: accountType, name: `${values.first_name} ${values.last_name}` }
+		const { repeat_password, first_name, last_name, ...theValues } = values
+		Modal.confirm({
+			title: "Daftar sekarang?",
+			content: "Yakin kamu mau daftar sekarang?",
+			centered: true,
+			onOk: () => {
+				console.log({ theValues })
+				setSubmitting(false)
+			}
+		})
 	}
 
 	useEffect(() => {
 		fetchProvinces()
 		fetchCities("", selectedProvince)
+		fetchCustomerServices()
 		if (selectedCity) fetchSubdistricts(selectedCity)
 	}, [selectedProvince, selectedCity])
 
@@ -292,7 +289,13 @@ function Register({
 					/>
 					<TheCard noHover>
 						<Formik
-							initialValues={{ customer_service_id: "Pilih CS nya" }}
+							initialValues={{
+								customer_service_id: "Pilih CS nya",
+								province: "Pilih provinsi kamu",
+								city: "Pilih kota/kabupaten kamu",
+								subdistrict: "Pilih kecamatan nya juga"
+							}}
+							validationSchema={validationSchema}
 							onSubmit={handleRegister}
 							render={({ handleSubmit, values }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
@@ -315,7 +318,7 @@ function Register({
 	)
 }
 
-const mapState = ({ rajaOngkir }) => {
+const mapState = ({ rajaOngkir, other }) => {
 	const provinces = rajaOngkir.provinces || []
 	const cities = rajaOngkir.cities || []
 	const subdistricts = rajaOngkir.subdistricts || []
@@ -325,6 +328,7 @@ const mapState = ({ rajaOngkir }) => {
 
 	return {
 		provinces: rajaOngkir.provinces,
+		csOptions: other.csOptions,
 		cities,
 		cityOptions,
 		subdistrictOptions,
@@ -332,4 +336,5 @@ const mapState = ({ rajaOngkir }) => {
 	}
 }
 
-export default connect(mapState, { fetchProvinces, fetchCities, fetchSubdistricts })(Register)
+// prettier-ignore
+export default connect(mapState, { fetchProvinces, fetchCities, fetchSubdistricts, fetchCustomerServices })(Register)

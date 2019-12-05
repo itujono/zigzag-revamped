@@ -23,8 +23,14 @@ export const fetchBankAccounts = () => dispatch => {
 	dispatch(loadingOther())
 	return instance
 		.get(`/order/bank_accounts/list`)
-		.then(({ data }) => {
-			dispatch({ type: types.FETCH_BANK_ACCOUNTS, payload: data.data.bank_accounts_data })
-		})
+		.then(({ data }) => dispatch({ type: types.FETCH_BANK_ACCOUNTS, payload: data.data.bank_accounts_data }))
+		.catch(err => console.error(err.response))
+}
+
+export const fetchCustomerServices = () => dispatch => {
+	dispatch(loadingOther())
+	return instance
+		.get(`/customer_service/list`)
+		.then(({ data }) => dispatch({ type: types.FETCH_CUSTOMER_SERVICES, payload: data.data.customer_service_data }))
 		.catch(err => console.error(err.response))
 }

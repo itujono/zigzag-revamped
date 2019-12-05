@@ -14,9 +14,9 @@ function Success() {
 					style={{ marginBottom: "2.5em" }}
 				>
 					<g id="check-group" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-						<circle id="filled-circle" fill="#1890ff" cx="66.5" cy="66.5" r="54.5" />
+						<circle id="filled-circle" fill="#66ceb2" cx="66.5" cy="66.5" r="54.5" />
 						<circle id="white-circle" fill="#FFFFFF" cx="66.5" cy="66.5" r="55.5" />
-						<circle id="outline" stroke="#1890ff" strokeWidth="4" cx="66.5" cy="66.5" r="54.5" />
+						<circle id="outline" stroke="#66ceb2" strokeWidth="4" cx="66.5" cy="66.5" r="54.5" />
 						<polyline id="check" stroke="#FFFFFF" strokeWidth="4" points="41 70 56 85 92 49" />
 					</g>
 				</svg>

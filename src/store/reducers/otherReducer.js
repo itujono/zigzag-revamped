@@ -12,6 +12,16 @@ function reducer(state = initial, action) {
 			return { ...state, orderCodeList: action.payload, loading: false }
 		case types.FETCH_BANK_ACCOUNTS:
 			return { ...state, bankAccounts: action.payload, loading: false }
+		case types.FETCH_CUSTOMER_SERVICES:
+			return {
+				...state,
+				cs: action.payload,
+				csOptions: action.payload.map(item => ({
+					value: item.id,
+					label: `${item.name} - Whatsapp: ${item.whatsapp}, Line: ${item.line}`
+				})),
+				loading: false
+			}
 		default:
 			return state
 	}

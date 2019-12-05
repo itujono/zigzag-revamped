@@ -5,6 +5,7 @@ import { createAppStore } from "./store"
 import { Loading } from "components"
 import Login from "pages/auth/Login"
 import Register from "pages/auth/Register"
+import RegisterSuccess from "pages/auth/Register/RegisterSuccess"
 import Forgot from "pages/auth/Forgot"
 import ForgotSuccess from "pages/auth/Forgot/ForgotSuccess"
 import Checkout from "pages/Checkout"
@@ -31,7 +32,8 @@ const App = () => {
 						<Route path="/category/:id-:name" component={Category} />
 						<Route path="/profile" component={Profile} />
 						<Route path="/login" component={Login} />
-						<Route path="/register" component={Register} />
+						<Route exact path="/register" component={Register} />
+						<Route path="/register/success" component={RegisterSuccess} />
 						<Route path="/checkout" component={Checkout} />
 						<Route path="/order/order_success" component={CheckoutSuccess} />
 						<Route exact path="/order/confirmation" component={Confirmation} />
