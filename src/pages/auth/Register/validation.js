@@ -18,5 +18,7 @@ export const validationSchema = yup.object().shape({
 	province: yup.string().required("Pilih provinsi kamu"),
 	city: yup.string().required("Pilih kota/kabupaten kamu"),
 	subdistrict: yup.string().required("Kecamatan nya juga"),
-	zip: yup.string().required("Kode pos jangan lupa")
+	zip: yup.string().required("Kode pos jangan lupa"),
+	tele: yup.string().required("Nomor HP jangan lupa"),
+	address: yup.string().required("Alamat juga jangan lupa")
 })

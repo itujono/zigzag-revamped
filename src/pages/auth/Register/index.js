@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Button, Logo, ButtonLink } from "components"
 import { Row, Col, Form, Icon, Modal } from "antd"
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
 import { fetchCustomerServices } from "store/actions/otherActions"
+import { registerUser } from "store/actions/authActions"
 import { Formik } from "formik"
 import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
@@ -56,6 +57,7 @@ const LeftSide = styled(Col)`
 const AccountCard = styled(Card)`
 	&& {
 		cursor: pointer;
+		margin-bottom: 2em;
 		background-color: ${({ value, accountType }) => accountType === value && theme.greyColor[4]};
 		border-color: ${({ value, accountType }) => accountType === value && theme.primaryColor};
 		.ant-card-body {
@@ -66,7 +68,7 @@ const AccountCard = styled(Card)`
 
 const accountTypeOptions = [
 	{
-		value: "reguler",
+		value: 1,
 		title: "Reguler",
 		description: (
 			<p>
@@ -80,26 +82,35 @@ const accountTypeOptions = [
 		)
 	},
 	{
-		value: "vip",
+		value: 2,
 		title: "VIP",
 		description: (
 			<p>
 				Dengan jadi VIP member, kamu dapat:
-				<ul>
+				<ul style={{ marginBottom: "1em" }}>
 					<li>Semua kelebihan di tipe Reguler</li>
 					<li>Dapat diskon melimpah</li>
 					<li>Dapat pahala dan amal jariyah</li>
+				</ul>
+				Tapi kamu diwajibkan untuk:
+				<ul style={{ marginBottom: "1em" }}>
+					<li>
+						Membayar biaya member sebesar <span className="primary">Rp 50.000</span> setelah proses
+						registrasi
+					</li>
+					<li>Belanja minimal 4 (empat) items (direset tiap awal bulan)</li>
 				</ul>
 			</p>
 		)
 	}
 ]
 
-function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdistrictOptions, ...props }) {
+function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdistrictOptions, error, ...props }) {
 	const [section, setSection] = useState("credentials")
-	const [accountType, setAccountType] = useState("reguler")
+	const [accountType, setAccountType] = useState(1)
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
+	const { push } = useHistory()
 	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces } = props
 
 	const handleNext = section => setSection(section)
@@ -154,9 +165,9 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 			return (
 				<>
 					{/* <RadioInput name="acc_type" label="Pilih tipe akun" options={accountTypeOptions} /> */}
-					<Row gutter={16} style={{ marginBottom: "2em" }}>
+					<Row style={{ marginBottom: "2em" }}>
 						{accountTypeOptions.map(item => (
-							<Col lg={12}>
+							<Col lg={24}>
 								<AccountCard
 									onClick={() => setAccountType(item.value)}
 									value={item.value}
@@ -228,9 +239,17 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 							/>
 						</Col>
 						<Col lg={6}>
-							<TextInput name="zip" label="Kode pos" />
+							<TextInput name="zip" label="Kode pos" placeholder="Kode pos kamu..." />
 						</Col>
 					</Row>
+					<TextInput name="tele" label="Nomor HP" placeholder="Misal: 08122212122" />
+					<TextInput
+						texarea
+						rows={3}
+						name="address"
+						label="Alamat kamu"
+						placeholder="Misal: Jalan Suci no. 11"
+					/>
 					<Row type="flex" justify="space-between">
 						<Col lg={12}>
 							<ButtonLink icon="left" onClick={() => handleNext("cs")}>
@@ -255,7 +274,12 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 			centered: true,
 			onOk: () => {
 				console.log({ theValues })
-				setSubmitting(false)
+				props.registerUser(theValues).then(response => {
+					setSubmitting(false)
+					if (response === undefined) {
+						push({ pathname: "/register/success", state: { success: true, isVip: accountType === 2 } })
+					}
+				})
 			}
 		})
 	}
@@ -318,7 +342,7 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 	)
 }
 
-const mapState = ({ rajaOngkir, other }) => {
+const mapState = ({ rajaOngkir, other, auth }) => {
 	const provinces = rajaOngkir.provinces || []
 	const cities = rajaOngkir.cities || []
 	const subdistricts = rajaOngkir.subdistricts || []
@@ -329,6 +353,7 @@ const mapState = ({ rajaOngkir, other }) => {
 	return {
 		provinces: rajaOngkir.provinces,
 		csOptions: other.csOptions,
+		error: auth.registerUserError,
 		cities,
 		cityOptions,
 		subdistrictOptions,
@@ -336,5 +361,7 @@ const mapState = ({ rajaOngkir, other }) => {
 	}
 }
 
+const actions = { fetchProvinces, fetchCities, fetchSubdistricts, fetchCustomerServices, registerUser }
+
 // prettier-ignore
-export default connect(mapState, { fetchProvinces, fetchCities, fetchSubdistricts, fetchCustomerServices })(Register)
+export default connect(mapState, actions)(Register)
