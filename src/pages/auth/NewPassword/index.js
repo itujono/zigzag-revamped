@@ -40,11 +40,11 @@ function NewPassword({ changeNewPassword, error }) {
 	const params = new URLSearchParams(search)
 
 	const handleChangePassword = (values, { setSubmitting }) => {
-		values = { ...values, email: params.email, code: params.code }
-		changeNewPassword(values, push).finally(() => setSubmitting)
+		values = { ...values, email: params.get("email"), code: params.get("code") }
+		changeNewPassword(values, push).finally(() => setSubmitting(false))
 	}
 
-	if (!state.success) push("/404")
+	// if (!state.success) push("/404")
 
 	return (
 		<Section centered>

@@ -95,7 +95,7 @@ export const changeNewPassword = (values, push) => dispatch => {
 			return response
 		})
 		.then(() => {
-			push({ pathname: "/new_password/success", state: { success: true } })
+			push({ pathname: "/new-password/success", state: { success: true } })
 		})
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
