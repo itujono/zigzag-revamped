@@ -65,3 +65,23 @@ export const registerUser = (values, accountType, push) => dispatch => {
 			dispatch({ type: types.REGISTER_USER_ERROR, payload: error })
 		})
 }
+
+export const forgotPassword = ({ email }, push) => dispatch => {
+	dispatch(loadingAuth())
+	return instance
+		.post(`/customer/forgot_password`, email)
+		.then(response => {
+			dispatch({ type: types.FORGOT_PASSWORD, payload: response.data })
+			return response
+		})
+		.then(() => {
+			push({ pathname: "/forgot_password/success", state: { success: true } })
+		})
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.FORGOT_PASSWORD_ERROR, payload: error })
+		})
+}

@@ -18,6 +18,8 @@ function reducer(state = initialState, action) {
 			return { ...state, registerUserError: action.payload, loading: false }
 		case types.AUTH_USER_ERROR:
 			return { ...state, authUserError: action.payload, loading: false }
+		case types.FORGOT_PASSWORD_ERROR:
+			return { ...state, forgotError: action.payload, loading: false }
 		default:
 			return state
 	}

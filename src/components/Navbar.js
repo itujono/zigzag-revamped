@@ -37,6 +37,8 @@ const StyledMenu = styled(Menu)`
 	}
 `
 
+const token = localStorage.getItem("access_token")
+
 function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
@@ -54,8 +56,6 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 		if (cartDrawerFromStore) setCartDrawer(true)
 	}, [cartDrawerFromStore])
 
-	user = "Muksin"
-
 	return (
 		<Nav>
 			<CartDrawer onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }} />
@@ -71,7 +71,7 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 					</span>
 				</Col>
 				<Col style={{ textAlign: "right" }}>
-					{user ? (
+					{token ? (
 						<StyledMenu mode="horizontal">
 							<Menu.Item
 								key="notifications"
@@ -99,9 +99,11 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 					) : (
 						<StyledMenu mode="horizontal">
 							<Menu.Item key="login" style={{ paddingRight: 0 }}>
-								<Button shape="circle" type="primary">
-									<Icon type="user" style={{ marginRight: 0 }} />
-								</Button>
+								<Link to="/login">
+									<Button shape="circle" type="primary">
+										<Icon type="user" style={{ marginRight: 0 }} />
+									</Button>
+								</Link>
 							</Menu.Item>
 						</StyledMenu>
 					)}

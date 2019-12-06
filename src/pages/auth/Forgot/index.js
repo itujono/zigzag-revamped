@@ -4,6 +4,9 @@ import { Row, Col, Form } from "antd"
 import { useHistory } from "react-router"
 import { Link } from "react-router-dom"
 import { Formik } from "formik"
+import { connect } from "react-redux"
+import { forgotPassword } from "store/actions/authActions"
+
 import { TextInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
@@ -31,22 +34,20 @@ const LeftSide = styled(Col)`
 	z-index: 1;
 `
 
-export default function Forgot() {
+function Forgot({ forgotPassword, error }) {
 	const { push } = useHistory()
 
 	const handleForgot = (values, { setSubmitting }) => {
-		console.log({ values })
-		setSubmitting(false)
-		push("/forgot_password/success")
+		forgotPassword({ email: values.email }, push).finally(() => setSubmitting)
 	}
 
 	return (
 		<Section centered>
-			<Row style={{ marginBottom: "2em" }}>
+			{/* <Row style={{ marginBottom: "2em" }}>
 				<Col lg={12}>
 					<Logo />
 				</Col>
-			</Row>
+			</Row> */}
 			<Row type="flex" align="middle" justify="center">
 				<LeftSide lg={10}>
 					<Heading
@@ -91,3 +92,9 @@ export default function Forgot() {
 		</Section>
 	)
 }
+
+const mapState = ({ auth }) => ({
+	error: auth.forgotError
+})
+
+export default connect(mapState, { forgotPassword })(Forgot)
