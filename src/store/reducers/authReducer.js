@@ -12,8 +12,12 @@ function reducer(state = initialState, action) {
 			return { ...state, isLoggedin: true, loading: false }
 		case types.REGISTER_USER:
 			return { ...state, loading: false }
+		case types.UNAUTH_USER:
+			return { ...state, loading: false }
 		case types.REGISTER_USER_ERROR:
 			return { ...state, registerUserError: action.payload, loading: false }
+		case types.AUTH_USER_ERROR:
+			return { ...state, authUserError: action.payload, loading: false }
 		default:
 			return state
 	}

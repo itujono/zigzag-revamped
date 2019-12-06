@@ -34,7 +34,7 @@ function RegisterSuccess() {
 				<Col lg={8}>
 					<Card noHover padding="3em" style={{ marginBottom: "3em" }}>
 						<Success />
-						<Heading content="Good job! 🎉🎉" subheader={subheader} />
+						<Heading content="Good job! &nbsp; 🎉🎉" subheader={subheader} />
 						<Alert
 							showIcon
 							banner

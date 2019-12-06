@@ -14,6 +14,7 @@ import Confirmation from "pages/Checkout/Confirmation"
 import ConfirmationSuccess from "pages/Checkout/ConfirmationSuccess"
 import NotFound from "pages/NotFound"
 import AccountUpgrade from "pages/Upgrade"
+import AccountActive from "pages/auth/AccountActive"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -31,6 +32,7 @@ const App = () => {
 						<Route path="/product/:id-:name" component={ProductDetail} />
 						<Route path="/category/:id-:name" component={Category} />
 						<Route path="/profile" component={Profile} />
+						<Route exact path="/account/active" component={AccountActive} />
 						<Route path="/login" component={Login} />
 						<Route exact path="/register" component={Register} />
 						<Route path="/register/success" component={RegisterSuccess} />

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react"
 import { Row, Col, Menu, Icon, Typography, List, Avatar } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
-import { Link, withRouter } from "react-router-dom"
+import { Link, withRouter, useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
+import { unauthUser } from "store/actions/authActions"
 import CartDrawer from "./common/CartDrawer"
 
 const Nav = styled.nav`
@@ -38,10 +39,10 @@ const StyledMenu = styled(Menu)`
 
 function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
+	const { push } = useHistory()
 
 	const handleLogout = () => {
-		// props.unauthUser()
-		console.log("Logged out...")
+		props.unauthUser(push)
 	}
 
 	const handleSetCardDrawer = () => {
@@ -117,4 +118,4 @@ const mapState = ({ user, auth, other }) => ({
 })
 
 // prettier-ignore
-export default withRouter(connect(mapState, {setCartDrawerFromStore})(Navbar))
+export default withRouter(connect(mapState, {setCartDrawerFromStore, unauthUser})(Navbar))

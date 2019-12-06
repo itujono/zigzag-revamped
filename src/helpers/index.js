@@ -11,7 +11,7 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-	config.headers["x-access-token"] = `Bearer ${localStorage.getItem("token")}`
+	config.headers["x-access-token"] = localStorage.getItem("access_token")
 	return config
 })
 

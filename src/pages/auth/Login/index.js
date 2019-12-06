@@ -1,12 +1,16 @@
 import React from "react"
 import { Section, Heading, Card, Button, Logo } from "components"
 import { Row, Col, Form } from "antd"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { Formik } from "formik"
-import { TextInput } from "components/Fields"
+import { connect, useSelector } from "react-redux"
 import styled from "styled-components"
+
+import { authUser } from "store/actions/authActions"
+import { TextInput } from "components/Fields"
 import { theme } from "styles"
 import { media } from "helpers"
+import { validationSchema } from "./validation"
 
 const TheImage = styled.section`
 	width: 100%;
@@ -48,7 +52,14 @@ const LeftSide = styled(Col)`
 	`}
 `
 
-export default function Login() {
+function Login({ authUser }) {
+	const { push } = useHistory()
+	const error = useSelector(({ auth }) => auth.authUserError)
+
+	const handleLogin = (values, { setSubmitting }) => {
+		authUser(values, setSubmitting, push)
+	}
+
 	return (
 		<Section centered>
 			{/* <Row style={{ marginBottom: "2em" }}>
@@ -71,6 +82,8 @@ export default function Login() {
 					/>
 					<TheCard>
 						<Formik
+							onSubmit={handleLogin}
+							validationSchema={validationSchema}
 							render={({ handleSubmit }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
 									<TextInput
@@ -110,3 +123,5 @@ export default function Login() {
 		</Section>
 	)
 }
+
+export default connect(null, { authUser })(Login)

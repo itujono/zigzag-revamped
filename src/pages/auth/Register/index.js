@@ -105,13 +105,13 @@ const accountTypeOptions = [
 	}
 ]
 
-function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdistrictOptions, error, ...props }) {
+function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions, error, loading, ...props }) {
 	const [section, setSection] = useState("credentials")
 	const [accountType, setAccountType] = useState(1)
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
 	const { push } = useHistory()
-	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces } = props
+	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces, fetchCities } = props
 
 	const handleNext = section => setSection(section)
 
@@ -227,8 +227,9 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 						label="Provinsi kamu"
 						options={provinceOptions}
 						onChange={handleRenderCities(values)}
+						loading={loading}
 					/>
-					<SelectInput name="city" label="Kota kamu" options={cityOptions} />
+					<SelectInput name="city" label="Kota kamu" options={cityOptions} loading={loading} />
 					<Row gutter={16}>
 						<Col lg={18}>
 							<SelectInput
@@ -236,6 +237,7 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 								label="Kecamatan kamu"
 								options={subdistrictOptions}
 								onChange={handleRenderSubdistricts(values)}
+								loading={loading}
 							/>
 						</Col>
 						<Col lg={6}>
@@ -257,7 +259,19 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 							</ButtonLink>
 						</Col>
 						<Col lg={12} style={{ textAlign: "right" }}>
-							<Button submit>Oke, register sekarang</Button>
+							<Button
+								disabled={
+									!values.province ||
+									!values.city ||
+									!values.subdistrict ||
+									!values.zip ||
+									!values.tele ||
+									!values.address
+								}
+								submit
+							>
+								Oke, register sekarang
+							</Button>
 						</Col>
 					</Row>
 				</>
@@ -265,7 +279,7 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 		}
 	}
 
-	const handleRegister = (values, { setSubmitting }) => {
+	const handleRegister = values => {
 		values = { ...values, acc_type: accountType, name: `${values.first_name} ${values.last_name}` }
 		const { repeat_password, first_name, last_name, ...theValues } = values
 		Modal.confirm({
@@ -273,13 +287,7 @@ function Register({ provinceOptions, cityOptions, fetchCities, csOptions, subdis
 			content: "Yakin kamu mau daftar sekarang?",
 			centered: true,
 			onOk: () => {
-				console.log({ theValues })
-				props.registerUser(theValues).then(response => {
-					setSubmitting(false)
-					if (response === undefined) {
-						push({ pathname: "/register/success", state: { success: true, isVip: accountType === 2 } })
-					}
-				})
+				props.registerUser(theValues, accountType, push)
 			}
 		})
 	}
@@ -354,6 +362,7 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 		provinces: rajaOngkir.provinces,
 		csOptions: other.csOptions,
 		error: auth.registerUserError,
+		loading: auth.loading,
 		cities,
 		cityOptions,
 		subdistrictOptions,
