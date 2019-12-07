@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { pricer } from "helpers"
-import { fetchProductItem, addItemToCart } from "store/actions/productActions"
+import { fetchProductItem, addItemToCart, fetchCartItems } from "store/actions/productActions"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -29,7 +29,7 @@ const { Paragraph, Text } = Typography
 function ProductDetail({ product, productPrice, ...props }) {
 	const { id: productId } = useParams()
 	const [selectedColor, setSelectedColor] = useState({})
-	const { fetchProductItem, addItemToCart } = props
+	const { fetchProductItem, addItemToCart, fetchCartItems } = props
 
 	const handleSelectColor = color => setSelectedColor(color)
 
@@ -76,6 +76,7 @@ function ProductDetail({ product, productPrice, ...props }) {
 
 	useEffect(() => {
 		fetchProductItem(Number(productId))
+		fetchCartItems()
 	}, [])
 
 	console.log({ selectedColor })
@@ -175,4 +176,4 @@ const mapState = ({ product }) => ({
 	productPrice: product.productPrice
 })
 
-export default connect(mapState, { fetchProductItem, addItemToCart })(ProductDetail)
+export default connect(mapState, { fetchProductItem, addItemToCart, fetchCartItems })(ProductDetail)

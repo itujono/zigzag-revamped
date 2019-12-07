@@ -42,7 +42,10 @@ export const fetchCartItems = () => dispatch => {
 	dispatch(loadingProduct())
 	instance
 		.get(`/cart/list`)
-		.then(({ data }) => dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.category_data }))
+		.then(({ data }) => {
+			console.log({ cartData: data })
+			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data })
+		})
 		.catch(err => console.error(err.response))
 }
 
