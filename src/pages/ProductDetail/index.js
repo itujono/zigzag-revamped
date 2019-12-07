@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { pricer } from "helpers"
-import { fetchProductItem, addItemToCart, fetchCartItems } from "store/actions/productActions"
+import { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist } from "store/actions/productActions"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -27,24 +27,23 @@ const StyledSection = styled(Section)`
 const { Paragraph, Text } = Typography
 
 function ProductDetail({ product, productPrice, ...props }) {
-	const { id: productId } = useParams()
 	const [selectedColor, setSelectedColor] = useState({})
-	const { fetchProductItem, addItemToCart, fetchCartItems } = props
+	const { id: productId } = useParams()
+	const { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist } = props
 
 	const handleSelectColor = color => setSelectedColor(color)
 
-	const color = (product.product_detail || []).map(item => (
+	const color = (product.product_detail || []).map(item =>
+		// prettier-ignore
 		<Tag
-			color="#2db7f5"
+			color={item.id === selectedColor.id && "#2db7f5"}
 			key={item.id}
 			onClick={() => handleSelectColor(item)}
-			css={`
-				cursor: pointer;
-			`}
+			css={` && { cursor: pointer; } `}
 		>
 			{item.color} ({item.product_more[0].stock || 0})
 		</Tag>
-	))
+	)
 
 	const size = typeId => {
 		if (typeId === 2)
@@ -61,7 +60,7 @@ function ProductDetail({ product, productPrice, ...props }) {
 		if (!selectedColor || Object.keys(selectedColor).length === 0) message.error("Jangan lupa pilih warna nya ya")
 		else {
 			const item = {
-				product_id: selectedColor.id,
+				product_id: productId,
 				product_more_detail_id: (selectedColor.product_more || [])[0].id,
 				weight: product.weight,
 				qty: 1,
@@ -71,6 +70,20 @@ function ProductDetail({ product, productPrice, ...props }) {
 			}
 
 			addItemToCart(item)
+		}
+	}
+
+	const handleAddToWishlist = () => {
+		if (!selectedColor || Object.keys(selectedColor).length === 0) message.error("Jangan lupa pilih warna nya ya")
+		else {
+			const item = {
+				product_id: productId,
+				product_more_detail_id: (selectedColor.product_more || [])[0].id,
+				color: selectedColor.color,
+				size: (selectedColor.product_more || [])[0].size
+			}
+
+			addItemToWishlist(item)
 		}
 	}
 
@@ -87,21 +100,11 @@ function ProductDetail({ product, productPrice, ...props }) {
 				<Row gutter={64} type="flex">
 					<Col lg={14}>
 						<Carousel autoplay adaptiveHeight infinite style={{ marginBottom: "2em" }}>
-							<div>
-								<img src="https://source.unsplash.com/600x300" alt="Disclaimer" width="100%" />
-							</div>
-							<div>
-								<img src="https://source.unsplash.com/600x299" alt="Welcome to Zigzag" width="100%" />
-							</div>
-							<div>
-								<img src="https://source.unsplash.com/599x299" alt="Welcome to Zigzag" width="100%" />
-							</div>
-							<div>
-								<img src="https://source.unsplash.com/599x300" alt="Welcome to Zigzag" width="100%" />
-							</div>
-							<div>
-								<img src="https://source.unsplash.com/599x301" alt="599x301" width="100%" />
-							</div>
+							{(product.product_image || []).map(item => (
+								<div key={item.id}>
+									<img src={item.picture} alt={item.caption} width="100%" />
+								</div>
+							))}
 						</Carousel>
 					</Col>
 					<Col lg={10}>
@@ -162,7 +165,10 @@ function ProductDetail({ product, productPrice, ...props }) {
 							<Button type="primary" icon="shopping-cart" onClick={handleAddToCart}>
 								Tambahkan ke cart
 							</Button>{" "}
-							&nbsp; <ButtonLink icon="heart">Wishlist</ButtonLink>
+							&nbsp;{" "}
+							<ButtonLink icon="heart" onClick={handleAddToWishlist}>
+								Wishlist
+							</ButtonLink>
 						</StyledSection>
 					</Col>
 				</Row>
@@ -176,4 +182,4 @@ const mapState = ({ product }) => ({
 	productPrice: product.productPrice
 })
 
-export default connect(mapState, { fetchProductItem, addItemToCart, fetchCartItems })(ProductDetail)
+export default connect(mapState, { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist })(ProductDetail)

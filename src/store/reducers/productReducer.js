@@ -8,7 +8,9 @@ const initialState = {
 	loading: false,
 	product: {},
 	productPrice: 0,
-	cartItems: []
+	cartItems: [],
+	wishlistItems: [],
+	wishlistError: null
 }
 
 const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -33,7 +35,24 @@ function reducer(state = initialState, action) {
 		case types.FETCH_CART_ITEMS:
 			return { ...state, cartItems: action.payload, loading: false }
 		case types.ADD_ITEM_TO_CART:
-			return { ...state, cartItems: [action.payload, ...state.cartItems], loading: false }
+			return { ...state, loading: false }
+		case types.FETCH_WISHLIST_ITEMS:
+			const theItems = action.payload.map(item => {
+				const price = item.product_price.filter(
+					({ price_type }) => price_type.toLowerCase() === typeRemark.toLowerCase()
+				)[0]
+				return { ...item, product_price: price }
+			})
+
+			return { ...state, wishlistItems: theItems, loading: false }
+		case types.ADD_ITEM_TO_WISHLIST:
+			return { ...state, loading: false }
+		case types.DELETE_WISHLIST_ITEM:
+			return { ...state, loading: false }
+		case types.DELETE_WISHLIST_ITEM_ERROR:
+			return { ...state, wishlistError: action.payload, loading: false }
+		case types.ADD_ITEM_TO_WISHLIST_ERROR:
+			return { ...state, wishlistError: action.payload, loading: false }
 		default:
 			return state
 	}

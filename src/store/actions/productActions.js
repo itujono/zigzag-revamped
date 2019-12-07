@@ -55,12 +55,60 @@ export const addItemToCart = item => dispatch => {
 		.post(`/cart/save`, item)
 		.then(({ data }) => dispatch({ type: types.ADD_ITEM_TO_CART, payload: data }))
 		.then(() => message.success("Produk berhasil ditambahkan ke cart"))
-		.then(() => dispatch({ type: types.FETCH_CART_ITEMS }))
+		.then(() => dispatch(fetchCartItems()))
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
 			if (err.response) {
 				message.error(error)
 			}
 			dispatch({ type: types.ADD_ITEM_TO_CART_ERROR, payload: error })
+		})
+}
+
+export const addItemToWishlist = item => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.post(`/customer/save_wishlist`, item)
+		.then(({ data }) => {
+			console.log({ wishlistData: data })
+			dispatch({ type: types.ADD_ITEM_TO_WISHLIST, payload: data.data })
+		})
+		.then(() => message.success("Produk ini sudah ditambahkan ke wishlist kamu"))
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.ADD_ITEM_TO_WISHLIST_ERROR, payload: error })
+		})
+}
+
+export const fetchWishlistItems = () => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.get(`/customer/wishlist`)
+		.then(({ data }) => {
+			console.log({ wishlistData: data })
+			dispatch({ type: types.FETCH_WISHLIST_ITEMS, payload: data.data.wishlist_data })
+		})
+		.catch(err => console.error(err.response))
+}
+
+export const deleteWishlistItem = id => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.delete(`/customer/delete_wishlist?wishlist_id=${id}`)
+		.then(({ data }) => {
+			console.log({ wishlistDeleted: data })
+			dispatch({ type: types.DELETE_WISHLIST_ITEM, payload: data.data })
+		})
+		.then(() => dispatch(fetchWishlistItems()))
+		.then(() => message.success("Produk ini berhasil dihapus dari Wishlist"))
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.DELETE_WISHLIST_ITEM_ERROR, payload: error })
 		})
 }

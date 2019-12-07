@@ -12,6 +12,7 @@ import Success from "./Success"
 import Drawer from "./Drawer"
 import Modal from "./Modal"
 import Alert from "./Alert"
+import Empty from "./Empty"
 
 export {
 	Heading,
@@ -27,5 +28,6 @@ export {
 	Success,
 	Drawer,
 	Modal,
-	Alert
+	Alert,
+	Empty
 }

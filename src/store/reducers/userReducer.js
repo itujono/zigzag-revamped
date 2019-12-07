@@ -1,13 +1,13 @@
 import * as types from "../types"
 
 const initialState = {
-	user: null
+	user: {}
 }
 
 function reducer(state = initialState, action) {
 	switch (action.type) {
 		case types.FETCH_USER:
-			return { ...state, user: "Gunawan Sasongko" }
+			return { ...state, user: action.payload }
 		default:
 			return state
 	}
