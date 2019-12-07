@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react"
-import { Section, Heading } from "components"
+import { Section, Heading, Loading } from "components"
 import { Formik } from "formik"
 import { TextInput, SelectInput } from "components/Fields"
-import { Form } from "antd"
-import { SubmitButton } from "formik-antd"
+import { Form, Divider, Button } from "antd"
 import { connect } from "react-redux"
+import styled from "styled-components"
 
 import { fetchUser } from "store/actions/userActions"
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
+import { ResetButton } from "formik-antd"
 
 const formItemLayout = {
 	labelCol: {
@@ -33,42 +34,72 @@ const tailLayout = {
 	}
 }
 
-function Basic({ provinceOptions, cityOptions, subdistrictOptions, ...props }) {
-	const [selectedProvince, setSelectedProvince] = useState({})
-	const [selectedCity, setSelectedCity] = useState({})
+const StyledForm = styled(Form)`
+	.ant-typography {
+		&.account-type {
+			margin-bottom: 0;
+			h4 {
+				font-size: 1.1em;
+			}
+		}
+	}
+`
+
+function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading, ...props }) {
 	const { fetchUser, fetchCities, fetchProvinces, fetchSubdistricts } = props
 
-	const handleRenderCities = values => setSelectedProvince(values.province)
-	const handleRenderSubdistricts = values => setSelectedCity(values.city)
+	const handleRenderCities = value => fetchCities("", value)
+	const handleRenderSubdistricts = value => fetchSubdistricts(value)
+	const accountType = (user.acc_type || {}).account_type_remark
 
 	useEffect(() => {
 		fetchUser()
 		fetchProvinces()
-		fetchCities("", selectedProvince)
-		if (selectedCity) fetchSubdistricts(selectedCity)
-	}, [selectedProvince, selectedCity])
+	}, [])
+
+	if (!user || Object.keys(user).length === 0) return <Loading />
 
 	return (
 		<Section width="70%" centered>
 			<Heading content="Basic" bold />
 			<Formik
-				render={({ handleSubmit, values }) => (
-					<Form {...formItemLayout} onSubmit={handleSubmit}>
-						<TextInput name="first_name" label="Nama depan" placeholder="Nama depan kamu..." />
-						<TextInput name="last_name" label="Nama belakang" placeholder="Nama belakang kamu..." />
-						<TextInput type="email" name="email" label="Email" placeholder="Email kamu..." />
+				initialValues={{
+					...user,
+					province: user.province_name,
+					city: user.city_name,
+					subdistrict: user.subdistrict_name
+				}}
+				render={({ handleSubmit }) => (
+					<StyledForm {...formItemLayout} onSubmit={handleSubmit}>
+						<Form.Item {...tailLayout}>
+							<Heading
+								className="account-type"
+								content={`Kamu adalah member ${accountType} ${accountType === "VIP" && "🔥"}`}
+							/>
+						</Form.Item>
+						<TextInput name="name" label="Nama kamu" placeholder="Nama kamu..." />
+						<TextInput
+							disabled
+							helpText="Email tidak dapat diubah"
+							type="email"
+							name="email"
+							label="Email"
+							placeholder="Email kamu..."
+						/>
+						<Divider />
+						<Heading content="Detail alamat" />
 						<SelectInput
 							name="province"
 							label="Provinsi kamu"
 							placeholder="Pilih salah satu..."
-							onChange={handleRenderCities(values)}
+							onChange={handleRenderCities}
 							options={provinceOptions}
 						/>
 						<SelectInput
 							name="city"
 							label="Kota/kabupaten kamu"
 							placeholder="Pilih salah satu..."
-							onChange={handleRenderSubdistricts(values)}
+							onChange={handleRenderSubdistricts}
 							options={cityOptions}
 						/>
 						<SelectInput
@@ -77,10 +108,13 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, ...props }) {
 							placeholder="Pilih salah satu..."
 							options={subdistrictOptions}
 						/>
+						<TextInput name="zip" label="Kode pos" placeholder="Kode pos kamu..." />
+						<TextInput texarea rows={3} name="address" label="Alamat" placeholder="Alamat kamu..." />
+						<TextInput name="tele" label="Nomor HP" placeholder="Nomor HP kamu..." />
 						<Form.Item {...tailLayout}>
-							<SubmitButton type="primary">Ubah detail</SubmitButton>
+							<Button submit>Ubah detail</Button> &nbsp; <ResetButton type="link">Reset</ResetButton>
 						</Form.Item>
-					</Form>
+					</StyledForm>
 				)}
 			/>
 		</Section>
@@ -89,6 +123,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, ...props }) {
 
 const mapState = ({ user, rajaOngkir }) => ({
 	user: user.user,
+	loading: user.loading,
 	provinceOptions: rajaOngkir.provinceOptions,
 	cityOptions: rajaOngkir.cityOptions,
 	subdistrictOptions: rajaOngkir.subdistrictOptions

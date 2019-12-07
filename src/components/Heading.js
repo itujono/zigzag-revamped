@@ -32,7 +32,7 @@ function Heading({ bold, reverse, level, content, subheader, ...props }) {
 			<Title bold={bold} style={reverse ? reverseStyle : ""} level={level || 4}>
 				{content}
 			</Title>
-			<Paragraph bold={bold}>{subheader}</Paragraph>
+			{subheader && <Paragraph bold={bold}>{subheader}</Paragraph>}
 		</Typo>
 	)
 }

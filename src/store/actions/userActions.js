@@ -1,7 +1,10 @@
 import * as types from "../types"
 import { instance } from "helpers"
 
+const loadingUser = () => ({ type: types.LOADING_USER })
+
 export const fetchUser = () => dispatch => {
+	dispatch(loadingUser())
 	return instance
 		.get(`/customer/view`)
 		.then(({ data }) => {
