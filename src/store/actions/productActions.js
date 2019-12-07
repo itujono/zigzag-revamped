@@ -1,5 +1,6 @@
 import * as types from "../types"
 import { instance } from "helpers"
+import { message } from "antd"
 
 const loadingProduct = condition => ({ type: types.LOADING_PRODUCT, payload: condition })
 
@@ -35,4 +36,28 @@ export const fetchProductCategories = () => dispatch => {
 		.get(`/category/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_PRODUCT_CATEGORIES, payload: data.data.category_data }))
 		.catch(err => console.error(err.response))
+}
+
+export const fetchCartItems = () => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.get(`/cart/list`)
+		.then(({ data }) => dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.category_data }))
+		.catch(err => console.error(err.response))
+}
+
+export const addItemToCart = item => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.post(`/cart/save`, item)
+		.then(({ data }) => dispatch({ type: types.ADD_ITEM_TO_CART, payload: data }))
+		.then(() => message.success("Produk berhasil ditambahkan ke cart"))
+		.then(() => dispatch({ type: types.FETCH_CART_ITEMS }))
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.ADD_ITEM_TO_CART_ERROR, payload: error })
+		})
 }

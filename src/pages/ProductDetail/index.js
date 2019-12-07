@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { Section, Layout, Heading, Button, ButtonLink } from "components"
-import { Row, Col, Tag, Divider, Typography, Carousel } from "antd"
-import styled from "styled-components"
+import { Row, Col, Tag, Divider, Typography, Carousel, message } from "antd"
+import styled from "styled-components/macro"
 import { useParams } from "react-router-dom"
-import { useDispatch, useSelector, connect } from "react-redux"
+import { connect } from "react-redux"
 
-import { warna, ukuran } from "helpers/dummy"
 import { pricer } from "helpers"
-import { fetchProductItem } from "store/actions/productActions"
+import { fetchProductItem, addItemToCart } from "store/actions/productActions"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -25,29 +24,61 @@ const StyledSection = styled(Section)`
 	}
 `
 
-const size = ukuran.map(item => (
-	<Tag color="#87d068" key={item.value}>
-		{item.label}
-	</Tag>
-))
-
 const { Paragraph, Text } = Typography
 
-function ProductDetail({ fetchProductItem }) {
+function ProductDetail({ product, productPrice, ...props }) {
 	const { id: productId } = useParams()
-	const product = useSelector(({ product }) => product.product)
-	const productPrice = useSelector(({ product }) => product.productPrice)
 	const [selectedColor, setSelectedColor] = useState({})
+	const { fetchProductItem, addItemToCart } = props
 
-	const color = (product.product_detail || []).map(({ color, ...item }) => (
-		<Tag {...item} color="#2db7f5" key={item.id} onClick={color => setSelectedColor(color)}>
-			{color}
+	const handleSelectColor = color => setSelectedColor(color)
+
+	const color = (product.product_detail || []).map(item => (
+		<Tag
+			color="#2db7f5"
+			key={item.id}
+			onClick={() => handleSelectColor(item)}
+			css={`
+				cursor: pointer;
+			`}
+		>
+			{item.color} ({item.product_more[0].stock || 0})
 		</Tag>
 	))
+
+	const size = typeId => {
+		if (typeId === 2)
+			return (selectedColor.product_more || []).map(item => (
+				<Tag color="#87d068" key={item.id}>
+					{item.size}
+				</Tag>
+			))
+
+		return "-"
+	}
+
+	const handleAddToCart = () => {
+		if (!selectedColor || Object.keys(selectedColor).length === 0) message.error("Jangan lupa pilih warna nya ya")
+		else {
+			const item = {
+				product_id: selectedColor.id,
+				product_more_detail_id: (selectedColor.product_more || [])[0].id,
+				weight: product.weight,
+				qty: 1,
+				color: selectedColor.color,
+				size: (selectedColor.product_more || [])[0].size,
+				total_price: productPrice * 1
+			}
+
+			addItemToCart(item)
+		}
+	}
 
 	useEffect(() => {
 		fetchProductItem(Number(productId))
 	}, [])
+
+	console.log({ selectedColor })
 
 	return (
 		<Layout sidebar>
@@ -104,13 +135,30 @@ function ProductDetail({ fetchProductItem }) {
 									<Heading reverse content="Warna" subheader={color} marginBottom="0" />
 								</Col>
 								<Col lg={12}>
-									<Heading reverse content="Ukuran" subheader={size} marginBottom="0" />
+									<Heading
+										reverse
+										content="Ukuran"
+										subheader={size((product.categories || {}).id)}
+										marginBottom="0"
+									/>
 								</Col>
 							</Row>
+							{/* <Row>
+								<Col lg={12}>
+									{selectedColor && Object.keys(selectedColor).length > 0 && (
+										<Heading
+											reverse
+											content={`Stok warna ${selectedColor.color}`}
+											subheader={`${productStock} pcs`}
+											marginBottom="0"
+										/>
+									)}
+								</Col>
+							</Row> */}
 						</StyledSection>
 						<Divider />
 						<StyledSection paddingHorizontal="0" marginBottom="0">
-							<Button type="primary" icon="shopping-cart">
+							<Button type="primary" icon="shopping-cart" onClick={handleAddToCart}>
 								Tambahkan ke cart
 							</Button>{" "}
 							&nbsp; <ButtonLink icon="heart">Wishlist</ButtonLink>
@@ -122,4 +170,9 @@ function ProductDetail({ fetchProductItem }) {
 	)
 }
 
-export default connect(null, { fetchProductItem })(ProductDetail)
+const mapState = ({ product }) => ({
+	product: product.product,
+	productPrice: product.productPrice
+})
+
+export default connect(mapState, { fetchProductItem, addItemToCart })(ProductDetail)
