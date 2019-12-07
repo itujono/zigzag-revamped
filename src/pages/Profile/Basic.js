@@ -5,10 +5,11 @@ import { TextInput, SelectInput } from "components/Fields"
 import { Form, Divider, Button } from "antd"
 import { connect } from "react-redux"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
-import { fetchUser } from "store/actions/userActions"
+import { fetchUser, updateUserProfile } from "store/actions/userActions"
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
-import { ResetButton } from "formik-antd"
+import { ResetButton, SubmitButton } from "formik-antd"
 
 const formItemLayout = {
 	labelCol: {
@@ -46,11 +47,17 @@ const StyledForm = styled(Form)`
 `
 
 function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading, ...props }) {
-	const { fetchUser, fetchCities, fetchProvinces, fetchSubdistricts } = props
+	const { fetchUser, fetchCities, fetchProvinces, fetchSubdistricts, updateUserProfile } = props
 
 	const handleRenderCities = value => fetchCities("", value)
 	const handleRenderSubdistricts = value => fetchSubdistricts(value)
 	const accountType = (user.acc_type || {}).account_type_remark
+	const accountTypeText = `Kamu adalah member ${accountType} ${(accountType === "VIP" && "🔥") ||
+		(accountType === "Reguler" && <Link to="/upgrade">Upgrade akun?</Link>)}`
+
+	const handleUpdate = values => {
+		updateUserProfile(values)
+	}
 
 	useEffect(() => {
 		fetchUser()
@@ -69,13 +76,11 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 					city: user.city_name,
 					subdistrict: user.subdistrict_name
 				}}
+				onSubmit={handleUpdate}
 				render={({ handleSubmit }) => (
 					<StyledForm {...formItemLayout} onSubmit={handleSubmit}>
 						<Form.Item {...tailLayout}>
-							<Heading
-								className="account-type"
-								content={`Kamu adalah member ${accountType} ${accountType === "VIP" && "🔥"}`}
-							/>
+							<Heading className="account-type" content={accountTypeText} />
 						</Form.Item>
 						<TextInput name="name" label="Nama kamu" placeholder="Nama kamu..." />
 						<TextInput
@@ -112,7 +117,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 						<TextInput texarea rows={3} name="address" label="Alamat" placeholder="Alamat kamu..." />
 						<TextInput name="tele" label="Nomor HP" placeholder="Nomor HP kamu..." />
 						<Form.Item {...tailLayout}>
-							<Button submit>Ubah detail</Button> &nbsp; <ResetButton type="link">Reset</ResetButton>
+							<SubmitButton>Ubah detail</SubmitButton> &nbsp; <ResetButton type="link">Reset</ResetButton>
 						</Form.Item>
 					</StyledForm>
 				)}
@@ -129,4 +134,6 @@ const mapState = ({ user, rajaOngkir }) => ({
 	subdistrictOptions: rajaOngkir.subdistrictOptions
 })
 
-export default connect(mapState, { fetchUser, fetchCities, fetchSubdistricts, fetchProvinces })(Basic)
+export default connect(mapState, { fetchUser, fetchCities, fetchSubdistricts, fetchProvinces, updateUserProfile })(
+	Basic
+)

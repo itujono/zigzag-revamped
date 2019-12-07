@@ -11,6 +11,11 @@ function reducer(state = initialState, action) {
 			return { ...state, loading: true }
 		case types.FETCH_USER:
 			return { ...state, user: action.payload, loading: false }
+		case types.UPDATE_USER_PROFILE:
+			return { ...state, loading: false }
+
+		case types.UPDATE_USER_PROFILE_ERROR:
+			return { ...state, error: action.payload, loading: false }
 		default:
 			return state
 	}

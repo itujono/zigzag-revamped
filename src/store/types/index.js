@@ -1,4 +1,7 @@
+export const LOADING_USER = "LOADING_USER"
 export const FETCH_USER = "FETCH_USER"
+export const UPDATE_USER_PROFILE = "UPDATE_USER_PROFILE"
+export const UPDATE_USER_PROFILE_ERROR = "UPDATE_USER_PROFILE_ERROR"
 
 // Product's types
 export const FETCH_PRODUCT_ITEM = "FETCH_PRODUCT_ITEM"
@@ -27,7 +30,6 @@ export const FETCH_SUBDISTRICTS = "FETCH_SUBDISTRICTS"
 export const FETCH_COURIERS = "FETCH_COURIERS"
 
 // Auth's types
-export const LOADING_USER = "LOADING_USER"
 export const AUTH_USER = "AUTH_USER"
 export const AUTH_USER_ERROR = "AUTH_USER_ERROR"
 export const UNAUTH_USER = "UNAUTH_USER"
