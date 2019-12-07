@@ -5,15 +5,24 @@ const initialState = {
 	categories: [],
 	products: [],
 	restockProducts: [],
-	loading: false
+	loading: false,
+	product: {},
+	productPrice: 0
 }
+
+const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+const { account_type_remark: typeRemark } = accountType
 
 function reducer(state = initialState, action) {
 	switch (action.type) {
 		case types.LOADING_PRODUCT:
 			return { ...state, loading: true }
 		case types.FETCH_PRODUCT_ITEM:
-			return { ...state, product: action.payload, loading: false }
+			const productPrice = action.payload.product_price
+				.filter(({ price_type }) => price_type.toLowerCase() === typeRemark.toLowerCase())
+				.map(({ price }) => price)[0]
+
+			return { ...state, product: action.payload, productPrice, loading: false }
 		case types.FETCH_PRODUCTS:
 			return { ...state, products: action.payload, loading: false }
 		case types.FETCH_RESTOCK_PRODUCTS:

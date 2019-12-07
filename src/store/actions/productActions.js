@@ -6,8 +6,8 @@ const loadingProduct = condition => ({ type: types.LOADING_PRODUCT, payload: con
 export const fetchProductItem = id => async dispatch => {
 	dispatch(loadingProduct())
 	try {
-		const response = await instance.get(`product/detail/${id}`)
-		dispatch({ type: types.FETCH_PRODUCT_ITEM, payload: response.data.result })
+		const response = await instance.get(`product/view`, { params: { product_id: id } })
+		dispatch({ type: types.FETCH_PRODUCT_ITEM, payload: response.data.data.product_data })
 	} catch (err) {
 		return console.error(err.response)
 	}

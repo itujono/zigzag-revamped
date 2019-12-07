@@ -54,7 +54,7 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
-	}, [cartDrawerFromStore])
+	}, [cartDrawerFromStore, token])
 
 	return (
 		<Nav>

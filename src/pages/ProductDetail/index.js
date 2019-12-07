@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Section, Layout, Heading, Button, ButtonLink } from "components"
 import { Row, Col, Tag, Divider, Typography, Carousel } from "antd"
 import styled from "styled-components"
+import { useParams } from "react-router-dom"
+import { useDispatch, useSelector, connect } from "react-redux"
+
 import { warna, ukuran } from "helpers/dummy"
 import { pricer } from "helpers"
+import { fetchProductItem } from "store/actions/productActions"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -21,12 +25,6 @@ const StyledSection = styled(Section)`
 	}
 `
 
-const color = warna.map(item => (
-	<Tag color="#2db7f5" key={item.value}>
-		{item.label}
-	</Tag>
-))
-
 const size = ukuran.map(item => (
 	<Tag color="#87d068" key={item.value}>
 		{item.label}
@@ -35,13 +33,28 @@ const size = ukuran.map(item => (
 
 const { Paragraph, Text } = Typography
 
-function ProductDetail() {
+function ProductDetail({ fetchProductItem }) {
+	const { id: productId } = useParams()
+	const product = useSelector(({ product }) => product.product)
+	const productPrice = useSelector(({ product }) => product.productPrice)
+	const [selectedColor, setSelectedColor] = useState({})
+
+	const color = (product.product_detail || []).map(({ color, ...item }) => (
+		<Tag {...item} color="#2db7f5" key={item.id} onClick={color => setSelectedColor(color)}>
+			{color}
+		</Tag>
+	))
+
+	useEffect(() => {
+		fetchProductItem(Number(productId))
+	}, [])
+
 	return (
 		<Layout sidebar>
 			<Section>
-				<Row gutter={64}>
+				<Row gutter={64} type="flex">
 					<Col lg={14}>
-						<Carousel autoplay infinite style={{ marginBottom: "2em" }}>
+						<Carousel autoplay adaptiveHeight infinite style={{ marginBottom: "2em" }}>
 							<div>
 								<img src="https://source.unsplash.com/600x300" alt="Disclaimer" width="100%" />
 							</div>
@@ -62,26 +75,26 @@ function ProductDetail() {
 					<Col lg={10}>
 						<Heading
 							bold
-							content="SP-008"
+							content={product.name}
 							subheader={
 								<Paragraph>
 									<Text delete disabled>
 										Rp {pricer(245000)}
 									</Text>{" "}
-									&nbsp; Rp {pricer(210000)}
+									&nbsp; Rp {pricer(productPrice)}
 								</Paragraph>
 							}
 						/>
 						<Stats>
 							<Row type="flex">
 								<Col lg={8}>
-									<Heading content="Kategori" subheader="Tas" reverse />
+									<Heading content="Kategori" subheader={(product.categories || {}).name} reverse />
 								</Col>
 								<Col lg={6}>
-									<Heading content="Berat" subheader="500 gr" reverse />
+									<Heading content="Berat" subheader={`${product.weight} gr`} reverse />
 								</Col>
 								<Col lg={10}>
-									<Heading content="Material" subheader="Kulit UK 21X14X7 with long strap" reverse />
+									<Heading content="Material" subheader={product.material} reverse />
 								</Col>
 							</Row>
 						</Stats>
@@ -109,4 +122,4 @@ function ProductDetail() {
 	)
 }
 
-export default ProductDetail
+export default connect(null, { fetchProductItem })(ProductDetail)

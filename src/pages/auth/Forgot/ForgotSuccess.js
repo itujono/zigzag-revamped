@@ -11,11 +11,11 @@ function ForgotSuccess({ location: { state }, history }) {
 					<Card noHover padding="3em">
 						<Success />
 						<Heading
-							content="Check your email!"
-							subheader="Great! The instruction on how to recover your password has been sent to your inbox. Thanks!"
+							content="Cek email kamu"
+							subheader="Oke, instruksi tentang gimana cara ngereset password akun kamu udah dikirim ke inbox email ya"
 						/>
 						<Alert
-							message="Don't forget to check your spam folder too"
+							message="Kalo di inbox nggak ada, jangan lupa cek di folder spam juga ya"
 							type="info"
 							showIcon
 							banner
@@ -23,7 +23,7 @@ function ForgotSuccess({ location: { state }, history }) {
 							style={{ textAlign: "left", marginBottom: "4em" }}
 						/>
 						<Button type="primary">
-							<Icon type="home" /> &nbsp; <Link to="/login">Go back to Login</Link>
+							<Icon type="home" /> &nbsp; <Link to="/login">Balik ke Login</Link>
 						</Button>
 					</Card>
 				</Col>

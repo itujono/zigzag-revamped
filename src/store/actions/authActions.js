@@ -11,7 +11,7 @@ export const authUser = ({ email, password }, setSubmitting, push) => dispatch =
 		.then(({ data }) => {
 			console.log({ loginResponse: data.data })
 			localStorage.setItem("access_token", data.data.access_token)
-			localStorage.setItem("account_type", data.data.account_type)
+			localStorage.setItem("account_type", JSON.stringify(data.data.account_type))
 			dispatch({ type: types.AUTH_USER, payload: data.data })
 		})
 		.then(() => push("/"))
@@ -33,7 +33,7 @@ export const unauthUser = push => dispatch => {
 			localStorage.clear()
 			message
 				.loading("Mohon tunggu...")
-				.then(() => push("/"))
+				.then(() => push({ pathname: "/logout", state: { success: true } }))
 				.then(() => message.success("Kamu udah keluar. Please come back! :)"))
 		})
 		.catch(err => {
