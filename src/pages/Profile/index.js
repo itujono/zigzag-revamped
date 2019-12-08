@@ -1,6 +1,6 @@
-import React, { Suspense } from "react"
+import React, { Suspense, useEffect } from "react"
 import { Section, Layout, Loading } from "components"
-import { Switch, Route } from "react-router-dom"
+import { Switch, Route, useHistory } from "react-router-dom"
 
 const Basic = React.lazy(() => import("./Basic"))
 const HistoryOrder = React.lazy(() => import("./HistoryOrder"))
@@ -9,6 +9,12 @@ const Settings = React.lazy(() => import("./Settings"))
 const Wishlist = React.lazy(() => import("./Wishlist"))
 
 function Profile() {
+	const { push } = useHistory()
+
+	useEffect(() => {
+		if (!localStorage.getItem("access_token")) push("/404")
+	}, [])
+
 	return (
 		<Layout sidebar page="profile">
 			<Section paddingHorizontal="0">

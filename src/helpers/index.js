@@ -1,6 +1,9 @@
 import axios from "axios"
 import { useState } from "react"
 import { css } from "styled-components"
+import { useHistory } from "react-router-dom"
+import { unauthUser } from "store/actions/authActions"
+import { message } from "antd"
 
 const instance = axios.create({
 	baseURL: "https://zigzagbatam.com:9000/api/v1/frontend",
@@ -18,6 +21,17 @@ instance.interceptors.request.use(config => {
 export { instance }
 
 /////////////////////////////////
+
+export function useRenderError(err, dispatch, type) {
+	console.error(err.response)
+	const error = (err.response.data || {}).message || ""
+	if (err.response) message.error(error)
+	if ((err.response || {}).status === 401) {
+		localStorage.clear()
+	}
+	dispatch({ type, payload: error })
+	return error
+}
 
 export function useFetchData(url, param) {
 	const [data, setData] = useState([])

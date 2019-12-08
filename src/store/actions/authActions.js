@@ -40,9 +40,15 @@ export const unauthUser = push => dispatch => {
 		})
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
+			if (err.response) message.error(error)
+			if ((err.response || {}).status === 401) {
+				localStorage.clear()
+				message
+					.loading("Mohon tunggu...", 1)
+					.then(() => push({ pathname: "/logout", state: { success: true } }))
+					.then(() => message.success("Session kamu sudah berakhir. Mohon login kembali :)"))
 			}
+
 			dispatch({ type: types.AUTH_USER_ERROR, payload: error })
 		})
 }

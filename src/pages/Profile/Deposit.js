@@ -1,14 +1,17 @@
-import React from "react"
-import { Section, Heading, Button } from "components"
+import React, { useEffect } from "react"
 import { Row, Col, Typography, Divider, Form, List, Icon, Badge } from "antd"
-import { pricer, media, mobile } from "helpers"
 import styled from "styled-components"
 import moment from "moment"
-import { theme } from "styles"
-import { Formik } from "formik"
-import { TextInput } from "components/Fields"
 import { SubmitButton } from "formik-antd"
-import { depositData } from "helpers/dummy"
+import { Formik } from "formik"
+import { connect } from "react-redux"
+import * as yup from "yup"
+
+import { fetchListDeposit, addNewDeposit, fetchUser } from "store/actions/userActions"
+import { Section, Heading, Button } from "components"
+import { pricer, media, mobile } from "helpers"
+import { theme } from "styles"
+import { TextInput } from "components/Fields"
 
 const { Text } = Typography
 
@@ -50,7 +53,12 @@ const ListItem = styled(List.Item)`
 	}
 `
 
-function Deposit({ amount = 350000 }) {
+function Deposit({ amount = 350000, depositList, fetchListDeposit, addNewDeposit, fetchUser, loading }) {
+	useEffect(() => {
+		fetchListDeposit()
+		// fetchUser()
+	}, [])
+
 	return (
 		<Section width="70%" centered>
 			<Heading content="Deposit" bold marginBottom="3em" />
@@ -62,13 +70,19 @@ function Deposit({ amount = 350000 }) {
 					<Divider />
 					<Section paddingHorizontal="0">
 						<Formik
+							onSubmit={(values, { setSubmitting }) => {
+								setSubmitting(false)
+								addNewDeposit(values)
+							}}
+							validationSchema={validationSchema}
 							render={({ handleSubmit }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
 									<TextInput
 										allowClear
 										number
-										name="amount"
+										name="total_deposit"
 										label="Saya mau deposit"
+										helpText="Tulis angka saja (tidak perlu titik atau koma)"
 										placeholder="Minimal Rp 50.000 ya"
 									/>
 									<SubmitButton submit type="primary" icon="check">
@@ -82,11 +96,13 @@ function Deposit({ amount = 350000 }) {
 				<Col lg={14} style={{ borderLeft: !mobile && "1px solid #ddd" }}>
 					<List
 						itemLayout="horizontal"
-						dataSource={depositData}
+						dataSource={depositList}
+						loading={loading}
+						locale={{ emptyText: "Kamu belum ada ngelakuin deposit" }}
 						renderItem={item => (
 							<ListItem>
 								<Row>
-									<Col lg={1}>
+									<Col lg={2}>
 										<div>
 											<Icon
 												type="check-circle"
@@ -96,16 +112,18 @@ function Deposit({ amount = 350000 }) {
 											/>
 										</div>
 									</Col>
-									<Col lg={23}>
+									<Col lg={22}>
 										<List.Item.Meta
 											title={
 												<span>
 													Kamu deposit sebesar{" "}
-													<span className="amount">Rp {pricer(item.amount)}</span> &nbsp;{" "}
+													<span className="amount">Rp {pricer(item.total)}</span> &nbsp;{" "}
 													<span className="time">{moment().fromNow()}</span>
 												</span>
 											}
-											description={<Badge text="Sukses" status="success" />}
+											description={
+												<Badge text={(item.status || {}).status_remark} status="success" />
+											}
 										/>
 									</Col>
 								</Row>
@@ -118,4 +136,17 @@ function Deposit({ amount = 350000 }) {
 	)
 }
 
-export default Deposit
+const mapState = ({ user }) => ({
+	depositList: (user.depositList[0] || {}).deposits,
+	loading: user.loading
+})
+
+const validationSchema = yup.object().shape({
+	total_deposit: yup
+		.number()
+		.required("Jangan dibiarin kosong ya")
+		.min(50000, "Minimal Rp 50.000 ya")
+		.typeError("Harus masukin angka aja ya")
+})
+
+export default connect(mapState, { fetchListDeposit, addNewDeposit, fetchUser })(Deposit)
