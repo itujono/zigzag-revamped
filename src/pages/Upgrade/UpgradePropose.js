@@ -1,8 +1,11 @@
 import React, { useState } from "react"
 import { Row, Col, Icon } from "antd"
-import { Heading, Button, Modal, ButtonLink } from "components"
 import styled from "styled-components"
 import { useHistory } from "react-router-dom"
+import { connect } from "react-redux"
+
+import { upgradeAccount } from "store/actions/userActions"
+import { Heading, Button, Modal, ButtonLink } from "components"
 import scenery from "assets/images/scenery.png"
 import { theme } from "styles"
 
@@ -44,12 +47,12 @@ const StyledRow = styled(Row)`
 	}
 `
 
-export default function UpgradePropose() {
+function UpgradePropose({ upgradeAccount }) {
 	const [confirmationModal, setConfirmationModal] = useState(false)
 	const { push } = useHistory()
 
 	const handlePropose = () => {
-		push({ pathname: "/upgrade/sent", state: { isSuccess: true } })
+		upgradeAccount(push)
 	}
 
 	return (
@@ -74,8 +77,10 @@ export default function UpgradePropose() {
 					content="Upgrade jadi VIP sekarang"
 					subheader="Dengan menge-klik tombol di bawah ini, kamu setuju untuk propose menjadi member VIP di Zigzag Online Shop"
 				/>
-				<Button onClick={() => setConfirmationModal(true)}>Jadi member VIP sekarang</Button>
+				<Button onClick={handlePropose}>Jadi member VIP sekarang</Button>
 			</Col>
 		</StyledRow>
 	)
 }
+
+export default connect(null, { upgradeAccount })(UpgradePropose)

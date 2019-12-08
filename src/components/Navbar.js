@@ -7,7 +7,9 @@ import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
 import { unauthUser } from "store/actions/authActions"
+import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
+import DynamicIcon from "./DynamicIcon"
 
 const Nav = styled.nav`
 	width: inherit;
@@ -37,11 +39,22 @@ const StyledMenu = styled(Menu)`
 	}
 `
 
-const token = localStorage.getItem("access_token")
+const StyledSubmenu = styled(Menu.SubMenu)`
+	&& {
+		> .ant-menu {
+			width: 200px;
+			padding-left: 10px;
+		}
+	}
+`
 
-function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...props }) {
+const token = localStorage.getItem("access_token")
+const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+
+function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetchUser, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
+	const typeId = accountType.account_type_id
 
 	const handleLogout = () => {
 		props.unauthUser(push)
@@ -54,6 +67,7 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
+		fetchUser()
 	}, [cartDrawerFromStore, token])
 
 	return (
@@ -89,21 +103,27 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 							>
 								<Icon type="bell" theme="filled" />
 							</Menu.Item>
-							<Menu.SubMenu title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}>
+							<StyledSubmenu title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}>
 								<Menu.Item key="greeting">
-									<Typography.Paragraph strong>Hi, Mulyawan!</Typography.Paragraph>
+									<Typography.Paragraph strong>Hi, {user.name}</Typography.Paragraph>
 								</Menu.Item>
 								<Menu.Item key="profile">
-									<Link to="/profile">Lihat profile</Link>
+									<Link to="/profile">
+										<DynamicIcon type="icon-tubiaozhizuomoban6" /> Lihat profile
+									</Link>
 								</Menu.Item>
-								<Menu.Item key="upgrade">
-									<Link to="/upgrade">Upgrade akun</Link>
-								</Menu.Item>
+								{typeId === 1 && (
+									<Menu.Item key="upgrade">
+										<Link to="/upgrade">
+											<DynamicIcon type="icon-tubiaozhizuomoban2" /> Upgrade akun
+										</Link>
+									</Menu.Item>
+								)}
 								<Menu.Divider />
 								<Menu.Item key="logout" onClick={handleLogout}>
 									Logout
 								</Menu.Item>
-							</Menu.SubMenu>
+							</StyledSubmenu>
 						</StyledMenu>
 					) : (
 						<StyledMenu mode="horizontal">
@@ -138,4 +158,4 @@ const mapState = ({ user, auth, other }) => ({
 })
 
 // prettier-ignore
-export default withRouter(connect(mapState, {setCartDrawerFromStore, unauthUser})(Navbar))
+export default withRouter(connect(mapState, {setCartDrawerFromStore, unauthUser, fetchUser})(Navbar))

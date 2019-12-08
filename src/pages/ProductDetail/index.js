@@ -92,8 +92,6 @@ function ProductDetail({ product, productPrice, ...props }) {
 		fetchCartItems()
 	}, [])
 
-	console.log({ selectedColor })
-
 	return (
 		<Layout sidebar>
 			<Section>

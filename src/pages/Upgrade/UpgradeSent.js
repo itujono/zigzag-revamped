@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { Row, Col } from "antd"
 import { Success, Heading, Button, Alert } from "components"
-import { useLocation, useHistory } from "react-router-dom"
+import { useLocation, useHistory, Link } from "react-router-dom"
 import styled from "styled-components"
 
 const StyledRow = styled(Row)`
@@ -36,7 +36,9 @@ export default function UpgradeSent() {
 						</span>
 					}
 				/>
-				<Button icon="home">Kembali ke Home</Button>
+				<Link to="/">
+					<Button icon="home">Kembali ke Home</Button>
+				</Link>
 			</Col>
 		</StyledRow>
 	)

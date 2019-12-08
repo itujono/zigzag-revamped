@@ -14,7 +14,7 @@ export const authUser = ({ email, password }, setSubmitting, push) => dispatch =
 			localStorage.setItem("account_type", JSON.stringify(data.data.account_type))
 			dispatch({ type: types.AUTH_USER, payload: data.data })
 		})
-		.then(() => message.loading("Mohon tunggu...").then(() => push("/")))
+		.then(() => message.loading("Mohon tunggu...", 1).then(() => window.location.replace("/")))
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
 			if (err.response) message.error(error)

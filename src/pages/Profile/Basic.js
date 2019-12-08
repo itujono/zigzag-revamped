@@ -52,8 +52,14 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 	const handleRenderCities = value => fetchCities("", value)
 	const handleRenderSubdistricts = value => fetchSubdistricts(value)
 	const accountType = (user.acc_type || {}).account_type_remark
-	const accountTypeText = `Kamu adalah member ${accountType} ${(accountType === "VIP" && "🔥") ||
-		(accountType === "Reguler" && <Link to="/upgrade">Upgrade akun?</Link>)}`
+	const accountTypeText = (
+		<span>
+			Kamu adalah member {accountType}{" "}
+			{(accountType === "VIP" && "🔥") ||
+				(accountType === "Reguler" && <Link to="/upgrade">Upgrade akun?</Link>) ||
+				null}
+		</span>
+	)
 
 	const handleUpdate = values => {
 		updateUserProfile(values)

@@ -52,6 +52,7 @@ function Wishlist({ fetchWishlistItems, deleteWishlistItem, wishlistItems, loadi
 				loading={loading}
 				renderItem={item => {
 					const picture = (item.product_image || [])[0] || {}
+					const details = item.wishlist
 
 					return (
 						<CartItem>
@@ -59,42 +60,26 @@ function Wishlist({ fetchWishlistItems, deleteWishlistItem, wishlistItems, loadi
 								avatar={<Avatar src={picture.picture} shape="square" className="product-photo" />}
 								title={
 									<p style={{ marginBottom: 0 }}>
-										<a href="https://ant.design">{item.name}</a> &middot;{" "}
+										<a href="https://ant.design">{details.product_name}</a> &middot;{" "}
 										<span>
-											Rp {pricer((item.product_price || {}).price)} / pcs &middot; &nbsp; &nbsp;
+											Rp {pricer((item.product_price || {}).price)} / pcs &middot;{" "}
+											{details.product_weight} gram
 										</span>
 									</p>
 								}
 								description={
 									<Row>
 										<Col lg={24}>
-											{/* <Formik
-												initialValues={{ quantity: item.quantity }}
-												render={({ handleSubmit }) => (
-													<Form layout="inline" onSubmit={handleSubmit}>
-														<TextInput
-															number
-															name="quantity"
-															width={90}
-															placeholder="Jumlah..."
-															css="margin-bottom: 1.5em"
-														/>
-														<Form.Item>
-															<SubmitButton type="primary">Update</SubmitButton>
-														</Form.Item>
-													</Form>
-												)}
-											/> */}
 											<p className="price-weight">
 												Kategori <strong>{(item.category || {}).name}</strong> &middot;{" "}
 												<span>
-													Warna <strong>{item.color}</strong>
+													Warna <strong>{details.product_color}</strong>
 												</span>
 											</p>
 											<Popconfirm
 												title="Yakin mau hapus produk ini dari Wishlist kamu?"
 												okText="Yakin"
-												onConfirm={() => handleDeleteWishlist(item.id)}
+												onConfirm={() => handleDeleteWishlist(details.wishlist_id)}
 											>
 												<Button type="dashed" icon="delete">
 													Hapus dari wishlist

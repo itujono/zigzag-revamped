@@ -7,11 +7,12 @@ import { useHistory, Link } from "react-router-dom"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton } from "formik-antd"
 
-import { fetchBankAccounts } from "store/actions/otherActions"
+import { fetchBankAccounts, fetchOrderCodeList } from "store/actions/otherActions"
 import { mobile } from "helpers"
 
 function PaymentConfirmation({ bankAccountOptions, ...props }) {
 	const { push } = useHistory()
+	const { fetchOrderCodeList, fetchBankAccounts } = props
 
 	const uploadProps = {
 		name: "file",
@@ -36,7 +37,8 @@ function PaymentConfirmation({ bankAccountOptions, ...props }) {
 	}
 
 	useEffect(() => {
-		props.fetchBankAccounts()
+		fetchBankAccounts()
+		fetchOrderCodeList()
 	}, [])
 
 	return (
@@ -122,4 +124,4 @@ const mapState = ({ other }) => {
 	}
 }
 
-export default connect(mapState, { fetchBankAccounts })(PaymentConfirmation)
+export default connect(mapState, { fetchBankAccounts, fetchOrderCodeList })(PaymentConfirmation)

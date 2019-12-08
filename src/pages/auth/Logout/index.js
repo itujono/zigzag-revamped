@@ -20,11 +20,9 @@ function Logout() {
 							content="Kamu udah keluar!"
 							subheader="Oke, jangan lupa balik lagi ya, dan hamburkan duit belanja ibumu!"
 						/>
-						<Link to="/">
-							<Button type="primary">
-								<Icon type="home" /> &nbsp; Balik ke Home
-							</Button>
-						</Link>
+						<Button type="primary" onClick={() => window.location.replace("/")}>
+							<Icon type="home" /> &nbsp; Balik ke Home
+						</Button>
 					</Card>
 				</Col>
 			</Row>

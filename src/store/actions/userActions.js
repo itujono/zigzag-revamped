@@ -79,3 +79,34 @@ export const addNewDeposit = amount => dispatch => {
 			dispatch({ type: types.ADD_NEW_DEPOSIT_ERROR, payload: error })
 		})
 }
+
+export const upgradeConfirmation = (values, push) => dispatch => {
+	dispatch(loadingUser())
+	return instance
+		.post(`/customer/confirmation_upgrade_account`, values)
+		.then(({ data }) => {
+			dispatch({ type: types.UPGRADE_CONFIRMATION, payload: data })
+		})
+		.then(() => {
+			message
+				.loading("Memverifikasi data...", 1)
+				.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
+		})
+		.catch(err => {
+			useRenderError(err, dispatch, types.UPGRADE_CONFIRMATION_ERROR)
+		})
+}
+
+export const upgradeAccount = push => dispatch => {
+	dispatch(loadingUser())
+	return instance
+		.get(`/customer/upgrade`)
+		.then(({ data }) => {
+			console.log({ upgrade: data.data })
+			dispatch({ type: types.UPGRADE_ACCOUNT, payload: data.data })
+		})
+		.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
+		.catch(err => {
+			useRenderError(err, dispatch, types.UPGRADE_ACCOUNT_ERROR)
+		})
+}

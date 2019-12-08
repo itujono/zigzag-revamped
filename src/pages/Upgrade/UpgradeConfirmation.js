@@ -1,13 +1,16 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { Formik } from "formik"
+import { SubmitButton, ResetButton } from "formik-antd"
+import { connect } from "react-redux"
 
+import { upgradeConfirmation } from "store/actions/userActions"
+import { fetchOrderCodeList } from "store/actions/otherActions"
 import { Heading } from "components"
 import { SelectInput, TextInput, DateInput } from "components/Fields"
-import { SubmitButton, ResetButton } from "formik-antd"
 import styled from "styled-components/macro"
 
-export default function UpgradeConfirmation() {
+function UpgradeConfirmation({ upgradeConfirmation, fetchOrderCodeList, orderCodeList }) {
 	const uploadProps = {
 		name: "file",
 		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
@@ -28,6 +31,10 @@ export default function UpgradeConfirmation() {
 		console.log({ values })
 		setSubmitting(false)
 	}
+
+	useEffect(() => {
+		fetchOrderCodeList()
+	}, [])
 
 	return (
 		<Row type="flex" justify="center" css="padding: 2em">
@@ -86,3 +93,9 @@ export default function UpgradeConfirmation() {
 		</Row>
 	)
 }
+
+const mapState = ({ other }) => ({
+	orderCodeList: other.orderCodeList
+})
+
+export default connect(mapState, { upgradeConfirmation, fetchOrderCodeList })(UpgradeConfirmation)

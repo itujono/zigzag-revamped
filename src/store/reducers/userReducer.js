@@ -5,7 +5,9 @@ const initialState = {
 	loading: false,
 	error: null,
 	depositList: [],
-	depositError: null
+	upgradeResponse: "",
+	depositError: null,
+	upgradeError: null
 }
 
 function reducer(state = initialState, action) {
@@ -22,6 +24,8 @@ function reducer(state = initialState, action) {
 			return { ...state, depositList: action.payload, loading: false }
 		case types.ADD_NEW_DEPOSIT:
 			return { ...state, loading: false }
+		case types.UPGRADE_ACCOUNT:
+			return { ...state, upgradeResponse: action.payload, loading: false }
 
 		case types.UPDATE_USER_PROFILE_ERROR:
 			return { ...state, error: action.payload, loading: false }
@@ -31,6 +35,8 @@ function reducer(state = initialState, action) {
 			return { ...state, depositError: action.payload, loading: false }
 		case types.ADD_NEW_DEPOSIT_ERROR:
 			return { ...state, depositError: action.payload, loading: false }
+		case types.UPGRADE_ACCOUNT_ERROR:
+			return { ...state, upgradeError: action.payload, loading: false }
 		default:
 			return state
 	}
