@@ -11,7 +11,7 @@ const initialState = {
 	cartItems: [],
 	wishlistItems: [],
 	wishlistError: null,
-	productList: [],
+	searchList: [],
 	searchError: null
 }
 
@@ -50,7 +50,7 @@ function reducer(state = initialState, action) {
 		case types.ADD_ITEM_TO_WISHLIST:
 			return { ...state, loading: false }
 		case types.SEARCH_PRODUCT:
-			return { ...state, productList: action.payload, loading: false }
+			return { ...state, searchList: action.payload, loading: false }
 		case types.DELETE_WISHLIST_ITEM:
 			return { ...state, loading: false }
 		case types.DELETE_WISHLIST_ITEM_ERROR:

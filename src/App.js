@@ -18,6 +18,7 @@ import AccountActive from "pages/auth/AccountActive"
 import NewPassword from "pages/auth/NewPassword"
 import NewPasswordSuccess from "pages/auth/NewPassword/NewPasswordSuccess"
 import Logout from "pages/auth/Logout"
+import SearchResult from "pages/Home/SearchResult"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -42,6 +43,7 @@ const App = () => {
 						<Route path="/new-password/success" component={NewPasswordSuccess} />
 						<Route exact path="/register" component={Register} />
 						<Route path="/register/success" component={RegisterSuccess} />
+						<Route path="/search" component={SearchResult} />
 						<Route path="/checkout" component={Checkout} />
 						<Route path="/order/order_success" component={CheckoutSuccess} />
 						<Route exact path="/order/confirmation" component={Confirmation} />
