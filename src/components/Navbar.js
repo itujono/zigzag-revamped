@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Menu, Icon, Typography, List, Avatar } from "antd"
+import { Row, Col, Menu, Icon, Typography, List, Avatar, Input } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
 import { Link, withRouter, useHistory } from "react-router-dom"
@@ -73,6 +73,15 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 				<Col style={{ textAlign: "right" }}>
 					{token ? (
 						<StyledMenu mode="horizontal">
+							<Menu.Item key="search">
+								<Input.Search
+									allowClear
+									name="search"
+									placeholder="Cari apa saja..."
+									style={{ width: 200 }}
+									onSearch={value => console.log({ search: value })}
+								/>
+							</Menu.Item>
 							<Menu.Item
 								key="notifications"
 								style={{ paddingLeft: "2em", paddingRight: 0 }}
@@ -98,6 +107,15 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 						</StyledMenu>
 					) : (
 						<StyledMenu mode="horizontal">
+							<Menu.Item key="search">
+								<Input.Search
+									allowClear
+									name="search"
+									placeholder="Cari apa saja..."
+									style={{ width: 200 }}
+									onSearch={value => console.log({ search: value })}
+								/>
+							</Menu.Item>
 							<Menu.Item key="login" style={{ paddingRight: 0 }}>
 								<Link to="/login">
 									<Button shape="circle" type="primary">

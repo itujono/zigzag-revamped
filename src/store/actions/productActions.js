@@ -1,5 +1,5 @@
 import * as types from "../types"
-import { instance } from "helpers"
+import { instance, useRenderError } from "helpers"
 import { message } from "antd"
 
 const loadingProduct = condition => ({ type: types.LOADING_PRODUCT, payload: condition })
@@ -111,4 +111,15 @@ export const deleteWishlistItem = id => dispatch => {
 			}
 			dispatch({ type: types.DELETE_WISHLIST_ITEM_ERROR, payload: error })
 		})
+}
+
+export const searchProduct = query => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.get(`/product/search?find=${query}`)
+		.then(({ data }) => {
+			console.log({ searchData: data })
+			dispatch({ type: types.SEARCH_PRODUCT, payload: data.data.wishlist_data })
+		})
+		.catch(err => useRenderError(err, dispatch, types.SEARCH_PRODUCT_ERROR))
 }
