@@ -91,7 +91,9 @@ export const fetchWishlistItems = () => dispatch => {
 			console.log({ wishlistData: data })
 			dispatch({ type: types.FETCH_WISHLIST_ITEMS, payload: data.data.wishlist_data })
 		})
-		.catch(err => console.error(err.response))
+		.catch(err => {
+			useRenderError(err, dispatch, types.FETCH_WISHLIST_ITEMS_ERROR)
+		})
 }
 
 export const deleteWishlistItem = id => dispatch => {

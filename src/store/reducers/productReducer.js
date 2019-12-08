@@ -55,6 +55,8 @@ function reducer(state = initialState, action) {
 			return { ...state, loading: false }
 		case types.DELETE_WISHLIST_ITEM_ERROR:
 			return { ...state, wishlistError: action.payload, loading: false }
+		case types.FETCH_WISHLIST_ITEMS_ERROR:
+			return { ...state, wishlistError: action.payload, loading: false }
 		case types.ADD_ITEM_TO_WISHLIST_ERROR:
 			return { ...state, wishlistError: action.payload, loading: false }
 		case types.SEARCH_PRODUCT_ERROR:
