@@ -27,9 +27,24 @@ export const updateUserProfile = values => dispatch => {
 		.then(() => message.success("Profil kamu berhasil di-update"))
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
+			if (err.response) message.error(error)
 			dispatch({ type: types.UPDATE_USER_PROFILE_ERROR, payload: error })
+		})
+}
+
+export const changeProfilePassword = values => dispatch => {
+	dispatch(loadingUser())
+	return instance
+		.post(`/customer/change_password`, values)
+		.then(({ data }) => {
+			dispatch({ type: types.CHANGE_PROFILE_PASSWORD, payload: data })
+		})
+		.then(() => {
+			message.loading("Mohon tunggu...").then(() => message.success("Password kamu sudah berhasil terganti"))
+		})
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) message.error(error)
+			dispatch({ type: types.CHANGE_PROFILE_PASSWORD_ERROR, payload: error })
 		})
 }

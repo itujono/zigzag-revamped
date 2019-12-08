@@ -14,7 +14,7 @@ export const authUser = ({ email, password }, setSubmitting, push) => dispatch =
 			localStorage.setItem("account_type", JSON.stringify(data.data.account_type))
 			dispatch({ type: types.AUTH_USER, payload: data.data })
 		})
-		.then(() => push("/"))
+		.then(() => message.loading("Mohon tunggu...").then(() => push("/")))
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
 			if (err.response) message.error(error)
@@ -31,6 +31,8 @@ export const unauthUser = push => dispatch => {
 		.then(({ data }) => dispatch({ type: types.UNAUTH_USER, payload: data }))
 		.then(() => {
 			localStorage.clear()
+		})
+		.then(() => {
 			message
 				.loading("Mohon tunggu...")
 				.then(() => push({ pathname: "/logout", state: { success: true } }))

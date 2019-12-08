@@ -19,9 +19,11 @@ function NewPasswordSuccess() {
 							content="Berhasil!"
 							subheader="Mantap! Password kamu sudah berhasil terganti. Silakan langsung coba login lagi"
 						/>
-						<Button type="primary">
-							<Icon type="home" /> &nbsp; <Link to="/login">Balik ke Login</Link>
-						</Button>
+						<Link to="/login">
+							<Button type="primary">
+								<Icon type="home" /> &nbsp; Balik ke Login
+							</Button>
+						</Link>
 					</Card>
 				</Col>
 			</Row>

@@ -22,9 +22,11 @@ function ForgotSuccess({ location: { state }, history }) {
 							closable
 							style={{ textAlign: "left", marginBottom: "4em" }}
 						/>
-						<Button type="primary">
-							<Icon type="home" /> &nbsp; <Link to="/login">Balik ke Login</Link>
-						</Button>
+						<Link to="/login">
+							<Button type="primary">
+								<Icon type="home" /> &nbsp; Balik ke Login
+							</Button>
+						</Link>
 					</Card>
 				</Col>
 			</Row>

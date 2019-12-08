@@ -13,6 +13,7 @@ import Drawer from "./Drawer"
 import Modal from "./Modal"
 import Alert from "./Alert"
 import Empty from "./Empty"
+import DynamicIcon from "./DynamicIcon"
 
 export {
 	Heading,
@@ -29,5 +30,6 @@ export {
 	Drawer,
 	Modal,
 	Alert,
-	Empty
+	Empty,
+	DynamicIcon
 }

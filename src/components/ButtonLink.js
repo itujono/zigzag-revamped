@@ -1,14 +1,16 @@
 import React from "react"
 import { Button } from "antd"
 import styled from "styled-components"
+import { theme } from "styles"
 
 const StyledButton = styled(Button)`
 	&& {
 		transition: 0ms;
 		margin-right: 8px;
 		color: #777;
+		background-color: ${theme.greyColor[4]};
 		&:hover {
-			background: #e9e9e9;
+			background: ${theme.greyColor[3]};
 			border-radius: 5px;
 			color: #777;
 			a {

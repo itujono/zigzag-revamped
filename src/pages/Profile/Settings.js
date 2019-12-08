@@ -2,11 +2,12 @@ import React from "react"
 import { Section, Heading } from "components"
 import { TextInput } from "components/Fields"
 import { Tabs, Form, Row, Col, Divider } from "antd"
+import * as yup from "yup"
 import { connect } from "react-redux"
 import { Formik } from "formik"
 import styled from "styled-components"
 import { SubmitButton, ResetButton } from "formik-antd"
-import { fetchProvinces } from "store/actions/rajaOngkirActions"
+import { changeProfilePassword } from "store/actions/userActions"
 
 const Tab = styled(Tabs)`
 	.ant-tabs-bar {
@@ -14,7 +15,12 @@ const Tab = styled(Tabs)`
 	}
 `
 
-function Settings() {
+function Settings({ changeProfilePassword, loading }) {
+	const handleChangePassword = (values, { setSubmitting }) => {
+		const { new_password_confirmation, ...theValues } = values
+		changeProfilePassword(theValues).then(() => setSubmitting(false))
+	}
+
 	return (
 		<Section width="70%" centered>
 			<Heading content="Settings" bold />
@@ -23,6 +29,9 @@ function Settings() {
 					<Row>
 						<Col lg={10}>
 							<Formik
+								onSubmit={handleChangePassword}
+								validationSchema={validationSchema}
+								initialValues={{ new_password_confirmation: "", new_password: "", old_password: "" }}
 								render={({ handleSubmit }) => (
 									<Form layout="vertical" onSubmit={handleSubmit}>
 										<TextInput
@@ -33,7 +42,7 @@ function Settings() {
 										/>
 										<TextInput
 											password
-											name="repeat_password"
+											name="new_password_confirmation"
 											label="Ulangi password baru kamu"
 											placeholder="Eheheh..."
 										/>
@@ -44,7 +53,7 @@ function Settings() {
 											placeholder="Eheheh..."
 										/>
 										<Divider />
-										<SubmitButton type="primary" icon="check">
+										<SubmitButton type="primary" icon="check" loading={loading}>
 											Ubah password sekarang
 										</SubmitButton>{" "}
 										&nbsp; <ResetButton type="link">Reset</ResetButton>
@@ -59,5 +68,17 @@ function Settings() {
 	)
 }
 
+const validationSchema = yup.object().shape({
+	new_password: yup
+		.string()
+		.required("Jangan lupa password baru nya ya")
+		.min(8, "Minimal 8 karakter ya"),
+	new_password_confirmation: yup
+		.string()
+		.required("Ulangi password kamu di atas")
+		.oneOf([yup.ref("new_password")], "Password ini harus sama dengan yang di atas"),
+	old_password: yup.string().required("Jangan lupa isi password lama kamu ya")
+})
+
 // prettier-ignore
-export default connect( null, { fetchProvinces } )(Settings)
+export default connect(({user}) => ({ loading: user.loading }), { changeProfilePassword } )(Settings)

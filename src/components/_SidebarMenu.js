@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom"
 import { connect } from "react-redux"
 import { fetchProductCategories } from "store/actions/productActions"
 import { BagIcon, ShoesIcon, LingerieIcon, WalletIcon, HomewareIcon } from "components/Icons"
+import DynamicIcon from "./DynamicIcon"
 
 function SidebarMenu({ page, fetchProductCategories, categories }) {
 	useEffect(() => {
@@ -24,27 +25,27 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 					<Menu>
 						<Menu.Item key="basic">
 							<NavLink to="/profile/basic">
-								<BagIcon /> Basic
+								<DynamicIcon type="icon-tubiaozhizuomoban6" /> Basic
 							</NavLink>
 						</Menu.Item>
 						<Menu.Item key="history">
 							<NavLink to="/profile/history">
-								<BagIcon /> History order
+								<DynamicIcon type="icon-tubiaozhizuomoban3" /> History order
 							</NavLink>
 						</Menu.Item>
 						<Menu.Item key="wishlist">
 							<NavLink to="/profile/wishlist">
-								<BagIcon /> Wishlist
+								<DynamicIcon type="icon-tubiaozhizuomoban" /> Wishlist
 							</NavLink>
 						</Menu.Item>
 						<Menu.Item key="deposit">
 							<NavLink to="/profile/deposit">
-								<BagIcon /> Deposit
+								<DynamicIcon type="icon-tubiaozhizuomoban5" /> Deposit
 							</NavLink>
 						</Menu.Item>
 						<Menu.Item key="settings">
 							<NavLink to="/profile/settings">
-								<BagIcon /> Settings
+								<DynamicIcon type="icon-tubiaozhizuomoban1" /> Settings
 							</NavLink>
 						</Menu.Item>
 					</Menu>
