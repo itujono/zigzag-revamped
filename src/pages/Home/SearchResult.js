@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Section, Heading, Button, Layout } from "components"
 import { Row, Col, Form, Input, List, Avatar } from "antd"
 import { connect } from "react-redux"
+import { useLocation } from "react-router-dom"
 import styled from "styled-components"
 
 import { searchProduct } from "store/actions/productActions"
@@ -35,11 +36,17 @@ const CartItem = styled(List.Item)`
 
 function SearchResult({ searchProduct, searchList, loading }) {
 	const [keyword, setKeyword] = useState("")
+	const { state = {} } = useLocation()
 
 	const handleSearch = value => {
 		setKeyword(value)
 		searchProduct(value)
 	}
+
+	useEffect(() => {
+		if (state.keyword) setKeyword(state.keyword)
+		handleSearch(keyword || state.keyword)
+	}, [state.keyword])
 
 	return (
 		<Layout>
@@ -52,7 +59,7 @@ function SearchResult({ searchProduct, searchList, loading }) {
 							name="search"
 							placeholder="Cari apa saja..."
 							style={{ width: "100%" }}
-							defaultValue="Heheh..."
+							defaultValue={state.keyword || ""}
 							onSearch={handleSearch}
 						/>
 						<List

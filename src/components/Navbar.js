@@ -79,7 +79,7 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, ...pr
 									name="search"
 									placeholder="Cari apa saja..."
 									style={{ width: 200 }}
-									onSearch={value => console.log({ search: value })}
+									onSearch={value => push({ pathname: "/search", state: { keyword: value } })}
 								/>
 							</Menu.Item>
 							<Menu.Item
