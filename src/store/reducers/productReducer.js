@@ -15,6 +15,7 @@ const initialState = {
 	searchError: null
 }
 
+const token = localStorage.getItem("access_token")
 const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 const { account_type_remark: typeRemark } = accountType
 
@@ -38,19 +39,30 @@ function reducer(state = initialState, action) {
 			return { ...state, cartItems: action.payload, loading: false }
 		case types.ADD_ITEM_TO_CART:
 			return { ...state, loading: false }
+
 		case types.FETCH_WISHLIST_ITEMS:
 			const theItems = action.payload.map(item => {
-				const price = item.product_price.filter(
-					({ price_type }) => price_type.toLowerCase() === typeRemark.toLowerCase()
-				)[0]
+				const price = item.product_price.filter(({ price_type }) => {
+					if (!token) return price_type === "REGULER"
+					return price_type.toLowerCase() === typeRemark.toLowerCase()
+				})[0]
 				return { ...item, product_price: price }
 			})
-
 			return { ...state, wishlistItems: theItems, loading: false }
+
 		case types.ADD_ITEM_TO_WISHLIST:
 			return { ...state, loading: false }
+
 		case types.SEARCH_PRODUCT:
-			return { ...state, searchList: action.payload, loading: false }
+			const items = action.payload.map(item => {
+				const price = item.product_price.filter(({ price_type }) => {
+					if (!token) return price_type === "REGULER"
+					return price_type.toLowerCase() === typeRemark.toLowerCase()
+				})[0]
+				return { ...item, product_price: price }
+			})
+			return { ...state, searchList: items, loading: false }
+
 		case types.DELETE_WISHLIST_ITEM:
 			return { ...state, loading: false }
 		case types.DELETE_WISHLIST_ITEM_ERROR:

@@ -121,7 +121,7 @@ export const searchProduct = query => dispatch => {
 		.get(`/product/search?find=${query}`)
 		.then(({ data }) => {
 			console.log({ searchData: data })
-			dispatch({ type: types.SEARCH_PRODUCT, payload: data.data.wishlist_data })
+			dispatch({ type: types.SEARCH_PRODUCT, payload: data.data.product_search.rows })
 		})
 		.catch(err => useRenderError(err, dispatch, types.SEARCH_PRODUCT_ERROR))
 }

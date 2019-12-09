@@ -23,12 +23,12 @@ export { instance }
 /////////////////////////////////
 
 export function useRenderError(err, dispatch, type) {
-	console.error(err.response)
-	const error = (err.response.data || {}).message || ""
-	if (err.response) message.error(error)
-	if ((err.response || {}).status === 401) {
-		localStorage.clear()
-	}
+	const errResponse = err.response || {}
+	console.error(errResponse)
+	const error = (errResponse.data || {}).message || ""
+	if (error) message.error(error)
+	if (errResponse.status === 401) localStorage.clear()
+
 	dispatch({ type, payload: error })
 	return error
 }

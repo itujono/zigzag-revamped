@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Section, Heading, Button, Layout } from "components"
-import { Row, Col, Form, Input, List, Avatar } from "antd"
+import { Row, Col, Input, List, Avatar } from "antd"
 import { connect } from "react-redux"
-import { useLocation } from "react-router-dom"
 import styled from "styled-components"
 
 import { searchProduct } from "store/actions/productActions"
@@ -36,17 +35,27 @@ const CartItem = styled(List.Item)`
 
 function SearchResult({ searchProduct, searchList, loading }) {
 	const [keyword, setKeyword] = useState("")
-	const { state = {} } = useLocation()
+
+	const keywordFromNavbar = localStorage.getItem("keywordFromNavbar")
 
 	const handleSearch = value => {
-		setKeyword(value)
-		searchProduct(value)
+		if (value !== "") {
+			setKeyword(value)
+			searchProduct(value)
+			// localStorage.removeItem("keywordFromNavbar")
+		}
 	}
 
 	useEffect(() => {
-		if (state.keyword) setKeyword(state.keyword)
-		handleSearch(keyword || state.keyword)
-	}, [state.keyword])
+		setKeyword(keywordFromNavbar)
+		handleSearch(keyword)
+		// handleSearch(keyword !== "" ? keyword : keywordFromNavbar)
+
+		// return () => {
+		// 	localStorage.removeItem("keywordFromNavbar")
+		// 	setKeyword("")
+		// }
+	}, [keyword, keywordFromNavbar])
 
 	return (
 		<Layout>
@@ -58,8 +67,8 @@ function SearchResult({ searchProduct, searchList, loading }) {
 							allowClear
 							name="search"
 							placeholder="Cari apa saja..."
-							style={{ width: "100%" }}
-							defaultValue={state.keyword || ""}
+							style={{ width: "100%", marginBottom: "3em" }}
+							defaultValue={keywordFromNavbar || ""}
 							onSearch={handleSearch}
 						/>
 						<List

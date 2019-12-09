@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Menu, Icon, Typography, List, Avatar, Input } from "antd"
+import { Row, Col, Menu, Icon, Typography, List, Avatar, Input, message } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
 import { Link, withRouter, useHistory } from "react-router-dom"
@@ -65,6 +65,11 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetch
 		setCartDrawer(true)
 	}
 
+	const handleSearch = value => {
+		localStorage.setItem("keywordFromNavbar", value)
+		message.loading("Mohon tunggu...", 2).then(() => push({ pathname: "/search" }))
+	}
+
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
 		fetchUser()
@@ -93,7 +98,7 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetch
 									name="search"
 									placeholder="Cari apa saja..."
 									style={{ width: 200 }}
-									onSearch={value => push({ pathname: "/search", state: { keyword: value } })}
+									onSearch={handleSearch}
 								/>
 							</Menu.Item>
 							<Menu.Item
@@ -133,7 +138,7 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetch
 									name="search"
 									placeholder="Cari apa saja..."
 									style={{ width: 200 }}
-									onSearch={value => console.log({ search: value })}
+									onSearch={handleSearch}
 								/>
 							</Menu.Item>
 							<Menu.Item key="login" style={{ paddingRight: 0 }}>
