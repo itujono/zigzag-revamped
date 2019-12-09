@@ -67,7 +67,7 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetch
 
 	const handleSearch = value => {
 		localStorage.setItem("keywordFromNavbar", value)
-		message.loading("Mohon tunggu...", 2).then(() => push({ pathname: "/search" }))
+		message.loading("Mohon tunggu...", 1).then(() => push({ pathname: "/search" }))
 	}
 
 	useEffect(() => {

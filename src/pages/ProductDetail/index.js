@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading, Button, ButtonLink } from "components"
+import { Section, Layout, Heading, Button, ButtonLink, Alert } from "components"
 import { Row, Col, Tag, Divider, Typography, Carousel, message } from "antd"
 import styled from "styled-components/macro"
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { pricer } from "helpers"
@@ -26,10 +26,22 @@ const StyledSection = styled(Section)`
 
 const { Paragraph, Text } = Typography
 
-function ProductDetail({ product, productPrice, ...props }) {
+function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 	const [selectedColor, setSelectedColor] = useState({})
 	const { id: productId } = useParams()
 	const { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist } = props
+
+	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+	const { account_type_id: typeId } = accountType
+	const token = localStorage.getItem("access_token")
+	const marketingText =
+		((!token || typeId === 1) && (
+			<span>
+				Dapatkan produk ini seharga <strong>Rp {pricer(vipPrice)}</strong> dengan menjadi member VIP kami.{" "}
+				<Link to={token ? "/upgrade" : "/login"}>Daftar jadi member VIP</Link>
+			</span>
+		)) ||
+		(token && typeId === 2 && "Great! Kamu berhak dapat harga spesial karena kamu adalah member VIP kami! 🎉")
 
 	const handleSelectColor = color => setSelectedColor(color)
 
@@ -118,6 +130,12 @@ function ProductDetail({ product, productPrice, ...props }) {
 								</Paragraph>
 							}
 						/>
+						<Alert
+							message={marketingText}
+							type="info"
+							showIcon
+							style={{ textAlign: "left", marginBottom: "2em" }}
+						/>
 						<Stats>
 							<Row type="flex">
 								<Col lg={8}>
@@ -175,9 +193,14 @@ function ProductDetail({ product, productPrice, ...props }) {
 	)
 }
 
-const mapState = ({ product }) => ({
-	product: product.product,
-	productPrice: product.productPrice
-})
+const mapState = ({ product }) => {
+	const vipPrice = (product.product.product_price || []).find(item => item.price_type === "VIP") || {}
+
+	return {
+		product: product.product,
+		productPrice: product.productPrice,
+		vipPrice: vipPrice.price || 0
+	}
+}
 
 export default connect(mapState, { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist })(ProductDetail)

@@ -6,12 +6,12 @@ import UpgradeSent from "./UpgradeSent"
 import UpgradeConfirmation from "./UpgradeConfirmation"
 import ConfirmationSuccess from "./ConfirmationSuccess"
 
-const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
-
 export default function AccountUpgrade() {
 	const { push } = useHistory()
+	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+	const token = localStorage.getItem("access_token")
 
-	if (accountType.account_type_id !== 1) push("/404")
+	if (accountType.account_type_id !== 1 || !token) push("/404")
 
 	return (
 		<Layout>

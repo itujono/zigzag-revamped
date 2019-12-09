@@ -54,7 +54,6 @@ const LeftSide = styled(Col)`
 
 function Login({ authUser }) {
 	const { push } = useHistory()
-	const error = useSelector(({ auth }) => auth.authUserError)
 
 	const handleLogin = (values, { setSubmitting }) => {
 		authUser(values, setSubmitting, push)
