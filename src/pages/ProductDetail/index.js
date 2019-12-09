@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { Section, Layout, Heading, Button, ButtonLink, Alert } from "components"
-import { Row, Col, Tag, Divider, Typography, Carousel, message } from "antd"
+import { Row, Col, Tag, Divider, Typography, Carousel, message, Rate, Popconfirm } from "antd"
 import styled from "styled-components/macro"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { pricer } from "helpers"
-import { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist } from "store/actions/productActions"
+import { fetchProductItem, addItemToCart, addItemToWishlist, addRating } from "store/actions/productActions"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -24,16 +24,33 @@ const StyledSection = styled(Section)`
 	}
 `
 
+const StyledRating = styled(Rate)`
+	.ant-rate-star {
+		margin-left: 5px;
+		&:first-child {
+			margin-left: 0;
+		}
+	}
+`
+
 const { Paragraph, Text } = Typography
 
 function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 	const [selectedColor, setSelectedColor] = useState({})
+	const [temporaryRating, setTemporaryRating] = useState(0)
 	const { id: productId } = useParams()
-	const { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist } = props
+	const { push } = useHistory()
+	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating } = props
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
 	const token = localStorage.getItem("access_token")
+
+	const handleRate = () => {
+		if (!token) push("/login")
+		else addRating(productId, temporaryRating)
+	}
+
 	const marketingText =
 		((!token || typeId === 1) && (
 			<span>
@@ -42,6 +59,28 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 			</span>
 		)) ||
 		(token && typeId === 2 && "Great! Kamu berhak dapat harga spesial karena kamu adalah member VIP kami! 🎉")
+
+	const productRating = (
+		<Popconfirm
+			title={
+				<span>
+					Kamu yakin mau kasih produk ini <strong>{temporaryRating} bintang</strong>?
+				</span>
+			}
+			onConfirm={handleRate}
+		>
+			<StyledRating
+				name="rating_product"
+				value={product.rating_product}
+				onChange={value => setTemporaryRating(value)}
+				allowHalf
+			/>{" "}
+			&nbsp;
+			{product.rating_customer > 0
+				? `${product.rating_customer} orang kasih rating`
+				: "Belum ada yang kasih rating"}
+		</Popconfirm>
+	)
 
 	const handleSelectColor = color => setSelectedColor(color)
 
@@ -101,8 +140,7 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 
 	useEffect(() => {
 		fetchProductItem(Number(productId))
-		fetchCartItems()
-	}, [])
+	}, [product.rating_product])
 
 	return (
 		<Layout sidebar>
@@ -136,6 +174,7 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 							showIcon
 							style={{ textAlign: "left", marginBottom: "2em" }}
 						/>
+						<Heading reverse content="Rating" subheader={productRating} />
 						<Stats>
 							<Row type="flex">
 								<Col lg={8}>
@@ -203,4 +242,4 @@ const mapState = ({ product }) => {
 	}
 }
 
-export default connect(mapState, { fetchProductItem, addItemToCart, fetchCartItems, addItemToWishlist })(ProductDetail)
+export default connect(mapState, { fetchProductItem, addItemToCart, addItemToWishlist, addRating })(ProductDetail)

@@ -12,7 +12,8 @@ const initialState = {
 	wishlistItems: [],
 	wishlistError: null,
 	searchList: [],
-	searchError: null
+	searchError: null,
+	productError: null
 }
 
 const token = localStorage.getItem("access_token")
@@ -41,6 +42,8 @@ function reducer(state = initialState, action) {
 		case types.FETCH_CART_ITEMS:
 			return { ...state, cartItems: action.payload, loading: false }
 		case types.ADD_ITEM_TO_CART:
+			return { ...state, loading: false }
+		case types.ADD_RATING:
 			return { ...state, loading: false }
 
 		case types.FETCH_WISHLIST_ITEMS:
@@ -76,6 +79,8 @@ function reducer(state = initialState, action) {
 			return { ...state, wishlistError: action.payload, loading: false }
 		case types.SEARCH_PRODUCT_ERROR:
 			return { ...state, searchError: action.payload, loading: false }
+		case types.ADD_RATING_ERROR:
+			return { ...state, productError: action.payload, loading: false }
 		default:
 			return state
 	}

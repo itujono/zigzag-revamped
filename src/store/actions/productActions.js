@@ -125,3 +125,22 @@ export const searchProduct = query => dispatch => {
 		})
 		.catch(err => useRenderError(err, dispatch, types.SEARCH_PRODUCT_ERROR))
 }
+
+export const addRating = (id, rate) => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.get(`/product/save_rating?product_id=${id}&rating=${rate}`)
+		.then(({ data }) => {
+			console.log({ rateData: data })
+			dispatch({ type: types.ADD_RATING, payload: data.data })
+		})
+		.then(() => dispatch(fetchProductItem(id)))
+		.then(() => message.success("Kamu sudah berhasil kasih rating. Terima kasih! :)"))
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.ADD_RATING_ERROR, payload: error })
+		})
+}
