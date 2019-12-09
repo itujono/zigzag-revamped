@@ -6,7 +6,6 @@ import { Link } from "react-router-dom"
 import styled from "styled-components/macro"
 import Button from "components/Button"
 import { pricer, media } from "helpers"
-import { cartItems } from "helpers/dummy"
 import Section from "components/Section"
 import { theme } from "styles"
 import { TextInput } from "components/Fields"
@@ -62,7 +61,7 @@ const CartItem = styled(List.Item)`
 	}
 `
 
-export default function CartDrawer({ onCartDrawer }) {
+export default function CartDrawer({ onCartDrawer, data }) {
 	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
 
 	const handleClose = () => {
@@ -88,7 +87,7 @@ export default function CartDrawer({ onCartDrawer }) {
 			<Heading content="Cart kamu" level={4} bold />
 			<List
 				itemLayout="horizontal"
-				dataSource={cartItems}
+				dataSource={data}
 				renderItem={item => (
 					<CartItem>
 						<List.Item.Meta

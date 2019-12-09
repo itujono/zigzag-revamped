@@ -201,12 +201,16 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props
 							content={product.name}
 							subheader={
 								<Paragraph>
-									{isVip && (
-										<Text delete disabled>
-											Rp {pricer(245000)}
-										</Text>
-									)}{" "}
-									&nbsp; Rp {pricer(productPrice)}
+									{isVip ? (
+										<>
+											<Text delete disabled>
+												Rp {pricer(245000)}
+											</Text>{" "}
+											&nbsp; Rp {pricer(productPrice)}
+										</>
+									) : (
+										`Rp ${pricer(productPrice)}`
+									)}
 								</Paragraph>
 							}
 						/>

@@ -43,10 +43,15 @@ export const fetchCartItems = () => dispatch => {
 	instance
 		.get(`/cart/list`)
 		.then(({ data }) => {
-			console.log({ cartData: data })
-			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data })
+			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data })
 		})
-		.catch(err => console.error(err.response))
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.ADD_ITEM_TO_CART_ERROR, payload: error })
+		})
 }
 
 export const addItemToCart = item => dispatch => {
@@ -54,8 +59,8 @@ export const addItemToCart = item => dispatch => {
 	instance
 		.post(`/cart/save`, item)
 		.then(({ data }) => dispatch({ type: types.ADD_ITEM_TO_CART, payload: data }))
-		.then(() => message.success("Produk berhasil ditambahkan ke cart"))
 		.then(() => dispatch(fetchCartItems()))
+		.then(() => message.success("Produk berhasil ditambahkan ke cart"))
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
 			if (err.response) {

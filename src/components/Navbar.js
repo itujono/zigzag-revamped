@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Menu, Icon, Typography, List, Avatar, Input, message } from "antd"
+import { Row, Col, Menu, Icon, Typography, List, Avatar, Input, message, Badge } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
 import { Link, withRouter, useHistory } from "react-router-dom"
@@ -7,6 +7,7 @@ import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
 import { unauthUser } from "store/actions/authActions"
+import { fetchCartItems } from "store/actions/productActions"
 import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
@@ -51,9 +52,10 @@ const StyledSubmenu = styled(Menu.SubMenu)`
 const token = localStorage.getItem("access_token")
 const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 
-function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetchUser, ...props }) {
+function Navbar({ user, role, cartDrawerFromStore, cartItems, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
+	const { setCartDrawerFromStore, fetchUser, fetchCartItems } = props
 	const typeId = accountType.account_type_id
 
 	const handleLogout = () => {
@@ -73,11 +75,15 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetch
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
 		fetchUser()
+		fetchCartItems()
 	}, [cartDrawerFromStore, token])
 
 	return (
 		<Nav>
-			<CartDrawer onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }} />
+			<CartDrawer
+				data={cartItems}
+				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
+			/>
 			<Row type="flex" justify="space-between">
 				<Col>
 					<Logo /> &nbsp;{" "}
@@ -106,7 +112,9 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetch
 								style={{ paddingLeft: "2em", paddingRight: 0 }}
 								onClick={handleSetCardDrawer}
 							>
-								<Icon type="bell" theme="filled" />
+								<Badge dot={cartItems.length > 0}>
+									<Icon type="shopping-cart" />
+								</Badge>
 							</Menu.Item>
 							<StyledSubmenu title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}>
 								<Menu.Item key="greeting">
@@ -156,11 +164,12 @@ function Navbar({ user, role, cartDrawerFromStore, setCartDrawerFromStore, fetch
 	)
 }
 
-const mapState = ({ user, auth, other }) => ({
+const mapState = ({ user, auth, other, product }) => ({
 	user: user.user,
 	role: auth.role,
-	cartDrawerFromStore: other.cartDrawer
+	cartDrawerFromStore: other.cartDrawer,
+	cartItems: product.cartItems
 })
 
 // prettier-ignore
-export default withRouter(connect(mapState, {setCartDrawerFromStore, unauthUser, fetchUser})(Navbar))
+export default withRouter(connect(mapState, {setCartDrawerFromStore, unauthUser, fetchUser, fetchCartItems})(Navbar))

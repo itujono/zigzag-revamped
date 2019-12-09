@@ -13,7 +13,8 @@ const initialState = {
 	wishlistError: null,
 	searchList: [],
 	searchError: null,
-	productError: null
+	productError: null,
+	cartError: null
 }
 
 const token = localStorage.getItem("access_token")
@@ -81,6 +82,8 @@ function reducer(state = initialState, action) {
 			return { ...state, searchError: action.payload, loading: false }
 		case types.ADD_RATING_ERROR:
 			return { ...state, productError: action.payload, loading: false }
+		case types.FETCH_CART_ITEMS_ERROR:
+			return { ...state, cartError: action.payload, loading: false }
 		default:
 			return state
 	}
