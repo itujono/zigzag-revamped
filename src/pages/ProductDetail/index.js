@@ -7,6 +7,7 @@ import { connect } from "react-redux"
 
 import { pricer } from "helpers"
 import { fetchProductItem, addItemToCart, addItemToWishlist, addRating } from "store/actions/productActions"
+import { theme } from "styles"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -33,10 +34,20 @@ const StyledRating = styled(Rate)`
 	}
 `
 
+const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize }) => ({
+	color: (id === selectedColor.id && "#2db7f5") || (id === selectedSize.id && "#87d068")
+}))`
+	&& {
+		cursor: pointer;
+		margin-bottom: 5px;
+	}
+`
+
 const { Paragraph, Text } = Typography
 
-function ProductDetail({ product, productPrice, vipPrice, ...props }) {
+function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props }) {
 	const [selectedColor, setSelectedColor] = useState({})
+	const [selectedSize, setSelectedSize] = useState({})
 	const [temporaryRating, setTemporaryRating] = useState(0)
 	const { id: productId } = useParams()
 	const { push } = useHistory()
@@ -45,6 +56,10 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
 	const token = localStorage.getItem("access_token")
+	const isVip = typeId && typeId === 2
+	const isShoes = (product.categories || {}).id === 2
+	const sizeIsNotSelected = Object.keys(selectedSize).length === 0
+	const colorIsNotSelected = Object.keys(selectedColor).length === 0
 
 	const handleRate = () => {
 		if (!token) push("/login")
@@ -58,7 +73,7 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 				<Link to={token ? "/upgrade" : "/login"}>Daftar jadi member VIP</Link>
 			</span>
 		)) ||
-		(token && typeId === 2 && "Great! Kamu berhak dapat harga spesial karena kamu adalah member VIP kami! 🎉")
+		(token && isVip && "Great! Kamu berhak dapat harga spesial karena kamu adalah member VIP kami! 🎉")
 
 	const productRating = (
 		<Popconfirm
@@ -82,26 +97,51 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 		</Popconfirm>
 	)
 
-	const handleSelectColor = color => setSelectedColor(color)
+	const handleSelectColor = (color, stock) => {
+		if (stock === "STOCK HABIS" || stock === 0) return
+		setSelectedColor(color)
+	}
+	const handleSelectSize = (size, stock) => {
+		if (stock === "STOCK HABIS" || stock === 0) return
+		setSelectedSize(size)
+	}
 
-	const color = (product.product_detail || []).map(item =>
-		// prettier-ignore
-		<Tag
-			color={item.id === selectedColor.id && "#2db7f5"}
-			key={item.id}
-			onClick={() => handleSelectColor(item)}
-			css={` && { cursor: pointer; } `}
-		>
-			{item.color} ({item.product_more[0].stock || 0})
-		</Tag>
-	)
+	const color = (product.product_detail || []).map(item => {
+		const stock = item.product_more[0].stock || 0
+		return (
+			<StyledTag
+				key={item.id}
+				id={item.id}
+				isShoes={isShoes}
+				selectedColor={selectedColor}
+				selectedSize={selectedSize}
+				onClick={() => handleSelectColor(item, stock)}
+			>
+				{item.color} {!isShoes && `(${stock})`}
+			</StyledTag>
+		)
+	})
 
 	const size = typeId => {
 		if (typeId === 2)
 			return (selectedColor.product_more || []).map(item => (
-				<Tag color="#87d068" key={item.id}>
-					{item.size}
-				</Tag>
+				<StyledTag
+					key={item.id}
+					id={item.id}
+					isShoes={isShoes}
+					selectedColor={selectedColor}
+					selectedSize={selectedSize}
+					onClick={() => handleSelectSize(item, item.stock)}
+				>
+					{item.size}{" "}
+					<span
+						css={`
+							color: ${theme.greyColor[2]};
+						`}
+					>
+						({item.stock || ""})
+					</span>
+				</StyledTag>
 			))
 
 		return "-"
@@ -161,19 +201,23 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 							content={product.name}
 							subheader={
 								<Paragraph>
-									<Text delete disabled>
-										Rp {pricer(245000)}
-									</Text>{" "}
+									{isVip && (
+										<Text delete disabled>
+											Rp {pricer(245000)}
+										</Text>
+									)}{" "}
 									&nbsp; Rp {pricer(productPrice)}
 								</Paragraph>
 							}
 						/>
-						<Alert
-							message={marketingText}
-							type="info"
-							showIcon
-							style={{ textAlign: "left", marginBottom: "2em" }}
-						/>
+						{typeId && typeId !== 3 && (
+							<Alert
+								message={marketingText}
+								type="info"
+								showIcon
+								style={{ textAlign: "left", marginBottom: "2em" }}
+							/>
+						)}
 						<Heading reverse content="Rating" subheader={productRating} />
 						<Stats>
 							<Row type="flex">
@@ -202,6 +246,7 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 									/>
 								</Col>
 							</Row>
+
 							{/* <Row>
 								<Col lg={12}>
 									{selectedColor && Object.keys(selectedColor).length > 0 && (
@@ -217,7 +262,12 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 						</StyledSection>
 						<Divider />
 						<StyledSection paddingHorizontal="0" marginBottom="0">
-							<Button type="primary" icon="shopping-cart" onClick={handleAddToCart}>
+							<Button
+								type="primary"
+								icon="shopping-cart"
+								disabled={isShoes ? colorIsNotSelected || sizeIsNotSelected : colorIsNotSelected}
+								onClick={handleAddToCart}
+							>
 								Tambahkan ke cart
 							</Button>{" "}
 							&nbsp;{" "}
@@ -234,11 +284,13 @@ function ProductDetail({ product, productPrice, vipPrice, ...props }) {
 
 const mapState = ({ product }) => {
 	const vipPrice = (product.product.product_price || []).find(item => item.price_type === "VIP") || {}
+	const regulerPrice = (product.product.product_price || []).find(item => item.price_type === "REGULER") || {}
 
 	return {
 		product: product.product,
 		productPrice: product.productPrice,
-		vipPrice: vipPrice.price || 0
+		vipPrice: vipPrice.price || 0,
+		regulerPrice: regulerPrice.price || 0
 	}
 }
 
