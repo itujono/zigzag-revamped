@@ -25,7 +25,10 @@ function reducer(state = initialState, action) {
 			return { ...state, loading: true }
 		case types.FETCH_PRODUCT_ITEM:
 			const productPrice = action.payload.product_price
-				.filter(({ price_type }) => price_type.toLowerCase() === typeRemark.toLowerCase())
+				.filter(({ price_type }) => {
+					if (!token) return price_type === "REGULER"
+					return price_type.toLowerCase() === typeRemark.toLowerCase()
+				})
 				.map(({ price }) => price)[0]
 
 			return { ...state, product: action.payload, productPrice, loading: false }

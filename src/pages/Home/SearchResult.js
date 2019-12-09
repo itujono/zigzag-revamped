@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { Section, Heading, Button, Layout } from "components"
-import { Row, Col, Input, List, Avatar } from "antd"
+import { Row, Col, Input, List, Avatar, Icon } from "antd"
 import { connect } from "react-redux"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 import { searchProduct } from "store/actions/productActions"
@@ -42,19 +43,12 @@ function SearchResult({ searchProduct, searchList, loading }) {
 		if (value !== "") {
 			setKeyword(value)
 			searchProduct(value)
-			// localStorage.removeItem("keywordFromNavbar")
 		}
 	}
 
 	useEffect(() => {
 		setKeyword(keywordFromNavbar)
 		handleSearch(keyword)
-		// handleSearch(keyword !== "" ? keyword : keywordFromNavbar)
-
-		// return () => {
-		// 	localStorage.removeItem("keywordFromNavbar")
-		// 	setKeyword("")
-		// }
 	}, [keyword, keywordFromNavbar])
 
 	return (
@@ -78,16 +72,14 @@ function SearchResult({ searchProduct, searchList, loading }) {
 							loading={loading}
 							renderItem={item => {
 								const picture = (item.product_image || [])[0] || {}
+								const colorArr = item.product_color.map(({ color }) => color)
+								const colors = colorArr.length > 1 ? colorArr.join(", ") : colorArr
 
 								return (
 									<CartItem>
 										<List.Item.Meta
 											avatar={
-												<Avatar
-													src={picture.picture}
-													shape="square"
-													className="product-photo"
-												/>
+												<Avatar src={picture.image} shape="square" className="product-photo" />
 											}
 											title={
 												<p style={{ marginBottom: 0 }}>
@@ -102,19 +94,21 @@ function SearchResult({ searchProduct, searchList, loading }) {
 												<Row>
 													<Col lg={24}>
 														<p className="price-weight">
-															Kategori <strong>{(item.category || {}).name}</strong>{" "}
+															Kategori <strong>{(item.categories || {}).name}</strong>{" "}
 															&middot;{" "}
 															<span>
-																Warna <strong>{item.color}</strong>
+																Warna <strong>{colors}</strong>
 															</span>
 														</p>
 													</Col>
 												</Row>
 											}
 										/>
-										<Button icon="plus" block={mobile}>
-											Tambah ke cart
-										</Button>
+										<Link to={`/product/${item.id}-${item.name}`}>
+											<Button block={mobile}>
+												Detail&nbsp; <Icon type="right" />
+											</Button>
+										</Link>
 									</CartItem>
 								)
 							}}
