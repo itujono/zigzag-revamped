@@ -5,7 +5,7 @@ import { List, Avatar, Row, Col, Icon, Form, Tooltip } from "antd"
 import { Link } from "react-router-dom"
 import styled from "styled-components/macro"
 import Button from "components/Button"
-import { pricer, media } from "helpers"
+import { pricer } from "helpers"
 import Section from "components/Section"
 import { theme } from "styles"
 import { TextInput } from "components/Fields"
@@ -61,8 +61,9 @@ const CartItem = styled(List.Item)`
 	}
 `
 
-export default function CartDrawer({ onCartDrawer, data }) {
+export default function CartDrawer({ onCartDrawer, data, handler }) {
 	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
+	const { updateCartItem } = handler
 
 	const handleClose = () => {
 		setCartDrawerFromStore(false)
@@ -90,17 +91,30 @@ export default function CartDrawer({ onCartDrawer, data }) {
 				dataSource={data}
 				renderItem={({ product_data, ...item }) => {
 					const quantity = Number(item.qty)
+					const price = (product_data.product_price || {}).price
+					const photo = (product_data.product_image || [])[0] || {}
+					const name = (product_data.products || {}).name || "-"
+
+					const handleUpdateCart = (values, { setSubmitting }) => {
+						values = {
+							qty: values.qty,
+							cart_id: item.id,
+							weight: item.weight,
+							total_price: values.qty * price
+						}
+
+						updateCartItem(values).finally(() => setSubmitting(false))
+					}
 
 					return (
 						<CartItem>
 							<List.Item.Meta
-								avatar={<Avatar src={item.photo} shape="square" className="product-photo" />}
+								avatar={<Avatar src={photo.picture} shape="square" className="product-photo" />}
 								title={
 									<p style={{ marginBottom: 0 }}>
-										<a href="https://ant.design">{item.name}</a> &middot;{" "}
+										<a href="https://ant.design">{name}</a> &middot;{" "}
 										<span>
-											Rp {pricer((product_data.product_price || {}).price)} / pcs &middot; &nbsp;
-											&nbsp;
+											Rp {pricer(price)} / pcs &middot; &nbsp; &nbsp;
 											<Tooltip title="Hapus" placement="right">
 												<span className="delete">
 													<Icon type="delete" />
@@ -113,12 +127,13 @@ export default function CartDrawer({ onCartDrawer, data }) {
 									<Row>
 										<Col lg={24}>
 											<Formik
-												initialValues={{ quantity: quantity }}
+												onSubmit={handleUpdateCart}
+												initialValues={{ qty: quantity }}
 												render={({ handleSubmit }) => (
 													<Form layout="inline" onSubmit={handleSubmit}>
 														<TextInput
 															number
-															name="quantity"
+															name="qty"
 															width={90}
 															placeholder="Jumlah..."
 															css="margin-bottom: 1.5em"
@@ -130,7 +145,7 @@ export default function CartDrawer({ onCartDrawer, data }) {
 												)}
 											/>
 											<p className="price-weight">
-												Rp {pricer(quantity * item.total_price)} &middot;{" "}
+												Rp {pricer(item.total_price)} &middot;{" "}
 												<span>{item.weight * quantity} gram</span>
 											</p>
 										</Col>

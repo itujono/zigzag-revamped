@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Menu, Icon, Typography, List, Avatar, Input, message, Badge } from "antd"
+import { Row, Col, Menu, Icon, Typography, Input, message, Badge } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
 import { Link, withRouter, useHistory } from "react-router-dom"
@@ -7,7 +7,7 @@ import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
 import { unauthUser } from "store/actions/authActions"
-import { fetchCartItems } from "store/actions/productActions"
+import { fetchCartItems, updateCartItem } from "store/actions/productActions"
 import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
@@ -55,7 +55,7 @@ const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 function Navbar({ user, role, cartDrawerFromStore, cartItems, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
-	const { setCartDrawerFromStore, fetchUser, fetchCartItems } = props
+	const { setCartDrawerFromStore, fetchUser, fetchCartItems, updateCartItem } = props
 	const typeId = accountType.account_type_id
 
 	const handleLogout = () => {
@@ -82,6 +82,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, ...props }) {
 		<Nav>
 			<CartDrawer
 				data={cartItems}
+				handler={{ updateCartItem }}
 				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
 			/>
 			<Row type="flex" justify="space-between">
@@ -171,5 +172,7 @@ const mapState = ({ user, auth, other, product }) => ({
 	cartItems: product.cartItems
 })
 
+const actions = { setCartDrawerFromStore, unauthUser, fetchUser, fetchCartItems, updateCartItem }
+
 // prettier-ignore
-export default withRouter(connect(mapState, {setCartDrawerFromStore, unauthUser, fetchUser, fetchCartItems})(Navbar))
+export default withRouter(connect(mapState, actions)(Navbar))

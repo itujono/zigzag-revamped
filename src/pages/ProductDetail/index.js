@@ -6,7 +6,13 @@ import { useParams, Link, useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { pricer } from "helpers"
-import { fetchProductItem, addItemToCart, addItemToWishlist, addRating } from "store/actions/productActions"
+import {
+	fetchProductItem,
+	addItemToCart,
+	addItemToWishlist,
+	addRating,
+	updateCartItem
+} from "store/actions/productActions"
 import { theme } from "styles"
 
 const Stats = styled.div`
@@ -51,7 +57,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props
 	const [temporaryRating, setTemporaryRating] = useState(0)
 	const { id: productId } = useParams()
 	const { push } = useHistory()
-	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating } = props
+	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem } = props
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
@@ -298,4 +304,6 @@ const mapState = ({ product }) => {
 	}
 }
 
-export default connect(mapState, { fetchProductItem, addItemToCart, addItemToWishlist, addRating })(ProductDetail)
+const actions = { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem }
+
+export default connect(mapState, actions)(ProductDetail)
