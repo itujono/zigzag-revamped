@@ -9,6 +9,7 @@ const initialState = {
 	product: {},
 	productPrice: 0,
 	cartItems: [],
+	cartTotal: {},
 	wishlistItems: [],
 	wishlistError: null,
 	searchList: [],
@@ -49,8 +50,18 @@ function reducer(state = initialState, action) {
 				})[0]
 				return { ...item, product_data: { ...product_data, product_price: price } }
 			})
+			const totalPrice = action.payload.map(item => item.total_price).reduce((acc, curr) => acc + curr, 0)
+			const totalWeight = action.payload
+				.map(({ weight, qty }) => weight * Number(qty))
+				.reduce((acc, curr) => acc + curr, 0)
+			const totalQty = action.payload.map(item => Number(item.qty)).reduce((acc, curr) => acc + curr, 0)
 
-			return { ...state, cartItems, loading: false }
+			return {
+				...state,
+				cartItems,
+				cartTotal: { price: totalPrice, weight: totalWeight, qty: totalQty },
+				loading: false
+			}
 
 		case types.ADD_ITEM_TO_CART:
 			return { ...state, loading: false }

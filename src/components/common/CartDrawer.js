@@ -11,6 +11,7 @@ import { theme } from "styles"
 import { TextInput } from "components/Fields"
 import { Formik } from "formik"
 import { SubmitButton } from "formik-antd"
+import Empty from "components/Empty"
 
 const SubtotalSection = styled(Section).attrs({
 	paddingHorizontal: "0"
@@ -64,14 +65,15 @@ const CartItem = styled(List.Item)`
 export default function CartDrawer({ onCartDrawer, data, handler }) {
 	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
 	const { updateCartItem, deleteCartItem } = handler
+	const { cartItems, cartTotal } = data
 
 	const handleClose = () => {
 		setCartDrawerFromStore(false)
 		setCartDrawer(false)
 	}
 
-	const handleDeleteCart = cart_id => {
-		deleteCartItem({ cart_id })
+	const handleDeleteCart = (cart_id, name) => {
+		deleteCartItem({ cart_id }, name)
 	}
 
 	return (
@@ -92,7 +94,24 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 			<Heading content="Cart kamu" level={4} bold />
 			<List
 				itemLayout="horizontal"
-				dataSource={data}
+				dataSource={cartItems}
+				locale={{
+					emptyText: (
+						<div css="margin-bottom: 2em">
+							<Empty
+								description="Masih belum ada apa-apa di cart kamu nih"
+								css={`
+									&& {
+										margin-bottom: 2em;
+									}
+								`}
+							/>{" "}
+							<Link to="/">
+								<Button>Belanja sekarang</Button>
+							</Link>
+						</div>
+					)
+				}}
 				renderItem={({ product_data, ...item }) => {
 					const quantity = Number(item.qty)
 					const price = (product_data.product_price || {}).price
@@ -107,7 +126,7 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 							total_price: values.qty * price
 						}
 
-						updateCartItem(values).finally(() => setSubmitting(false))
+						updateCartItem(values, name).finally(() => setSubmitting(false))
 					}
 
 					return (
@@ -116,11 +135,14 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 								avatar={<Avatar src={photo.picture} shape="square" className="product-photo" />}
 								title={
 									<p style={{ marginBottom: 0 }}>
-										<a href="https://ant.design">{name}</a> &middot;{" "}
+										<Link to={`/product/${item.id}-${name}`}>{name}</Link> &middot;{" "}
 										<span>
 											Rp {pricer(price)} / pcs &middot; &nbsp; &nbsp;
 											<Tooltip title="Hapus" placement="right">
-												<span className="delete" onClick={() => handleDeleteCart(item.id)}>
+												<span
+													className="delete"
+													onClick={() => handleDeleteCart(item.id, name)}
+												>
 													<Icon type="delete" />
 												</span>
 											</Tooltip>
@@ -169,11 +191,15 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 						/>
 					</Col>
 					<Col lg={8} style={{ textAlign: "right" }}>
-						<Heading content="Rp 560,000" subheader="2400 gram" className="price" />
+						<Heading
+							content={`Rp ${cartItems.length === 0 ? 0 : pricer(cartTotal.price)}`}
+							subheader={`${cartTotal.weight || 0} gram`}
+							className="price"
+						/>
 					</Col>
 				</Row>
 				<Link to="/checkout">
-					<Button block size="large">
+					<Button block size="large" disabled={cartItems.length === 0}>
 						Lanjut ke Checkout &nbsp; <Icon type="right" />
 					</Button>
 				</Link>

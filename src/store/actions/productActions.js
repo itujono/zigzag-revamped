@@ -46,13 +46,7 @@ export const fetchCartItems = () => dispatch => {
 		.then(({ data }) => {
 			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data })
 		})
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
-			dispatch({ type: types.ADD_ITEM_TO_CART_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.ADD_ITEM_TO_CART_ERROR))
 }
 
 export const addItemToCart = item => dispatch => {
@@ -62,13 +56,7 @@ export const addItemToCart = item => dispatch => {
 		.then(({ data }) => dispatch({ type: types.ADD_ITEM_TO_CART, payload: data }))
 		.then(() => dispatch(fetchCartItems()))
 		.then(() => message.success("Produk berhasil ditambahkan ke cart"))
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
-			dispatch({ type: types.ADD_ITEM_TO_CART_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.ADD_ITEM_TO_CART_ERROR))
 }
 
 export const updateCartItem = ({ cart_id, qty, weight, total_price }, name = "Heheh") => dispatch => {
@@ -85,13 +73,7 @@ export const updateCartItem = ({ cart_id, qty, weight, total_price }, name = "He
 				1
 			)
 		)
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
-			dispatch({ type: types.UPDATE_CART_ITEM_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.UPDATE_CART_ITEM_ERROR))
 }
 
 export const deleteCartItem = ({ cart_id }, name = "Heheh") => dispatch => {

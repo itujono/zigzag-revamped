@@ -52,7 +52,7 @@ const StyledSubmenu = styled(Menu.SubMenu)`
 const token = localStorage.getItem("access_token")
 const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 
-function Navbar({ user, role, cartDrawerFromStore, cartItems, ...props }) {
+function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
 	const { setCartDrawerFromStore, fetchUser, fetchCartItems, updateCartItem, deleteCartItem } = props
@@ -81,7 +81,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, ...props }) {
 	return (
 		<Nav>
 			<CartDrawer
-				data={cartItems}
+				data={{ cartItems, cartTotal }}
 				handler={{ updateCartItem, deleteCartItem }}
 				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
 			/>
@@ -169,7 +169,8 @@ const mapState = ({ user, auth, other, product }) => ({
 	user: user.user,
 	role: auth.role,
 	cartDrawerFromStore: other.cartDrawer,
-	cartItems: product.cartItems
+	cartItems: product.cartItems,
+	cartTotal: product.cartTotal
 })
 
 const actions = { setCartDrawerFromStore, unauthUser, fetchUser, fetchCartItems, updateCartItem, deleteCartItem }
