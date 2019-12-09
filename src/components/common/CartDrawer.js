@@ -63,11 +63,15 @@ const CartItem = styled(List.Item)`
 
 export default function CartDrawer({ onCartDrawer, data, handler }) {
 	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
-	const { updateCartItem } = handler
+	const { updateCartItem, deleteCartItem } = handler
 
 	const handleClose = () => {
 		setCartDrawerFromStore(false)
 		setCartDrawer(false)
+	}
+
+	const handleDeleteCart = cart_id => {
+		deleteCartItem({ cart_id })
 	}
 
 	return (
@@ -116,7 +120,7 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 										<span>
 											Rp {pricer(price)} / pcs &middot; &nbsp; &nbsp;
 											<Tooltip title="Hapus" placement="right">
-												<span className="delete">
+												<span className="delete" onClick={() => handleDeleteCart(item.id)}>
 													<Icon type="delete" />
 												</span>
 											</Tooltip>

@@ -77,7 +77,37 @@ export const updateCartItem = ({ cart_id, qty, weight, total_price }, name = "He
 		.put(`/cart/update?cart_id=${cart_id}&qty=${qty}&weight=${weight}&total_price=${total_price}`)
 		.then(({ data }) => dispatch({ type: types.UPDATE_CART_ITEM, payload: data }))
 		.then(() => dispatch(fetchCartItems()))
-		.then(() => message.success(<strong>{name} berhasil diupdate</strong>, 1))
+		.then(() =>
+			message.success(
+				<span>
+					<strong>{name}</strong> berhasil diupdate
+				</span>,
+				1
+			)
+		)
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.UPDATE_CART_ITEM_ERROR, payload: error })
+		})
+}
+
+export const deleteCartItem = ({ cart_id }, name = "Heheh") => dispatch => {
+	dispatch(loadingProduct())
+	return instance
+		.delete(`/cart/delete?cart_id=${cart_id}`)
+		.then(({ data }) => dispatch({ type: types.UPDATE_CART_ITEM, payload: data }))
+		.then(() => dispatch(fetchCartItems()))
+		.then(() =>
+			message.success(
+				<span>
+					<strong>{name}</strong> berhasil dihapus
+				</span>,
+				1
+			)
+		)
 		.catch(err => {
 			const error = (err.response.data || {}).message || ""
 			if (err.response) {

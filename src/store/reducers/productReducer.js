@@ -56,6 +56,8 @@ function reducer(state = initialState, action) {
 			return { ...state, loading: false }
 		case types.UPDATE_CART_ITEM:
 			return { ...state, loading: false }
+		case types.DELETE_CART_ITEM:
+			return { ...state, loading: false }
 		case types.ADD_RATING:
 			return { ...state, loading: false }
 
@@ -97,6 +99,8 @@ function reducer(state = initialState, action) {
 		case types.FETCH_CART_ITEMS_ERROR:
 			return { ...state, cartError: action.payload, loading: false }
 		case types.UPDATE_CART_ITEM_ERROR:
+			return { ...state, cartError: action.payload, loading: false }
+		case types.DELETE_CART_ITEM_ERROR:
 			return { ...state, cartError: action.payload, loading: false }
 		default:
 			return state

@@ -7,7 +7,7 @@ import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
 import { unauthUser } from "store/actions/authActions"
-import { fetchCartItems, updateCartItem } from "store/actions/productActions"
+import { fetchCartItems, updateCartItem, deleteCartItem } from "store/actions/productActions"
 import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
@@ -55,7 +55,7 @@ const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 function Navbar({ user, role, cartDrawerFromStore, cartItems, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
-	const { setCartDrawerFromStore, fetchUser, fetchCartItems, updateCartItem } = props
+	const { setCartDrawerFromStore, fetchUser, fetchCartItems, updateCartItem, deleteCartItem } = props
 	const typeId = accountType.account_type_id
 
 	const handleLogout = () => {
@@ -82,7 +82,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, ...props }) {
 		<Nav>
 			<CartDrawer
 				data={cartItems}
-				handler={{ updateCartItem }}
+				handler={{ updateCartItem, deleteCartItem }}
 				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
 			/>
 			<Row type="flex" justify="space-between">
@@ -172,7 +172,7 @@ const mapState = ({ user, auth, other, product }) => ({
 	cartItems: product.cartItems
 })
 
-const actions = { setCartDrawerFromStore, unauthUser, fetchUser, fetchCartItems, updateCartItem }
+const actions = { setCartDrawerFromStore, unauthUser, fetchUser, fetchCartItems, updateCartItem, deleteCartItem }
 
 // prettier-ignore
 export default withRouter(connect(mapState, actions)(Navbar))
