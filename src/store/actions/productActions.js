@@ -70,6 +70,22 @@ export const addItemToCart = item => dispatch => {
 		})
 }
 
+export const updateCartItem = ({ cart_id, qty, weight, total_price }) => dispatch => {
+	dispatch(loadingProduct())
+	instance
+		.put(`/cart/update?cart_id=${cart_id}&qty=${qty}&weight=${weight}&total_price=${total_price}`)
+		.then(({ data }) => dispatch({ type: types.UPDATE_CART_ITEM, payload: data }))
+		.then(() => dispatch(fetchCartItems()))
+		.then(() => message.success("Produk berhasil diupdate"))
+		.catch(err => {
+			const error = (err.response.data || {}).message || ""
+			if (err.response) {
+				message.error(error)
+			}
+			dispatch({ type: types.UPDATE_CART_ITEM_ERROR, payload: error })
+		})
+}
+
 export const addItemToWishlist = item => dispatch => {
 	dispatch(loadingProduct())
 	instance

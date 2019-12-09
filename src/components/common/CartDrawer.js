@@ -88,53 +88,58 @@ export default function CartDrawer({ onCartDrawer, data }) {
 			<List
 				itemLayout="horizontal"
 				dataSource={data}
-				renderItem={item => (
-					<CartItem>
-						<List.Item.Meta
-							avatar={<Avatar src={item.photo} shape="square" className="product-photo" />}
-							title={
-								<p style={{ marginBottom: 0 }}>
-									<a href="https://ant.design">{item.name}</a> &middot;{" "}
-									<span>
-										Rp {pricer(item.price)} / pcs &middot; &nbsp; &nbsp;
-										<Tooltip title="Hapus" placement="right">
-											<span className="delete">
-												<Icon type="delete" />
-											</span>
-										</Tooltip>
-									</span>
-								</p>
-							}
-							description={
-								<Row>
-									<Col lg={24}>
-										<Formik
-											initialValues={{ quantity: item.quantity }}
-											render={({ handleSubmit }) => (
-												<Form layout="inline" onSubmit={handleSubmit}>
-													<TextInput
-														number
-														name="quantity"
-														width={90}
-														placeholder="Jumlah..."
-														css="margin-bottom: 1.5em"
-													/>
-													<Form.Item>
-														<SubmitButton type="primary">Update</SubmitButton>
-													</Form.Item>
-												</Form>
-											)}
-										/>
-										<p className="price-weight">
-											Rp {pricer(item.quantity * item.price)} &middot;{" "}
-											<span>{item.weight * item.quantity} gram</span>
-										</p>
-									</Col>
-								</Row>
-							}
-						/>
-					</CartItem>
-				)}
+				renderItem={({ product_data, ...item }) => {
+					const quantity = Number(item.qty)
+
+					return (
+						<CartItem>
+							<List.Item.Meta
+								avatar={<Avatar src={item.photo} shape="square" className="product-photo" />}
+								title={
+									<p style={{ marginBottom: 0 }}>
+										<a href="https://ant.design">{item.name}</a> &middot;{" "}
+										<span>
+											Rp {pricer((product_data.product_price || {}).price)} / pcs &middot; &nbsp;
+											&nbsp;
+											<Tooltip title="Hapus" placement="right">
+												<span className="delete">
+													<Icon type="delete" />
+												</span>
+											</Tooltip>
+										</span>
+									</p>
+								}
+								description={
+									<Row>
+										<Col lg={24}>
+											<Formik
+												initialValues={{ quantity: quantity }}
+												render={({ handleSubmit }) => (
+													<Form layout="inline" onSubmit={handleSubmit}>
+														<TextInput
+															number
+															name="quantity"
+															width={90}
+															placeholder="Jumlah..."
+															css="margin-bottom: 1.5em"
+														/>
+														<Form.Item>
+															<SubmitButton type="primary">Update</SubmitButton>
+														</Form.Item>
+													</Form>
+												)}
+											/>
+											<p className="price-weight">
+												Rp {pricer(quantity * item.total_price)} &middot;{" "}
+												<span>{item.weight * quantity} gram</span>
+											</p>
+										</Col>
+									</Row>
+								}
+							/>
+						</CartItem>
+					)
+				}}
 			/>
 			<SubtotalSection>
 				<Row type="flex" justify="space-between" gutter={32}>

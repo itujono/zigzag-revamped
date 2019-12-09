@@ -40,9 +40,21 @@ function reducer(state = initialState, action) {
 			return { ...state, restockProducts: action.payload, loading: false }
 		case types.FETCH_PRODUCT_CATEGORIES:
 			return { ...state, categories: action.payload, loading: false }
+
 		case types.FETCH_CART_ITEMS:
-			return { ...state, cartItems: action.payload, loading: false }
+			const cartItems = action.payload.map(({ product_data, ...item }) => {
+				const price = product_data.product_price.filter(({ price_type }) => {
+					if (!token) return price_type === "REGULER"
+					return price_type.toLowerCase() === typeRemark.toLowerCase()
+				})[0]
+				return { ...item, product_data: { ...product_data, product_price: price } }
+			})
+
+			return { ...state, cartItems, loading: false }
+
 		case types.ADD_ITEM_TO_CART:
+			return { ...state, loading: false }
+		case types.UPDATE_CART_ITEM:
 			return { ...state, loading: false }
 		case types.ADD_RATING:
 			return { ...state, loading: false }
@@ -83,6 +95,8 @@ function reducer(state = initialState, action) {
 		case types.ADD_RATING_ERROR:
 			return { ...state, productError: action.payload, loading: false }
 		case types.FETCH_CART_ITEMS_ERROR:
+			return { ...state, cartError: action.payload, loading: false }
+		case types.UPDATE_CART_ITEM_ERROR:
 			return { ...state, cartError: action.payload, loading: false }
 		default:
 			return state
