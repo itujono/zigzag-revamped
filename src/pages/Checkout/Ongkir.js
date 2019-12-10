@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Section, Heading, Card, Button } from "components"
 import { Row, Col, Badge, Icon } from "antd"
 import styled from "styled-components"
@@ -67,13 +67,38 @@ const CourierCol = styled.div`
 	}
 `
 
+const dummyData = {
+	origin: "48",
+	destination: "574",
+	weight: 5,
+	courier: "jne",
+	originType: "city",
+	destinationType: "subdistrict"
+}
+
 export default function Ongkir({ data, handlers }) {
 	const { push } = useHistory()
 
-	const { couriers = [], selectedCourier } = data
-	const { setSelectedCourier } = handlers
+	const { couriers = [], selectedCourier, formValues = {}, cartTotal } = data
+	const { setSelectedCourier, fetchCouriers } = handlers
 
 	const handleSelectCourier = courier => setSelectedCourier(courier)
+	const handleFetchCouriers = () => {
+		const data = {
+			origin: "48",
+			destination: formValues.subdistrict,
+			weight: cartTotal.weight,
+			destinationType: formValues.subdistrict ? "subdistrict" : "city",
+			originType: "city",
+			courier: "jne:jnt:sicepat"
+		}
+
+		fetchCouriers(data)
+	}
+
+	useEffect(() => {
+		handleFetchCouriers()
+	}, [])
 
 	return (
 		<Section paddingHorizontal="0">
@@ -84,7 +109,8 @@ export default function Ongkir({ data, handlers }) {
 			/>
 			{couriers.map(courier => {
 				const { code, costs = [], name } = courier
-				const courierLogo = code === "jne" ? jneLogo : code === "jnt" ? jntLogo : sicepatLogo
+				const courierLogo =
+					code === "jne" ? jneLogo : code === "J&T" ? jntLogo : code === "sicepat" ? sicepatLogo : ""
 
 				return (
 					<StyledCard noHover key={code}>

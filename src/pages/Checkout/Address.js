@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react"
-import { Section, Heading, Card, Button, Loading } from "components"
+import React from "react"
+import { Section, Heading, Card, Loading } from "components"
 import { Formik } from "formik"
 import { Form, Row, Col, Icon } from "antd"
 import { useHistory } from "react-router-dom"
@@ -7,6 +7,7 @@ import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
 import { Switch, SubmitButton } from "formik-antd"
+import { addressValidation } from "./validation"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -19,23 +20,14 @@ const StyledCard = styled(Card)`
 	}
 `
 
-export default function Address({ data, handlers, loading, initialLoading }) {
-	const [selectedProvince, setSelectedProvince] = useState("")
-	const [selectedCity, setSelectedCity] = useState("")
+export default function Address({ data, handlers, initialLoading }) {
 	const { push } = useHistory()
 
 	const { fetchCities, fetchSubdistricts, setFormValues } = handlers
 	const { cityOptions, provinceOptions, subdistrictOptions, user } = data
 
-	// const handleRenderCities = provinceId => setSelectedProvince(provinceId)
-	// const handleRenderSubdistricts = cityId => setSelectedCity(cityId)
-
 	const handleRenderCities = value => fetchCities("", value)
 	const handleRenderSubdistricts = value => fetchSubdistricts(value)
-
-	useEffect(() => {
-		// if (selectedCity) fetchSubdistricts(selectedCity)
-	}, [])
 
 	if (initialLoading) return <Loading />
 
@@ -48,6 +40,7 @@ export default function Address({ data, handlers, loading, initialLoading }) {
 					setSubmitting(false)
 					push("/checkout/ongkir")
 				}}
+				validationSchema={addressValidation}
 				initialValues={{
 					...user,
 					province: user.province_name || "Pilih provinsi nya",

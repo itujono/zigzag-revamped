@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading, ButtonLink } from "components"
-import { Switch, Route, Redirect } from "react-router-dom"
+import { Section, Layout, Heading, ButtonLink, Empty, Button } from "components"
+import { Switch, Route, Redirect, Link } from "react-router-dom"
 import { connect } from "react-redux"
 import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
 import styled from "styled-components/macro"
@@ -8,12 +8,12 @@ import styled from "styled-components/macro"
 import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "store/actions/rajaOngkirActions"
 import { setCartDrawerFromStore } from "store/actions/otherActions"
 import { fetchUser } from "store/actions/userActions"
+import { fetchCartItems } from "store/actions/productActions"
 import Address from "./Address"
 import Ongkir from "./Ongkir"
 import Payment from "./Payment"
 import Summary from "./Summary"
 import { pricer } from "helpers"
-import { cartItems } from "helpers/dummy"
 
 const Sidebar = styled.div`
 	padding: 2em;
@@ -43,16 +43,17 @@ const CartItem = styled(List.Item)`
 	}
 `
 
-const dummyData = {
-	origin: "48",
-	destination: "574",
-	weight: 5,
-	courier: "jne",
-	originType: "city",
-	destinationType: "subdistrict"
-}
-
-function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, user, loading, ...props }) {
+function Checkout({
+	provinceOptions,
+	cityOptions,
+	subdistrictOptions,
+	dataOnSidebar,
+	user,
+	loading,
+	cartItems,
+	cartTotal,
+	...props
+}) {
 	const [formValues, setFormValues] = useState({})
 	const [initialLoading, setInitialLoading] = useState(true)
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
@@ -70,7 +71,7 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 
 	useEffect(() => {
 		props.fetchProvinces()
-		props.fetchCouriers(dummyData)
+		props.fetchCartItems()
 		props.fetchUser().then(() => setInitialLoading(false))
 	}, [])
 
@@ -104,8 +105,8 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 								path="/checkout/ongkir"
 								render={() => (
 									<Ongkir
-										data={{ couriers, formValues, selectedCourier }}
-										handlers={{ setSelectedCourier }}
+										data={{ couriers, formValues, selectedCourier, cartTotal }}
+										handlers={{ setSelectedCourier, fetchCouriers: props.fetchCouriers }}
 									/>
 								)}
 							/>
@@ -129,44 +130,71 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 									<List
 										itemLayout="horizontal"
 										dataSource={cartItems}
-										renderItem={item => (
-											<CartItem>
-												<List.Item.Meta
-													avatar={
-														<Avatar
-															src={item.photo}
-															shape="square"
-															className="product-photo"
-														/>
-													}
-													title={
-														<p style={{ marginBottom: 0 }}>
-															<a href="https://ant.design">{item.name}</a> &middot;{" "}
-															<span>
-																{item.quantity} x Rp {pricer(item.price)}/pcs
-															</span>
-														</p>
-													}
-													description={
-														<Row>
-															<Col lg={24}>
-																<p className="price-weight">
-																	Rp {pricer(item.quantity * item.price)} &middot;{" "}
-																	<span>{item.weight * item.quantity} gram</span>
-																</p>
-																<ButtonLink
-																	onClick={() => props.setCartDrawerFromStore(true)}
-																>
-																	Ubah
-																</ButtonLink>
-															</Col>
-														</Row>
-													}
-												/>
-											</CartItem>
-										)}
+										locale={{
+											emptyText: (
+												<div css="margin-bottom: 2em">
+													<Empty
+														description="Masih belum ada apa-apa di cart kamu nih"
+														css={`
+															&& {
+																margin-bottom: 2em;
+															}
+														`}
+													/>{" "}
+													<Link to="/">
+														<Button>Belanja sekarang</Button>
+													</Link>
+												</div>
+											)
+										}}
+										renderItem={({ product_data, ...item }) => {
+											const quantity = Number(item.qty)
+											const price = (product_data.product_price || {}).price
+											const photo = (product_data.product_image || [])[0] || {}
+											const name = (product_data.products || {}).name || "-"
+
+											return (
+												<CartItem>
+													<List.Item.Meta
+														avatar={
+															<Avatar
+																src={photo.picture}
+																shape="square"
+																className="product-photo"
+															/>
+														}
+														title={
+															<p style={{ marginBottom: 0 }}>
+																<a href="https://ant.design">{name}</a> &middot;{" "}
+																<span>
+																	{quantity} x Rp {pricer(price)}/pcs
+																</span>
+															</p>
+														}
+														description={
+															<Row>
+																<Col lg={24}>
+																	<p className="price-weight">
+																		Rp {pricer(quantity * price)} &middot;{" "}
+																		<span>{item.weight * quantity} gram</span>
+																	</p>
+																	<ButtonLink
+																		onClick={() =>
+																			props.setCartDrawerFromStore(true)
+																		}
+																	>
+																		Ubah
+																	</ButtonLink>
+																</Col>
+															</Row>
+														}
+													/>
+												</CartItem>
+											)
+										}}
 									/>
 								</Collapse.Panel>
+
 								<Collapse.Panel key="shipping" header="Detail pengiriman">
 									<Row gutter={16}>
 										<Col lg={12}>
@@ -185,10 +213,10 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 											<Heading reverse content="Provinsi" subheader={province || "-"} />
 										</Col>
 										<Col lg={12}>
-											<Heading reverse content="Kota" subheader={city || "-"} />
+											<Heading reverse content="Kota/Kabupaten" subheader={city || "-"} />
 										</Col>
 										<Col lg={12}>
-											<Heading reverse content="Kabupaten" subheader={subdistrict || "-"} />
+											<Heading reverse content="Kecamatan" subheader={subdistrict || "-"} />
 										</Col>
 										<Col lg={12}>
 											<Heading reverse content="Kode pos" subheader={renderFormValues("zip")} />
@@ -213,6 +241,8 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 												subheader={renderFormValues("dropshipper_tele")}
 											/>
 										</Col>
+									</Row>
+									<Row gutter={16}>
 										<Col lg={12}>
 											<Heading
 												reverse
@@ -262,7 +292,7 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 	)
 }
 
-const mapState = ({ rajaOngkir, user }) => {
+const mapState = ({ rajaOngkir, user, product }) => {
 	const provinceOnSidebar = province => rajaOngkir.provinces.find(item => item.province_id === province) || {}
 	const cityOnSidebar = city => rajaOngkir.cities.find(item => item.city_id === city) || {}
 	const subdistrictOnSidebar = subdistrict =>
@@ -271,6 +301,8 @@ const mapState = ({ rajaOngkir, user }) => {
 	return {
 		user: user.user,
 		couriers: rajaOngkir.couriers,
+		cartItems: product.cartItems,
+		cartTotal: product.cartTotal,
 		loading: rajaOngkir.loading || user.loading,
 		dataOnSidebar: { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar },
 		cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, label: item.city_name })),
@@ -288,7 +320,8 @@ const actions = {
 	fetchSubdistricts,
 	fetchCouriers,
 	setCartDrawerFromStore,
-	fetchUser
+	fetchUser,
+	fetchCartItems
 }
 
 // prettier-ignore
