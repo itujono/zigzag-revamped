@@ -46,7 +46,7 @@ export const fetchCartItems = () => dispatch => {
 		.then(({ data }) => {
 			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data })
 		})
-		.catch(err => useRenderError(err, dispatch, types.ADD_ITEM_TO_CART_ERROR))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_CART_ITEMS_ERROR, true))
 }
 
 export const addItemToCart = item => dispatch => {
@@ -59,7 +59,7 @@ export const addItemToCart = item => dispatch => {
 		.catch(err => useRenderError(err, dispatch, types.ADD_ITEM_TO_CART_ERROR))
 }
 
-export const updateCartItem = ({ cart_id, qty, weight, total_price }, name = "Heheh") => dispatch => {
+export const updateCartItem = ({ cart_id, qty, weight, total_price }, name) => dispatch => {
 	dispatch(loadingProduct())
 	return instance
 		.put(`/cart/update?cart_id=${cart_id}&qty=${qty}&weight=${weight}&total_price=${total_price}`)

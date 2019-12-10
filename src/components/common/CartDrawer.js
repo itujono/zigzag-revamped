@@ -1,17 +1,21 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { connect } from "react-redux"
+import { Formik } from "formik"
+import { SubmitButton } from "formik-antd"
+import { Link } from "react-router-dom"
+import { List, Avatar, Row, Col, Icon, Form, Spin } from "antd"
+
 import Drawer from "components/Drawer"
 import Heading from "components/Heading"
-import { List, Avatar, Row, Col, Icon, Form, Tooltip } from "antd"
-import { Link } from "react-router-dom"
 import styled from "styled-components/macro"
 import Button from "components/Button"
 import { pricer } from "helpers"
 import Section from "components/Section"
 import { theme } from "styles"
 import { TextInput } from "components/Fields"
-import { Formik } from "formik"
-import { SubmitButton } from "formik-antd"
 import Empty from "components/Empty"
+import { fetchCartItems, updateCartItem, deleteCartItem } from "store/actions/productActions"
+import Loading from "components/Loading"
 
 const SubtotalSection = styled(Section).attrs({
 	paddingHorizontal: "0"
@@ -62,10 +66,11 @@ const CartItem = styled(List.Item)`
 	}
 `
 
-export default function CartDrawer({ onCartDrawer, data, handler }) {
+function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading, ...props }) {
 	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
-	const { updateCartItem, deleteCartItem } = handler
-	const { cartItems, cartTotal } = data
+	const { fetchCartItems, deleteCartItem, updateCartItem } = props
+
+	const itemCount = cartTotal.qty === 0 ? `(Masih kosong)` : `(${cartTotal.qty} item)`
 
 	const handleClose = () => {
 		setCartDrawerFromStore(false)
@@ -75,6 +80,10 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 	const handleDeleteCart = (cart_id, name) => {
 		deleteCartItem({ cart_id }, name)
 	}
+
+	useEffect(() => {
+		fetchCartItems()
+	}, [])
 
 	return (
 		<Drawer
@@ -91,97 +100,106 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 				}
 			`}
 		>
-			<Heading content="Cart kamu" level={4} bold />
-			<List
-				itemLayout="horizontal"
-				dataSource={cartItems}
-				locale={{
-					emptyText: (
-						<div css="margin-bottom: 2em">
-							<Empty
-								description="Masih belum ada apa-apa di cart kamu nih"
-								css={`
-									&& {
-										margin-bottom: 2em;
-									}
-								`}
-							/>{" "}
-							<Link to="/">
-								<Button>Belanja sekarang</Button>
-							</Link>
-						</div>
-					)
-				}}
-				renderItem={({ product_data, ...item }) => {
-					const quantity = Number(item.qty)
-					const price = (product_data.product_price || {}).price
-					const photo = (product_data.product_image || [])[0] || {}
-					const name = (product_data.products || {}).name || "-"
+			<Heading content={`Cart kamu ${itemCount}`} level={4} bold />
+			{loading ? (
+				<Loading />
+			) : (
+				<List
+					itemLayout="horizontal"
+					dataSource={cartItems}
+					locale={{
+						emptyText: (
+							<div css="margin-bottom: 2em">
+								<Empty
+									description="Masih belum ada apa-apa di cart kamu nih"
+									css={`
+										&& {
+											margin-bottom: 2em;
+										}
+									`}
+								/>{" "}
+								<Link to="/">
+									<Button>Belanja sekarang</Button>
+								</Link>
+							</div>
+						)
+					}}
+					loading={loading}
+					renderItem={({ product_data, ...item }) => {
+						const quantity = Number(item.qty)
+						const price = (product_data.product_price || {}).price
+						const photo = (product_data.product_image || [])[0] || {}
+						const name = (product_data.products || {}).name || "-"
 
-					const handleUpdateCart = (values, { setSubmitting }) => {
-						values = {
-							qty: values.qty,
-							cart_id: item.id,
-							weight: item.weight,
-							total_price: values.qty * price
+						const handleUpdateCart = (values, { setSubmitting }) => {
+							values = {
+								qty: values.qty,
+								cart_id: item.id,
+								weight: item.weight,
+								total_price: values.qty * price
+							}
+
+							updateCartItem(values, name).finally(() => setSubmitting(false))
 						}
 
-						updateCartItem(values, name).finally(() => setSubmitting(false))
-					}
-
-					return (
-						<CartItem>
-							<List.Item.Meta
-								avatar={<Avatar src={photo.picture} shape="square" className="product-photo" />}
-								title={
-									<p style={{ marginBottom: 0 }}>
-										<Link to={`/product/${item.id}-${name}`}>{name}</Link> &middot;{" "}
-										<span>
-											Rp {pricer(price)} / pcs &middot; &nbsp; &nbsp;
-											<Tooltip title="Hapus" placement="right">
-												<span
-													className="delete"
-													onClick={() => handleDeleteCart(item.id, name)}
-												>
-													<Icon type="delete" />
-												</span>
-											</Tooltip>
-										</span>
-									</p>
-								}
-								description={
-									<Row>
-										<Col lg={24}>
-											<Formik
-												onSubmit={handleUpdateCart}
-												initialValues={{ qty: quantity }}
-												render={({ handleSubmit }) => (
-													<Form layout="inline" onSubmit={handleSubmit}>
-														<TextInput
-															number
-															name="qty"
-															width={90}
-															placeholder="Jumlah..."
-															css="margin-bottom: 1.5em"
-														/>
-														<Form.Item>
-															<SubmitButton type="primary">Update</SubmitButton>
-														</Form.Item>
-													</Form>
-												)}
-											/>
-											<p className="price-weight">
-												Rp {pricer(item.total_price)} &middot;{" "}
-												<span>{item.weight * quantity} gram</span>
-											</p>
-										</Col>
-									</Row>
-								}
-							/>
-						</CartItem>
-					)
-				}}
-			/>
+						return (
+							<CartItem>
+								<List.Item.Meta
+									avatar={<Avatar src={photo.picture} shape="square" className="product-photo" />}
+									title={
+										<p style={{ marginBottom: 0 }}>
+											<Link to={`/product/${item.id}-${name}`}>{name}</Link> &middot;{" "}
+											<span>
+												Rp {pricer(price)} / pcs &middot;{" "}
+												<span css="color: #999;">{item.color}</span>{" "}
+												{item.size && <span css="color: #999;">(size {item.size})</span>}
+											</span>
+										</p>
+									}
+									description={
+										<Row>
+											<Col lg={24}>
+												<Formik
+													onSubmit={handleUpdateCart}
+													initialValues={{ qty: Number(item.qty) }}
+													render={({ handleSubmit }) => (
+														<Form layout="inline" onSubmit={handleSubmit}>
+															<TextInput
+																number
+																name="qty"
+																width={90}
+																placeholder="Jumlah..."
+																css="margin-bottom: 1.5em"
+															/>
+															<Form.Item>
+																<SubmitButton type="primary">Update</SubmitButton>
+															</Form.Item>
+															<Form.Item>
+																<Button
+																	type="danger"
+																	shape={null}
+																	icon="delete"
+																	onClick={() => handleDeleteCart(item.id, name)}
+																>
+																	Hapus
+																</Button>
+															</Form.Item>
+														</Form>
+													)}
+												/>
+												<p className="price-weight">
+													Rp {pricer(item.total_price)} &middot;{" "}
+													<span>{item.weight * quantity} gram</span>
+												</p>
+											</Col>
+										</Row>
+									}
+								/>
+							</CartItem>
+						)
+					}}
+				/>
+			)}
 			<SubtotalSection>
 				<Row type="flex" justify="space-between" gutter={32}>
 					<Col lg={16}>
@@ -207,3 +225,11 @@ export default function CartDrawer({ onCartDrawer, data, handler }) {
 		</Drawer>
 	)
 }
+
+const mapState = ({ product }) => ({
+	cartItems: product.cartItems,
+	cartTotal: product.cartTotal || {},
+	loading: product.loading
+})
+
+export default connect(mapState, { fetchCartItems, updateCartItem, deleteCartItem })(CartDrawer)

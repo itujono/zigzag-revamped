@@ -55,7 +55,7 @@ const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...props }) {
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
-	const { setCartDrawerFromStore, fetchUser, fetchCartItems, updateCartItem, deleteCartItem } = props
+	const { setCartDrawerFromStore, fetchUser, updateCartItem, deleteCartItem } = props
 	const typeId = accountType.account_type_id
 
 	const handleLogout = () => {
@@ -75,7 +75,6 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
 		fetchUser()
-		fetchCartItems()
 	}, [cartDrawerFromStore, token])
 
 	return (
@@ -173,7 +172,7 @@ const mapState = ({ user, auth, other, product }) => ({
 	cartTotal: product.cartTotal
 })
 
-const actions = { setCartDrawerFromStore, unauthUser, fetchUser, fetchCartItems, updateCartItem, deleteCartItem }
+const actions = { setCartDrawerFromStore, unauthUser, fetchUser, updateCartItem, deleteCartItem }
 
 // prettier-ignore
 export default withRouter(connect(mapState, actions)(Navbar))

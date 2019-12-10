@@ -6,13 +6,7 @@ import { useParams, Link, useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { pricer } from "helpers"
-import {
-	fetchProductItem,
-	addItemToCart,
-	addItemToWishlist,
-	addRating,
-	updateCartItem
-} from "store/actions/productActions"
+import { fetchProductItem, addItemToCart, addItemToWishlist, addRating } from "store/actions/productActions"
 import { theme } from "styles"
 
 const Stats = styled.div`
@@ -46,18 +40,21 @@ const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize 
 	&& {
 		cursor: pointer;
 		margin-bottom: 5px;
+		.stock-text {
+			color: ${({ id, selectedSize }) => (id === selectedSize.id && "#fff") || theme.greyColor[2]};
+		}
 	}
 `
 
 const { Paragraph, Text } = Typography
 
-function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props }) {
+function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading, ...props }) {
 	const [selectedColor, setSelectedColor] = useState({})
 	const [selectedSize, setSelectedSize] = useState({})
 	const [temporaryRating, setTemporaryRating] = useState(0)
 	const { id: productId } = useParams()
 	const { push } = useHistory()
-	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem } = props
+	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating } = props
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
@@ -103,8 +100,8 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props
 		</Popconfirm>
 	)
 
-	const handleSelectColor = (color, stock) => {
-		if (stock === "STOCK HABIS" || stock === 0) return
+	const handleSelectColor = (color, stock, isShoes) => {
+		if (!isShoes && (stock === "STOCK HABIS" || stock === 0)) return
 		setSelectedColor(color)
 	}
 	const handleSelectSize = (size, stock) => {
@@ -121,7 +118,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props
 				isShoes={isShoes}
 				selectedColor={selectedColor}
 				selectedSize={selectedSize}
-				onClick={() => handleSelectColor(item, stock)}
+				onClick={() => handleSelectColor(item, stock, isShoes)}
 			>
 				{item.color} {!isShoes && `(${stock})`}
 			</StyledTag>
@@ -139,14 +136,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props
 					selectedSize={selectedSize}
 					onClick={() => handleSelectSize(item, item.stock)}
 				>
-					{item.size}{" "}
-					<span
-						css={`
-							color: ${theme.greyColor[2]};
-						`}
-					>
-						({item.stock || ""})
-					</span>
+					{item.size} <span className="stock-text">({item.stock || ""})</span>
 				</StyledTag>
 			))
 
@@ -154,15 +144,17 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props
 	}
 
 	const handleAddToCart = () => {
-		if (!selectedColor || Object.keys(selectedColor).length === 0) message.error("Jangan lupa pilih warna nya ya")
-		else {
+		if (!token) {
+			push("/login")
+			message.error("Kamu harus login dulu ya")
+		} else {
 			const item = {
 				product_id: productId,
-				product_more_detail_id: (selectedColor.product_more || [])[0].id,
+				product_more_detail_id: isShoes ? selectedSize.id : (selectedColor.product_more || [])[0].id,
 				weight: product.weight,
 				qty: 1,
 				color: selectedColor.color,
-				size: (selectedColor.product_more || [])[0].size,
+				size: isShoes ? selectedSize.size : (selectedColor.product_more || [])[0].size,
 				total_price: productPrice * 1
 			}
 
@@ -277,11 +269,12 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, ...props
 								icon="shopping-cart"
 								disabled={isShoes ? colorIsNotSelected || sizeIsNotSelected : colorIsNotSelected}
 								onClick={handleAddToCart}
+								loading={loading}
 							>
 								Tambahkan ke cart
 							</Button>{" "}
 							&nbsp;{" "}
-							<ButtonLink icon="heart" onClick={handleAddToWishlist}>
+							<ButtonLink icon="heart" onClick={handleAddToWishlist} loading={loading}>
 								Wishlist
 							</ButtonLink>
 						</StyledSection>
@@ -300,10 +293,11 @@ const mapState = ({ product }) => {
 		product: product.product,
 		productPrice: product.productPrice,
 		vipPrice: vipPrice.price || 0,
-		regulerPrice: regulerPrice.price || 0
+		regulerPrice: regulerPrice.price || 0,
+		loading: product.loading
 	}
 }
 
-const actions = { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem }
+const actions = { fetchProductItem, addItemToCart, addItemToWishlist, addRating }
 
 export default connect(mapState, actions)(ProductDetail)

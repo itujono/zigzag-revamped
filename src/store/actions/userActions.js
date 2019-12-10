@@ -12,7 +12,7 @@ export const fetchUser = () => dispatch => {
 			console.log({ profileData: data })
 			dispatch({ type: types.FETCH_USER, payload: data.data.account_customer })
 		})
-		.catch(err => console.error(err.response))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_USER, true))
 }
 
 export const updateUserProfile = values => dispatch => {

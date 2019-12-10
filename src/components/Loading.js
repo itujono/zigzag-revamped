@@ -6,7 +6,7 @@ export default function Loading() {
 	const indicator = <Icon type="loading" style={{ fontSize: 24 }} spin />
 
 	return (
-		<Section>
+		<Section centered>
 			<Spin indicator={indicator} />
 		</Section>
 	)

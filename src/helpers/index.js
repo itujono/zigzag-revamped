@@ -4,6 +4,7 @@ import { css } from "styled-components"
 import { useHistory } from "react-router-dom"
 import { unauthUser } from "store/actions/authActions"
 import { message } from "antd"
+import { FETCH_USER } from "store/types"
 
 const instance = axios.create({
 	baseURL: "https://zigzagbatam.com:9000/api/v1/frontend",
@@ -22,11 +23,14 @@ export { instance }
 
 /////////////////////////////////
 
-export function useRenderError(err, dispatch, type) {
+export function useRenderError(err, dispatch, type, noShow = false) {
 	const errResponse = err.response || {}
 	console.error(errResponse)
 	const error = (errResponse.data || {}).message || ""
-	if (error) message.error(error)
+	if (error) {
+		if (noShow) console.log({ error })
+		else message.error(error)
+	}
 	if (errResponse.status === 401) localStorage.clear()
 
 	dispatch({ type, payload: error })

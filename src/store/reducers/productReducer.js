@@ -18,11 +18,11 @@ const initialState = {
 	cartError: null
 }
 
-const token = localStorage.getItem("access_token")
-const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
-const { account_type_remark: typeRemark } = accountType
-
 function reducer(state = initialState, action) {
+	const token = localStorage.getItem("access_token")
+	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+	const { account_type_remark: typeRemark } = accountType
+
 	switch (action.type) {
 		case types.LOADING_PRODUCT:
 			return { ...state, loading: true }
