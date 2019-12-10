@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Section, Heading, Card, Button } from "components"
+import { Section, Heading, Card, Button, Loading } from "components"
 import { Formik } from "formik"
 import { Form, Row, Col, Icon } from "antd"
 import { useHistory } from "react-router-dom"
@@ -19,21 +19,25 @@ const StyledCard = styled(Card)`
 	}
 `
 
-export default function Address({ data, handlers }) {
+export default function Address({ data, handlers, loading, initialLoading }) {
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
 	const { push } = useHistory()
 
 	const { fetchCities, fetchSubdistricts, setFormValues } = handlers
-	const { cityOptions, provinceOptions, subdistrictOptions } = data
+	const { cityOptions, provinceOptions, subdistrictOptions, user } = data
 
-	const handleRenderCities = provinceId => setSelectedProvince(provinceId)
-	const handleRenderSubdistricts = cityId => setSelectedCity(cityId)
+	// const handleRenderCities = provinceId => setSelectedProvince(provinceId)
+	// const handleRenderSubdistricts = cityId => setSelectedCity(cityId)
+
+	const handleRenderCities = value => fetchCities("", value)
+	const handleRenderSubdistricts = value => fetchSubdistricts(value)
 
 	useEffect(() => {
-		fetchCities("", selectedProvince)
-		if (selectedCity) fetchSubdistricts(selectedCity)
-	}, [selectedProvince, selectedCity])
+		// if (selectedCity) fetchSubdistricts(selectedCity)
+	}, [])
+
+	if (initialLoading) return <Loading />
 
 	return (
 		<Section paddingHorizontal="0">
@@ -43,6 +47,12 @@ export default function Address({ data, handlers }) {
 					console.log({ values })
 					setSubmitting(false)
 					push("/checkout/ongkir")
+				}}
+				initialValues={{
+					...user,
+					province: user.province_name || "Pilih provinsi nya",
+					city: user.city_name || "Pilih kota nya",
+					subdistrict: user.subdistrict_name || "Pilih kecamatan nya"
 				}}
 				render={({ handleSubmit, values }) => {
 					const handleChange = e => {

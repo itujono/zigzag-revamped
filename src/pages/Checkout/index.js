@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react"
 import { Section, Layout, Heading, ButtonLink } from "components"
 import { Switch, Route, Redirect } from "react-router-dom"
 import { connect } from "react-redux"
-import { Row, Col, Divider, List, Avatar, Tooltip, Icon, Form, Collapse } from "antd"
+import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
 import styled from "styled-components/macro"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "store/actions/rajaOngkirActions"
 import { setCartDrawerFromStore } from "store/actions/otherActions"
+import { fetchUser } from "store/actions/userActions"
 import Address from "./Address"
 import Ongkir from "./Ongkir"
 import Payment from "./Payment"
@@ -51,8 +52,9 @@ const dummyData = {
 	destinationType: "subdistrict"
 }
 
-function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, ...props }) {
+function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSidebar, user, loading, ...props }) {
 	const [formValues, setFormValues] = useState({})
+	const [initialLoading, setInitialLoading] = useState(true)
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
 	const [selectedPayment, setSelectedPayment] = useState({ value: "transfer", label: "ATM/Transfer bank" })
 
@@ -62,9 +64,14 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
 	const courierDetails = (selectedCourier.details || {}).cost || []
 
+	const renderFormValues = prop => {
+		return formValues[prop] === "" ? "-" : formValues[prop] ? formValues[prop] : user[prop]
+	}
+
 	useEffect(() => {
 		props.fetchProvinces()
 		props.fetchCouriers(dummyData)
+		props.fetchUser().then(() => setInitialLoading(false))
 	}, [])
 
 	return (
@@ -86,7 +93,9 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 								path="/checkout/address"
 								render={() => (
 									<Address
-										data={{ provinceOptions, cityOptions, subdistrictOptions, formValues }}
+										loading={loading}
+										initialLoading={initialLoading}
+										data={{ provinceOptions, cityOptions, subdistrictOptions, formValues, user }}
 										handlers={{ fetchCities, fetchSubdistricts, setFormValues }}
 									/>
 								)}
@@ -161,13 +170,13 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 								<Collapse.Panel key="shipping" header="Detail pengiriman">
 									<Row gutter={16}>
 										<Col lg={12}>
-											<Heading reverse content="Nama" subheader={formValues.name || "-"} />
+											<Heading reverse content="Nama" subheader={renderFormValues("name")} />
 										</Col>
 										<Col lg={12}>
-											<Heading reverse content="Email" subheader={formValues.email || "-"} />
+											<Heading reverse content="Email" subheader={renderFormValues("email")} />
 										</Col>
 										<Col lg={12}>
-											<Heading reverse content="Nomor HP" subheader={formValues.tele || "-"} />
+											<Heading reverse content="Nomor HP" subheader={renderFormValues("tele")} />
 										</Col>
 									</Row>
 									<Divider />
@@ -182,10 +191,10 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 											<Heading reverse content="Kabupaten" subheader={subdistrict || "-"} />
 										</Col>
 										<Col lg={12}>
-											<Heading reverse content="Kode pos" subheader={formValues.zip || "-"} />
+											<Heading reverse content="Kode pos" subheader={renderFormValues("zip")} />
 										</Col>
 										<Col lg={24}>
-											<Heading reverse content="Alamat" subheader={formValues.address || "-"} />
+											<Heading reverse content="Alamat" subheader={renderFormValues("address")} />
 										</Col>
 									</Row>
 									<Divider />
@@ -194,21 +203,21 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 											<Heading
 												reverse
 												content="Nama dropshipper"
-												subheader={formValues.dropshipper_name || "-"}
+												subheader={renderFormValues("dropshipper_name")}
 											/>
 										</Col>
 										<Col lg={12}>
 											<Heading
 												reverse
 												content="Nomor HP dropshipper"
-												subheader={formValues.dropshipper_tele || "-"}
+												subheader={renderFormValues("dropshipper_tele")}
 											/>
 										</Col>
 										<Col lg={12}>
 											<Heading
 												reverse
 												content="JNE Online Booking"
-												subheader={formValues.jne_online_booking || "-"}
+												subheader={renderFormValues("jne_online_booking")}
 											/>
 										</Col>
 									</Row>
@@ -253,14 +262,16 @@ function Checkout({ provinceOptions, cityOptions, subdistrictOptions, dataOnSide
 	)
 }
 
-const mapState = ({ rajaOngkir }) => {
+const mapState = ({ rajaOngkir, user }) => {
 	const provinceOnSidebar = province => rajaOngkir.provinces.find(item => item.province_id === province) || {}
 	const cityOnSidebar = city => rajaOngkir.cities.find(item => item.city_id === city) || {}
 	const subdistrictOnSidebar = subdistrict =>
 		rajaOngkir.subdistricts.find(item => item.subdistrict_id === subdistrict) || {}
 
 	return {
+		user: user.user,
 		couriers: rajaOngkir.couriers,
+		loading: rajaOngkir.loading || user.loading,
 		dataOnSidebar: { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar },
 		cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, label: item.city_name })),
 		provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, label: item.province })),
@@ -276,7 +287,8 @@ const actions = {
 	fetchProvinces,
 	fetchSubdistricts,
 	fetchCouriers,
-	setCartDrawerFromStore
+	setCartDrawerFromStore,
+	fetchUser
 }
 
 // prettier-ignore
