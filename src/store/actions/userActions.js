@@ -4,6 +4,8 @@ import { message } from "antd"
 
 const loadingUser = () => ({ type: types.LOADING_USER })
 
+const token = localStorage.getItem("access_token")
+
 export const fetchUser = () => dispatch => {
 	dispatch(loadingUser())
 	return instance

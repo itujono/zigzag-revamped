@@ -1,11 +1,12 @@
 import React from "react"
 import { Section, Heading, Card, Button } from "components"
-import { Row, Col, Icon } from "antd"
+import { Row, Col, Icon, message } from "antd"
 import styled from "styled-components"
 import { useHistory } from "react-router-dom"
 import mandiriLogo from "assets/images/mandiri-logo.png"
 import bcaLogo from "assets/images/bca-logo.jpeg"
 import { theme } from "styles"
+import { randomCode } from "helpers"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -39,8 +40,23 @@ const StyledCard = styled(Card)`
 export default function Payment({ data, handlers }) {
 	const { push } = useHistory()
 
+	const formData = JSON.parse(localStorage.getItem("formData")) || {}
+
 	const { selectedPayment } = data
 	const { setSelectedPayment } = handlers
+	const random = randomCode()
+
+	const handleSavePayment = () => {
+		localStorage.setItem(
+			"formData",
+			JSON.stringify({
+				...formData,
+				payment: selectedPayment,
+				unique_code: formData.unique_code ? formData.unique_code : random
+			})
+		)
+		message.loading("Mengkalkulasi totalan...", 1).then(() => push("/checkout/summary"))
+	}
 
 	return (
 		<Section paddingHorizontal="0">
@@ -97,7 +113,7 @@ export default function Payment({ data, handlers }) {
 				</Row>
 			</StyledCard>
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button onClick={() => push("/checkout/summary")}>
+				<Button onClick={handleSavePayment}>
 					Lanjut ke Summary <Icon type="right" />
 				</Button>
 			</Section>

@@ -145,8 +145,10 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 
 	const handleAddToCart = () => {
 		if (!token) {
-			push("/login")
-			message.error("Kamu harus login dulu ya")
+			message.loading("Mengalihkan ke Login...", 1).then(() => {
+				push("/login")
+				message.error("Kamu harus login dulu ya")
+			})
 		} else {
 			const item = {
 				product_id: productId,

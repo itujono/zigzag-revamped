@@ -5,6 +5,7 @@ import { Row, Col, Tooltip, Icon } from "antd"
 import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"
+import { pricer } from "helpers"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -27,6 +28,9 @@ export default function Summary() {
 	const { push } = useHistory()
 	const [confirmModal, setConfirmModal] = useState(false)
 
+	const formData = JSON.parse(localStorage.getItem("formData")) || {}
+	const { cartTotal } = formData
+
 	return (
 		<Section paddingHorizontal="0">
 			<Modal visible={confirmModal} onCancel={() => setConfirmModal(false)}>
@@ -38,11 +42,13 @@ export default function Summary() {
 					Ya, place order sekarang
 				</Button>
 			</Modal>
+
 			<Heading
 				content="Ringkasan pemesanan"
 				subheader="Harap dibaca lagi semua detail dengan seksama"
 				marginBottom="3em"
 			/>
+
 			<StyledCard noHover>
 				<Heading
 					content="Periksa sekali lagi 🧐"
@@ -55,7 +61,7 @@ export default function Summary() {
 							<Heading reverse content="Diskon" subheader="Jika ada diskon, akan muncul di sini" />
 						</Col>
 						<Col lg={8} className="right">
-							<Heading content="Rp 0" />
+							<Heading content={`Rp ${pricer(formData.discount) || 0}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
@@ -67,7 +73,7 @@ export default function Summary() {
 							/>
 						</Col>
 						<Col lg={8} className="right">
-							<Heading content="899" />
+							<Heading content={formData.unique_code} />
 						</Col>
 					</StyledRow>
 					<StyledRow gutter={32}>
@@ -75,7 +81,11 @@ export default function Summary() {
 							<Heading reverse content="Grand total" subheader="Total yang harus dibayar sekarang" />
 						</Col>
 						<Col lg={8} className="right">
-							<Heading content="Rp 560,000" subheader="2400 gram" className="price" />
+							<Heading
+								content={`Rp ${pricer(cartTotal.price) || 0}`}
+								subheader={`${cartTotal.weight} gram`}
+								className="price"
+							/>
 						</Col>
 					</StyledRow>
 				</Section>

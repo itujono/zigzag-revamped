@@ -42,14 +42,19 @@ function SearchResult({ searchProduct, searchList, loading }) {
 	const handleSearch = value => {
 		if (value !== "") {
 			setKeyword(value)
-			searchProduct(value)
+			searchProduct(value || keywordFromNavbar)
 		}
 	}
 
 	useEffect(() => {
 		setKeyword(keywordFromNavbar)
 		handleSearch(keyword)
-	}, [keyword, keywordFromNavbar])
+
+		return () => {
+			setKeyword("")
+			localStorage.removeItem("keywordFromNavbar")
+		}
+	}, [keyword])
 
 	return (
 		<Layout>
@@ -72,7 +77,7 @@ function SearchResult({ searchProduct, searchList, loading }) {
 							loading={loading}
 							renderItem={item => {
 								const picture = (item.product_image || [])[0] || {}
-								const colorArr = item.product_color.map(({ color }) => color)
+								const colorArr = item.product_detail.map(({ color }) => color)
 								const colors = colorArr.length > 1 ? colorArr.join(", ") : colorArr
 
 								return (

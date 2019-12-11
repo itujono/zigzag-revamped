@@ -1,5 +1,7 @@
 import * as types from "../types"
-import { instance } from "helpers"
+import { instance, useRenderError } from "helpers"
+
+const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
 const loadingOther = () => ({ type: types.LOADING_OTHER })
 
@@ -33,4 +35,16 @@ export const fetchCustomerServices = () => dispatch => {
 		.get(`/customer_service/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_CUSTOMER_SERVICES, payload: data.data.customer_service_data }))
 		.catch(err => console.error(err.response))
+}
+
+export const saveCourierDetails = values => dispatch => {
+	dispatch(loadingOther())
+	return instance
+		.post(`/order/save_expedition`, values)
+		.then(({ data }) => {
+			console.log({ courierDataAtas: data })
+			localStorage.setItem("formData", JSON.stringify({ ...formData, order_detail: data.data.order_id }))
+			dispatch({ type: types.SAVE_COURIER_DETAILS, payload: data.data.order_id })
+		})
+		.catch(err => useRenderError(err, dispatch, types.SAVE_COURIER_DETAILS_ERROR))
 }

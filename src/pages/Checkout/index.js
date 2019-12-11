@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading, ButtonLink, Empty, Button } from "components"
+import { Section, Layout, Heading, ButtonLink, Empty, Button, Loading } from "components"
 import { Switch, Route, Redirect, Link } from "react-router-dom"
 import { connect } from "react-redux"
 import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
 import styled from "styled-components/macro"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "store/actions/rajaOngkirActions"
-import { setCartDrawerFromStore } from "store/actions/otherActions"
+import { setCartDrawerFromStore, saveCourierDetails } from "store/actions/otherActions"
 import { fetchUser } from "store/actions/userActions"
 import { fetchCartItems } from "store/actions/productActions"
 import Address from "./Address"
@@ -52,6 +52,7 @@ function Checkout({
 	loading,
 	cartItems,
 	cartTotal,
+	courierDetails,
 	...props
 }) {
 	const [formValues, setFormValues] = useState({})
@@ -59,11 +60,11 @@ function Checkout({
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
 	const [selectedPayment, setSelectedPayment] = useState({ value: "transfer", label: "ATM/Transfer bank" })
 
-	const { fetchCities, fetchSubdistricts, couriers } = props
+	const { fetchCities, fetchSubdistricts, couriers, saveCourierDetails } = props
 	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
 	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
 	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
-	const courierDetails = (selectedCourier.details || {}).cost || []
+	const courierData = (selectedCourier.details || {}).cost || []
 
 	const renderFormValues = prop => {
 		return formValues[prop] === "" ? "-" : formValues[prop] ? formValues[prop] : user[prop]
@@ -72,8 +73,12 @@ function Checkout({
 	useEffect(() => {
 		props.fetchProvinces()
 		props.fetchCartItems()
-		props.fetchUser().then(() => setInitialLoading(false))
+		props.fetchUser().then(() => {
+			setInitialLoading(false)
+		})
 	}, [])
+
+	// if (loading) return <Loading />
 
 	return (
 		<Layout sidebar page="checkout">
@@ -96,7 +101,15 @@ function Checkout({
 									<Address
 										loading={loading}
 										initialLoading={initialLoading}
-										data={{ provinceOptions, cityOptions, subdistrictOptions, formValues, user }}
+										data={{
+											provinceOptions,
+											cityOptions,
+											subdistrictOptions,
+											formValues,
+											user,
+											cartTotal,
+											cartItems
+										}}
 										handlers={{ fetchCities, fetchSubdistricts, setFormValues }}
 									/>
 								)}
@@ -105,8 +118,12 @@ function Checkout({
 								path="/checkout/ongkir"
 								render={() => (
 									<Ongkir
-										data={{ couriers, formValues, selectedCourier, cartTotal }}
-										handlers={{ setSelectedCourier, fetchCouriers: props.fetchCouriers }}
+										data={{ couriers, formValues, selectedCourier, cartTotal, courierDetails }}
+										handlers={{
+											setSelectedCourier,
+											fetchCouriers: props.fetchCouriers,
+											saveCourierDetails
+										}}
 									/>
 								)}
 							/>
@@ -267,9 +284,7 @@ function Checkout({
 											<Heading
 												reverse
 												content="Ongkir"
-												subheader={
-													`Rp ${pricer((courierDetails[0] || {}).value || "")}` || "Rp 0"
-												}
+												subheader={`Rp ${pricer((courierData[0] || {}).value || "")}` || "Rp 0"}
 											/>
 										</Col>
 									</Row>
@@ -292,7 +307,7 @@ function Checkout({
 	)
 }
 
-const mapState = ({ rajaOngkir, user, product }) => {
+const mapState = ({ rajaOngkir, user, product, other }) => {
 	const provinceOnSidebar = province => rajaOngkir.provinces.find(item => item.province_id === province) || {}
 	const cityOnSidebar = city => rajaOngkir.cities.find(item => item.city_id === city) || {}
 	const subdistrictOnSidebar = subdistrict =>
@@ -301,6 +316,7 @@ const mapState = ({ rajaOngkir, user, product }) => {
 	return {
 		user: user.user,
 		couriers: rajaOngkir.couriers,
+		courierDetails: other.courierDetails,
 		cartItems: product.cartItems,
 		cartTotal: product.cartTotal,
 		loading: rajaOngkir.loading || user.loading,
@@ -321,7 +337,8 @@ const actions = {
 	fetchCouriers,
 	setCartDrawerFromStore,
 	fetchUser,
-	fetchCartItems
+	fetchCartItems,
+	saveCourierDetails
 }
 
 // prettier-ignore

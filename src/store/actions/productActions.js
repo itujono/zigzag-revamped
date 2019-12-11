@@ -5,6 +5,8 @@ import { message } from "antd"
 
 const loadingProduct = condition => ({ type: types.LOADING_PRODUCT, payload: condition })
 
+const token = localStorage.getItem("access_token")
+
 export const fetchProductItem = id => async dispatch => {
 	dispatch(loadingProduct())
 	try {
@@ -43,9 +45,7 @@ export const fetchCartItems = () => dispatch => {
 	dispatch(loadingProduct())
 	return instance
 		.get(`/cart/list`)
-		.then(({ data }) => {
-			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data })
-		})
+		.then(({ data }) => dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data }))
 		.catch(err => useRenderError(err, dispatch, types.FETCH_CART_ITEMS_ERROR, true))
 }
 
@@ -154,8 +154,7 @@ export const searchProduct = query => dispatch => {
 	return instance
 		.get(`/product/search?find=${query}`)
 		.then(({ data }) => {
-			console.log({ searchData: data })
-			dispatch({ type: types.SEARCH_PRODUCT, payload: data.data.product_search.rows })
+			dispatch({ type: types.SEARCH_PRODUCT, payload: data.data.product_data })
 		})
 		.catch(err => useRenderError(err, dispatch, types.SEARCH_PRODUCT_ERROR))
 }

@@ -79,21 +79,38 @@ const dummyData = {
 export default function Ongkir({ data, handlers }) {
 	const { push } = useHistory()
 
-	const { couriers = [], selectedCourier, formValues = {}, cartTotal } = data
-	const { setSelectedCourier, fetchCouriers } = handlers
+	const formData = JSON.parse(localStorage.getItem("formData")) || {}
+
+	const { couriers = [], selectedCourier, formValues = {}, cartTotal = {}, courierDetails } = data
+	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
 
 	const handleSelectCourier = courier => setSelectedCourier(courier)
 	const handleFetchCouriers = () => {
 		const data = {
 			origin: "48",
-			destination: formValues.subdistrict,
-			weight: cartTotal.weight,
-			destinationType: formValues.subdistrict ? "subdistrict" : "city",
+			destination: formData.subdistrict,
+			weight: formData.cartTotal.weight,
+			destinationType: formData.subdistrict ? "subdistrict" : "city",
 			originType: "city",
 			courier: "jne:jnt:sicepat"
 		}
 
 		fetchCouriers(data)
+	}
+
+	const handleSaveCourier = () => {
+		const order_detail = {
+			expedition_code: selectedCourier.code,
+			expedition_company:
+				selectedCourier.code === "jne"
+					? "JNE"
+					: selectedCourier.code === "sicepat"
+					? "SiCepat"
+					: selectedCourier.code,
+			expedition_remark: `${selectedCourier.details.service} - ${selectedCourier.details.description}`,
+			expedition_total: selectedCourier.details.cost[0].value
+		}
+		saveCourierDetails(order_detail).then(() => push("/checkout/payment"))
 	}
 
 	useEffect(() => {
@@ -147,7 +164,7 @@ export default function Ongkir({ data, handlers }) {
 				)
 			})}
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button onClick={() => push("/checkout/payment")}>
+				<Button onClick={handleSaveCourier}>
 					Lanjut ke Pembayaran <Icon type="right" />
 				</Button>
 			</Section>

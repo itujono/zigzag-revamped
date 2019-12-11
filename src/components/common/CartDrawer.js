@@ -70,6 +70,8 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
 	const { fetchCartItems, deleteCartItem, updateCartItem } = props
 
+	const token = localStorage.getItem("access_token")
+
 	const itemCount = cartTotal.qty === 0 ? `(Masih kosong)` : `(${cartTotal.qty} item)`
 
 	const handleClose = () => {
@@ -82,7 +84,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 	}
 
 	useEffect(() => {
-		fetchCartItems()
+		if (token) fetchCartItems()
 	}, [])
 
 	return (
@@ -217,7 +219,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 					</Col>
 				</Row>
 				<Link to="/checkout">
-					<Button block size="large" disabled={cartItems.length === 0}>
+					<Button block size="large" disabled={cartItems.length === 0} onClick={() => setCartDrawer(false)}>
 						Lanjut ke Checkout &nbsp; <Icon type="right" />
 					</Button>
 				</Link>
