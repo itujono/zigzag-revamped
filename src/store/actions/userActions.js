@@ -11,7 +11,6 @@ export const fetchUser = () => dispatch => {
 	return instance
 		.get(`/customer/view`)
 		.then(({ data }) => {
-			console.log({ profileData: data })
 			dispatch({ type: types.FETCH_USER, payload: data.data.account_customer })
 		})
 		.catch(err => useRenderError(err, dispatch, types.FETCH_USER, true))
@@ -22,7 +21,6 @@ export const updateUserProfile = values => dispatch => {
 	return instance
 		.put(`/customer/update_profile`, values)
 		.then(({ data }) => {
-			console.log({ profileData: data })
 			dispatch({ type: types.UPDATE_USER_PROFILE, payload: data.data })
 		})
 		.then(() => dispatch(fetchUser()))

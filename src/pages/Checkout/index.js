@@ -70,6 +70,11 @@ function Checkout({
 	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
 	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
 	const courierData = (selectedCourier.details || {}).cost || []
+	const courierOnSidebar = formData.order_detail
+		? `${formData.order_detail.ekspedition_company || ""} (${formData.order_detail.ekspedition_remark || ""})`
+		: Object.keys(selectedCourier).length === 0
+		? "-"
+		: `${selectedCourier.details.service || ""} (${selectedCourier.details.description || ""})`
 
 	const renderFormValues = prop => {
 		const values = Object.keys(formValues).length === 0 ? formData : formValues
@@ -82,8 +87,6 @@ function Checkout({
 		props.fetchCartItems()
 		props.fetchUser().then(() => setInitialLoading(false))
 	}, [props.fetchProvinces, props.fetchCartItems, props.fetchUser])
-
-	// if (loading) return <Loading />
 
 	return (
 		<Layout sidebar page="checkout">
@@ -243,11 +246,6 @@ function Checkout({
 									<Divider />
 									<Row gutter={16}>
 										<Col lg={12}>
-											{/* <Heading
-												reverse
-												content="Provinsi"
-												subheader={renderFormValues("province")}
-											/> */}
 											<Heading
 												reverse
 												content="Provinsi"
@@ -255,11 +253,6 @@ function Checkout({
 											/>
 										</Col>
 										<Col lg={12}>
-											{/* <Heading
-												reverse
-												content="Kota/Kabupaten"
-												subheader={renderFormValues("city")}
-											/> */}
 											<Heading
 												reverse
 												content="Kota/Kabupaten"
@@ -267,11 +260,6 @@ function Checkout({
 											/>
 										</Col>
 										<Col lg={12}>
-											{/* <Heading
-												reverse
-												content="Kecamatan"
-												subheader={renderFormValues("subdistrict")}
-											/> */}
 											<Heading
 												reverse
 												content="Kecamatan"
@@ -319,10 +307,7 @@ function Checkout({
 											<Heading
 												reverse
 												content="Kurir yang dipilih"
-												subheader={
-													`${selectedCourier.details.service || ""} (${selectedCourier.details
-														.description || ""})` || "-"
-												}
+												subheader={courierOnSidebar}
 											/>
 										</Col>
 										<Col lg={12}>
@@ -368,7 +353,8 @@ const mapState = ({ rajaOngkir, user, product, other }) => {
 		subdistrict: user.user.subdistrict,
 		subdistrict_name: user.user.subdistrict_name,
 		zip: user.user.zip,
-		address: user.user.address
+		address: user.user.address,
+		deposit: user.user.deposit
 	}
 
 	return {

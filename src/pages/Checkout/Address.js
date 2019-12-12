@@ -45,6 +45,10 @@ export default function Address({ data, handlers, initialLoading }) {
 		selectedCity
 	} = data
 
+	const renderInitialValues = property => {
+		return formData[property] ? formData[property] : user[property]
+	}
+
 	const handleRenderCities = value => {
 		fetchCities("", value)
 		setSelectedProvince(provinceOptions.find(item => item.value === value) || {})
@@ -61,15 +65,19 @@ export default function Address({ data, handlers, initialLoading }) {
 
 	const handleSaveAddress = (values, { setSubmitting }) => {
 		values = {
-			...formData,
+			// ...formData,
 			...values,
 			cartItems,
 			cartTotal,
+			province: values.province_id,
 			province_name: selectedProvince.label,
+			city: values.city_id,
 			city_name: selectedCity.label,
+			subdistrict: values.subdistrict_id,
 			subdistrict_name: selectedSubdistrict.label
 		}
 		localStorage.setItem("formData", JSON.stringify(values))
+		console.log({ addressValue: values })
 		setSubmitting(false)
 		push("/checkout/ongkir")
 	}
@@ -83,12 +91,20 @@ export default function Address({ data, handlers, initialLoading }) {
 				onSubmit={handleSaveAddress}
 				validationSchema={addressValidation}
 				initialValues={{
-					...user,
-					province: formData.province ? formData.province : user.province_name || "Pilih provinsi nya",
-					city: formData.city ? formData.city : user.city_name || "Pilih kota nya",
-					subdistrict: formData.subdistrict
-						? formData.subdistrict
-						: user.subdistrict_name || "Pilih kecamatan nya"
+					name: renderInitialValues("name"),
+					email: renderInitialValues("email"),
+					tele: renderInitialValues("tele"),
+					province: renderInitialValues("province_name") || "Pilih provinsi nya",
+					city: renderInitialValues("city_name") || "Pilih kota nya",
+					subdistrict: renderInitialValues("subdistrict_name") || "Pilih kecamatan nya",
+					province_id: renderInitialValues("province"),
+					city_id: renderInitialValues("city"),
+					subdistrict_id: renderInitialValues("subdistrict"),
+					zip: renderInitialValues("zip"),
+					address: renderInitialValues("address"),
+					dropshipper_name: renderInitialValues("dropshipper_name"),
+					dropshipper_tele: renderInitialValues("dropshipper_tele"),
+					jne_online_booking: renderInitialValues("jne_online_booking")
 				}}
 				render={({ handleSubmit, values }) => {
 					const handleChange = e => {
