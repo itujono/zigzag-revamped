@@ -17,7 +17,7 @@ function Home({ fetchProducts, products, fetchRestockProducts, restockProducts }
 	useEffect(() => {
 		fetchProducts(0, 6)
 		fetchRestockProducts(0, 6)
-	}, [])
+	}, [fetchProducts, fetchRestockProducts])
 
 	return (
 		<Layout sidebar>
@@ -72,7 +72,7 @@ function Home({ fetchProducts, products, fetchRestockProducts, restockProducts }
 						</Row>
 						<Row gutter={16}>
 							{products.map(item => (
-								<Col xs={12} lg={8}>
+								<Col xs={12} lg={8} key={item.id}>
 									<ProductCard
 										mode="mini"
 										data={{
@@ -109,7 +109,7 @@ function Home({ fetchProducts, products, fetchRestockProducts, restockProducts }
 						</Row>
 						<Row gutter={16}>
 							{restockProducts.map(item => (
-								<Col xs={12} lg={8}>
+								<Col xs={12} lg={8} key={item.id}>
 									<ProductCard
 										mode="mini"
 										data={{

@@ -22,14 +22,28 @@ const StyledCard = styled(Card)`
 
 export default function Address({ data, handlers, initialLoading }) {
 	const { push } = useHistory()
-	const [selectedProvince, setSelectedProvince] = useState({})
-	const [selectedCity, setSelectedCity] = useState({})
-	const [selectedSubdistrict, setSelectedSubdistrict] = useState({})
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
-	const { fetchCities, fetchSubdistricts, setFormValues } = handlers
-	const { cityOptions, provinceOptions, subdistrictOptions, user, cartItems, cartTotal } = data
+	const {
+		fetchCities,
+		fetchSubdistricts,
+		setFormValues,
+		setSelectedSubdistrict,
+		setSelectedProvince,
+		setSelectedCity
+	} = handlers
+	const {
+		cityOptions,
+		provinceOptions,
+		subdistrictOptions,
+		user,
+		cartItems,
+		cartTotal,
+		selectedSubdistrict,
+		selectedProvince,
+		selectedCity
+	} = data
 
 	const handleRenderCities = value => {
 		fetchCities("", value)
@@ -70,11 +84,11 @@ export default function Address({ data, handlers, initialLoading }) {
 				validationSchema={addressValidation}
 				initialValues={{
 					...user,
-					province: "Pilih provinsi nya",
-					city: "Pilih kota nya",
-					subdistrict: "Pilih kecamatan nya",
-					zip: "",
-					address: ""
+					province: formData.province ? formData.province : user.province_name || "Pilih provinsi nya",
+					city: formData.city ? formData.city : user.city_name || "Pilih kota nya",
+					subdistrict: formData.subdistrict
+						? formData.subdistrict
+						: user.subdistrict_name || "Pilih kecamatan nya"
 				}}
 				render={({ handleSubmit, values }) => {
 					const handleChange = e => {

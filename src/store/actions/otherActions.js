@@ -1,8 +1,6 @@
 import * as types from "../types"
 import { instance, useRenderError } from "helpers"
 
-const formData = JSON.parse(localStorage.getItem("formData")) || {}
-
 const loadingOther = () => ({ type: types.LOADING_OTHER })
 
 export const setCartDrawerFromStore = cartDrawer => ({
@@ -37,14 +35,25 @@ export const fetchCustomerServices = () => dispatch => {
 		.catch(err => console.error(err.response))
 }
 
-export const saveCourierDetails = values => dispatch => {
+export const saveCourierDetails = (values, formData, push) => dispatch => {
 	dispatch(loadingOther())
 	return instance
 		.post(`/order/save_expedition`, values)
 		.then(({ data }) => {
-			console.log({ courierDataAtas: data })
-			localStorage.setItem("formData", JSON.stringify({ ...formData, order_detail: data.data.order_id }))
 			dispatch({ type: types.SAVE_COURIER_DETAILS, payload: data.data.order_id })
+			localStorage.setItem("formData", JSON.stringify({ ...formData, order_detail: data.data.order_id }))
 		})
+		.then(() => push("/checkout/payment"))
 		.catch(err => useRenderError(err, dispatch, types.SAVE_COURIER_DETAILS_ERROR))
+}
+
+export const saveOrder = values => dispatch => {
+	dispatch(loadingOther())
+	return instance
+		.post(`/order/save`, values)
+		.then(({ data }) => {
+			console.log({ saveOrder: data })
+			dispatch({ type: types.SAVE_ORDER, payload: data.data })
+		})
+		.catch(err => useRenderError(err, dispatch, types.SAVE_ORDER_ERROR))
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useCallback } from "react"
 import { Section, Heading, Card, Button } from "components"
 import { Row, Col, Badge, Icon } from "antd"
 import styled from "styled-components"
@@ -81,22 +81,23 @@ export default function Ongkir({ data, handlers }) {
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
-	const { couriers = [], selectedCourier, formValues = {}, cartTotal = {}, courierDetails } = data
+	const { couriers = [], selectedCourier, formValues = {}, courierDetails } = data
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
+	const { cartTotal = {}, subdistrict } = formData
 
 	const handleSelectCourier = courier => setSelectedCourier(courier)
-	const handleFetchCouriers = () => {
+	const handleFetchCouriers = useCallback(() => {
 		const data = {
 			origin: "48",
-			destination: formData.subdistrict,
-			weight: formData.cartTotal.weight,
-			destinationType: formData.subdistrict ? "subdistrict" : "city",
+			destination: subdistrict,
+			weight: cartTotal.weight,
+			destinationType: subdistrict ? "subdistrict" : "city",
 			originType: "city",
 			courier: "jne:jnt:sicepat"
 		}
 
 		fetchCouriers(data)
-	}
+	}, [fetchCouriers, cartTotal.weight, subdistrict])
 
 	const handleSaveCourier = () => {
 		const order_detail = {
@@ -110,12 +111,12 @@ export default function Ongkir({ data, handlers }) {
 			expedition_remark: `${selectedCourier.details.service} - ${selectedCourier.details.description}`,
 			expedition_total: selectedCourier.details.cost[0].value
 		}
-		saveCourierDetails(order_detail).then(() => push("/checkout/payment"))
+		saveCourierDetails(order_detail, formData, push)
 	}
 
 	useEffect(() => {
 		handleFetchCouriers()
-	}, [])
+	}, [handleFetchCouriers])
 
 	return (
 		<Section paddingHorizontal="0">

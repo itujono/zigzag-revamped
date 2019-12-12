@@ -6,7 +6,7 @@ import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
 import styled from "styled-components/macro"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "store/actions/rajaOngkirActions"
-import { setCartDrawerFromStore, saveCourierDetails } from "store/actions/otherActions"
+import { setCartDrawerFromStore, saveCourierDetails, saveOrder } from "store/actions/otherActions"
 import { fetchUser } from "store/actions/userActions"
 import { fetchCartItems } from "store/actions/productActions"
 import Address from "./Address"
@@ -59,24 +59,29 @@ function Checkout({
 	const [initialLoading, setInitialLoading] = useState(true)
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
 	const [selectedPayment, setSelectedPayment] = useState({ value: "transfer", label: "ATM/Transfer bank" })
+	const [selectedProvince, setSelectedProvince] = useState({})
+	const [selectedCity, setSelectedCity] = useState({})
+	const [selectedSubdistrict, setSelectedSubdistrict] = useState({})
 
-	const { fetchCities, fetchSubdistricts, couriers, saveCourierDetails } = props
+	const formData = JSON.parse(localStorage.getItem("formData")) || {}
+
+	const { fetchCities, fetchSubdistricts, couriers, saveCourierDetails, saveOrder } = props
 	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
 	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
 	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
 	const courierData = (selectedCourier.details || {}).cost || []
 
 	const renderFormValues = prop => {
-		return formValues[prop] === "" ? "-" : formValues[prop] ? formValues[prop] : user[prop]
+		const values = Object.keys(formValues).length === 0 ? formData : formValues
+		if (prop === "province" || prop === "city" || prop === "subdistrict") return values[`${prop}_name`]
+		return values[prop] === "" ? "-" : values[prop] ? values[prop] : user[prop]
 	}
 
 	useEffect(() => {
 		props.fetchProvinces()
 		props.fetchCartItems()
-		props.fetchUser().then(() => {
-			setInitialLoading(false)
-		})
-	}, [])
+		props.fetchUser().then(() => setInitialLoading(false))
+	}, [props.fetchProvinces, props.fetchCartItems, props.fetchUser])
 
 	// if (loading) return <Loading />
 
@@ -108,9 +113,19 @@ function Checkout({
 											formValues,
 											user,
 											cartTotal,
-											cartItems
+											cartItems,
+											selectedCity,
+											selectedProvince,
+											selectedSubdistrict
 										}}
-										handlers={{ fetchCities, fetchSubdistricts, setFormValues }}
+										handlers={{
+											fetchCities,
+											fetchSubdistricts,
+											setFormValues,
+											setSelectedCity,
+											setSelectedProvince,
+											setSelectedSubdistrict
+										}}
 									/>
 								)}
 							/>
@@ -131,9 +146,10 @@ function Checkout({
 								path="/checkout/payment"
 								render={() => <Payment data={{ selectedPayment }} handlers={{ setSelectedPayment }} />}
 							/>
-							<Route path="/checkout/summary" component={Summary} />
+							<Route path="/checkout/summary" render={() => <Summary handlers={{ saveOrder }} />} />
 						</Switch>
 					</Col>
+
 					<Col lg={8}>
 						<Sidebar>
 							<Heading
@@ -227,13 +243,42 @@ function Checkout({
 									<Divider />
 									<Row gutter={16}>
 										<Col lg={12}>
-											<Heading reverse content="Provinsi" subheader={province || "-"} />
+											{/* <Heading
+												reverse
+												content="Provinsi"
+												subheader={renderFormValues("province")}
+											/> */}
+											<Heading
+												reverse
+												content="Provinsi"
+												subheader={province || formData.province_name || user.province_name}
+											/>
 										</Col>
 										<Col lg={12}>
-											<Heading reverse content="Kota/Kabupaten" subheader={city || "-"} />
+											{/* <Heading
+												reverse
+												content="Kota/Kabupaten"
+												subheader={renderFormValues("city")}
+											/> */}
+											<Heading
+												reverse
+												content="Kota/Kabupaten"
+												subheader={city || formData.city_name || user.city_name}
+											/>
 										</Col>
 										<Col lg={12}>
-											<Heading reverse content="Kecamatan" subheader={subdistrict || "-"} />
+											{/* <Heading
+												reverse
+												content="Kecamatan"
+												subheader={renderFormValues("subdistrict")}
+											/> */}
+											<Heading
+												reverse
+												content="Kecamatan"
+												subheader={
+													subdistrict || formData.subdistrict_name || user.subdistrict_name
+												}
+											/>
 										</Col>
 										<Col lg={12}>
 											<Heading reverse content="Kode pos" subheader={renderFormValues("zip")} />
@@ -312,9 +357,22 @@ const mapState = ({ rajaOngkir, user, product, other }) => {
 	const cityOnSidebar = city => rajaOngkir.cities.find(item => item.city_id === city) || {}
 	const subdistrictOnSidebar = subdistrict =>
 		rajaOngkir.subdistricts.find(item => item.subdistrict_id === subdistrict) || {}
+	const userDetails = {
+		name: user.user.name,
+		email: user.user.email,
+		tele: user.user.tele,
+		province: user.user.province,
+		province_name: user.user.province_name,
+		city: user.user.city,
+		city_name: user.user.city_name,
+		subdistrict: user.user.subdistrict,
+		subdistrict_name: user.user.subdistrict_name,
+		zip: user.user.zip,
+		address: user.user.address
+	}
 
 	return {
-		user: user.user,
+		user: userDetails,
 		couriers: rajaOngkir.couriers,
 		courierDetails: other.courierDetails,
 		cartItems: product.cartItems,
@@ -338,7 +396,8 @@ const actions = {
 	setCartDrawerFromStore,
 	fetchUser,
 	fetchCartItems,
-	saveCourierDetails
+	saveCourierDetails,
+	saveOrder
 }
 
 // prettier-ignore

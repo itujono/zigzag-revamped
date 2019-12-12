@@ -24,12 +24,14 @@ const StyledRow = styled(Row).attrs({
 	}
 `
 
-export default function Summary() {
+export default function Summary({ handlers: { saveOrder } }) {
 	const { push } = useHistory()
 	const [confirmModal, setConfirmModal] = useState(false)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const { cartTotal } = formData
+
+	const handleSaveOrder = () => {}
 
 	return (
 		<Section paddingHorizontal="0">

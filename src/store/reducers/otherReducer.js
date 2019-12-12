@@ -1,6 +1,13 @@
 import * as types from "../types"
 
-const initial = { cartDrawer: false, orderCodeList: [], bankAccounts: [], courierDetails: {} }
+const initial = {
+	cartDrawer: false,
+	orderCodeList: [],
+	bankAccounts: [],
+	courierDetails: {},
+	saveOrderError: null,
+	saveCourierDetailsError: null
+}
 
 function reducer(state = initial, action) {
 	switch (action.type) {
@@ -14,6 +21,12 @@ function reducer(state = initial, action) {
 			return { ...state, bankAccounts: action.payload, loading: false }
 		case types.SAVE_COURIER_DETAILS:
 			return { ...state, courierDetails: action.payload, loading: false }
+		case types.SAVE_ORDER:
+			return { ...state, orderDetails: action.payload, loading: false }
+		case types.SAVE_COURIER_DETAILS_ERROR:
+			return { ...state, saveCourierDetailsError: action.payload, loading: false }
+		case types.SAVE_ORDER_ERROR:
+			return { ...state, saveOrderError: action.payload, loading: false }
 		case types.FETCH_CUSTOMER_SERVICES:
 			return {
 				...state,
