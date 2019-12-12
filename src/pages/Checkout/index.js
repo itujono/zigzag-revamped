@@ -147,7 +147,12 @@ function Checkout({
 							/>
 							<Route
 								path="/checkout/payment"
-								render={() => <Payment data={{ selectedPayment }} handlers={{ setSelectedPayment }} />}
+								render={() => (
+									<Payment
+										data={{ selectedPayment, user, cartTotal }}
+										handlers={{ setSelectedPayment }}
+									/>
+								)}
 							/>
 							<Route path="/checkout/summary" render={() => <Summary handlers={{ saveOrder }} />} />
 						</Switch>

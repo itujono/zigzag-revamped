@@ -29,7 +29,14 @@ export default function Summary({ handlers: { saveOrder } }) {
 	const [confirmModal, setConfirmModal] = useState(false)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
-	const { cartTotal } = formData
+	const { cartTotal = {}, order_detail = {} } = formData
+	const generalTotal =
+		Number(order_detail.ekspedition_total) +
+		Number(cartTotal.price) +
+		Number(formData.unique_code || 0) -
+		Number(formData.discount || 0)
+
+	console.log({ generalTotal })
 
 	const handleSaveOrder = () => {}
 
@@ -63,7 +70,15 @@ export default function Summary({ handlers: { saveOrder } }) {
 							<Heading reverse content="Diskon" subheader="Jika ada diskon, akan muncul di sini" />
 						</Col>
 						<Col lg={8} className="right">
-							<Heading content={`Rp ${pricer(formData.discount) || 0}`} />
+							<Heading content={`Rp ${pricer(formData.discount || 0)}`} />
+						</Col>
+					</StyledRow>
+					<StyledRow>
+						<Col lg={12}>
+							<Heading reverse content="Ongkos kirim" subheader="Ongkos kirim untuk orderan ini" />
+						</Col>
+						<Col lg={8} className="right">
+							<Heading content={`Rp ${pricer(order_detail.ekspedition_total)}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
@@ -84,7 +99,7 @@ export default function Summary({ handlers: { saveOrder } }) {
 						</Col>
 						<Col lg={8} className="right">
 							<Heading
-								content={`Rp ${pricer(cartTotal.price) || 0}`}
+								content={`Rp ${pricer(generalTotal || 0)}`}
 								subheader={`${cartTotal.weight} gram`}
 								className="price"
 							/>

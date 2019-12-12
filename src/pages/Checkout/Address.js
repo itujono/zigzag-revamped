@@ -69,6 +69,7 @@ export default function Address({ data, handlers, initialLoading }) {
 			...values,
 			cartItems,
 			cartTotal,
+			deposit: user.deposit,
 			province: values.province_id,
 			province_name: selectedProvince.label,
 			city: values.city_id,

@@ -16,5 +16,9 @@ export const addressValidation = yup.object().shape({
 	province: yup.string().required("Provinsi wajib diisi"),
 	city: yup.string().required("Kota wajib diisi"),
 	subdistrict: yup.string().required("Kecamatan wajib diisi"),
+	zip: yup
+		.string()
+		.required("Kode pos wajib diisi")
+		.max(5, "Kode pos apaan nih?"),
 	address: yup.string().required("Alamat pengiriman wajib diisi")
 })

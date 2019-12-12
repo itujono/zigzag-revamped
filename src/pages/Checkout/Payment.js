@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom"
 import mandiriLogo from "assets/images/mandiri-logo.png"
 import bcaLogo from "assets/images/bca-logo.jpeg"
 import { theme } from "styles"
-import { randomCode } from "helpers"
+import { randomCode, pricer } from "helpers"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -42,9 +42,11 @@ export default function Payment({ data, handlers }) {
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
-	const { selectedPayment } = data
+	// prettier-ignore
+	const { selectedPayment, user: { deposit } } = data
 	const { setSelectedPayment } = handlers
 	const random = randomCode()
+	const cartTotal = formData.cartTotal && Number(formData.cartTotal.price)
 
 	const handleSavePayment = () => {
 		localStorage.setItem(
@@ -104,7 +106,8 @@ export default function Payment({ data, handlers }) {
 							Kamu memilih untuk menggunakan deposit kamu:
 							<ul style={{ paddingLeft: 20 }}>
 								<li>
-									Jumlah deposit di akun kamu akan dikurangi sebanyak <strong>Rp 500,000</strong>
+									Jumlah deposit di akun kamu akan dikurangi sebanyak{" "}
+									<strong>Rp {pricer(cartTotal)}</strong>
 								</li>
 								<li>Dapat pahala dan amal jariyah</li>
 							</ul>
