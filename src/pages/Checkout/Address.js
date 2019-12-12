@@ -71,11 +71,11 @@ export default function Address({ data, handlers, initialLoading }) {
 			cartTotal,
 			deposit: user.deposit,
 			province: values.province_id,
-			province_name: selectedProvince.label,
+			province_name: values.province,
 			city: values.city_id,
-			city_name: selectedCity.label,
+			city_name: values.city,
 			subdistrict: values.subdistrict_id,
-			subdistrict_name: selectedSubdistrict.label
+			subdistrict_name: values.subdistrict
 		}
 		localStorage.setItem("formData", JSON.stringify(values))
 		console.log({ addressValue: values })
@@ -229,9 +229,9 @@ export default function Address({ data, handlers, initialLoading }) {
 								</Row>
 							</StyledCard>
 							<Section textAlign="right" paddingHorizontal="0">
-								<SubmitButton type="primary">
+								<Button htmlType="submit" type="primary">
 									Lanjut ke Ongkir <Icon type="right" />
-								</SubmitButton>
+								</Button>
 							</Section>
 						</Form>
 					)

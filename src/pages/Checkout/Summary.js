@@ -36,9 +36,34 @@ export default function Summary({ handlers: { saveOrder } }) {
 		Number(formData.unique_code || 0) -
 		Number(formData.discount || 0)
 
-	console.log({ generalTotal })
+	const handleSaveOrder = () => {
+		const {
+			cartItems,
+			cartTotal,
+			province,
+			province_id,
+			city,
+			city_id,
+			subdistrict,
+			subdistrict_id,
+			order_detail,
+			address,
+			payment,
+			...restValues
+		} = formData
 
-	const handleSaveOrder = () => {}
+		const values = {
+			...restValues,
+			payment_method: (formData.payment || {}).value,
+			order_detail: JSON.stringify(formData.cartItems),
+			shipping_address: formData.address,
+			order_id: order_detail.id,
+			total_weight: cartTotal.weight,
+			discount: formData.discount || 0
+		}
+
+		saveOrder(values, push)
+	}
 
 	return (
 		<Section paddingHorizontal="0">
@@ -47,7 +72,7 @@ export default function Summary({ handlers: { saveOrder } }) {
 					content="Place order sekarang?"
 					subheader="Apa kamu yakin mau place order sekarang? Action ini tidak bisa di-undo lagi."
 				/>
-				<Button icon="check" onClick={() => push("/order/order_success")}>
+				<Button icon="check" onClick={handleSaveOrder}>
 					Ya, place order sekarang
 				</Button>
 			</Modal>

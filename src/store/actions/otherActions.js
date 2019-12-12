@@ -47,7 +47,7 @@ export const saveCourierDetails = (values, formData, push) => dispatch => {
 		.catch(err => useRenderError(err, dispatch, types.SAVE_COURIER_DETAILS_ERROR))
 }
 
-export const saveOrder = values => dispatch => {
+export const saveOrder = (values, push) => dispatch => {
 	dispatch(loadingOther())
 	return instance
 		.post(`/order/save`, values)
@@ -55,5 +55,14 @@ export const saveOrder = values => dispatch => {
 			console.log({ saveOrder: data })
 			dispatch({ type: types.SAVE_ORDER, payload: data.data })
 		})
+		.then(() => push({ pathname: "/order/order_success", state: { isSuccess: true } }))
 		.catch(err => useRenderError(err, dispatch, types.SAVE_ORDER_ERROR))
+}
+
+export const fetchOrderHistory = () => dispatch => {
+	dispatch(loadingOther())
+	return instance
+		.get(`/order/history_order/list`)
+		.then(({ data }) => dispatch({ type: types.FETCH_ORDER_HISTORY, payload: data.data.order_data }))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_ORDER_HISTORY_ERROR))
 }

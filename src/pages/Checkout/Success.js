@@ -3,7 +3,7 @@ import { Section, Card, Success, Heading, Alert, ButtonLink } from "components"
 import { Row, Col } from "antd"
 import styled from "styled-components/macro"
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useHistory } from "react-router-dom"
 
 import { fetchBankAccounts } from "store/actions/otherActions"
 import { theme } from "styles"
@@ -57,9 +57,14 @@ const bankAccountText = bankAccounts => (
 )
 
 function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
+	const { state = {} } = useLocation()
+	const { push } = useHistory()
+
 	useEffect(() => {
+		if (!state.isSuccess) push("/404")
+
 		fetchBankAccounts()
-	}, [])
+	}, [fetchBankAccounts, push, state.isSuccess])
 
 	return (
 		<Section centered width={mobile ? "100%" : "75%"} textAlign="center">

@@ -6,7 +6,9 @@ const initial = {
 	bankAccounts: [],
 	courierDetails: {},
 	saveOrderError: null,
-	saveCourierDetailsError: null
+	saveCourierDetailsError: null,
+	orderHistory: [],
+	orderHistoryError: null
 }
 
 function reducer(state = initial, action) {
@@ -23,6 +25,10 @@ function reducer(state = initial, action) {
 			return { ...state, courierDetails: action.payload, loading: false }
 		case types.SAVE_ORDER:
 			return { ...state, orderDetails: action.payload, loading: false }
+		case types.FETCH_ORDER_HISTORY:
+			return { ...state, orderHistory: action.payload, loading: false }
+		case types.FETCH_ORDER_HISTORY_ERROR:
+			return { ...state, orderHistoryError: action.payload, loading: false }
 		case types.SAVE_COURIER_DETAILS_ERROR:
 			return { ...state, saveCourierDetailsError: action.payload, loading: false }
 		case types.SAVE_ORDER_ERROR:
