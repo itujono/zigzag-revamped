@@ -7,7 +7,8 @@ const initialState = {
 	depositList: [],
 	upgradeResponse: "",
 	depositError: null,
-	upgradeError: null
+	upgradeError: null,
+	depositBalance: 0
 }
 
 function reducer(state = initialState, action) {
@@ -21,7 +22,12 @@ function reducer(state = initialState, action) {
 		case types.CHANGE_PROFILE_PASSWORD:
 			return { ...state, loading: false }
 		case types.FETCH_LIST_DEPOSIT:
-			return { ...state, depositList: action.payload, loading: false }
+			return {
+				...state,
+				depositList: action.payload,
+				depositBalance: (action.payload[0] || {}).customer,
+				loading: false
+			}
 		case types.ADD_NEW_DEPOSIT:
 			return { ...state, loading: false }
 		case types.UPGRADE_ACCOUNT:

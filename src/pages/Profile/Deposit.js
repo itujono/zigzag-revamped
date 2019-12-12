@@ -53,19 +53,18 @@ const ListItem = styled(List.Item)`
 	}
 `
 
-function Deposit({ amount = 350000, depositList, fetchListDeposit, addNewDeposit, fetchUser, loading }) {
+function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance, loading }) {
 	useEffect(() => {
 		fetchListDeposit()
-		// fetchUser()
-	}, [])
+	}, [fetchListDeposit])
 
 	return (
-		<Section width="70%" centered>
+		<Section width="80%" centered>
 			<Heading content="Deposit" bold marginBottom="3em" />
 			<Row gutter={64}>
 				<Col lg={10}>
 					<PriceSection paddingHorizontal="0">
-						<Text className="rp">Rp</Text> <Text>{pricer(amount)}</Text>
+						<Text className="rp">Rp</Text> <Text>{pricer(depositBalance)}</Text>
 					</PriceSection>
 					<Divider />
 					<Section paddingHorizontal="0">
@@ -118,7 +117,7 @@ function Deposit({ amount = 350000, depositList, fetchListDeposit, addNewDeposit
 												<span>
 													Kamu deposit sebesar{" "}
 													<span className="amount">Rp {pricer(item.total)}</span> &nbsp;{" "}
-													<span className="time">{moment().fromNow()}</span>
+													<span className="time">{moment(item.created_date).fromNow()}</span>
 												</span>
 											}
 											description={
@@ -136,10 +135,17 @@ function Deposit({ amount = 350000, depositList, fetchListDeposit, addNewDeposit
 	)
 }
 
-const mapState = ({ user }) => ({
-	depositList: (user.depositList[0] || {}).deposits,
-	loading: user.loading
-})
+const mapState = ({ user }) => {
+	const depositList = ((user.depositList[0] || {}).deposits || []).sort(
+		(a, b) => Date.parse(b.created_date) - Date.parse(a.created_date)
+	)
+
+	return {
+		depositList,
+		depositBalance: user.depositBalance.deposit,
+		loading: user.loading
+	}
+}
 
 const validationSchema = yup.object().shape({
 	total_deposit: yup

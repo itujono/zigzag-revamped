@@ -70,7 +70,7 @@ export const addNewDeposit = amount => dispatch => {
 			dispatch({ type: types.ADD_NEW_DEPOSIT, payload: data })
 		})
 		.then(() => {
-			message.loading("Mohon tunggu...", 1).then(() => dispatch(fetchListDeposit()))
+			message.loading("Mohon tunggu...", 2).then(() => dispatch(fetchListDeposit()))
 		})
 		.then(() => message.success("Kamu sudah berhasil melakukan permintaan deposit"))
 		.catch(err => {
