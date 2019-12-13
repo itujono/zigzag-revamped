@@ -9,7 +9,7 @@ import Drawer from "components/Drawer"
 import Heading from "components/Heading"
 import styled from "styled-components/macro"
 import Button from "components/Button"
-import { pricer } from "helpers"
+import { pricer, mobile } from "helpers"
 import Section from "components/Section"
 import { theme } from "styles"
 import { TextInput } from "components/Fields"
@@ -91,13 +91,11 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 		if (token) fetchCartItems()
 	}, [fetchCartItems, token])
 
-	console.log(String(cartTotal.weight))
-
 	return (
 		<Drawer
 			placement="right"
-			closable={false}
-			width={540}
+			closable={mobile}
+			width={mobile ? "100%" : 540}
 			onClose={handleClose}
 			visible={cartDrawer}
 			css={`

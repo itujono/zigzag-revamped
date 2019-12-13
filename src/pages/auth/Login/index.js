@@ -59,6 +59,8 @@ function Login({ authUser }) {
 		authUser(values, setSubmitting, push)
 	}
 
+	if (localStorage.getItem("access_token")) push("/404")
+
 	return (
 		<Section centered>
 			{/* <Row style={{ marginBottom: "2em" }}>

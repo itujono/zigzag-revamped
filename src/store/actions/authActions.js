@@ -1,4 +1,4 @@
-import { instance } from "helpers"
+import { instance, useRenderError } from "helpers"
 import * as types from "../types"
 import { message } from "antd"
 
@@ -10,17 +10,12 @@ export const authUser = ({ email, password }, setSubmitting, push) => dispatch =
 		.post(`/customer/login`, { email, password })
 		.then(({ data }) => {
 			console.log({ loginResponse: data.data })
+			dispatch({ type: types.AUTH_USER, payload: data.data })
 			localStorage.setItem("access_token", data.data.access_token)
 			localStorage.setItem("account_type", JSON.stringify(data.data.account_type))
-			dispatch({ type: types.AUTH_USER, payload: data.data })
 		})
 		.then(() => message.loading("Mohon tunggu...", 1).then(() => window.location.replace("/")))
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) message.error(error)
-
-			dispatch({ type: types.AUTH_USER_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.AUTH_USER_ERROR))
 		.finally(() => setSubmitting(false))
 }
 

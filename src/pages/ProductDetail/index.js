@@ -221,7 +221,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		<Layout sidebar>
 			<Section>
 				<Row gutter={64} type="flex">
-					<Col lg={14}>
+					<Col lg={14} xs={24}>
 						<Carousel autoplay adaptiveHeight infinite style={{ marginBottom: "2em" }}>
 							{(product.product_image || []).map(item => (
 								<div key={item.id}>
@@ -230,7 +230,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 							))}
 						</Carousel>
 					</Col>
-					<Col lg={10}>
+					<Col lg={10} xs={24}>
 						<Heading
 							bold
 							content={product.name}
@@ -239,7 +239,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 									{isVip ? (
 										<>
 											<Text delete disabled>
-												Rp {pricer(245000)}
+												Rp {pricer(regulerPrice)}
 											</Text>{" "}
 											&nbsp; Rp {pricer(productPrice)}
 										</>

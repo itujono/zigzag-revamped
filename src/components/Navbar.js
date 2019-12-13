@@ -93,7 +93,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
 			/>
 			<Row type="flex" justify="space-between">
-				<Col>
+				<Col xs={16}>
 					<Logo /> &nbsp;{" "}
 					<span>
 						<Heading
@@ -103,7 +103,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 						/>
 					</span>
 				</Col>
-				<Col style={{ textAlign: "right" }}>
+				<Col xs={8} style={{ textAlign: "right" }}>
 					{token ? (
 						<StyledMenu mode="horizontal">
 							<Menu.Item key="search">

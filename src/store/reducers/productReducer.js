@@ -18,19 +18,19 @@ const initialState = {
 	cartError: null
 }
 
+const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+const { account_type_remark: typeRemark } = accountType
+const token = localStorage.getItem("access_token")
+
+const renderPrice = productPrice => {
+	const price = productPrice.filter(({ price_type }) => {
+		if (!token) return price_type === "REGULER"
+		return price_type.toLowerCase() === typeRemark.toLowerCase()
+	})[0]
+	return { product_price: price }
+}
+
 function reducer(state = initialState, action) {
-	const token = localStorage.getItem("access_token")
-	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
-	const { account_type_remark: typeRemark } = accountType
-
-	const renderPrice = productPrice => {
-		const price = productPrice.filter(({ price_type }) => {
-			if (!token) return price_type === "REGULER"
-			return price_type.toLowerCase() === typeRemark.toLowerCase()
-		})[0]
-		return { product_price: price }
-	}
-
 	switch (action.type) {
 		case types.LOADING_PRODUCT:
 			return { ...state, loading: true }
