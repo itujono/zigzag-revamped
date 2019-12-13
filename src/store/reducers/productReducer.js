@@ -62,13 +62,17 @@ function reducer(state = initialState, action) {
 				const { product_price } = renderPrice(product_data.product_price)
 				return {
 					...item,
+					weight_per_pcs: (product_data.products || {}).weight_per_pcs,
 					product_id: (product_data.products || {}).id,
 					product_data: { ...product_data, product_price }
 				}
 			})
 			const totalPrice = action.payload.map(item => item.total_price).reduce((acc, curr) => acc + curr, 0)
 			const totalWeight = action.payload
-				.map(({ weight, qty }) => weight * Number(qty))
+				.map(({ weight, qty, product_data }) => {
+					const weight_per_pcs = (product_data.products || {}).weight_per_pcs
+					return weight_per_pcs * Number(qty)
+				})
 				.reduce((acc, curr) => acc + curr, 0)
 			const totalQty = action.payload.map(item => Number(item.qty)).reduce((acc, curr) => acc + curr, 0)
 

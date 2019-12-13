@@ -176,19 +176,10 @@ function Checkout({
 										dataSource={cartItems}
 										locale={{
 											emptyText: (
-												<div css="margin-bottom: 2em">
-													<Empty
-														description="Masih belum ada apa-apa di cart kamu nih"
-														css={`
-															&& {
-																margin-bottom: 2em;
-															}
-														`}
-													/>{" "}
-													<Link to="/">
-														<Button>Belanja sekarang</Button>
-													</Link>
-												</div>
+												<Empty
+													isEmptyItems
+													description="Masih belum ada apa-apa di cart kamu nih"
+												/>
 											)
 										}}
 										renderItem={({ product_data, ...item }) => {
@@ -220,7 +211,9 @@ function Checkout({
 																<Col lg={24}>
 																	<p className="price-weight">
 																		Rp {pricer(quantity * price)} &middot;{" "}
-																		<span>{item.weight * quantity} gram</span>
+																		<span>
+																			{item.weight_per_pcs * quantity} gram
+																		</span>
 																	</p>
 																	<ButtonLink
 																		onClick={() =>

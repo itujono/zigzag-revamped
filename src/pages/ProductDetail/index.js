@@ -74,7 +74,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const colorIsNotSelected = Object.keys(selectedColor).length === 0
 	const isInCart = cartItems.find(item => item.product_id === Number(productId)) || {}
 
-	console.log({ isInCart })
+	// console.log({ isInCart })
 
 	const handleRate = () => {
 		if (!token) {

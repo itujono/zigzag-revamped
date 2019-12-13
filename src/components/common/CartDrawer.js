@@ -183,7 +183,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 												/>
 												<p className="price-weight">
 													Rp {pricer(item.total_price)} &middot;{" "}
-													<span>{item.weight * quantity} gram</span>
+													<span>{item.weight_per_pcs * quantity} gram</span>
 												</p>
 											</Col>
 										</Row>
