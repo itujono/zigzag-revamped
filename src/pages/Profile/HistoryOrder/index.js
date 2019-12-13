@@ -3,7 +3,6 @@ import { Section, Heading, Button, ButtonLink, Empty } from "components"
 import { List, Icon, Avatar, Row, Col, Menu, Tabs } from "antd"
 import styled from "styled-components/macro"
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
 
 import { fetchOrderHistory } from "store/actions/otherActions"
 import { pricer, mobile, media } from "helpers"
@@ -47,19 +46,11 @@ function HistoryOrder({ orderHistory, ...props }) {
 				dataSource={orderHistory}
 				locale={{
 					emptyText: (
-						<div css="margin-bottom: 2em">
-							<Empty
-								description="Masih belum ada apa-apa di cart kamu nih"
-								css={`
-									&& {
-										margin-bottom: 2em;
-									}
-								`}
-							/>{" "}
-							<Link to="/">
-								<Button>Belanja sekarang</Button>
-							</Link>
-						</div>
+						<Empty
+							isEmptyItems
+							description="Kurang mantap okeee?"
+							button={{ to: "/", text: "Belanja nanti" }}
+						/>
 					)
 				}}
 				renderItem={({ order_code, time, grandtotal_order, status_order, ...item }) => {

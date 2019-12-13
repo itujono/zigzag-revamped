@@ -49,10 +49,14 @@ export function useFetchData(url, param) {
 	return data
 }
 
-export const pricer = price =>
-	new Intl.NumberFormat("en-ID", {
+export const pricer = (price, withComma = false) => {
+	const theValue = new Intl.NumberFormat("id-ID", {
 		currency: "IDR"
 	}).format(price)
+
+	if (withComma) return theValue + ",00"
+	return theValue
+}
 
 export const upperCase = word => word && word[0].toUpperCase() + word.slice(1)
 

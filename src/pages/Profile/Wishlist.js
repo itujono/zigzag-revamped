@@ -3,7 +3,7 @@ import { List, Avatar, Tooltip, Icon, Row, Col, Form, Popconfirm } from "antd"
 import styled from "styled-components"
 import { connect } from "react-redux"
 
-import { Section, Heading, Button } from "components"
+import { Section, Heading, Button, Empty } from "components"
 import { fetchWishlistItems, deleteWishlistItem } from "store/actions/productActions"
 import { pricer, media, mobile } from "helpers"
 
@@ -40,7 +40,7 @@ function Wishlist({ fetchWishlistItems, deleteWishlistItem, wishlistItems, loadi
 
 	useEffect(() => {
 		fetchWishlistItems()
-	}, [])
+	}, [fetchWishlistItems])
 
 	return (
 		<Section centered width="70%">
@@ -48,7 +48,7 @@ function Wishlist({ fetchWishlistItems, deleteWishlistItem, wishlistItems, loadi
 			<List
 				itemLayout="horizontal"
 				dataSource={wishlistItems}
-				locale={{ emptyText: "Kamu belum ada wishlist sama sekali" }}
+				locale={{ emptyText: <Empty isEmptyItems description="Kamu belum ada wishlist sama sekali" /> }}
 				loading={loading}
 				renderItem={item => {
 					const picture = (item.product_image || [])[0] || {}

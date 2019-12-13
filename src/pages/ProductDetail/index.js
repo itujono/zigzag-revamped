@@ -6,7 +6,13 @@ import { useParams, Link, useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { pricer } from "helpers"
-import { fetchProductItem, addItemToCart, addItemToWishlist, addRating } from "store/actions/productActions"
+import {
+	fetchProductItem,
+	addItemToCart,
+	addItemToWishlist,
+	addRating,
+	updateCartItem
+} from "store/actions/productActions"
 import { theme } from "styles"
 
 const Stats = styled.div`
@@ -51,13 +57,13 @@ const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize 
 
 const { Paragraph, Text } = Typography
 
-function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading, ...props }) {
+function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading, cartItems, ...props }) {
 	const [selectedColor, setSelectedColor] = useState({})
 	const [selectedSize, setSelectedSize] = useState({})
 	const [temporaryRating, setTemporaryRating] = useState(0)
 	const { id: productId } = useParams()
 	const { push } = useHistory()
-	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating } = props
+	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem } = props
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
@@ -66,10 +72,15 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const isShoes = (product.categories || {}).id === 2
 	const sizeIsNotSelected = Object.keys(selectedSize).length === 0
 	const colorIsNotSelected = Object.keys(selectedColor).length === 0
+	const isInCart = cartItems.find(item => item.product_id === Number(productId)) || {}
+
+	console.log({ isInCart })
 
 	const handleRate = () => {
-		if (!token) push("/login")
-		else addRating(productId, temporaryRating)
+		if (!token) {
+			push("/login")
+			message.error("Kalo mau nge-rate, harus login dulu ya")
+		} else addRating(productId, temporaryRating)
 	}
 
 	const marketingText =
@@ -83,8 +94,6 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 
 	const productRating = (
 		<Popconfirm
-			visible={temporaryRating !== 0}
-			onCancel={() => setTemporaryRating(0)}
 			title={
 				<span>
 					Kamu yakin mau kasih produk ini <strong>{temporaryRating} bintang</strong>?
@@ -164,6 +173,17 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				message.error("Kamu harus login dulu ya")
 			})
 		} else {
+			// if (isInCart && Object.keys(isInCart).length > 0) {
+			// 	const productPrice = (isInCart.product_data || {}).product_price.price
+			// 	const updateItem = {
+			// 		cart_id: isInCart.id,
+			// 		qty: Number(isInCart.qty) + 1,
+			// 		weight: isInCart.weight,
+			// 		total_price: productPrice * Number(isInCart.qty) * 1
+			// 	}
+
+			// 	updateCartItem(updateItem)
+			// } else {
 			const item = {
 				product_id: productId,
 				product_more_detail_id: isShoes ? selectedSize.id : (selectedColor.product_more || [])[0].id,
@@ -175,6 +195,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 			}
 
 			addItemToCart(item)
+			// }
 		}
 	}
 
@@ -307,6 +328,7 @@ const mapState = ({ product }) => {
 
 	return {
 		product: product.product,
+		cartItems: product.cartItems,
 		productPrice: product.productPrice,
 		vipPrice: vipPrice.price || 0,
 		regulerPrice: regulerPrice.price || 0,
@@ -314,6 +336,6 @@ const mapState = ({ product }) => {
 	}
 }
 
-const actions = { fetchProductItem, addItemToCart, addItemToWishlist, addRating }
+const actions = { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem }
 
 export default connect(mapState, actions)(ProductDetail)

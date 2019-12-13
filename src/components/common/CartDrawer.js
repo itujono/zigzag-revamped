@@ -91,6 +91,8 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 		if (token) fetchCartItems()
 	}, [fetchCartItems, token])
 
+	console.log(String(cartTotal.weight))
+
 	return (
 		<Drawer
 			placement="right"
@@ -114,21 +116,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 					itemLayout="horizontal"
 					dataSource={cartItems}
 					locale={{
-						emptyText: (
-							<div css="margin-bottom: 2em">
-								<Empty
-									description="Masih belum ada apa-apa di cart kamu nih"
-									css={`
-										&& {
-											margin-bottom: 2em;
-										}
-									`}
-								/>{" "}
-								<Link to="/">
-									<Button onClick={() => setCartDrawer(false)}>Belanja sekarang</Button>
-								</Link>
-							</div>
-						)
+						emptyText: <Empty isEmptyItems description="Masih belum ada apa-apa di cart kamu nih" />
 					}}
 					loading={loading}
 					renderItem={({ product_data, ...item }) => {
@@ -158,7 +146,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 											<span>
 												Rp {pricer(price)} / pcs &middot;{" "}
 												<span css="color: #999;">{item.color}</span>{" "}
-												{item.size && <span css="color: #999;">(size {item.size})</span>}
+												{item.size !== 0 && <span css="color: #999;">(size {item.size})</span>}
 											</span>
 										</p>
 									}

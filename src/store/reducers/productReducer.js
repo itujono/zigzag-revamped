@@ -23,6 +23,14 @@ function reducer(state = initialState, action) {
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_remark: typeRemark } = accountType
 
+	const renderPrice = productPrice => {
+		const price = productPrice.filter(({ price_type }) => {
+			if (!token) return price_type === "REGULER"
+			return price_type.toLowerCase() === typeRemark.toLowerCase()
+		})[0]
+		return { product_price: price }
+	}
+
 	switch (action.type) {
 		case types.LOADING_PRODUCT:
 			return { ...state, loading: true }
@@ -35,8 +43,15 @@ function reducer(state = initialState, action) {
 				.map(({ price }) => price)[0]
 
 			return { ...state, product: action.payload, productPrice, loading: false }
+
 		case types.FETCH_PRODUCTS:
-			return { ...state, products: action.payload, loading: false }
+			const products = action.payload.map(item => {
+				const { product_price } = renderPrice(item.product_price)
+				return { ...item, product_price }
+			})
+
+			return { ...state, products, loading: false }
+
 		case types.FETCH_RESTOCK_PRODUCTS:
 			return { ...state, restockProducts: action.payload, loading: false }
 		case types.FETCH_PRODUCT_CATEGORIES:
@@ -48,7 +63,11 @@ function reducer(state = initialState, action) {
 					if (!token) return price_type === "REGULER"
 					return price_type.toLowerCase() === typeRemark.toLowerCase()
 				})[0]
-				return { ...item, product_data: { ...product_data, product_price: price } }
+				return {
+					...item,
+					product_id: (product_data.products || {}).id,
+					product_data: { ...product_data, product_price: price }
+				}
 			})
 			const totalPrice = action.payload.map(item => item.total_price).reduce((acc, curr) => acc + curr, 0)
 			const totalWeight = action.payload

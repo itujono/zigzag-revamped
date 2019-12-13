@@ -11,7 +11,7 @@ function Category({ products, fetchProducts, loading }) {
 
 	useEffect(() => {
 		fetchProducts(id, 0)
-	}, [name, id])
+	}, [name, id, fetchProducts])
 
 	// if (loading) return <Loading />
 
@@ -29,7 +29,7 @@ function Category({ products, fetchProducts, loading }) {
 				/>
 				<Row gutter={16}>
 					{products.map(item => (
-						<Col xs={12} lg={6}>
+						<Col xs={12} lg={6} key={item.id}>
 							<ProductCard
 								key={item.id}
 								mode="mini"
@@ -37,7 +37,7 @@ function Category({ products, fetchProducts, loading }) {
 								data={{
 									src: item.product_image[0].picture,
 									title: item.name,
-									price: item.product_price[0].price,
+									price: item.product_price.price,
 									to: `/product/${item.id}-${item.name}`,
 									category: item.categories.name
 								}}

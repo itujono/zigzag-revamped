@@ -49,6 +49,14 @@ const StyledSubmenu = styled(Menu.SubMenu)`
 	}
 `
 
+const StyledCardIcon = styled(Badge)`
+	&& {
+		> .anticon {
+			margin-right: 3px;
+		}
+	}
+`
+
 function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...props }) {
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const token = localStorage.getItem("access_token")
@@ -112,9 +120,9 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 								style={{ paddingLeft: "2em", paddingRight: 0 }}
 								onClick={handleSetCardDrawer}
 							>
-								<Badge dot={cartItems.length > 0}>
+								<StyledCardIcon dot={cartItems.length > 0}>
 									<Icon type="shopping-cart" />
-								</Badge>
+								</StyledCardIcon>
 							</Menu.Item>
 							<StyledSubmenu title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}>
 								<Menu.Item key="greeting">
