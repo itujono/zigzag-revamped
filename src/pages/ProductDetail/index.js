@@ -27,9 +27,12 @@ const StyledSection = styled(Section)`
 
 const StyledRating = styled(Rate)`
 	.ant-rate-star {
-		margin-left: 5px;
+		margin-left: 0;
 		&:first-child {
 			margin-left: 0;
+		}
+		&:not(:last-child) {
+			margin-right: 4px;
 		}
 	}
 `
@@ -80,6 +83,8 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 
 	const productRating = (
 		<Popconfirm
+			visible={temporaryRating !== 0}
+			onCancel={() => setTemporaryRating(0)}
 			title={
 				<span>
 					Kamu yakin mau kasih produk ini <strong>{temporaryRating} bintang</strong>?
@@ -94,9 +99,18 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				allowHalf
 			/>{" "}
 			&nbsp;
-			{product.rating_customer > 0
-				? `${product.rating_customer} orang kasih rating`
+			{product.count_user_rating > 0
+				? `${product.count_user_rating} orang kasih rating`
 				: "Belum ada yang kasih rating"}
+			{product.is_rated_by_customer === 1 && (
+				<p
+					css={`
+						color: ${theme.greyColor[2]};
+					`}
+				>
+					Kamu sudah kasih rating untuk produk ini
+				</p>
+			)}
 		</Popconfirm>
 	)
 
@@ -180,7 +194,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 
 	useEffect(() => {
 		fetchProductItem(Number(productId))
-	}, [product.rating_product])
+	}, [fetchProductItem, product.rating_product, productId])
 
 	return (
 		<Layout sidebar>
@@ -222,7 +236,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 								style={{ textAlign: "left", marginBottom: "2em" }}
 							/>
 						)}
-						<Heading reverse content="Rating" subheader={productRating} />
+						<Heading reverse content="Rating" subheader={productRating} marginBottom="2em" />
 						<Stats>
 							<Row type="flex">
 								<Col lg={8}>
