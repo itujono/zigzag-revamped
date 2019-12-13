@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Section, Heading, Card, Button } from "components"
 import { Row, Col, Icon, message } from "antd"
 import styled from "styled-components"
@@ -59,6 +59,10 @@ export default function Payment({ data, handlers }) {
 		)
 		message.loading("Mengkalkulasi totalan...", 1).then(() => push("/checkout/summary"))
 	}
+
+	useEffect(() => {
+		if (!formData.order_detail) push("/404")
+	}, [formData.order_detail, push])
 
 	return (
 		<Section paddingHorizontal="0">

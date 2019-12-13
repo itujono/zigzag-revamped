@@ -49,15 +49,14 @@ const StyledSubmenu = styled(Menu.SubMenu)`
 	}
 `
 
-const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
-
 function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...props }) {
+	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+	const token = localStorage.getItem("access_token")
+
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
 	const { setCartDrawerFromStore, fetchUser, updateCartItem, deleteCartItem } = props
 	const typeId = accountType.account_type_id
-
-	const token = localStorage.getItem("access_token")
 
 	const handleLogout = () => {
 		props.unauthUser(push)
@@ -76,7 +75,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
 		if (token) fetchUser()
-	}, [cartDrawerFromStore, token])
+	}, [cartDrawerFromStore, fetchUser, token])
 
 	return (
 		<Nav>

@@ -53,6 +53,7 @@ function Checkout({
 	cartItems,
 	cartTotal,
 	courierDetails,
+	couriers,
 	...props
 }) {
 	const [formValues, setFormValues] = useState({})
@@ -65,7 +66,8 @@ function Checkout({
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
-	const { fetchCities, fetchSubdistricts, couriers, saveCourierDetails, saveOrder } = props
+	// prettier-ignore
+	const { fetchCities, fetchSubdistricts, saveCourierDetails, saveOrder, fetchProvinces, fetchCartItems, fetchUser } = props
 	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
 	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
 	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
@@ -83,10 +85,10 @@ function Checkout({
 	}
 
 	useEffect(() => {
-		props.fetchProvinces()
-		props.fetchCartItems()
-		props.fetchUser().then(() => setInitialLoading(false))
-	}, [props.fetchProvinces, props.fetchCartItems, props.fetchUser])
+		fetchProvinces()
+		fetchCartItems()
+		fetchUser().then(() => setInitialLoading(false))
+	}, [fetchProvinces, fetchCartItems, fetchUser, fetchCities, fetchSubdistricts])
 
 	return (
 		<Layout sidebar page="checkout">
@@ -136,6 +138,7 @@ function Checkout({
 								path="/checkout/ongkir"
 								render={() => (
 									<Ongkir
+										loading={loading}
 										data={{ couriers, formValues, selectedCourier, cartTotal, courierDetails }}
 										handlers={{
 											setSelectedCourier,

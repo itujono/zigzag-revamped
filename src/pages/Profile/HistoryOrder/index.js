@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { Section, Heading, Button, ButtonLink } from "components"
+import { Section, Heading, Button, ButtonLink, Empty } from "components"
 import { List, Icon, Avatar, Row, Col, Menu, Tabs } from "antd"
-import styled from "styled-components"
+import styled from "styled-components/macro"
 import { connect } from "react-redux"
+import { Link } from "react-router-dom"
 
 import { fetchOrderHistory } from "store/actions/otherActions"
-import { historyData } from "helpers/dummy"
 import { pricer, mobile, media } from "helpers"
 import { theme } from "styles"
 import OrderItems from "./OrderItems"
@@ -45,6 +45,23 @@ function HistoryOrder({ orderHistory, ...props }) {
 			<List
 				itemLayout="horizontal"
 				dataSource={orderHistory}
+				locale={{
+					emptyText: (
+						<div css="margin-bottom: 2em">
+							<Empty
+								description="Masih belum ada apa-apa di cart kamu nih"
+								css={`
+									&& {
+										margin-bottom: 2em;
+									}
+								`}
+							/>{" "}
+							<Link to="/">
+								<Button>Belanja sekarang</Button>
+							</Link>
+						</div>
+					)
+				}}
 				renderItem={({ order_code, time, grandtotal_order, status_order, ...item }) => {
 					const isSelected = order_code === selectedItem
 

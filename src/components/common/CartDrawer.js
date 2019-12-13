@@ -72,20 +72,24 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 
 	const token = localStorage.getItem("access_token")
 
-	const itemCount = cartTotal.qty === 0 ? `(Masih kosong)` : `(${cartTotal.qty} item)`
+	const itemCount = cartTotal && cartTotal.qty > 0 ? `(${cartTotal.qty} item)` : `(masih kosong)`
+	// const itemCount = cartTotal.qty === 0 ? `(Masih kosong)` : `(${cartTotal.qty} item)`
 
 	const handleClose = () => {
 		setCartDrawerFromStore(false)
 		setCartDrawer(false)
 	}
 
-	const handleDeleteCart = (cart_id, name) => {
-		deleteCartItem({ cart_id }, name)
+	const handleDeleteCart = (cart_id, name) => deleteCartItem({ cart_id }, name)
+
+	const handleGoToCheckout = () => {
+		setCartDrawer(false)
+		localStorage.setItem("cartDrawerFromStore", false)
 	}
 
 	useEffect(() => {
 		if (token) fetchCartItems()
-	}, [])
+	}, [fetchCartItems, token])
 
 	return (
 		<Drawer
@@ -121,7 +125,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 									`}
 								/>{" "}
 								<Link to="/">
-									<Button>Belanja sekarang</Button>
+									<Button onClick={() => setCartDrawer(false)}>Belanja sekarang</Button>
 								</Link>
 							</div>
 						)
@@ -219,7 +223,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 					</Col>
 				</Row>
 				<Link to="/checkout">
-					<Button block size="large" disabled={cartItems.length === 0} onClick={() => setCartDrawer(false)}>
+					<Button block size="large" disabled={cartItems.length === 0} onClick={handleGoToCheckout}>
 						Lanjut ke Checkout &nbsp; <Icon type="right" />
 					</Button>
 				</Link>

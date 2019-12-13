@@ -55,7 +55,10 @@ export const saveOrder = (values, push) => dispatch => {
 			console.log({ saveOrder: data })
 			dispatch({ type: types.SAVE_ORDER, payload: data.data })
 		})
-		.then(() => push({ pathname: "/order/order_success", state: { isSuccess: true } }))
+		.then(() => {
+			localStorage.removeItem("formData")
+			push({ pathname: "/order/order_success", state: { isSuccess: true } })
+		})
 		.catch(err => useRenderError(err, dispatch, types.SAVE_ORDER_ERROR))
 }
 

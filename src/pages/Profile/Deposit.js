@@ -98,7 +98,7 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 						dataSource={depositList}
 						loading={loading}
 						locale={{ emptyText: "Kamu belum ada ngelakuin deposit" }}
-						renderItem={item => (
+						renderItem={({ status, ...item }) => (
 							<ListItem>
 								<Row>
 									<Col lg={2}>
@@ -121,7 +121,16 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 												</span>
 											}
 											description={
-												<Badge text={(item.status || {}).status_remark} status="success" />
+												<Badge
+													text={status.status_remark}
+													status={
+														status.status_id === 1
+															? "warning"
+															: status.status_id === 6
+															? "error"
+															: "success"
+													}
+												/>
 											}
 										/>
 									</Col>

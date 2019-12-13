@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from "react"
-import { Section, Heading, Card, Button } from "components"
+import { Section, Heading, Card, Button, Loading } from "components"
 import { Row, Col, Badge, Icon } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
@@ -76,7 +76,7 @@ const dummyData = {
 	destinationType: "subdistrict"
 }
 
-export default function Ongkir({ data, handlers }) {
+export default function Ongkir({ data, handlers, loading }) {
 	const { push } = useHistory()
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
@@ -115,8 +115,10 @@ export default function Ongkir({ data, handlers }) {
 	}
 
 	useEffect(() => {
+		if (!formData.address) push("/404")
+
 		handleFetchCouriers()
-	}, [handleFetchCouriers])
+	}, [formData.address, handleFetchCouriers, push])
 
 	return (
 		<Section paddingHorizontal="0">
@@ -125,6 +127,7 @@ export default function Ongkir({ data, handlers }) {
 				subheader="Pilih kurir dan ongkir yang paling sesuai untuk kamu"
 				marginBottom="3em"
 			/>
+			{loading && <Loading />}
 			{couriers.map(courier => {
 				const { code, costs = [], name } = courier
 				const courierLogo =
