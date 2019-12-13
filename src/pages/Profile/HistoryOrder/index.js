@@ -5,6 +5,7 @@ import styled from "styled-components/macro"
 import { connect } from "react-redux"
 
 import { fetchOrderHistory } from "store/actions/otherActions"
+import { fetchAirwayBill } from "store/actions/rajaOngkirActions"
 import { pricer, mobile, media } from "helpers"
 import { theme } from "styles"
 import OrderItems from "./OrderItems"
@@ -24,10 +25,10 @@ const ContentDetail = styled.div`
 	background-color: ${theme.greyColor[4]};
 `
 
-function HistoryOrder({ orderHistory, ...props }) {
+function HistoryOrder({ orderHistory, loading, ...props }) {
 	const [selectedItem, setSelectedItem] = useState("")
 
-	const { fetchOrderHistory } = props
+	const { fetchOrderHistory, fetchAirwayBill } = props
 
 	const handleSelect = orderNumber => {
 		if (selectedItem === orderNumber) setSelectedItem("")
@@ -36,7 +37,8 @@ function HistoryOrder({ orderHistory, ...props }) {
 
 	useEffect(() => {
 		fetchOrderHistory()
-	}, [fetchOrderHistory])
+		fetchAirwayBill({ waybill: "SOCAG00183235715", courier: "jne" })
+	}, [fetchAirwayBill, fetchOrderHistory])
 
 	return (
 		<Section width="70%" centered>
@@ -44,6 +46,7 @@ function HistoryOrder({ orderHistory, ...props }) {
 			<List
 				itemLayout="horizontal"
 				dataSource={orderHistory}
+				loading={loading}
 				locale={{
 					emptyText: (
 						<Empty
@@ -147,8 +150,10 @@ function HistoryOrder({ orderHistory, ...props }) {
 	)
 }
 
-const mapState = ({ other }) => ({
-	orderHistory: other.orderHistory
+const mapState = ({ other, rajaOngkir }) => ({
+	orderHistory: other.orderHistory,
+	loading: other.loading,
+	airwayBill: rajaOngkir.airwayBill
 })
 
-export default connect(mapState, { fetchOrderHistory })(HistoryOrder)
+export default connect(mapState, { fetchOrderHistory, fetchAirwayBill })(HistoryOrder)

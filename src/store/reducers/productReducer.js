@@ -59,14 +59,11 @@ function reducer(state = initialState, action) {
 
 		case types.FETCH_CART_ITEMS:
 			const cartItems = action.payload.map(({ product_data, ...item }) => {
-				const price = product_data.product_price.filter(({ price_type }) => {
-					if (!token) return price_type === "REGULER"
-					return price_type.toLowerCase() === typeRemark.toLowerCase()
-				})[0]
+				const { product_price } = renderPrice(product_data.product_price)
 				return {
 					...item,
 					product_id: (product_data.products || {}).id,
-					product_data: { ...product_data, product_price: price }
+					product_data: { ...product_data, product_price }
 				}
 			})
 			const totalPrice = action.payload.map(item => item.total_price).reduce((acc, curr) => acc + curr, 0)

@@ -1,5 +1,7 @@
+/* eslint-disable no-undef */
 import * as types from "store/types"
 import Axios from "axios"
+import { useRenderError } from "helpers"
 
 const baseUrl = `https://pro.rajaongkir.com/api`
 const corsUrl = `https://cors-anywhere.herokuapp.com`
@@ -37,4 +39,17 @@ export const fetchCouriers = data => dispatch => {
 	})
 		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.rajaongkir.results }))
 		.catch(err => console.error(err.response))
+}
+
+export const fetchAirwayBill = ({ waybill, courier }) => dispatch => {
+	dispatch(loadingRajaOngkir())
+	return Axios.post(
+		`${corsUrl}/${baseUrl}/waybill`,
+		{ waybill, courier },
+		{
+			headers: { key: process.env.REACT_APP_RAJAONGKIR }
+		}
+	)
+		.then(({ data }) => dispatch({ type: types.FETCH_AIRWAY_BILL, payload: data.rajaongkir.result }))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_AIRWAY_BILL_ERROR))
 }
