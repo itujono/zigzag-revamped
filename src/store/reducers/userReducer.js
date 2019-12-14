@@ -8,6 +8,7 @@ const initialState = {
 	upgradeResponse: "",
 	depositError: null,
 	upgradeError: null,
+	changeAvatarError: null,
 	depositBalance: 0
 }
 
@@ -32,6 +33,8 @@ function reducer(state = initialState, action) {
 			return { ...state, loading: false }
 		case types.UPGRADE_ACCOUNT:
 			return { ...state, upgradeResponse: action.payload, loading: false }
+		case types.CHANGE_AVATAR:
+			return { ...state, avatar: action.payload, loading: false }
 
 		case types.UPDATE_USER_PROFILE_ERROR:
 			return { ...state, error: action.payload, loading: false }
@@ -43,6 +46,8 @@ function reducer(state = initialState, action) {
 			return { ...state, depositError: action.payload, loading: false }
 		case types.UPGRADE_ACCOUNT_ERROR:
 			return { ...state, upgradeError: action.payload, loading: false }
+		case types.CHANGE_AVATAR_ERROR:
+			return { ...state, changeAvatarError: action.payload, loading: false }
 		default:
 			return state
 	}

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { Section, Heading, Loading, Card } from "components"
+import { Section, Heading, Loading, Card, ButtonLink } from "components"
 import { Formik } from "formik"
 import { TextInput, SelectInput } from "components/Fields"
-import { Form, Divider, Button, Row, Col, Avatar, Affix } from "antd"
+import { Form, Divider, Button, Row, Col, Avatar, Affix, Upload } from "antd"
 import { connect } from "react-redux"
 import styled from "styled-components/macro"
 import { Link } from "react-router-dom"
 
-import { fetchUser, updateUserProfile } from "store/actions/userActions"
+import { fetchUser, updateUserProfile, changeAvatar } from "store/actions/userActions"
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
 import { ResetButton, SubmitButton } from "formik-antd"
 
@@ -53,9 +53,23 @@ const CsHeading = styled(Heading)`
 	}
 `
 
+const StyledAvatar = styled(Avatar)`
+	&& {
+		width: 100px;
+		height: 100px;
+	}
+`
+
+const StyledUpload = styled(Upload)`
+	.ant-upload-list {
+		margin-bottom: 2em;
+	}
+`
+
 function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading, ...props }) {
-	const { fetchUser, fetchCities, fetchProvinces, fetchSubdistricts, updateUserProfile } = props
+	const { fetchUser, fetchCities, fetchProvinces, fetchSubdistricts, updateUserProfile, changeAvatar } = props
 	const { customer_service: cs = {} } = user
+	const [media, setMedia] = useState({})
 
 	const handleRenderCities = value => fetchCities("", value)
 	const handleRenderSubdistricts = value => fetchSubdistricts(value)
@@ -76,8 +90,21 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 		</div>
 	)
 
-	const handleUpdate = values => {
-		updateUserProfile(values)
+	const handleUpdate = (values, { setSubmitting }) => {
+		updateUserProfile(values).finally(() => setSubmitting(false))
+	}
+
+	const handleBeforeUpload = media => {
+		setMedia(media)
+		return false
+	}
+
+	const handleRemoveMedia = file => setMedia({})
+
+	const handleUpload = () => {
+		const formData = new FormData()
+		formData.append("photo_file", media)
+		changeAvatar(formData)
 	}
 
 	useEffect(() => {
@@ -92,6 +119,25 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 			<Row>
 				<Col lg={16}>
 					<Heading content="Basic" bold />
+					<Form.Item {...tailLayout}>
+						<Row style={{ marginBottom: "3em" }} type="flex" align="middle">
+							<Col lg={8}>
+								<StyledAvatar src={user.picture} />
+							</Col>
+							<Col lg={16}>
+								<StyledUpload
+									multiple={false}
+									beforeUpload={handleBeforeUpload}
+									onRemove={handleRemoveMedia}
+								>
+									<ButtonLink icon="upload">Ganti avatar...</ButtonLink>
+								</StyledUpload>
+								{Object.keys(media).length > 0 && (
+									<Button onClick={handleUpload}>Upload sekarang</Button>
+								)}
+							</Col>
+						</Row>
+					</Form.Item>
 					<Formik
 						initialValues={{
 							...user,
@@ -190,6 +236,6 @@ const mapState = ({ user, rajaOngkir }) => ({
 	subdistrictOptions: rajaOngkir.subdistrictOptions
 })
 
-const actions = { fetchUser, fetchCities, fetchSubdistricts, fetchProvinces, updateUserProfile }
+const actions = { fetchUser, fetchCities, fetchSubdistricts, fetchProvinces, updateUserProfile, changeAvatar }
 
 export default connect(mapState, actions)(Basic)

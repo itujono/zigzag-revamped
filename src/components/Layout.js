@@ -83,7 +83,7 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 			<PageLayout.Content>
 				<PageLayout>
 					{sidebar && (
-						<Sidebar breakpoint="lg" reverseArrow collapsible collapsedWidth={0} width="200">
+						<Sidebar breakpoint="lg" collapsible={mobile} collapsedWidth={0} width="200">
 							<SidebarMenu page={props.page || ""} />
 						</Sidebar>
 					)}

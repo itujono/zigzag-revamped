@@ -49,6 +49,19 @@ export const changeProfilePassword = values => dispatch => {
 		})
 }
 
+export const changeAvatar = photoFile => dispatch => {
+	dispatch(loadingUser())
+	return instance
+		.post(`/customer/upload_photo_profile`, photoFile)
+		.then(({ data }) => {
+			dispatch({ type: types.CHANGE_AVATAR, payload: data })
+		})
+		.then(() =>
+			message.loading("Mohon tunggu...").then(() => message.success("Avatar kamu sudah berhasil terganti"))
+		)
+		.catch(err => useRenderError(err, dispatch, types.CHANGE_AVATAR_ERROR))
+}
+
 export const fetchListDeposit = () => dispatch => {
 	dispatch(loadingUser())
 	return instance
