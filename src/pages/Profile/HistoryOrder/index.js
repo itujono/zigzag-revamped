@@ -9,6 +9,7 @@ import { fetchAirwayBill } from "store/actions/rajaOngkirActions"
 import { pricer, mobile, media } from "helpers"
 import { theme } from "styles"
 import OrderItems from "./OrderItems"
+import Waybill from "./Waybill"
 
 const ListItem = styled(List.Item)`
 	&&& {
@@ -17,15 +18,16 @@ const ListItem = styled(List.Item)`
 `
 
 const ContentDetail = styled.div`
-	${media.mobile`
-		margin-left: 0;
-	`}
 	padding: 1.5em;
 	margin-left: 3.4em;
 	background-color: ${theme.greyColor[4]};
+
+	${media.mobile`
+		margin-left: 0;
+	`}
 `
 
-function HistoryOrder({ orderHistory, loading, ...props }) {
+function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 	const [selectedItem, setSelectedItem] = useState("")
 
 	const { fetchOrderHistory, fetchAirwayBill } = props
@@ -41,7 +43,7 @@ function HistoryOrder({ orderHistory, loading, ...props }) {
 	}, [fetchAirwayBill, fetchOrderHistory])
 
 	return (
-		<Section width="70%" centered>
+		<Section width="80%" centered>
 			<Heading content="History Order" marginBottom="3em" bold />
 			<List
 				itemLayout="horizontal"
@@ -137,7 +139,7 @@ function HistoryOrder({ orderHistory, loading, ...props }) {
 											<OrderItems data={item.orders_detail} />
 										</Tabs.TabPane>
 										<Tabs.TabPane key="status" tab="Status barang">
-											Status barang
+											<Waybill data={airwayBill} />
 										</Tabs.TabPane>
 									</Tabs>
 								</ContentDetail>
