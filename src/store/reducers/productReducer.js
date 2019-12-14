@@ -33,6 +33,17 @@ const renderPrice = productPrice => {
 	return { product_price: price }
 }
 
+const roundupOngkir = number => {
+	let prefix = number.slice(0, number.length - 3)
+	let suffix = number.slice(-3)
+	if (Number(suffix[0]) > 3) {
+		prefix = Number(prefix) + 1
+		suffix = "000"
+	}
+	const result = prefix + suffix
+	return Number(result)
+}
+
 function reducer(state = initialState, action) {
 	switch (action.type) {
 		case types.LOADING_PRODUCT:
@@ -40,7 +51,7 @@ function reducer(state = initialState, action) {
 		case types.FETCH_PRODUCT_ITEM:
 			const productPrice = action.payload.product_price
 				.filter(({ price_type }) => {
-					if (!token) return price_type === "REGULER"
+					if (!token || userId === akunKoko) return price_type === "REGULER"
 					return price_type.toLowerCase() === typeRemark.toLowerCase()
 				})
 				.map(({ price }) => price)[0]
@@ -78,11 +89,19 @@ function reducer(state = initialState, action) {
 				})
 				.reduce((acc, curr) => acc + curr, 0)
 			const totalQty = action.payload.map(item => Number(item.qty)).reduce((acc, curr) => acc + curr, 0)
+			const roundedWeight = roundupOngkir(String(totalWeight))
+
+			console.log({ cartItems })
 
 			return {
 				...state,
 				cartItems,
-				cartTotal: { price: totalPrice, weight: totalWeight, qty: totalQty },
+				cartTotal: {
+					price: totalPrice,
+					weight: totalWeight,
+					qty: totalQty,
+					roundedWeight
+				},
 				loading: false
 			}
 
@@ -97,11 +116,8 @@ function reducer(state = initialState, action) {
 
 		case types.FETCH_WISHLIST_ITEMS:
 			const theItems = action.payload.map(item => {
-				const price = item.product_price.filter(({ price_type }) => {
-					if (!token) return price_type === "REGULER"
-					return price_type.toLowerCase() === typeRemark.toLowerCase()
-				})[0]
-				return { ...item, product_price: price }
+				const { product_price } = renderPrice(item.product_price)
+				return { ...item, product_price }
 			})
 			return { ...state, wishlistItems: theItems, loading: false }
 
@@ -110,11 +126,8 @@ function reducer(state = initialState, action) {
 
 		case types.SEARCH_PRODUCT:
 			const items = action.payload.map(item => {
-				const price = item.product_price.filter(({ price_type }) => {
-					if (!token) return price_type === "REGULER"
-					return price_type.toLowerCase() === typeRemark.toLowerCase()
-				})[0]
-				return { ...item, product_price: price }
+				const { product_price } = renderPrice(item.product_price)
+				return { ...item, product_price }
 			})
 			return { ...state, searchList: items, loading: false }
 

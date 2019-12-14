@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { Formik } from "formik"
 import { SubmitButton } from "formik-antd"
 import { Link } from "react-router-dom"
-import { List, Avatar, Row, Col, Icon, Form, Spin } from "antd"
+import { List, Avatar, Row, Col, Icon, Form, Spin, Tooltip } from "antd"
 
 import Drawer from "components/Drawer"
 import Heading from "components/Heading"
@@ -73,7 +73,14 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 	const token = localStorage.getItem("access_token")
 
 	const itemCount = cartTotal && cartTotal.qty > 0 ? `(${cartTotal.qty} item)` : `(masih kosong)`
-	// const itemCount = cartTotal.qty === 0 ? `(Masih kosong)` : `(${cartTotal.qty} item)`
+	const roundedWeight = (
+		<div>
+			{cartTotal.roundedWeight || 0} &nbsp;{" "}
+			<Tooltip title="Kenapa dibulatkan?">
+				<Icon type="question" />
+			</Tooltip>
+		</div>
+	)
 
 	const handleClose = () => {
 		setCartDrawerFromStore(false)
@@ -203,7 +210,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 					<Col lg={8} style={{ textAlign: "right" }}>
 						<Heading
 							content={`Rp ${cartItems.length === 0 ? 0 : pricer(cartTotal.price)}`}
-							subheader={`${cartTotal.weight || 0} gram`}
+							subheader={roundedWeight}
 							className="price"
 						/>
 					</Col>
