@@ -67,37 +67,28 @@ const CourierCol = styled.div`
 	}
 `
 
-const dummyData = {
-	origin: "48",
-	destination: "574",
-	weight: 5,
-	courier: "jne",
-	originType: "city",
-	destinationType: "subdistrict"
-}
-
 export default function Ongkir({ data, handlers, loading }) {
 	const { push } = useHistory()
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
-	const { couriers = [], selectedCourier, formValues = {}, courierDetails } = data
+	const { couriers = [], selectedCourier } = data
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
-	const { cartTotal = {}, subdistrict } = formData
+	const { cartTotal = {}, subdistrict, subdistrict_id } = formData
 
 	const handleSelectCourier = courier => setSelectedCourier(courier)
 	const handleFetchCouriers = useCallback(() => {
 		const data = {
 			origin: "48",
-			destination: subdistrict,
-			weight: cartTotal.weight,
+			destination: subdistrict_id,
+			weight: cartTotal.roundedWeight,
 			destinationType: subdistrict ? "subdistrict" : "city",
 			originType: "city",
 			courier: "jne:jnt:sicepat"
 		}
 
 		fetchCouriers(data)
-	}, [fetchCouriers, cartTotal.weight, subdistrict])
+	}, [subdistrict_id, cartTotal.roundedWeight, subdistrict, fetchCouriers])
 
 	const handleSaveCourier = () => {
 		const order_detail = {
@@ -168,7 +159,12 @@ export default function Ongkir({ data, handlers, loading }) {
 				)
 			})}
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button onClick={handleSaveCourier}>
+				<Button
+					onClick={handleSaveCourier}
+					disabled={Object.values(selectedCourier).some(
+						item => item === "" || Object.keys(item).length === 0
+					)}
+				>
 					Lanjut ke Pembayaran <Icon type="right" />
 				</Button>
 			</Section>

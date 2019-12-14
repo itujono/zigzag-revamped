@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom"
 import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
-import { Switch, SubmitButton, FormikDebug } from "formik-antd"
+import { Switch, FormikDebug } from "formik-antd"
 import { addressValidation } from "./validation"
 
 const StyledCard = styled(Card)`
@@ -70,11 +70,11 @@ export default function Address({ data, handlers, initialLoading }) {
 			cartItems,
 			cartTotal,
 			deposit: user.deposit,
-			province: values.province_id,
+			// province: values.province_id,
 			province_name: selectedProvince.label,
-			city: values.city_id,
+			// city: values.city_id,
 			city_name: selectedCity.label,
-			subdistrict: values.subdistrict_id,
+			// subdistrict: values.subdistrict_id,
 			subdistrict_name: selectedSubdistrict.label
 		}
 		localStorage.setItem("formData", JSON.stringify(values))
@@ -192,6 +192,7 @@ export default function Address({ data, handlers, initialLoading }) {
 										/>
 									</Col>
 								</Row>
+								<FormikDebug />
 							</StyledCard>
 							<StyledCard
 								noHover

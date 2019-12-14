@@ -6,7 +6,11 @@ const initialStates = {
 	subdistricts: [],
 	couriers: [],
 	airwayBill: {},
-	airwayBillError: null
+	airwayBillError: null,
+	couriersError: null,
+	provincesError: null,
+	citiesError: null,
+	subdistrictsError: null
 }
 
 function reducer(state = initialStates, action) {
@@ -27,6 +31,14 @@ function reducer(state = initialStates, action) {
 			return { ...state, subdistricts: action.payload, subdistrictOptions, loading: false }
 		case types.FETCH_COURIERS:
 			return { ...state, couriers: action.payload, loading: false }
+		case types.FETCH_COURIERS_ERROR:
+			return { ...state, couriersError: action.payload, loading: false }
+		case types.FETCH_PROVINCES_ERROR:
+			return { ...state, provincesError: action.payload, loading: false }
+		case types.FETCH_CITIES_ERROR:
+			return { ...state, citiesError: action.payload, loading: false }
+		case types.FETCH_SUBDISTRICTS_ERROR:
+			return { ...state, subdistrictsError: action.payload, loading: false }
 		case types.FETCH_AIRWAY_BILL:
 			return { ...state, airwayBill: action.payload, loading: false }
 		case types.FETCH_AIRWAY_BILL_ERROR:

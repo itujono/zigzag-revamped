@@ -40,11 +40,11 @@ export default function Summary({ handlers: { saveOrder } }) {
 		const {
 			cartItems,
 			cartTotal,
-			province,
+			// province,
 			province_id,
-			city,
+			// city,
 			city_id,
-			subdistrict,
+			// subdistrict,
 			subdistrict_id,
 			order_detail,
 			address,
@@ -54,11 +54,14 @@ export default function Summary({ handlers: { saveOrder } }) {
 
 		const values = {
 			...restValues,
+			province_name: formData.province,
+			city_name: formData.city,
+			subdistrict_name: formData.subdistrict,
 			payment_method: (formData.payment || {}).value,
 			order_detail: JSON.stringify(formData.cartItems),
 			shipping_address: formData.address,
-			order_id: order_detail.id,
-			total_weight: cartTotal.weight,
+			order_id: String(order_detail.id),
+			total_weight: cartTotal.roundedWeight,
 			discount: formData.discount || 0
 		}
 
@@ -125,7 +128,7 @@ export default function Summary({ handlers: { saveOrder } }) {
 						<Col lg={8} className="right">
 							<Heading
 								content={`Rp ${pricer(generalTotal || 0)}`}
-								subheader={`${cartTotal.weight} gram`}
+								subheader={`${cartTotal.roundedWeight} gram`}
 								className="price"
 							/>
 						</Col>

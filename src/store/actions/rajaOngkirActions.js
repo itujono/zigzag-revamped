@@ -13,7 +13,7 @@ export const fetchProvinces = () => dispatch => {
 	dispatch(loadingRajaOngkir())
 	return Axios.get(`${baseUrl}/province`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
 		.then(({ data }) => dispatch({ type: types.FETCH_PROVINCES, payload: data.rajaongkir.results }))
-		.catch(err => console.error(err.response))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_PROVINCES_ERROR))
 }
 
 export const fetchCities = (cityId, provinceId) => dispatch => {
@@ -22,14 +22,14 @@ export const fetchCities = (cityId, provinceId) => dispatch => {
 		params: { key: process.env.REACT_APP_RAJAONGKIR }
 	})
 		.then(({ data }) => dispatch({ type: types.FETCH_CITIES, payload: data.rajaongkir.results }))
-		.catch(err => console.error(err.response))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_CITIES_ERROR))
 }
 
 export const fetchSubdistricts = cityId => dispatch => {
 	dispatch(loadingRajaOngkir())
 	return Axios.get(`${baseUrl}/subdistrict?city=${cityId}`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
 		.then(({ data }) => dispatch({ type: types.FETCH_SUBDISTRICTS, payload: data.rajaongkir.results }))
-		.catch(err => console.error(err.response))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_SUBDISTRICTS_ERROR))
 }
 
 export const fetchCouriers = data => dispatch => {
@@ -38,7 +38,7 @@ export const fetchCouriers = data => dispatch => {
 		headers: { key: process.env.REACT_APP_RAJAONGKIR }
 	})
 		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.rajaongkir.results }))
-		.catch(err => console.error(err.response))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_COURIERS_ERROR))
 }
 
 export const fetchAirwayBill = ({ waybill, courier }) => dispatch => {
