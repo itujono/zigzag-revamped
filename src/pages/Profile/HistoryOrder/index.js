@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Section, Heading, Button, ButtonLink, Empty } from "components"
 import { List, Icon, Avatar, Row, Col, Menu, Tabs } from "antd"
 import styled from "styled-components/macro"
@@ -10,6 +10,7 @@ import { pricer, mobile, media } from "helpers"
 import { theme } from "styles"
 import OrderItems from "./OrderItems"
 import Waybill from "./Waybill"
+import moment from "moment"
 
 const ListItem = styled(List.Item)`
 	&&& {
@@ -28,19 +29,35 @@ const ContentDetail = styled.div`
 `
 
 function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
-	const [selectedItem, setSelectedItem] = useState("")
+	const [selectedItem, setSelectedItem] = useState({})
 
 	const { fetchOrderHistory, fetchAirwayBill } = props
 
-	const handleSelect = orderNumber => {
-		if (selectedItem === orderNumber) setSelectedItem("")
-		else setSelectedItem(orderNumber)
+	const handleSelect = item => {
+		console.log("item: ", item)
+		if (selectedItem.order_code === item.order_code) setSelectedItem({})
+		else setSelectedItem(item)
 	}
+
+	const handleFetchAirwayBill = useCallback(
+		(resi_order, courier) => {
+			fetchAirwayBill({ waybill: resi_order, courier })
+		},
+		[fetchAirwayBill]
+	)
 
 	useEffect(() => {
 		fetchOrderHistory()
-		fetchAirwayBill({ waybill: "SOCAG00183235715", courier: "jne" })
-	}, [fetchAirwayBill, fetchOrderHistory])
+		if (selectedItem.resi_order) {
+			handleFetchAirwayBill(selectedItem.resi_order, (selectedItem.ekspedition_data || {}).ekspedition_code)
+		}
+	}, [
+		fetchAirwayBill,
+		fetchOrderHistory,
+		handleFetchAirwayBill,
+		selectedItem.ekspedition_data,
+		selectedItem.resi_order
+	])
 
 	return (
 		<Section width="80%" centered>
@@ -53,24 +70,25 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 					emptyText: (
 						<Empty
 							isEmptyItems
-							description="Kurang mantap okeee?"
-							button={{ to: "/", text: "Belanja nanti" }}
+							description="Kamu belum ada belanja sama sekali"
+							button={{ to: "/", text: "Belanja sekarang" }}
 						/>
 					)
 				}}
-				renderItem={({ order_code, time, grandtotal_order, status_order, ...item }) => {
-					const isSelected = order_code === selectedItem
+				renderItem={item => {
+					const { order_code, ekspedition_data: courier = {}, grandtotal_order, status_order } = item
+					const isSelected = order_code === selectedItem.order_code
 
 					return (
 						<div style={{ marginBottom: "1.5em" }}>
 							<ListItem
-								selectedItem={selectedItem}
+								selectedItem={selectedItem.order_code}
 								orderNumber={order_code}
 								actions={[
 									<ButtonLink
 										key={order_code}
 										icon={isSelected ? "up" : "down"}
-										onClick={() => handleSelect(order_code)}
+										onClick={() => handleSelect(item)}
 									>
 										{isSelected ? "Tutup detail" : "Lihat detail"}
 									</ButtonLink>
@@ -86,7 +104,8 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 									description={
 										<>
 											<span>
-												<Icon type="clock-circle" /> &nbsp; {time}
+												<Icon type="clock-circle" /> &nbsp;{" "}
+												{moment(item.created_date).format("dddd, DD MMMM YYYY")}
 											</span>{" "}
 											&nbsp; &middot; &nbsp;
 											<span>
@@ -110,7 +129,7 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 													<Heading
 														reverse
 														content="Alamat pengiriman"
-														subheader={item.shipping_address}
+														subheader={`${item.shipping_address}, ${item.province_name}, ${item.city_name}, ${item.subdistrict_name} ${item.zip}`}
 													/>
 												</Col>
 												<Col lg={8}>
@@ -122,16 +141,20 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 													<Heading
 														reverse
 														content="Nomor resi"
-														subheader={item.airway_bill}
+														subheader={item.resi_order || "-"}
 													/>
 												</Col>
 												<Col lg={8}>
 													<Heading
 														reverse
 														content="Status orderan"
-														subheader={status_order.status_remark}
+														subheader={status_order.status_remark || "-"}
 													/>
-													<Heading reverse content="Ekspedisi" subheader={"JNE"} />
+													<Heading
+														reverse
+														content="Ekspedisi"
+														subheader={`${courier.ekspedition_company} (${courier.ekspedition_remark})`}
+													/>
 												</Col>
 											</Row>
 										</Tabs.TabPane>
@@ -153,7 +176,7 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 }
 
 const mapState = ({ other, rajaOngkir }) => ({
-	orderHistory: other.orderHistory,
+	orderHistory: other.orderHistory.sort((a, b) => Date.parse(b.created_date) - Date.parse(a.created_date)),
 	loading: other.loading,
 	airwayBill: rajaOngkir.airwayBill
 })

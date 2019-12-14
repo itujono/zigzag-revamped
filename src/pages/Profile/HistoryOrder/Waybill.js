@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { Section, Heading } from "components"
+import { Section, Heading, Empty } from "components"
 import { Row, Col, Tag, Timeline } from "antd"
 import moment from "moment"
 import { theme } from "styles"
@@ -63,19 +63,24 @@ export default function Waybill({ data = {} }) {
 			<Row>
 				<Col lg={16}>
 					<Heading content="Perjalanan barang" reverse />
-					<Timeline>
-						{manifest.map(item => (
-							<TimelineItem color="green" key={item.manifest_code}>
-								<p>
-									<strong>Sampai di {item.city_name}</strong>
-								</p>
-								<p>{item.manifest_description}</p>
-								<p className="manifest-date">
-									{moment(item.manifest_date).format("dddd, DD MMMM YYYY")}
-								</p>
-							</TimelineItem>
-						))}
-					</Timeline>
+					{(!manifest || manifest.length === 0) && (
+						<Empty description="Belum ada detail perjalanan barang kamu" />
+					)}
+					{manifest.length > 0 && (
+						<Timeline>
+							{manifest.map(item => (
+								<TimelineItem color="green" key={item.manifest_code}>
+									<p>
+										<strong>Sampai di {item.city_name}</strong>
+									</p>
+									<p>{item.manifest_description}</p>
+									<p className="manifest-date">
+										{moment(item.manifest_date).format("dddd, DD MMMM YYYY")}
+									</p>
+								</TimelineItem>
+							))}
+						</Timeline>
+					)}
 				</Col>
 			</Row>
 		</Section>
