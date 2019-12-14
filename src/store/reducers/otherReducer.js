@@ -20,7 +20,15 @@ function reducer(state = initial, action) {
 		case types.FETCH_ORDER_CODE_LIST:
 			return { ...state, orderCodeList: action.payload, loading: false }
 		case types.FETCH_BANK_ACCOUNTS:
-			return { ...state, bankAccounts: action.payload, loading: false }
+			return {
+				...state,
+				bankAccounts: action.payload,
+				bankAccountOptions: action.payload.map(item => ({
+					value: `${item.bank_name} ${item.bank_account}`,
+					label: `${item.bank_name} ${item.bank_account} an ${item.under_name}`
+				})),
+				loading: false
+			}
 		case types.SAVE_COURIER_DETAILS:
 			return { ...state, courierDetails: action.payload, loading: false }
 		case types.SAVE_ORDER:

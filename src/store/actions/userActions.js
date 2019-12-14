@@ -94,19 +94,24 @@ export const addNewDeposit = amount => dispatch => {
 
 export const upgradeConfirmation = (values, push) => dispatch => {
 	dispatch(loadingUser())
+	const formData = new FormData()
+	formData.append("order_code", values.order_code)
+	formData.append("bank_sender", values.bank_sender)
+	formData.append("bank_number_sender", values.bank_number_sender)
+	formData.append("bank_receiver", values.bank_receiver)
+	formData.append("date", values.date)
+	formData.append("total_transfer", values.total_transfer)
+	formData.append("evidence_file", values.evidence_file)
+
 	return instance
-		.post(`/customer/confirmation_upgrade_account`, values)
-		.then(({ data }) => {
-			dispatch({ type: types.UPGRADE_CONFIRMATION, payload: data })
-		})
+		.post(`/customer/confirmation_upgrade_account`, formData)
+		.then(({ data }) => dispatch({ type: types.UPGRADE_CONFIRMATION, payload: data }))
 		.then(() => {
 			message
 				.loading("Memverifikasi data...", 1)
 				.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
 		})
-		.catch(err => {
-			useRenderError(err, dispatch, types.UPGRADE_CONFIRMATION_ERROR)
-		})
+		.catch(err => useRenderError(err, dispatch, types.UPGRADE_CONFIRMATION_ERROR))
 }
 
 export const upgradeAccount = push => dispatch => {
@@ -120,5 +125,19 @@ export const upgradeAccount = push => dispatch => {
 		.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
 		.catch(err => {
 			useRenderError(err, dispatch, types.UPGRADE_ACCOUNT_ERROR)
+		})
+}
+
+export const fetchUpgradeCodeList = push => dispatch => {
+	dispatch(loadingUser())
+	return instance
+		.get(`/customer/confirmation_upgrade_account/order_code/list`)
+		.then(({ data }) => {
+			console.log({ upgrade: data.data })
+			dispatch({ type: types.FETCH_UPGRADE_CODE_LIST, payload: data.data.upgrade_account })
+		})
+		.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
+		.catch(err => {
+			useRenderError(err, dispatch, types.FETCH_UPGRADE_CODE_LIST_ERROR)
 		})
 }

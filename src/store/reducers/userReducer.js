@@ -9,7 +9,9 @@ const initialState = {
 	depositError: null,
 	upgradeError: null,
 	changeAvatarError: null,
-	depositBalance: 0
+	depositBalance: 0,
+	upgradeCodeList: [],
+	upgradeCodeListError: null
 }
 
 function reducer(state = initialState, action) {
@@ -35,6 +37,8 @@ function reducer(state = initialState, action) {
 			return { ...state, upgradeResponse: action.payload, loading: false }
 		case types.CHANGE_AVATAR:
 			return { ...state, avatar: action.payload, loading: false }
+		case types.FETCH_UPGRADE_CODE_LIST:
+			return { ...state, upgradeCodeList: action.payload, loading: false }
 
 		case types.UPDATE_USER_PROFILE_ERROR:
 			return { ...state, error: action.payload, loading: false }
@@ -48,6 +52,8 @@ function reducer(state = initialState, action) {
 			return { ...state, upgradeError: action.payload, loading: false }
 		case types.CHANGE_AVATAR_ERROR:
 			return { ...state, changeAvatarError: action.payload, loading: false }
+		case types.FETCH_UPGRADE_CODE_LIST_ERROR:
+			return { ...state, upgradeCodeListError: action.payload, loading: false }
 		default:
 			return state
 	}

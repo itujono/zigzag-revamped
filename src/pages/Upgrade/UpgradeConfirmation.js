@@ -1,19 +1,26 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton } from "formik-antd"
 import { connect } from "react-redux"
 
-import { upgradeConfirmation } from "store/actions/userActions"
-import { fetchOrderCodeList } from "store/actions/otherActions"
+import { upgradeConfirmation, fetchUpgradeCodeList } from "store/actions/userActions"
+import { fetchBankAccounts } from "store/actions/otherActions"
 import { Heading } from "components"
 import { SelectInput, TextInput, DateInput } from "components/Fields"
 import styled from "styled-components/macro"
 
-function UpgradeConfirmation({ upgradeConfirmation, fetchOrderCodeList, orderCodeList }) {
+function UpgradeConfirmation({ bankAccountOptions, ...props }) {
+	const { upgradeConfirmation, fetchUpgradeCodeList, fetchBankAccounts, upgradeCodeListOptions } = props
+	const [file, setFile] = useState({})
+
 	const uploadProps = {
+		multiple: false,
 		name: "file",
-		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+		beforeUpload(file) {
+			setFile(file)
+			return false
+		},
 		onChange(info) {
 			const { status } = info.file
 			if (status !== "uploading") {
@@ -28,13 +35,15 @@ function UpgradeConfirmation({ upgradeConfirmation, fetchOrderCodeList, orderCod
 	}
 
 	const handleSubmitConfirmation = (values, { setSubmitting }) => {
+		values = { ...values, bank_number_sender: values.bank_sender, evidence_file: file }
 		console.log({ values })
-		setSubmitting(false)
+		upgradeConfirmation(values).then(() => setSubmitting(false))
 	}
 
 	useEffect(() => {
-		fetchOrderCodeList()
-	}, [])
+		fetchUpgradeCodeList()
+		fetchBankAccounts()
+	}, [fetchBankAccounts, fetchUpgradeCodeList])
 
 	return (
 		<Row type="flex" justify="center" css="padding: 2em">
@@ -52,13 +61,13 @@ function UpgradeConfirmation({ upgradeConfirmation, fetchOrderCodeList, orderCod
 								name="order_code"
 								label="Kode order"
 								placeholder="Masukkan kode order kamu..."
-								options={[]}
+								options={upgradeCodeListOptions}
 							/>
 							<SelectInput
 								name="bank_receiver"
 								label="Nomor rekening Zigzag yang kamu transfer"
 								placeholder="Pilih salah satu rekening nya..."
-								options={[]}
+								options={bankAccountOptions}
 							/>
 							<TextInput
 								name="bank_sender"
@@ -94,8 +103,10 @@ function UpgradeConfirmation({ upgradeConfirmation, fetchOrderCodeList, orderCod
 	)
 }
 
-const mapState = ({ other }) => ({
-	orderCodeList: other.orderCodeList
+const mapState = ({ user, other }) => ({
+	upgradeCodeList: user.upgradeCodeList,
+	upgradeCodeListOptions: user.upgradeCodeList.map(({ order_code }) => ({ value: order_code, label: order_code })),
+	bankAccountOptions: other.bankAccountOptions
 })
 
-export default connect(mapState, { upgradeConfirmation, fetchOrderCodeList })(UpgradeConfirmation)
+export default connect(mapState, { upgradeConfirmation, fetchUpgradeCodeList, fetchBankAccounts })(UpgradeConfirmation)
