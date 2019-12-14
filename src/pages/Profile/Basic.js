@@ -62,7 +62,7 @@ const StyledAvatar = styled(Avatar)`
 
 const StyledUpload = styled(Upload)`
 	.ant-upload-list {
-		margin-bottom: 2em;
+		margin-bottom: ${({ file }) => Object.keys(file).length > 0 && "2em"};
 	}
 `
 
@@ -85,7 +85,19 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 
 	const csDetails = (
 		<div>
-			<Heading content="Whatsapp" subheader={cs.whatsapp} reverse />
+			<Heading
+				content="Whatsapp"
+				subheader={
+					<a
+						href={`https://wa.me/6285667651688?text=${encodeURIComponent(
+							"Halo, Zigzag. Saya mau tanya..."
+						)}`}
+					>
+						{cs.whatsapp}
+					</a>
+				}
+				reverse
+			/>
 			<Heading content="Line" subheader={cs.line} reverse />
 		</div>
 	)
@@ -98,8 +110,6 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 		setMedia(media)
 		return false
 	}
-
-	const handleRemoveMedia = file => setMedia({})
 
 	const handleUpload = () => {
 		const formData = new FormData()
@@ -116,7 +126,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 
 	return (
 		<Section centered>
-			<Row>
+			<Row gutter={32}>
 				<Col lg={16}>
 					<Heading content="Basic" bold />
 					<Form.Item {...tailLayout}>
@@ -128,7 +138,9 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 								<StyledUpload
 									multiple={false}
 									beforeUpload={handleBeforeUpload}
-									onRemove={handleRemoveMedia}
+									onRemove={() => setMedia({})}
+									file={media}
+									accept="image/*"
 								>
 									<ButtonLink icon="upload">Ganti avatar...</ButtonLink>
 								</StyledUpload>

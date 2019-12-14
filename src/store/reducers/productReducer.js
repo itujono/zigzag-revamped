@@ -21,10 +21,13 @@ const initialState = {
 const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 const { account_type_remark: typeRemark } = accountType
 const token = localStorage.getItem("access_token")
+const userId = Number(localStorage.getItem("user_id"))
+
+const akunKoko = 394
 
 const renderPrice = productPrice => {
 	const price = productPrice.filter(({ price_type }) => {
-		if (!token) return price_type === "REGULER"
+		if (!token || userId === akunKoko) return price_type === "REGULER"
 		return price_type.toLowerCase() === typeRemark.toLowerCase()
 	})[0]
 	return { product_price: price }

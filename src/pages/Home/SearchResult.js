@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { Section, Heading, Button, Layout } from "components"
+import React, { useState, useEffect, useCallback } from "react"
+import { Section, Heading, Button, Layout, Empty } from "components"
 import { Row, Col, Input, List, Avatar, Icon } from "antd"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
@@ -39,12 +39,15 @@ function SearchResult({ searchProduct, searchList, loading }) {
 
 	const keywordFromNavbar = localStorage.getItem("keywordFromNavbar")
 
-	const handleSearch = value => {
-		if (value !== "") {
-			setKeyword(value)
-			searchProduct(value || keywordFromNavbar)
-		}
-	}
+	const handleSearch = useCallback(
+		value => {
+			if (value !== "") {
+				setKeyword(value)
+				searchProduct(value || keywordFromNavbar)
+			}
+		},
+		[keywordFromNavbar, searchProduct]
+	)
 
 	useEffect(() => {
 		setKeyword(keywordFromNavbar)
@@ -54,7 +57,7 @@ function SearchResult({ searchProduct, searchList, loading }) {
 			setKeyword("")
 			localStorage.removeItem("keywordFromNavbar")
 		}
-	}, [keyword])
+	}, [handleSearch, keyword, keywordFromNavbar])
 
 	return (
 		<Layout>
@@ -73,7 +76,7 @@ function SearchResult({ searchProduct, searchList, loading }) {
 						<List
 							itemLayout="horizontal"
 							dataSource={searchList}
-							locale={{ emptyText: "Ayo cari apa saja!" }}
+							locale={{ emptyText: <Empty isEmptyItems description="Ayo cari apa saja!" /> }}
 							loading={loading}
 							renderItem={item => {
 								const picture = (item.product_image || [])[0] || {}
@@ -84,7 +87,11 @@ function SearchResult({ searchProduct, searchList, loading }) {
 									<CartItem>
 										<List.Item.Meta
 											avatar={
-												<Avatar src={picture.image} shape="square" className="product-photo" />
+												<Avatar
+													src={picture.picture}
+													shape="square"
+													className="product-photo"
+												/>
 											}
 											title={
 												<p style={{ marginBottom: 0 }}>

@@ -56,9 +56,8 @@ export const changeAvatar = photoFile => dispatch => {
 		.then(({ data }) => {
 			dispatch({ type: types.CHANGE_AVATAR, payload: data })
 		})
-		.then(() =>
-			message.loading("Mohon tunggu...").then(() => message.success("Avatar kamu sudah berhasil terganti"))
-		)
+		.then(() => message.loading("Mohon tunggu...").then(() => dispatch(fetchUser())))
+		.then(() => message.success("Avatar kamu sudah berhasil terganti"))
 		.catch(err => useRenderError(err, dispatch, types.CHANGE_AVATAR_ERROR))
 }
 

@@ -9,10 +9,10 @@ export const authUser = ({ email, password }, setSubmitting, push) => dispatch =
 	return instance
 		.post(`/customer/login`, { email, password })
 		.then(({ data }) => {
-			console.log({ loginResponse: data.data })
 			dispatch({ type: types.AUTH_USER, payload: data.data })
 			localStorage.setItem("access_token", data.data.access_token)
 			localStorage.setItem("account_type", JSON.stringify(data.data.account_type))
+			localStorage.setItem("user_id", data.data.customer_id)
 		})
 		.then(() => message.loading("Mohon tunggu...", 1).then(() => window.location.replace("/")))
 		.catch(err => useRenderError(err, dispatch, types.AUTH_USER_ERROR))
@@ -53,20 +53,13 @@ export const registerUser = (values, accountType, push) => dispatch => {
 	return instance
 		.post(`/customer/register`, values)
 		.then(response => {
-			console.log({ regisFromStore: response })
 			dispatch({ type: types.REGISTER_USER, payload: response.data })
 			return response
 		})
-		.then(response => {
+		.then(() => {
 			push({ pathname: "/register/success", state: { success: true, isVip: accountType === 2 } })
 		})
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
-			dispatch({ type: types.REGISTER_USER_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.REGISTER_USER_ERROR))
 }
 
 export const forgotPassword = ({ email }, push) => dispatch => {
@@ -80,13 +73,7 @@ export const forgotPassword = ({ email }, push) => dispatch => {
 		.then(() => {
 			push({ pathname: "/forgot_password/success", state: { success: true } })
 		})
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
-			dispatch({ type: types.FORGOT_PASSWORD_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.FORGOT_PASSWORD_ERROR))
 }
 
 export const changeNewPassword = (values, push) => dispatch => {
@@ -100,11 +87,5 @@ export const changeNewPassword = (values, push) => dispatch => {
 		.then(() => {
 			push({ pathname: "/new-password/success", state: { success: true } })
 		})
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
-			dispatch({ type: types.CHANGE_NEW_PASSWORD_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.CHANGE_NEW_PASSWORD_ERROR))
 }

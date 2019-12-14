@@ -279,7 +279,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 		}
 	}
 
-	const handleRegister = values => {
+	const handleRegister = (values, { setSubmitting }) => {
 		values = { ...values, acc_type: accountType, name: `${values.first_name} ${values.last_name}` }
 		const { repeat_password, first_name, last_name, ...theValues } = values
 		Modal.confirm({
@@ -287,7 +287,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 			content: "Yakin kamu mau daftar sekarang?",
 			centered: true,
 			onOk: () => {
-				props.registerUser(theValues, accountType, push)
+				props.registerUser(theValues, accountType, push).finally(() => setSubmitting(false))
 			}
 		})
 	}
@@ -297,7 +297,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 		fetchCities("", selectedProvince)
 		fetchCustomerServices()
 		if (selectedCity) fetchSubdistricts(selectedCity)
-	}, [selectedProvince, selectedCity])
+	}, [selectedProvince, selectedCity, fetchProvinces, fetchCities, fetchCustomerServices, fetchSubdistricts])
 
 	return (
 		<Section centered>
