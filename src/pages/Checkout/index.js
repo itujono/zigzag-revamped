@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import { Section, Layout, Heading, ButtonLink, Empty, Button, Loading } from "components"
 import { Switch, Route, Redirect, Link } from "react-router-dom"
 import { connect } from "react-redux"
@@ -85,10 +85,24 @@ function Checkout({
 	}
 
 	useEffect(() => {
+		const handleUpdateCartTotal = () => {
+			localStorage.setItem("formData", JSON.stringify({ ...formData, cartTotal }))
+		}
 		fetchProvinces()
-		fetchCartItems()
+		fetchCartItems().then(() => handleUpdateCartTotal())
 		fetchUser().then(() => setInitialLoading(false))
-	}, [fetchProvinces, fetchCartItems, fetchUser, fetchCities, fetchSubdistricts])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		fetchProvinces,
+		fetchCartItems,
+		fetchUser,
+		fetchCities,
+		fetchSubdistricts,
+		cartTotal.price,
+		cartTotal.qty,
+		cartTotal.weight,
+		cartTotal.roundedWeight
+	])
 
 	return (
 		<Layout sidebar page="checkout">

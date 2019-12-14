@@ -6,6 +6,7 @@ import { message } from "antd"
 const loadingProduct = condition => ({ type: types.LOADING_PRODUCT, payload: condition })
 
 const token = localStorage.getItem("access_token")
+const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
 export const fetchProductItem = id => async dispatch => {
 	dispatch(loadingProduct())
@@ -45,7 +46,10 @@ export const fetchCartItems = () => dispatch => {
 	dispatch(loadingProduct())
 	return instance
 		.get(`/cart/list`)
-		.then(({ data }) => dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data }))
+		.then(({ data }) => {
+			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data })
+			localStorage.setItem("formData", JSON.stringify({ ...formData, cartItems: data.data.cart_data }))
+		})
 		.catch(err => useRenderError(err, dispatch, types.FETCH_CART_ITEMS_ERROR, true))
 }
 

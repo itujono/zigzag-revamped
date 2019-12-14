@@ -71,14 +71,13 @@ export default function Address({ data, handlers, initialLoading }) {
 			cartTotal,
 			deposit: user.deposit,
 			province: values.province_id,
-			province_name: values.province,
+			province_name: selectedProvince.label,
 			city: values.city_id,
-			city_name: values.city,
+			city_name: selectedCity.label,
 			subdistrict: values.subdistrict_id,
-			subdistrict_name: values.subdistrict
+			subdistrict_name: selectedSubdistrict.label
 		}
 		localStorage.setItem("formData", JSON.stringify(values))
-		console.log({ addressValue: values })
 		setSubmitting(false)
 		push("/checkout/ongkir")
 	}
@@ -108,6 +107,7 @@ export default function Address({ data, handlers, initialLoading }) {
 					jne_online_booking: renderInitialValues("jne_online_booking")
 				}}
 				render={({ handleSubmit, values }) => {
+					const { dropshipper_name, dropshipper_tele, jne_online_booking, ...restValues } = values
 					const handleChange = e => {
 						const name = e.target.name
 						setFormValues(formValues => ({ ...formValues, [name]: e.target.value }))
@@ -229,7 +229,11 @@ export default function Address({ data, handlers, initialLoading }) {
 								</Row>
 							</StyledCard>
 							<Section textAlign="right" paddingHorizontal="0">
-								<Button htmlType="submit" type="primary">
+								<Button
+									htmlType="submit"
+									type="primary"
+									disabled={Object.values(restValues).some(item => item === "" || !item)}
+								>
 									Lanjut ke Ongkir <Icon type="right" />
 								</Button>
 							</Section>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { Section, Heading, Card, Button } from "components"
 import { Row, Col, Icon, message } from "antd"
 import styled from "styled-components"
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import mandiriLogo from "assets/images/mandiri-logo.png"
 import bcaLogo from "assets/images/bca-logo.jpeg"
 import { theme } from "styles"
@@ -43,10 +43,11 @@ export default function Payment({ data, handlers }) {
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
 	// prettier-ignore
-	const { selectedPayment, user: { deposit } } = data
+	const { selectedPayment } = data
 	const { setSelectedPayment } = handlers
 	const random = randomCode()
 	const cartTotal = formData.cartTotal && Number(formData.cartTotal.price)
+	const depositNotSufficient = formData.deposit < cartTotal
 
 	const handleSavePayment = () => {
 		localStorage.setItem(
@@ -106,16 +107,24 @@ export default function Payment({ data, handlers }) {
 			>
 				<Row gutter={32}>
 					<Col lg={18}>
-						<p className="description">
-							Kamu memilih untuk menggunakan deposit kamu:
-							<ul style={{ paddingLeft: 20 }}>
-								<li>
-									Jumlah deposit di akun kamu akan dikurangi sebanyak{" "}
-									<strong>Rp {pricer(cartTotal)}</strong>
-								</li>
-								<li>Dapat pahala dan amal jariyah</li>
-							</ul>
-						</p>
+						{depositNotSufficient && (
+							<p className="description">
+								Maaf, deposit kamu tidak cukup. Mau tambah deposit dulu?{" "}
+								<Link to="/profile/deposit">Tambah deposit</Link>
+							</p>
+						)}
+						{!depositNotSufficient && (
+							<p className="description">
+								Kamu memilih untuk menggunakan deposit kamu:
+								<ul style={{ paddingLeft: 20 }}>
+									<li>
+										Jumlah deposit di akun kamu akan dikurangi sebanyak{" "}
+										<strong>Rp {pricer(cartTotal)}</strong>
+									</li>
+									<li>Dapat pahala dan amal jariyah</li>
+								</ul>
+							</p>
+						)}
 					</Col>
 				</Row>
 			</StyledCard>

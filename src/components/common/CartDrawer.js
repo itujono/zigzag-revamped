@@ -37,6 +37,9 @@ const SubtotalSection = styled(Section).attrs({
 	}
 	.price {
 		font-weight: bold;
+		> p {
+			margin-bottom: 0;
+		}
 		> div {
 			font-weight: normal;
 		}
@@ -74,12 +77,12 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 
 	const itemCount = cartTotal && cartTotal.qty > 0 ? `(${cartTotal.qty} item)` : `(masih kosong)`
 	const roundedWeight = (
-		<div>
-			{cartTotal.roundedWeight || 0} &nbsp;{" "}
-			<Tooltip title="Kenapa dibulatkan?">
-				<Icon type="question" />
+		<p>
+			{cartTotal.roundedWeight || 0} gram &nbsp;{" "}
+			<Tooltip title="Kenapa dibulatkan? Karena kami bekerjasama dengan ekspedisi-ekspedisi yang mempunyai ketetapan/peraturan demikian">
+				<Icon type="question-circle" theme="filled" />
 			</Tooltip>
-		</div>
+		</p>
 	)
 
 	const handleClose = () => {
