@@ -1,12 +1,12 @@
 import React, { useState } from "react"
 import { Section, Heading, Card, Loading, Button } from "components"
 import { Formik } from "formik"
-import { Form, Row, Col, Icon } from "antd"
+import { Form, Row, Col, Icon, Tooltip } from "antd"
 import { useHistory } from "react-router-dom"
 import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
-import { Switch, FormikDebug } from "formik-antd"
+import { Switch } from "formik-antd"
 import { addressValidation } from "./validation"
 
 const StyledCard = styled(Card)`
@@ -24,6 +24,8 @@ export default function Address({ data, handlers, initialLoading }) {
 	const { push } = useHistory()
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
+	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+	const typeRemark = (accountType.account_type_remark || "").toLowerCase()
 
 	const {
 		fetchCities,
@@ -79,7 +81,8 @@ export default function Address({ data, handlers, initialLoading }) {
 		}
 		localStorage.setItem("formData", JSON.stringify(values))
 		setSubmitting(false)
-		push("/checkout/ongkir")
+		const url = values.isSelfPickup ? "/checkout/summary" : "/checkout/ongkir"
+		push(url)
 	}
 
 	if (initialLoading) return <Loading />
@@ -122,113 +125,132 @@ export default function Address({ data, handlers, initialLoading }) {
 
 					return (
 						<Form layout="vertical" onSubmit={handleSubmit}>
-							<StyledCard noHover title="Info kontak">
-								<Row gutter={16}>
-									<Col lg={8}>
-										<TextInput
-											name="name"
-											placeholder="Nama kamu..."
-											marginBottom="0"
-											onChange={handleChange}
-										/>
-									</Col>
-									<Col lg={8}>
-										<TextInput
-											name="email"
-											placeholder="Email kamu..."
-											marginBottom="0"
-											onChange={handleChange}
-										/>
-									</Col>
-									<Col lg={8}>
-										<TextInput
-											name="tele"
-											placeholder="Nomor handphone kamu..."
-											marginBottom="0"
-											onChange={handleChange}
-										/>
-									</Col>
-								</Row>
-							</StyledCard>
-							<StyledCard noHover title="Alamat">
-								<Row gutter={16}>
-									<Col lg={12}>
-										<SelectInput
-											name="province"
-											placeholder="Provinsi kamu..."
-											options={provinceOptions}
-											onChange={handleChangeSelect("province")}
-										/>
-									</Col>
-									<Col lg={12}>
-										<SelectInput
-											name="city"
-											placeholder="Kota/kabupaten kamu..."
-											options={cityOptions}
-											onChange={handleChangeSelect("city")}
-										/>
-									</Col>
-									<Col lg={12}>
-										<SelectInput
-											name="subdistrict"
-											placeholder="Kecamatan kamu..."
-											options={subdistrictOptions}
-											onChange={handleChangeSelect("subdistrict")}
-										/>
-									</Col>
-									<Col lg={12}>
-										<TextInput name="zip" placeholder="Kode pos kamu..." onChange={handleChange} />
-									</Col>
-								</Row>
-								<Row gutter={16}>
-									<Col lg={24}>
-										<TextInput
-											textarea
-											rows={3}
-											name="address"
-											placeholder="Alamat pengiriman kamu..."
-											marginBottom="0"
-											onChange={handleChange}
-										/>
-									</Col>
-								</Row>
-							</StyledCard>
+							{typeRemark === "partner" && (
+								<Section paddingHorizontal="0">
+									<Switch name="isSelfPickup" /> &nbsp; Saya bersedia jemput di gudang Zigzag &nbsp;
+									<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu hanya punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
+										<Icon type="question-circle" theme="filled" />
+									</Tooltip>
+								</Section>
+							)}
 
-							<StyledCard
-								noHover
-								title={
-									<div>
-										Dropshipper &nbsp; <Switch name="isDropshipper" />
-									</div>
-								}
-							>
-								<Row gutter={16}>
-									<Col lg={8}>
-										<TextInput
-											name="dropshipper_name"
-											placeholder="Nama kamu sebagai dropshipper..."
-											disabled={!values.isDropshipper}
-											onChange={handleChange}
-										/>
-									</Col>
-									<Col lg={8}>
-										<TextInput
-											name="dropshipper_tele"
-											placeholder="Nomor HP kamu sebagai dropshipper..."
-											disabled={!values.isDropshipper}
-											onChange={handleChange}
-										/>
-									</Col>
-									<Col lg={8}>
-										<TextInput
-											name="jne_online_booking"
-											placeholder="JNE Online Booking..."
-											disabled={!values.isDropshipper}
-											onChange={handleChange}
-										/>
-									</Col>
-								</Row>
-							</StyledCard>
+							{!values.isSelfPickup && (
+								<>
+									<StyledCard noHover title="Info kontak">
+										<Row gutter={16}>
+											<Col lg={8}>
+												<TextInput
+													name="name"
+													placeholder="Nama kamu..."
+													marginBottom="0"
+													onChange={handleChange}
+												/>
+											</Col>
+											<Col lg={8}>
+												<TextInput
+													name="email"
+													placeholder="Email kamu..."
+													marginBottom="0"
+													onChange={handleChange}
+												/>
+											</Col>
+											<Col lg={8}>
+												<TextInput
+													name="tele"
+													placeholder="Nomor handphone kamu..."
+													marginBottom="0"
+													onChange={handleChange}
+												/>
+											</Col>
+										</Row>
+									</StyledCard>
+
+									<StyledCard noHover title="Alamat">
+										<Row gutter={16}>
+											<Col lg={12}>
+												<SelectInput
+													name="province"
+													placeholder="Provinsi kamu..."
+													options={provinceOptions}
+													onChange={handleChangeSelect("province")}
+												/>
+											</Col>
+											<Col lg={12}>
+												<SelectInput
+													name="city"
+													placeholder="Kota/kabupaten kamu..."
+													options={cityOptions}
+													onChange={handleChangeSelect("city")}
+												/>
+											</Col>
+											<Col lg={12}>
+												<SelectInput
+													name="subdistrict"
+													placeholder="Kecamatan kamu..."
+													options={subdistrictOptions}
+													onChange={handleChangeSelect("subdistrict")}
+												/>
+											</Col>
+											<Col lg={12}>
+												<TextInput
+													name="zip"
+													placeholder="Kode pos kamu..."
+													onChange={handleChange}
+												/>
+											</Col>
+										</Row>
+										<Row gutter={16}>
+											<Col lg={24}>
+												<TextInput
+													textarea
+													rows={3}
+													name="address"
+													placeholder="Alamat pengiriman kamu..."
+													marginBottom="0"
+													onChange={handleChange}
+												/>
+											</Col>
+										</Row>
+									</StyledCard>
+
+									<StyledCard
+										noHover
+										title={
+											<div>
+												Dropshipper &nbsp; <Switch name="isDropshipper" />
+											</div>
+										}
+									>
+										<Row gutter={16}>
+											<Col lg={8}>
+												<TextInput
+													name="dropshipper_name"
+													placeholder="Nama kamu sebagai dropshipper..."
+													disabled={!values.isDropshipper}
+													onChange={handleChange}
+												/>
+											</Col>
+											<Col lg={8}>
+												<TextInput
+													name="dropshipper_tele"
+													placeholder="Nomor HP kamu sebagai dropshipper..."
+													disabled={!values.isDropshipper}
+													onChange={handleChange}
+												/>
+											</Col>
+											<Col lg={8}>
+												<TextInput
+													name="jne_online_booking"
+													placeholder="JNE Online Booking..."
+													disabled={!values.isDropshipper}
+													onChange={handleChange}
+												/>
+											</Col>
+										</Row>
+									</StyledCard>
+								</>
+							)}
+
 							<Section textAlign="right" paddingHorizontal="0">
 								<Button
 									htmlType="submit"

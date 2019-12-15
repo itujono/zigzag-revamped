@@ -33,7 +33,7 @@ export default function Summary({ handlers: { saveOrder } }) {
 	const { account_type_remark: typeRemark } = accountType
 	const isPartner = typeRemark.toLowerCase() === "partner"
 
-	const { cartTotal, order_detail } = formData
+	const { cartTotal, order_detail = {} } = formData
 	const adjustedCartItems = formData.cartItems.map(item => {
 		const { id, ...restItem } = item
 		return restItem
