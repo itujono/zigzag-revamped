@@ -11,7 +11,8 @@ const initialState = {
 	changeAvatarError: null,
 	depositBalance: 0,
 	upgradeCodeList: [],
-	upgradeCodeListError: null
+	upgradeCodeListError: null,
+	depositConfirmationError: null
 }
 
 function reducer(state = initialState, action) {
@@ -29,13 +30,21 @@ function reducer(state = initialState, action) {
 		case types.CHANGE_PROFILE_PASSWORD:
 			return { ...state, loading: false }
 		case types.FETCH_LIST_DEPOSIT:
+			const depositCodeList = action.payload[0].deposits.map(({ deposit_code }) => ({
+				value: deposit_code,
+				label: deposit_code
+			}))
+
 			return {
 				...state,
+				depositCodeList,
 				depositList: action.payload,
 				depositBalance: (action.payload[0] || {}).customer,
 				loading: false
 			}
 		case types.ADD_NEW_DEPOSIT:
+			return { ...state, loading: false }
+		case types.DEPOSIT_CONFIRMATION:
 			return { ...state, loading: false }
 		case types.UPGRADE_ACCOUNT:
 			return { ...state, upgradeResponse: action.payload, loading: false }
@@ -58,6 +67,8 @@ function reducer(state = initialState, action) {
 			return { ...state, changeAvatarError: action.payload, loading: false }
 		case types.FETCH_UPGRADE_CODE_LIST_ERROR:
 			return { ...state, upgradeCodeListError: action.payload, loading: false }
+		case types.DEPOSIT_CONFIRMATION_ERROR:
+			return { ...state, depositConfirmationError: action.payload, loading: false }
 		default:
 			return state
 	}

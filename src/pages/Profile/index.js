@@ -7,6 +7,7 @@ const HistoryOrder = React.lazy(() => import("./HistoryOrder"))
 const Deposit = React.lazy(() => import("./Deposit"))
 const Settings = React.lazy(() => import("./Settings"))
 const Wishlist = React.lazy(() => import("./Wishlist"))
+const DepositConfirmation = React.lazy(() => import("./Deposit/DepositConfirmation"))
 
 function Profile() {
 	const { push } = useHistory()

@@ -173,7 +173,7 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 									{isNotPaid && (
 										<div>
 											Sudah melakukan pembayaran?{" "}
-											<Link>
+											<Link to="/order/confirmation">
 												Konfirmasi pembayaran sekarang&nbsp;
 												<Icon type="right" />
 											</Link>

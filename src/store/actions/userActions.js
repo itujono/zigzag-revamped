@@ -90,6 +90,28 @@ export const addNewDeposit = amount => dispatch => {
 		})
 }
 
+export const depositConfirmation = (values, push) => dispatch => {
+	dispatch(loadingUser())
+	const formData = new FormData()
+	formData.append("deposit_code", values.deposit_code)
+	formData.append("bank_sender", values.bank_sender)
+	formData.append("bank_number_sender", values.bank_number_sender)
+	formData.append("bank_receiver", values.bank_receiver)
+	formData.append("date", values.date)
+	formData.append("total_transfer", values.total_transfer)
+	formData.append("evidence_file", values.evidence_file)
+
+	return instance
+		.post(`/customer/verify_deposit`, formData)
+		.then(({ data }) => dispatch({ type: types.DEPOSIT_CONFIRMATION, payload: data }))
+		.then(() => {
+			message
+				.loading("Memverifikasi data...", 1)
+				.then(() => push({ pathname: "/deposit/confirmation_success", state: { isSuccess: true } }))
+		})
+		.catch(err => useRenderError(err, dispatch, types.DEPOSIT_CONFIRMATION_ERROR))
+}
+
 export const upgradeConfirmation = (values, push) => dispatch => {
 	dispatch(loadingUser())
 	const formData = new FormData()
