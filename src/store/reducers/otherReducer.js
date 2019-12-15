@@ -1,4 +1,5 @@
 import * as types from "../types"
+import { akunKoko } from "helpers"
 
 const initial = {
 	cartDrawer: false,
@@ -34,7 +35,22 @@ function reducer(state = initial, action) {
 		case types.SAVE_ORDER:
 			return { ...state, orderDetails: action.payload, loading: false }
 		case types.FETCH_ORDER_HISTORY:
-			return { ...state, orderHistory: action.payload, loading: false }
+			const orderHistory = action.payload.map(({ customers, orders_detail, ...item }) => {
+				if (customers.id === akunKoko) {
+					return {
+						...item,
+						orders_detail: orders_detail.map(detail => ({
+							...detail,
+							product_price: "-",
+							product_total_price: "-"
+						}))
+					}
+				}
+
+				return item
+			})
+
+			return { ...state, orderHistory, loading: false }
 		case types.FETCH_ORDER_HISTORY_ERROR:
 			return { ...state, orderHistoryError: action.payload, loading: false }
 		case types.SAVE_COURIER_DETAILS_ERROR:

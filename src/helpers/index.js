@@ -23,6 +23,8 @@ export { instance }
 
 /////////////////////////////////
 
+export const akunKoko = 40
+
 export const randomCode = () => Math.floor(Math.random() * (100 - 10)) + 10
 
 export function useRenderError(err, dispatch, type, noShow = false) {

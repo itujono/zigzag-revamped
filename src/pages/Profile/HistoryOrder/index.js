@@ -34,7 +34,6 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 	const { fetchOrderHistory, fetchAirwayBill } = props
 
 	const handleSelect = item => {
-		console.log("item: ", item)
 		if (selectedItem.order_code === item.order_code) setSelectedItem({})
 		else setSelectedItem(item)
 	}
