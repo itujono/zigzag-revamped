@@ -291,32 +291,7 @@ function Checkout({
 										</Col>
 									</Row>
 									<Divider />
-									<Row gutter={16}>
-										<Col lg={12}>
-											<Heading
-												reverse
-												content="Nama dropshipper"
-												subheader={renderFormValues("dropshipper_name")}
-											/>
-										</Col>
-										<Col lg={12}>
-											<Heading
-												reverse
-												content="Nomor HP dropshipper"
-												subheader={renderFormValues("dropshipper_tele")}
-											/>
-										</Col>
-									</Row>
-									<Row gutter={16}>
-										<Col lg={12}>
-											<Heading
-												reverse
-												content="JNE Online Booking"
-												subheader={renderFormValues("jne_online_booking")}
-											/>
-										</Col>
-									</Row>
-									<Divider />
+
 									<Row gutter={16}>
 										<Col lg={12}>
 											<Heading
@@ -339,6 +314,34 @@ function Checkout({
 												reverse
 												content="Metode pembayaran"
 												subheader={selectedPayment.label || "-"}
+											/>
+										</Col>
+									</Row>
+
+									<Divider />
+
+									<Row gutter={16}>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="Nama dropshipper"
+												subheader={renderFormValues("dropshipper_name")}
+											/>
+										</Col>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="Nomor HP dropshipper"
+												subheader={renderFormValues("dropshipper_tele")}
+											/>
+										</Col>
+									</Row>
+									<Row gutter={16}>
+										<Col lg={12}>
+											<Heading
+												reverse
+												content="JNE Online Booking"
+												subheader={renderFormValues("jne_online_booking")}
 											/>
 										</Col>
 									</Row>

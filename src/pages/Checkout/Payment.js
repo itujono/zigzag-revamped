@@ -47,8 +47,8 @@ export default function Payment({ data, handlers }) {
 	const { setSelectedPayment } = handlers
 	const random = randomCode()
 	const uniqueCode = formData.unique_code ? Number(formData.unique_code) : Number(random)
-	const cartTotal = formData !== undefined && (formData.cartTotal || {}).price
-	const discount = formData !== undefined && (formData.cartTotal || {}).discount
+	const cartTotal = formData !== undefined && formData.cartTotal.price
+	const discount = formData !== undefined && formData.cartTotal.discount
 	const depositNotSufficient = formData.deposit < Number(cartTotal)
 
 	const handleSavePayment = () => {

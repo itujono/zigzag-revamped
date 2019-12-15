@@ -4,13 +4,15 @@ import { List, Icon, Avatar, Row, Col, Menu, Tabs } from "antd"
 import styled from "styled-components/macro"
 import { connect } from "react-redux"
 
-import { fetchOrderHistory } from "store/actions/otherActions"
+import { fetchOrderHistory, cancelOrder } from "store/actions/otherActions"
 import { fetchAirwayBill } from "store/actions/rajaOngkirActions"
 import { pricer, mobile, media } from "helpers"
 import { theme } from "styles"
 import OrderItems from "./OrderItems"
 import Waybill from "./Waybill"
+import CancelOrder from "./CancelOrder"
 import moment from "moment"
+import { Link } from "react-router-dom"
 
 const ListItem = styled(List.Item)`
 	&&& {
@@ -31,7 +33,7 @@ const ContentDetail = styled.div`
 function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 	const [selectedItem, setSelectedItem] = useState({})
 
-	const { fetchOrderHistory, fetchAirwayBill } = props
+	const { fetchOrderHistory, fetchAirwayBill, cancelOrder } = props
 
 	const handleSelect = item => {
 		if (selectedItem.order_code === item.order_code) setSelectedItem({})
@@ -77,6 +79,7 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 				renderItem={item => {
 					const { order_code, ekspedition_data: courier = {}, grandtotal_order, status_order } = item
 					const isSelected = order_code === selectedItem.order_code
+					const isNotPaid = status_order.status_id === 1
 
 					return (
 						<div style={{ marginBottom: "1.5em" }}>
@@ -116,7 +119,7 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 							</ListItem>
 							{isSelected && (
 								<ContentDetail>
-									<Tabs tabPosition={mobile ? "top" : "left"}>
+									<Tabs tabPosition={mobile ? "top" : "left"} style={{ marginBottom: "2em" }}>
 										<Tabs.TabPane key="details" tab="Detail">
 											<Row gutter={32}>
 												<Col lg={8}>
@@ -163,7 +166,19 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 										<Tabs.TabPane key="status" tab="Status barang">
 											<Waybill data={airwayBill} />
 										</Tabs.TabPane>
+										<Tabs.TabPane key="cancel" tab="Batal order" className="cancel">
+											<CancelOrder data={item} cancelOrder={cancelOrder} />
+										</Tabs.TabPane>
 									</Tabs>
+									{isNotPaid && (
+										<div>
+											Sudah melakukan pembayaran?{" "}
+											<Link>
+												Konfirmasi pembayaran sekarang&nbsp;
+												<Icon type="right" />
+											</Link>
+										</div>
+									)}
 								</ContentDetail>
 							)}
 						</div>
@@ -180,4 +195,4 @@ const mapState = ({ other, rajaOngkir }) => ({
 	airwayBill: rajaOngkir.airwayBill
 })
 
-export default connect(mapState, { fetchOrderHistory, fetchAirwayBill })(HistoryOrder)
+export default connect(mapState, { fetchOrderHistory, fetchAirwayBill, cancelOrder })(HistoryOrder)

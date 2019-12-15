@@ -1,5 +1,6 @@
 import * as types from "../types"
 import { instance, useRenderError } from "helpers"
+import { message } from "antd"
 
 const loadingOther = () => ({ type: types.LOADING_OTHER })
 
@@ -68,4 +69,19 @@ export const fetchOrderHistory = () => dispatch => {
 		.get(`/order/history_order/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_ORDER_HISTORY, payload: data.data.order_data }))
 		.catch(err => useRenderError(err, dispatch, types.FETCH_ORDER_HISTORY_ERROR))
+}
+
+export const cancelOrder = values => dispatch => {
+	dispatch(loadingOther())
+	return instance
+		.post(`/order/cancel_order`, values)
+		.then(({ data }) => dispatch({ type: types.CANCEL_ORDER, payload: data.data }))
+		.then(() => {
+			message
+				.loading("Memproses batal order...")
+				.then(() =>
+					message.success("Oke, orderan ini telah di-cancel. Silakan cek email untuk info pembatalannya")
+				)
+		})
+		.catch(err => useRenderError(err, dispatch, types.CANCEL_ORDER_ERROR))
 }

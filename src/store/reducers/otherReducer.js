@@ -9,7 +9,8 @@ const initial = {
 	saveOrderError: null,
 	saveCourierDetailsError: null,
 	orderHistory: [],
-	orderHistoryError: null
+	orderHistoryError: null,
+	cancelOrderError: null
 }
 
 function reducer(state = initial, action) {
@@ -34,6 +35,10 @@ function reducer(state = initial, action) {
 			return { ...state, courierDetails: action.payload, loading: false }
 		case types.SAVE_ORDER:
 			return { ...state, orderDetails: action.payload, loading: false }
+		case types.CANCEL_ORDER:
+			return { ...state, cancelOrder: action.payload, loading: false }
+		case types.CANCEL_ORDER_ERROR:
+			return { ...state, cancelOrderError: action.payload, loading: false }
 		case types.FETCH_ORDER_HISTORY:
 			const orderHistory = action.payload.map(item => {
 				const { customers, orders_detail } = item
