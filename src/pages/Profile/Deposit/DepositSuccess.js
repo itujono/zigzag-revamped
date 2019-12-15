@@ -68,10 +68,10 @@ export default function ConfirmationSuccess() {
 					<Col lg={16} className="left">
 						<Success />
 						<Heading
-							content="Konfirmasi pembayaran selesai! 🎉🎉"
-							subheader="Great! Konfirmasi pembayaran kamu telah kami terima, dan email berisi detail info
-                            orderan juga sudah ada di inbox email kamu. Silakan duduk tenang, dan kami akan
-                            melakukan verifikasi terhadap konfirmasi pembayaran kamu. Tunggu notifikasi
+							content="Konfirmasi deposit selesai! 🎉🎉"
+							subheader="Great! Konfirmasi deposit kamu telah kami terima, dan email berisi detail info
+                            deposit juga sudah ada di inbox email kamu. Silakan duduk tenang, dan kami akan
+                            melakukan verifikasi terhadap konfirmasi deposit kamu. Tunggu notifikasi
                             berikutnya dari kami. Have a great day!"
 						/>
 						<Alert

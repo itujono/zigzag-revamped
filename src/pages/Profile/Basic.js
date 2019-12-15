@@ -79,7 +79,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 		<span>
 			Kamu adalah member {accountType}{" "}
 			{(accountType === "VIP" && "🔥") ||
-				(accountType === "Reguler" && <Link to="/upgrade">Upgrade akun?</Link>) ||
+				(accountType === "Reguler" && upgradeStatus !== 3 && <Link to="/upgrade">Upgrade akun?</Link>) ||
 				null}
 		</span>
 	)

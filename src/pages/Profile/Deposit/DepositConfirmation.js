@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { Formik } from "formik"
-import { SubmitButton, ResetButton } from "formik-antd"
+import { SubmitButton, ResetButton, FormikDebug } from "formik-antd"
 import { connect } from "react-redux"
 import { useHistory } from "react-router-dom"
 
@@ -11,7 +11,7 @@ import { Heading, Layout } from "components"
 import { SelectInput, TextInput, DateInput } from "components/Fields"
 import styled from "styled-components/macro"
 
-function DepositConfirmation({ bankAccountOptions, depositCodeList, ...props }) {
+function DepositConfirmation({ bankAccountOptions, depositCodeOptions, ...props }) {
 	const { push } = useHistory()
 
 	const { fetchBankAccounts, depositConfirmation, fetchListDeposit } = props
@@ -39,8 +39,7 @@ function DepositConfirmation({ bankAccountOptions, depositCodeList, ...props }) 
 
 	const handleSubmitConfirmation = (values, { setSubmitting }) => {
 		values = { ...values, bank_number_sender: values.bank_sender, evidence_file: file }
-		console.log({ values })
-		depositConfirmation(values, push).then(() => setSubmitting(false))
+		depositConfirmation(values, push).finally(() => setSubmitting(false))
 	}
 
 	useEffect(() => {
@@ -59,13 +58,13 @@ function DepositConfirmation({ bankAccountOptions, depositCodeList, ...props }) 
 					/>
 					<Formik
 						onSubmit={handleSubmitConfirmation}
-						render={({ handleSubmit }) => (
+						render={({ handleSubmit, isValid }) => (
 							<Form layout="vertical" onSubmit={handleSubmit}>
 								<SelectInput
 									name="deposit_code"
 									label="Kode deposit"
 									placeholder="Masukkan kode deposit kamu..."
-									options={depositCodeList}
+									options={depositCodeOptions}
 								/>
 								<SelectInput
 									name="bank_receiver"
@@ -84,7 +83,7 @@ function DepositConfirmation({ bankAccountOptions, depositCodeList, ...props }) 
 									placeholder="Misal: 50000"
 								/>
 								<DateInput
-									name="date"
+									name="transfer_date"
 									label="Tanggal ditransfer"
 									placeholder="Pilih tanggal ketika kamu transfer"
 								/>
@@ -111,7 +110,7 @@ function DepositConfirmation({ bankAccountOptions, depositCodeList, ...props }) 
 }
 
 const mapState = ({ user, other }) => ({
-	depositCodeList: user.depositCodeList,
+	depositCodeOptions: user.depositCodeOptions,
 	bankAccountOptions: other.bankAccountOptions
 })
 

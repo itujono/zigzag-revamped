@@ -94,10 +94,11 @@ export const depositConfirmation = (values, push) => dispatch => {
 	dispatch(loadingUser())
 	const formData = new FormData()
 	formData.append("deposit_code", values.deposit_code)
+	// formData.append("order_code", values.deposit_code)
 	formData.append("bank_sender", values.bank_sender)
 	formData.append("bank_number_sender", values.bank_number_sender)
 	formData.append("bank_receiver", values.bank_receiver)
-	formData.append("date", values.date)
+	formData.append("transfer_date", values.transfer_date)
 	formData.append("total_transfer", values.total_transfer)
 	formData.append("evidence_file", values.evidence_file)
 

@@ -20,6 +20,7 @@ import NewPasswordSuccess from "pages/auth/NewPassword/NewPasswordSuccess"
 import Logout from "pages/auth/Logout"
 import SearchResult from "pages/Home/SearchResult"
 import DepositConfirmation from "pages/Profile/Deposit/DepositConfirmation"
+import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -53,6 +54,7 @@ const App = () => {
 						<Route path="/forgot_password/success" component={ForgotSuccess} />
 						<Route path="/upgrade" component={AccountUpgrade} />
 						<Route exact path="/deposit/confirmation" component={DepositConfirmation} />
+						<Route exact path="/deposit/confirmation_success" component={DepositSuccess} />
 						<Route component={NotFound} />
 					</Switch>
 				</Suspense>
