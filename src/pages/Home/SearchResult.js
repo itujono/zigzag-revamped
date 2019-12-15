@@ -95,7 +95,8 @@ function SearchResult({ searchProduct, searchList, loading }) {
 											}
 											title={
 												<p style={{ marginBottom: 0 }}>
-													<a href="https://ant.design">{item.name}</a> &middot;{" "}
+													<Link to={`/product/${item.id}-${item.name}`}>{item.name}</Link>{" "}
+													&middot;{" "}
 													<span>
 														Rp {pricer((item.product_price || {}).price)} / pcs &middot;
 														&nbsp; &nbsp;

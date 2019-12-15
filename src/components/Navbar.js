@@ -88,7 +88,6 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 	return (
 		<Nav>
 			<CartDrawer
-				data={{ cartItems, cartTotal }}
 				handler={{ updateCartItem, deleteCartItem }}
 				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
 			/>

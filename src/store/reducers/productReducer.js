@@ -34,7 +34,7 @@ const renderPrice = productPrice => {
 	return { product_price: price }
 }
 
-const roundupOngkir = number => {
+const roundupWeight = number => {
 	let prefix = number.slice(0, number.length - 3)
 	let suffix = number.slice(-3)
 	if (Number(suffix[0]) > 3) {
@@ -43,6 +43,19 @@ const roundupOngkir = number => {
 	}
 	const result = prefix + suffix
 	return Number(result)
+}
+
+const getDiscount = (cartItems = [], qty) => {
+	let discount = 0
+
+	if (typeRemark.toLowerCase() === "reguler") {
+		if (qty > 2) {
+			const itemsNotPromo = cartItems.filter(item => item.promo === 0)
+			discount = 10000 * itemsNotPromo.length
+		}
+	}
+
+	return discount
 }
 
 function reducer(state = initialState, action) {
@@ -84,18 +97,19 @@ function reducer(state = initialState, action) {
 			})
 			const totalPrice = action.payload.map(item => item.total_price).reduce((acc, curr) => acc + curr, 0)
 			const totalWeight = action.payload
-				.map(({ weight, qty, product_data }) => {
+				.map(({ qty, product_data }) => {
 					const weight_per_pcs = (product_data.products || {}).weight_per_pcs
 					return weight_per_pcs * Number(qty)
 				})
 				.reduce((acc, curr) => acc + curr, 0)
 			const totalQty = action.payload.map(item => Number(item.qty)).reduce((acc, curr) => acc + curr, 0)
-			const roundedWeight = roundupOngkir(String(totalWeight))
+			const roundedWeight = roundupWeight(String(totalWeight))
+			const discount = getDiscount(cartItems, totalQty)
 
 			return {
 				...state,
 				cartItems,
-				cartTotal: { price: totalPrice, weight: totalWeight, qty: totalQty, roundedWeight },
+				cartTotal: { price: totalPrice, weight: totalWeight, discount, qty: totalQty, roundedWeight },
 				loading: false
 			}
 

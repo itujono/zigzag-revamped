@@ -14,7 +14,6 @@ import Ongkir from "./Ongkir"
 import Payment from "./Payment"
 import Summary from "./Summary"
 import { pricer } from "helpers"
-import { FormikDebug } from "formik-antd"
 
 const Sidebar = styled.div`
 	padding: 2em;
@@ -83,7 +82,6 @@ function Checkout({
 		const values = Object.keys(formValues).length === 0 ? formData : formValues
 		if (prop === "province" || prop === "city" || prop === "subdistrict") return values[`${prop}_name`]
 		return values[prop] === "" ? "-" : values[prop] ? values[prop] : user[prop]
-		// return values[prop] !== "" ? values[prop] : user[prop] || "-"
 	}
 
 	useEffect(() => {
@@ -105,8 +103,6 @@ function Checkout({
 		cartTotal.weight,
 		cartTotal.roundedWeight
 	])
-
-	console.log({ province, city, subdistrict })
 
 	return (
 		<Layout sidebar page="checkout">
@@ -359,8 +355,9 @@ function Checkout({
 const mapState = ({ rajaOngkir, user, product, other }) => {
 	const provinceOnSidebar = province => rajaOngkir.provinces.find(item => item.province_id === province) || {}
 	const cityOnSidebar = city => rajaOngkir.cities.find(item => item.city_id === city) || {}
-	const subdistrictOnSidebar = subdistrict =>
-		rajaOngkir.subdistricts.find(item => item.subdistrict_id === subdistrict) || {}
+	const subdistrictOnSidebar = subdistrict => {
+		return rajaOngkir.subdistricts.find(item => item.subdistrict_id === subdistrict) || {}
+	}
 	const userDetails = {
 		name: user.user.name,
 		email: user.user.email,

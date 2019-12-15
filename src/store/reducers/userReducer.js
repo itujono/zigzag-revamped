@@ -19,7 +19,11 @@ function reducer(state = initialState, action) {
 		case types.LOADING_USER:
 			return { ...state, loading: true }
 		case types.FETCH_USER:
-			return { ...state, user: action.payload, loading: false }
+			return {
+				...state,
+				user: { ...action.payload, customer_upgrade: action.payload.customer_upgrade[0] || {} },
+				loading: false
+			}
 		case types.UPDATE_USER_PROFILE:
 			return { ...state, loading: false }
 		case types.CHANGE_PROFILE_PASSWORD:

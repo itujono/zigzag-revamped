@@ -35,6 +35,11 @@ const SubtotalSection = styled(Section).attrs({
 			color: ${theme.greyColor[1]};
 		}
 	}
+	.discount {
+		h4 {
+			color: ${theme.greenColor};
+		}
+	}
 	.price {
 		font-weight: bold;
 		> p {
@@ -69,19 +74,24 @@ const CartItem = styled(List.Item)`
 	}
 `
 
-function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading, ...props }) {
+function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...props }) {
 	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
 	const { fetchCartItems, deleteCartItem, updateCartItem } = props
 
 	const token = localStorage.getItem("access_token")
 
 	const itemCount = cartTotal && cartTotal.qty > 0 ? `(${cartTotal.qty} item)` : `(masih kosong)`
+	const subtotal = cartItems.length === 0 ? 0 : cartTotal.price - (cartTotal.discount || 0)
 	const roundedWeight = (
 		<p>
-			{cartTotal.roundedWeight || 0} gram &nbsp;{" "}
-			<Tooltip title="Kenapa dibulatkan? Karena kami bekerjasama dengan ekspedisi-ekspedisi yang mempunyai ketetapan/peraturan demikian">
+			<Tooltip
+				placement="left"
+				title="Kenapa dibulatkan? Karena kami bekerjasama dengan ekspedisi-ekspedisi yang mempunyai ketetapan/peraturan demikian"
+			>
 				<Icon type="question-circle" theme="filled" />
-			</Tooltip>
+			</Tooltip>{" "}
+			&nbsp;
+			{cartTotal.roundedWeight || 0} gram
 		</p>
 	)
 
@@ -203,6 +213,18 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 				/>
 			)}
 			<SubtotalSection>
+				<Row type="flex" justify="space-between" align="middle" gutter={32}>
+					<Col lg={16}>
+						<Heading content="Diskon" subheader="Jika kamu berhak dapat diskon, akan muncul di sini" />
+					</Col>
+					<Col lg={8} style={{ textAlign: "right" }}>
+						<Heading
+							content={`- Rp ${cartTotal.discount || 0}`}
+							// subheader={roundedWeight}
+							className="discount"
+						/>
+					</Col>
+				</Row>
 				<Row type="flex" justify="space-between" gutter={32}>
 					<Col lg={16}>
 						<Heading
@@ -211,11 +233,7 @@ function CartDrawer({ onCartDrawer, data, handler, cartItems, cartTotal, loading
 						/>
 					</Col>
 					<Col lg={8} style={{ textAlign: "right" }}>
-						<Heading
-							content={`Rp ${cartItems.length === 0 ? 0 : pricer(cartTotal.price)}`}
-							subheader={roundedWeight}
-							className="price"
-						/>
+						<Heading content={`Rp ${pricer(subtotal)}`} subheader={roundedWeight} className="price" />
 					</Col>
 				</Row>
 				<Link to="/checkout">
