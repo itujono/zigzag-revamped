@@ -127,10 +127,22 @@ export default function Address({ data, handlers, initialLoading }) {
 						<Form layout="vertical" onSubmit={handleSubmit}>
 							{typeRemark === "partner" && (
 								<Section paddingHorizontal="0">
-									<Switch name="isSelfPickup" /> &nbsp; Saya bersedia jemput di gudang Zigzag &nbsp;
-									<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu hanya punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
-										<Icon type="question-circle" theme="filled" />
-									</Tooltip>
+									<div style={{ marginBottom: "2em" }}>
+										<Switch name="isSelfPickup" /> &nbsp; Saya bersedia jemput di gudang Zigzag
+										&nbsp;{" "}
+										<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu hanya punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
+											<Icon type="question-circle" theme="filled" />
+										</Tooltip>
+									</div>
+									{values.isSelfPickup && (
+										<TextInput
+											textarea
+											rows={3}
+											name="notes"
+											label="Tulis notes"
+											placeholder="Biasanya untuk copy paste alamat di Shopee..."
+										/>
+									)}
 								</Section>
 							)}
 
