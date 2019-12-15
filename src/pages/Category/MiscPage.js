@@ -3,8 +3,23 @@ import { Section, Button, Heading, ProductCard, Layout, Loading } from "componen
 import { Row, Col, Select, Form } from "antd"
 import { useParams } from "react-router-dom"
 import { connect } from "react-redux"
+import styled from "styled-components"
 import { fetchPromoProducts, fetchProductCategories } from "store/actions/productActions"
-import { upperCase } from "helpers"
+import { upperCase, mobile, media } from "helpers"
+
+const HeadingSection = styled(Row).attrs({
+	type: "flex",
+	justify: "space-between",
+	gutter: 16
+})`
+	${media.mobile`
+		> .ant-col{
+			&:last-child {
+				margin-bottom: 2em;
+			}
+		}
+	`}
+`
 
 function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 	const { name } = useParams()
@@ -26,8 +41,8 @@ function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 	return (
 		<Layout sidebar>
 			<Section>
-				<Row type="flex" justify="space-between">
-					<Col lg={12}>
+				<HeadingSection>
+					<Col lg={12} xs={24}>
 						<Heading
 							content={
 								<div>
@@ -38,7 +53,7 @@ function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 							marginBottom="3em"
 						/>
 					</Col>
-					<Col lg={12} style={{ textAlign: "right" }}>
+					<Col lg={12} xs={24} style={{ textAlign: mobile ? "left" : "right" }}>
 						<Form layout="inline">
 							<Form.Item name="filter" label="Filter">
 								<Select
@@ -56,7 +71,7 @@ function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 							</Form.Item>
 						</Form>
 					</Col>
-				</Row>
+				</HeadingSection>
 				<Row gutter={16}>
 					{products.map(item => (
 						<Col xs={12} lg={6} key={item.id}>

@@ -131,7 +131,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 				<Col lg={16}>
 					<Heading content="Basic" bold />
 					<Form.Item {...tailLayout}>
-						<Row style={{ marginBottom: "3em" }} type="flex" align="middle">
+						<Row style={{ marginBottom: "3em" }} type="flex" align="middle" gutter={32}>
 							<Col lg={8}>
 								<StyledAvatar src={user.picture} />
 							</Col>

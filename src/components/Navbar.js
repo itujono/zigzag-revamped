@@ -42,9 +42,15 @@ const StyledMenu = styled(Menu)`
 
 const StyledSubmenu = styled(Menu.SubMenu)`
 	&& {
+		.dropdown-menu {
+			display: block;
+		}
 		> .ant-menu {
 			width: 200px;
 			padding-left: 10px;
+			.ant-menu-item {
+				margin-left: 8px;
+			}
 		}
 	}
 `
@@ -123,7 +129,10 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 									<Icon type="shopping-cart" />
 								</StyledCardIcon>
 							</Menu.Item>
-							<StyledSubmenu title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}>
+							<StyledSubmenu
+								popupClassName="dropdown-menu"
+								title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}
+							>
 								<Menu.Item key="greeting">
 									<Typography.Paragraph strong>Hi, {user.name}</Typography.Paragraph>
 								</Menu.Item>
