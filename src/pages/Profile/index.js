@@ -13,7 +13,7 @@ function Profile() {
 
 	useEffect(() => {
 		if (!localStorage.getItem("access_token")) push("/404")
-	}, [])
+	}, [push])
 
 	return (
 		<Layout sidebar page="profile">

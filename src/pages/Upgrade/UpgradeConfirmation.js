@@ -3,6 +3,7 @@ import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton } from "formik-antd"
 import { connect } from "react-redux"
+import { useHistory } from "react-router-dom"
 
 import { upgradeConfirmation, fetchUpgradeCodeList } from "store/actions/userActions"
 import { fetchBankAccounts } from "store/actions/otherActions"
@@ -11,6 +12,8 @@ import { SelectInput, TextInput, DateInput } from "components/Fields"
 import styled from "styled-components/macro"
 
 function UpgradeConfirmation({ bankAccountOptions, ...props }) {
+	const { push } = useHistory()
+
 	const { upgradeConfirmation, fetchUpgradeCodeList, fetchBankAccounts, upgradeCodeListOptions } = props
 	const [file, setFile] = useState({})
 
@@ -37,7 +40,7 @@ function UpgradeConfirmation({ bankAccountOptions, ...props }) {
 	const handleSubmitConfirmation = (values, { setSubmitting }) => {
 		values = { ...values, bank_number_sender: values.bank_sender, evidence_file: file }
 		console.log({ values })
-		upgradeConfirmation(values).then(() => setSubmitting(false))
+		upgradeConfirmation(values, push).then(() => setSubmitting(false))
 	}
 
 	useEffect(() => {

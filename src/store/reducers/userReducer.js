@@ -21,7 +21,7 @@ function reducer(state = initialState, action) {
 		case types.FETCH_USER:
 			return {
 				...state,
-				user: { ...action.payload, customer_upgrade: action.payload.customer_upgrade[0] || {} },
+				user: { ...action.payload, customer_upgrade: (action.payload.customer_upgrade || [])[0] || {} },
 				loading: false
 			}
 		case types.UPDATE_USER_PROFILE:

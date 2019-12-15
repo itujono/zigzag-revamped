@@ -15,7 +15,7 @@ export default function UpgradeSent() {
 
 	useEffect(() => {
 		if (!state.isSuccess) push("/404")
-	}, [])
+	}, [push, state.isSuccess])
 
 	return (
 		<StyledRow type="flex" justify="center">

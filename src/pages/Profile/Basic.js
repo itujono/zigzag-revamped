@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Section, Heading, Loading, Card, ButtonLink } from "components"
+import { Section, Heading, Loading, Card, ButtonLink, Alert } from "components"
 import { Formik } from "formik"
 import { TextInput, SelectInput } from "components/Fields"
 import { Form, Divider, Button, Row, Col, Avatar, Affix, Upload } from "antd"
@@ -68,7 +68,8 @@ const StyledUpload = styled(Upload)`
 
 function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading, ...props }) {
 	const { fetchUser, fetchCities, fetchProvinces, fetchSubdistricts, updateUserProfile, changeAvatar } = props
-	const { customer_service: cs = {} } = user
+	const { customer_service: cs = {}, customer_upgrade = {} } = user
+	const upgradeStatus = (customer_upgrade.status || {}).status_id || 0
 	const [media, setMedia] = useState({})
 
 	const handleRenderCities = value => fetchCities("", value)
@@ -213,7 +214,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 				</Col>
 				<Col lg={8}>
 					<Affix offset={30}>
-						<Card title="CS kamu">
+						<Card title="CS kamu" style={{ marginBottom: "2em" }}>
 							<Row type="flex">
 								<Col lg={8}>
 									<Avatar
@@ -233,6 +234,21 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 								</Col>
 							</Row>
 						</Card>
+						{upgradeStatus === 3 && (
+							<Alert
+								type="warning"
+								message="Konfirmasi upgrade akun?"
+								description={
+									<span>
+										Kamu sudah mengajukan upgrade akun, tapi kamu{" "}
+										<strong>belum melakukan konfirmasi pembayaran</strong> upgrade akun. Kalo kamu
+										sudah melakukan pembayaran, silakan{" "}
+										<Link to="/upgrade/confirmation">konfirmasi sekarang</Link>
+									</span>
+								}
+								showIcon
+							/>
+						)}
 					</Affix>
 				</Col>
 			</Row>

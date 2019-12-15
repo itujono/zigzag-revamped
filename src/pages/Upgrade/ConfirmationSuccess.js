@@ -49,7 +49,7 @@ export default function ConfirmationSuccess() {
 				<Heading
 					content="Konfirmasi upgrade akun selesai! 🎉🎉"
 					subheader="Great! Konfirmasi upgrade akun kamu telah kami terima, dan email berisi detail info
-                            orderan juga sudah ada di inbox email kamu. Silakan duduk tenang, dan kami akan
+                            upgrade akun juga sudah ada di inbox email kamu. Silakan duduk tenang, dan kami akan
                             melakukan verifikasi terhadap konfirmasi upgrade akun kamu. Tunggu notifikasi
                             berikutnya dari kami. Have a great day!"
 				/>
@@ -58,7 +58,7 @@ export default function ConfirmationSuccess() {
 					showIcon
 					message={
 						<span>
-							Kalo email yang berisi detail info orderan nya gak ada, jangan lupa{" "}
+							Kalo email yang berisi detail info upgrade akun nya gak ada, jangan lupa{" "}
 							<strong>cek folder spam</strong> nya juga ya.
 						</span>
 					}
