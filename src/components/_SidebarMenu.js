@@ -89,16 +89,21 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 						style={{ paddingLeft: "1em", paddingTop: "2em" }}
 					/>
 					<Menu>
-						<Menu.Item key="latest">
-							<NavLink to="/products/latest">
-								<BagIcon /> Produk terbaru
+						<Menu.Item key="promo">
+							<NavLink to="/products/promo">
+								<BagIcon /> Lagi promo!
 							</NavLink>
 						</Menu.Item>
-						<Menu.Item key="best-seller">
+						<Menu.Item key="about">
+							<NavLink to="/about">
+								<DynamicIcon type="icon-sunglasses" /> Tentang Zigzag
+							</NavLink>
+						</Menu.Item>
+						{/* <Menu.Item key="best-seller">
 							<NavLink to="/products/best-seller">
 								<ShoesIcon /> Paling laris
 							</NavLink>
-						</Menu.Item>
+						</Menu.Item> */}
 					</Menu>
 				</>
 			)}

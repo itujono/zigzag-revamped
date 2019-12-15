@@ -4,6 +4,7 @@ import { akunKoko } from "helpers"
 const initialState = {
 	user: {},
 	categories: [],
+	categoryOptions: [],
 	products: [],
 	restockProducts: [],
 	loading: false,
@@ -14,9 +15,11 @@ const initialState = {
 	wishlistItems: [],
 	wishlistError: null,
 	searchList: [],
+	promoProducts: [],
 	searchError: null,
 	productError: null,
-	cartError: null
+	cartError: null,
+	promoProductsError: null
 }
 
 const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -80,9 +83,22 @@ function reducer(state = initialState, action) {
 			return { ...state, products, loading: false }
 
 		case types.FETCH_RESTOCK_PRODUCTS:
-			return { ...state, restockProducts: action.payload, loading: false }
+			const restockProducts = action.payload.map(item => {
+				const { product_price } = renderPrice(item.product_price)
+				return { ...item, product_price }
+			})
+			return { ...state, restockProducts, loading: false }
+
+		case types.FETCH_PROMO_PRODUCTS:
+			const promoProducts = action.payload.map(item => {
+				const { product_price } = renderPrice(item.product_price)
+				return { ...item, product_price }
+			})
+			return { ...state, promoProducts, loading: false }
+
 		case types.FETCH_PRODUCT_CATEGORIES:
-			return { ...state, categories: action.payload, loading: false }
+			const categoryOptions = action.payload.map(({ id, name }) => ({ value: id, label: name }))
+			return { ...state, categories: action.payload, categoryOptions, loading: false }
 
 		case types.FETCH_CART_ITEMS:
 			const cartItems = action.payload.map(({ product_data, ...item }) => {
@@ -156,6 +172,8 @@ function reducer(state = initialState, action) {
 			return { ...state, cartError: action.payload, loading: false }
 		case types.DELETE_CART_ITEM_ERROR:
 			return { ...state, cartError: action.payload, loading: false }
+		case types.FETCH_PROMO_PRODUCTS_ERROR:
+			return { ...state, promoProductsError: action.payload, loading: false }
 		default:
 			return state
 	}

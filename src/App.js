@@ -8,6 +8,7 @@ import Register from "pages/auth/Register"
 import RegisterSuccess from "pages/auth/Register/RegisterSuccess"
 import Forgot from "pages/auth/Forgot"
 import ForgotSuccess from "pages/auth/Forgot/ForgotSuccess"
+import MiscPage from "pages/Category/MiscPage"
 import Checkout from "pages/Checkout"
 import CheckoutSuccess from "pages/Checkout/Success"
 import Confirmation from "pages/Checkout/Confirmation"
@@ -37,6 +38,7 @@ const App = () => {
 						<Route exact path="/" component={Home} />
 						<Route path="/product/:id-:name" component={ProductDetail} />
 						<Route path="/category/:id-:name" component={Category} />
+						<Route path="/products/:name" component={MiscPage} />
 						<Route path="/profile" component={Profile} />
 						<Route exact path="/account/active" component={AccountActive} />
 						<Route path="/login" component={Login} />

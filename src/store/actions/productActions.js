@@ -34,6 +34,14 @@ export const fetchRestockProducts = (category = 0, limit = 10, restock = 1) => d
 		.catch(err => console.error(err.response))
 }
 
+export const fetchPromoProducts = (category = 0, limit = 10) => dispatch => {
+	dispatch(loadingProduct())
+	return instance
+		.get(`/product/list?category=${category}&limit=${limit}&promo=1`)
+		.then(({ data }) => dispatch({ type: types.FETCH_PROMO_PRODUCTS, payload: data.data.product_data }))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_PROMO_PRODUCTS_ERROR))
+}
+
 export const fetchProductCategories = () => dispatch => {
 	dispatch(loadingProduct())
 	return instance
