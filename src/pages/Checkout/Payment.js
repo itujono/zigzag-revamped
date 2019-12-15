@@ -46,8 +46,10 @@ export default function Payment({ data, handlers }) {
 	const { selectedPayment } = data
 	const { setSelectedPayment } = handlers
 	const random = randomCode()
-	const cartTotal = formData.cartTotal && Number(formData.cartTotal.price)
-	const depositNotSufficient = formData.deposit < cartTotal
+	const uniqueCode = formData.unique_code ? Number(formData.unique_code) : Number(random)
+	const cartTotal = formData !== undefined && (formData.cartTotal || {}).price
+	const discount = formData !== undefined && (formData.cartTotal || {}).discount
+	const depositNotSufficient = formData.deposit < Number(cartTotal)
 
 	const handleSavePayment = () => {
 		localStorage.setItem(
@@ -55,7 +57,7 @@ export default function Payment({ data, handlers }) {
 			JSON.stringify({
 				...formData,
 				payment: selectedPayment,
-				unique_code: formData.unique_code ? formData.unique_code : random
+				unique_code: uniqueCode
 			})
 		)
 		message.loading("Mengkalkulasi totalan...", 1).then(() => push("/checkout/summary"))
@@ -63,7 +65,7 @@ export default function Payment({ data, handlers }) {
 
 	useEffect(() => {
 		if (!formData.order_detail) push("/404")
-	}, [formData.order_detail, push])
+	}, [formData.order_detail, formData.cartTotal.price, depositNotSufficient, push])
 
 	return (
 		<Section paddingHorizontal="0">
@@ -119,7 +121,7 @@ export default function Payment({ data, handlers }) {
 								<ul style={{ paddingLeft: 20 }}>
 									<li>
 										Jumlah deposit di akun kamu akan dikurangi sebanyak{" "}
-										<strong>Rp {pricer(cartTotal)}</strong>
+										<strong>Rp {pricer(cartTotal + uniqueCode - discount)}</strong>
 									</li>
 									<li>Dapat pahala dan amal jariyah</li>
 								</ul>
@@ -129,7 +131,10 @@ export default function Payment({ data, handlers }) {
 				</Row>
 			</StyledCard>
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button onClick={handleSavePayment}>
+				<Button
+					onClick={handleSavePayment}
+					disabled={selectedPayment.value === "deposit" && depositNotSufficient}
+				>
 					Lanjut ke Summary <Icon type="right" />
 				</Button>
 			</Section>

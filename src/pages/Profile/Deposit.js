@@ -8,10 +8,11 @@ import { connect } from "react-redux"
 import * as yup from "yup"
 
 import { fetchListDeposit, addNewDeposit, fetchUser } from "store/actions/userActions"
-import { Section, Heading, Button } from "components"
+import { Section, Heading, Button, ButtonLink } from "components"
 import { pricer, media, mobile } from "helpers"
 import { theme } from "styles"
 import { TextInput } from "components/Fields"
+import { Link } from "react-router-dom"
 
 const { Text } = Typography
 
@@ -98,45 +99,56 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 						dataSource={depositList}
 						loading={loading}
 						locale={{ emptyText: "Kamu belum ada ngelakuin deposit" }}
-						renderItem={({ status, ...item }) => (
-							<ListItem>
-								<Row>
-									<Col lg={2}>
-										<div>
-											<Icon
-												type="check-circle"
-												theme="twoTone"
-												twoToneColor="#52c41a"
-												style={{ fontSize: 20 }}
-											/>
-										</div>
-									</Col>
-									<Col lg={22}>
-										<List.Item.Meta
-											title={
-												<span>
-													Kamu deposit sebesar{" "}
-													<span className="amount">Rp {pricer(item.total)}</span> &nbsp;{" "}
-													<span className="time">{moment(item.created_date).fromNow()}</span>
-												</span>
-											}
-											description={
-												<Badge
-													text={status.status_remark}
-													status={
-														status.status_id === 1
-															? "warning"
-															: status.status_id === 6
-															? "error"
-															: "success"
-													}
+						renderItem={({ status, ...item }) => {
+							const statusId = status.status_id
+							const statusDepo =
+								statusId === 1 ? "warning" : statusId === 6 || statusId === 2 ? "error" : "success"
+
+							return (
+								<ListItem>
+									<Row>
+										<Col lg={2}>
+											<div>
+												<Icon
+													type="check-circle"
+													theme="twoTone"
+													twoToneColor="#52c41a"
+													style={{ fontSize: 20 }}
 												/>
-											}
-										/>
-									</Col>
-								</Row>
-							</ListItem>
-						)}
+											</div>
+										</Col>
+										<Col lg={22}>
+											<List.Item.Meta
+												title={
+													<span>
+														Kamu deposit sebesar{" "}
+														<span className="amount">Rp {pricer(item.total)}</span> &nbsp;{" "}
+														<span className="time">
+															{moment(item.created_date).fromNow()}
+														</span>
+													</span>
+												}
+												description={
+													<div>
+														<Badge
+															text={status.status_remark}
+															status={statusDepo}
+															style={{ marginBottom: "1em", display: "block" }}
+														/>
+														{statusId === 1 && (
+															<Link to="/deposit/confirmation">
+																Konfirmasi deposit sekarang&nbsp;
+																<Icon type="right" />
+															</Link>
+														)}
+													</div>
+												}
+											/>
+										</Col>
+									</Row>
+								</ListItem>
+							)
+						}}
 					/>
 				</Col>
 			</Row>

@@ -35,7 +35,9 @@ function reducer(state = initial, action) {
 		case types.SAVE_ORDER:
 			return { ...state, orderDetails: action.payload, loading: false }
 		case types.FETCH_ORDER_HISTORY:
-			const orderHistory = action.payload.map(({ customers, orders_detail, ...item }) => {
+			const orderHistory = action.payload.map(item => {
+				const { customers, orders_detail } = item
+
 				if (customers.id === akunKoko) {
 					return {
 						...item,

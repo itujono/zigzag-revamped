@@ -49,8 +49,8 @@ const getDiscount = (cartItems = [], qty) => {
 
 	if (typeRemark.toLowerCase() === "reguler") {
 		if (qty > 2) {
-			const itemsNotPromo = cartItems.filter(item => item.promo === 0)
-			discount = 10000 * itemsNotPromo.length
+			const itemsNotPromo = cartItems.filter(({ product_data }) => (product_data.products || {}).is_promo === 0)
+			discount = 10000 * itemsNotPromo.reduce((acc, curr) => acc + Number(curr.qty), 0)
 		}
 	}
 

@@ -29,12 +29,16 @@ export default function Summary({ handlers: { saveOrder } }) {
 	const [confirmModal, setConfirmModal] = useState(false)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
+	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
+	const { account_type_remark: typeRemark } = accountType
+	const isPartner = typeRemark.toLowerCase() === "partner"
+
 	const { cartTotal = {}, order_detail = {} } = formData
 	const generalTotal =
 		Number(order_detail.ekspedition_total) +
 		Number(cartTotal.price) +
 		Number(formData.unique_code || 0) -
-		Number(formData.discount || 0)
+		Number(cartTotal.discount || 0)
 
 	const handleSaveOrder = () => {
 		const {
@@ -62,11 +66,13 @@ export default function Summary({ handlers: { saveOrder } }) {
 			shipping_address: formData.address,
 			order_id: String(order_detail.id),
 			total_weight: cartTotal.roundedWeight,
-			discount: formData.discount || 0
+			discount: cartTotal.discount || 0
 		}
 
 		saveOrder(values, push)
 	}
+
+	if (!isPartner && !formData.payment) push("/404")
 
 	return (
 		<Section paddingHorizontal="0">
@@ -98,7 +104,7 @@ export default function Summary({ handlers: { saveOrder } }) {
 							<Heading reverse content="Diskon" subheader="Jika ada diskon, akan muncul di sini" />
 						</Col>
 						<Col lg={8} className="right">
-							<Heading content={`Rp ${pricer(formData.discount || 0)}`} />
+							<Heading content={`Rp ${pricer(cartTotal.discount || 0)}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
