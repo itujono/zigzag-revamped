@@ -173,19 +173,8 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				message.error("Kamu harus login dulu ya")
 			})
 		} else {
-			// if (isInCart && Object.keys(isInCart).length > 0) {
-			// 	const productPrice = (isInCart.product_data || {}).product_price.price
-			// 	const updateItem = {
-			// 		cart_id: isInCart.id,
-			// 		qty: Number(isInCart.qty) + 1,
-			// 		weight: isInCart.weight,
-			// 		total_price: productPrice * Number(isInCart.qty) * 1
-			// 	}
-
-			// 	updateCartItem(updateItem)
-			// } else {
 			const item = {
-				product_id: productId,
+				product_id: Number(productId),
 				product_more_detail_id: isShoes ? selectedSize.id : (selectedColor.product_more || [])[0].id,
 				weight: product.weight,
 				qty: 1,
@@ -195,7 +184,6 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 			}
 
 			addItemToCart(item)
-			// }
 		}
 	}
 
@@ -203,7 +191,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		if (!selectedColor || Object.keys(selectedColor).length === 0) message.error("Jangan lupa pilih warna nya ya")
 		else {
 			const item = {
-				product_id: productId,
+				product_id: Number(productId),
 				product_more_detail_id: (selectedColor.product_more || [])[0].id,
 				color: selectedColor.color,
 				size: (selectedColor.product_more || [])[0].size

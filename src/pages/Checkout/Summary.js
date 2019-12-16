@@ -34,10 +34,6 @@ export default function Summary({ handlers: { saveOrder } }) {
 	const isPartner = typeRemark.toLowerCase() === "partner"
 
 	const { cartTotal, order_detail = {} } = formData
-	const adjustedCartItems = formData.cartItems.map(item => {
-		const { id, ...restItem } = item
-		return restItem
-	})
 
 	const generalTotal =
 		Number(order_detail.ekspedition_total) +
@@ -68,7 +64,7 @@ export default function Summary({ handlers: { saveOrder } }) {
 			city_name: formData.city_name,
 			subdistrict_name: formData.subdistrict_name,
 			payment_method: (formData.payment || {}).value,
-			order_detail: JSON.stringify(adjustedCartItems),
+			order_detail: JSON.stringify(formData.cartItems),
 			shipping_address: formData.address,
 			order_id: order_detail.id,
 			total_weight: cartTotal.roundedWeight,

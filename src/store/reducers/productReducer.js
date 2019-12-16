@@ -101,23 +101,23 @@ function reducer(state = initialState, action) {
 			return { ...state, categories: action.payload, categoryOptions, loading: false }
 
 		case types.FETCH_CART_ITEMS:
-			const cartItems = action.payload.map(({ product_data, ...item }) => {
-				const { product_price } = renderPrice(product_data.product_price)
+			const cartItems = action.payload.map(({ product_data, product_id, ...item }) => {
+				const { product_price } = renderPrice(item.product_price)
 				return {
 					...item,
-					weight_per_pcs: (product_data.products || {}).weight_per_pcs,
-					product_id: (product_data.products || {}).id,
+					product_id,
+					weight_per_pcs: product_data.weight_per_pcs,
 					product_data: { ...product_data, product_price }
 				}
 			})
-			const totalPrice = action.payload.map(item => item.total_price).reduce((acc, curr) => acc + curr, 0)
+			const totalPrice = action.payload.reduce((acc, curr) => acc + curr.product_total_price, 0)
 			const totalWeight = action.payload
-				.map(({ qty, product_data }) => {
-					const weight_per_pcs = (product_data.products || {}).weight_per_pcs
-					return weight_per_pcs * Number(qty)
+				.map(({ product_qty, product_data }) => {
+					const weight_per_pcs = product_data.weight_per_pcs
+					return weight_per_pcs * Number(product_qty)
 				})
 				.reduce((acc, curr) => acc + curr, 0)
-			const totalQty = action.payload.map(item => Number(item.qty)).reduce((acc, curr) => acc + curr, 0)
+			const totalQty = action.payload.reduce((acc, curr) => acc + curr.product_qty, 0)
 			const roundedWeight = roundupWeight(String(totalWeight))
 			const discount = getDiscount(cartItems, totalQty)
 
