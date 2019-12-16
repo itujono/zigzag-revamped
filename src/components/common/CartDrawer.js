@@ -1,9 +1,9 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useCallback } from "react"
 import { connect } from "react-redux"
 import { Formik } from "formik"
 import { SubmitButton } from "formik-antd"
 import { Link } from "react-router-dom"
-import { List, Avatar, Row, Col, Icon, Form, Spin, Tooltip } from "antd"
+import { List, Avatar, Row, Col, Icon, Form, Tooltip } from "antd"
 
 import Drawer from "components/Drawer"
 import Heading from "components/Heading"
@@ -107,9 +107,15 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 		localStorage.setItem("cartDrawerFromStore", false)
 	}
 
-	useEffect(() => {
+	const handleFetchCartItems = useCallback(() => {
 		if (token) fetchCartItems()
 	}, [fetchCartItems, token])
+
+	useEffect(() => {
+		handleFetchCartItems()
+	}, [handleFetchCartItems, token])
+
+	console.log({ cartItems, cartTotal })
 
 	return (
 		<Drawer
@@ -137,17 +143,17 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 						emptyText: <Empty isEmptyItems description="Masih belum ada apa-apa di cart kamu nih" />
 					}}
 					loading={loading}
-					renderItem={({ product_data, ...item }) => {
-						const quantity = Number(item.qty)
-						const price = (product_data.product_price || {}).price
+					renderItem={({ product_data, product_total_price, ...item }) => {
+						const quantity = Number(item.product_qty)
+						const price = (item.product_price || {}).price
 						const photo = (product_data.product_image || [])[0] || {}
-						const name = (product_data.products || {}).name || "-"
+						const name = item.product_name || "-"
 
 						const handleUpdateCart = (values, { setSubmitting }) => {
 							values = {
 								qty: values.qty,
-								cart_id: item.id,
-								weight: item.weight,
+								cart_id: item.cart_id,
+								weight: item.weight_per_pcs * values.qty,
 								total_price: values.qty * price
 							}
 
@@ -160,11 +166,13 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 									avatar={<Avatar src={photo.picture} shape="square" className="product-photo" />}
 									title={
 										<p style={{ marginBottom: 0 }}>
-											<Link to={`/product/${item.id}-${name}`}>{name}</Link> &middot;{" "}
+											<Link to={`/product/${item.product_id}-${name}`}>{name}</Link> &middot;{" "}
 											<span>
 												Rp {pricer(price)} / pcs &middot;{" "}
-												<span css="color: #999;">{item.color}</span>{" "}
-												{item.size !== 0 && <span css="color: #999;">(size {item.size})</span>}
+												<span css="color: #999;">{item.product_color}</span>{" "}
+												{item.product_size !== 0 && (
+													<span css="color: #999;">(size {item.product_size})</span>
+												)}
 											</span>
 										</p>
 									}
@@ -173,7 +181,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 											<Col lg={24}>
 												<Formik
 													onSubmit={handleUpdateCart}
-													initialValues={{ qty: Number(item.qty) }}
+													initialValues={{ qty: Number(item.product_qty) }}
 													render={({ handleSubmit }) => (
 														<Form layout="inline" onSubmit={handleSubmit}>
 															<TextInput
@@ -191,7 +199,9 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 																	type="danger"
 																	shape={null}
 																	icon="delete"
-																	onClick={() => handleDeleteCart(item.id, name)}
+																	onClick={() =>
+																		handleDeleteCart(item.product_id, name)
+																	}
 																>
 																	Hapus
 																</Button>
@@ -200,7 +210,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 													)}
 												/>
 												<p className="price-weight">
-													Rp {pricer(item.total_price)} &middot;{" "}
+													Rp {pricer(product_total_price)} &middot;{" "}
 													<span>{item.weight_per_pcs * quantity} gram</span>
 												</p>
 											</Col>
@@ -244,7 +254,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 
 const mapState = ({ product }) => ({
 	cartItems: product.cartItems,
-	cartTotal: product.cartTotal || {},
+	cartTotal: product.cartTotal,
 	loading: product.loading
 })
 

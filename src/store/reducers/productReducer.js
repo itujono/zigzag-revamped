@@ -52,8 +52,8 @@ const getDiscount = (cartItems = [], qty) => {
 
 	if (typeRemark.toLowerCase() === "reguler") {
 		if (qty > 2) {
-			const itemsNotPromo = cartItems.filter(({ product_data }) => (product_data.products || {}).is_promo === 0)
-			discount = 10000 * itemsNotPromo.reduce((acc, curr) => acc + Number(curr.qty), 0)
+			const itemsNotPromo = cartItems.filter(({ product_data }) => product_data.is_promo === 0)
+			discount = 10000 * itemsNotPromo.reduce((acc, curr) => acc + Number(curr.product_qty), 0)
 		}
 	}
 
@@ -106,8 +106,9 @@ function reducer(state = initialState, action) {
 				return {
 					...item,
 					product_id,
-					weight_per_pcs: product_data.weight_per_pcs,
-					product_data: { ...product_data, product_price }
+					product_data,
+					product_price,
+					weight_per_pcs: product_data.weight_per_pcs
 				}
 			})
 			const totalPrice = action.payload.reduce((acc, curr) => acc + curr.product_total_price, 0)
