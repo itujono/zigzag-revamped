@@ -74,7 +74,7 @@ export const orderConfirmation = (values, push) => dispatch => {
 	formData.append("total_transfer", values.total_transfer)
 	formData.append("evidence_file", values.evidence_file)
 	return instance
-		.post(`/order/confirmation_order`, values)
+		.post(`/order/confirmation_order`, formData)
 		.then(({ data }) => dispatch({ type: types.ORDER_CONFIRMATION, payload: data.data }))
 		.then(() => {
 			localStorage.removeItem("formData")
