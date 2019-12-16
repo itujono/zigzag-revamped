@@ -11,6 +11,7 @@ import { fetchCartItems, updateCartItem, deleteCartItem } from "store/actions/pr
 import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
+import { mobile } from "helpers"
 
 const Nav = styled.nav`
 	width: inherit;
@@ -99,14 +100,21 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 			/>
 			<Row type="flex" justify="space-between">
 				<Col xs={16}>
-					<Logo /> &nbsp;{" "}
-					<span>
-						<Heading
-							bold
-							content="Zigzag Batam"
-							style={{ display: "inline-block", verticalAlign: "sub" }}
-						/>
-					</span>
+					<Logo /> &nbsp; &nbsp;
+					{mobile && (
+						<Link to="/search">
+							<Icon type="search" />
+						</Link>
+					)}
+					{!mobile && (
+						<span>
+							<Heading
+								bold
+								content="Zigzag Batam"
+								style={{ display: "inline-block", verticalAlign: "sub" }}
+							/>
+						</span>
+					)}
 				</Col>
 				<Col xs={8} style={{ textAlign: "right" }}>
 					{token ? (
