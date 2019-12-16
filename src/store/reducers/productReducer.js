@@ -26,7 +26,6 @@ const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 const { account_type_remark: typeRemark } = accountType
 const token = localStorage.getItem("access_token")
 const userId = Number(localStorage.getItem("user_id"))
-// const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
 const renderPrice = productPrice => {
 	const price = productPrice.filter(({ price_type }) => {

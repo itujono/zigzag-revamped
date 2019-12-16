@@ -10,7 +10,7 @@ import DynamicIcon from "./DynamicIcon"
 function SidebarMenu({ page, fetchProductCategories, categories }) {
 	useEffect(() => {
 		fetchProductCategories()
-	}, [])
+	}, [fetchProductCategories])
 
 	return (
 		<div>

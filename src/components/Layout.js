@@ -9,17 +9,16 @@ import SidebarMenu from "./_SidebarMenu"
 
 const Header = styled(PageLayout.Header)`
 	&& {
-		${media.mobile`
-            padding-left: 1em;
-            padding-right: 1em;
-        `}
-	}
-
-	&& {
 		padding: 0 35px;
 		background-color: #fff;
 		height: 5em;
 		border-bottom: 1px solid #eee;
+
+		${media.mobile`
+            padding-left: 1em;
+            padding-right: 1em;
+			height: auto;
+        `}
 	}
 `
 const Footer = styled(PageLayout.Footer)`

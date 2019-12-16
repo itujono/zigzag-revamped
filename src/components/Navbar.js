@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react"
 import { Row, Col, Menu, Icon, Typography, Input, message, Badge, Dropdown } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
-import { Link, withRouter, useHistory } from "react-router-dom"
+import { Link, withRouter, useHistory, NavLink } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
 import { unauthUser } from "store/actions/authActions"
-import { fetchCartItems, updateCartItem, deleteCartItem } from "store/actions/productActions"
+import { updateCartItem, deleteCartItem } from "store/actions/productActions"
 import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
 import { mobile } from "helpers"
+import { HomewareIcon, ShoesIcon, WalletIcon, LingerieIcon, BagIcon } from "./Icons"
 
 const Nav = styled.nav`
 	width: inherit;
@@ -67,7 +68,10 @@ const StyledCardIcon = styled(Badge)`
 const StyledLeftMenu = styled(Col)`
 	.search-icon {
 		font-weight: bold;
-		font-size: 20px;
+		font-size: 18px;
+		position: relative;
+		top: 5px;
+		left: 5px;
 	}
 `
 
@@ -85,7 +89,13 @@ const StyledMobileMenu = styled(Menu)`
 	}
 `
 
-function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...props }) {
+const BottomBar = styled(Row)`
+	background-color: #fff;
+	border-top: 1px solid #eee;
+	margin-top: 1em;
+`
+
+function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categories, ...props }) {
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const token = localStorage.getItem("access_token")
 
@@ -111,6 +121,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
 		if (token) fetchUser()
+		// fetchProductCategories()
 	}, [cartDrawerFromStore, fetchUser, token])
 
 	return (
@@ -121,7 +132,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 			/>
 			<Row type="flex" justify="space-between">
 				<StyledLeftMenu xs={16}>
-					<Logo /> &nbsp; &nbsp;
+					<Logo width="60" /> &nbsp; &nbsp;
 					{mobile && (
 						<Link to="/search" className="search-icon">
 							<Icon type="search" />
@@ -144,6 +155,36 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 					/>
 				</Col>
 			</Row>
+			{mobile && (
+				<BottomBar>
+					<Col lg={24} xs={24}>
+						<Row type="flex">
+							{categories.map(item => {
+								const theIcon =
+									item.id === 1 ? (
+										<HomewareIcon />
+									) : item.id === 2 ? (
+										<ShoesIcon />
+									) : item.id === 3 ? (
+										<WalletIcon />
+									) : item.id === 4 ? (
+										<LingerieIcon />
+									) : (
+										<BagIcon />
+									)
+
+								return (
+									<Menu.Item key={item.id}>
+										<NavLink to={`/category/${item.id}-${item.name.toLowerCase()}`}>
+											{theIcon} {item.name}
+										</NavLink>
+									</Menu.Item>
+								)
+							})}
+						</Row>
+					</Col>
+				</BottomBar>
+			)}
 		</Nav>
 	)
 }
@@ -169,6 +210,10 @@ function RightMenu({ data, handlers }) {
 					</Link>
 				</Menu.Item>
 			)}
+			<Menu.Divider />
+			<Menu.Item key="logout" onClick={handleLogout}>
+				Logout
+			</Menu.Item>
 		</StyledMobileMenu>
 	)
 
@@ -176,7 +221,7 @@ function RightMenu({ data, handlers }) {
 		if (mobile)
 			return (
 				<Dropdown overlay={menuMobile} trigger={["click"]}>
-					<Button type="primary" icon="more" shape="circle" />
+					<Button type="primary" icon="more" shape="circle" size="large" />
 				</Dropdown>
 			)
 
@@ -255,10 +300,18 @@ const mapState = ({ user, auth, other, product }) => ({
 	role: auth.role,
 	cartDrawerFromStore: other.cartDrawer,
 	cartItems: product.cartItems,
-	cartTotal: product.cartTotal
+	cartTotal: product.cartTotal,
+	categories: product.categories.filter(item => item.parent === 0)
 })
 
-const actions = { setCartDrawerFromStore, unauthUser, fetchUser, updateCartItem, deleteCartItem }
+const actions = {
+	setCartDrawerFromStore,
+	unauthUser,
+	fetchUser,
+	updateCartItem,
+	deleteCartItem
+	// fetchProductCategories
+}
 
 // prettier-ignore
 export default withRouter(connect(mapState, actions)(Navbar))
