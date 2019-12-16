@@ -99,7 +99,7 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 						dataSource={depositList}
 						loading={loading}
 						locale={{ emptyText: "Kamu belum ada ngelakuin deposit" }}
-						renderItem={({ status, ...item }) => {
+						renderItem={({ status, deposit_code, ...item }) => {
 							const statusId = status.status_id
 							const statusDepo =
 								statusId === 1 ? "warning" : statusId === 6 || statusId === 2 ? "error" : "success"
@@ -136,7 +136,12 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 															style={{ marginBottom: "1em", display: "block" }}
 														/>
 														{statusId === 1 && (
-															<Link to="/deposit/confirmation">
+															<Link
+																to={{
+																	pathname: "/deposit/confirmation",
+																	state: { depositCode: deposit_code }
+																}}
+															>
 																Konfirmasi deposit sekarang&nbsp;
 																<Icon type="right" />
 															</Link>

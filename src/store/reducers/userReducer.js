@@ -30,10 +30,12 @@ function reducer(state = initialState, action) {
 		case types.CHANGE_PROFILE_PASSWORD:
 			return { ...state, loading: false }
 		case types.FETCH_LIST_DEPOSIT:
-			const depositCodeOptions = action.payload[0].deposits.map(({ deposit_code }) => ({
-				value: deposit_code,
-				label: deposit_code
-			}))
+			const depositCodeOptions = action.payload[0].deposits
+				.sort((a, b) => Date.parse(b.created_date) - Date.parse(a.created_date))
+				.map(({ deposit_code }) => ({
+					value: deposit_code,
+					label: deposit_code
+				}))
 
 			return {
 				...state,

@@ -3,7 +3,7 @@ import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton, FormikDebug } from "formik-antd"
 import { connect } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 
 import { fetchListDeposit, depositConfirmation } from "store/actions/userActions"
 import { fetchBankAccounts } from "store/actions/otherActions"
@@ -13,6 +13,7 @@ import styled from "styled-components/macro"
 
 function DepositConfirmation({ bankAccountOptions, depositCodeOptions, ...props }) {
 	const { push } = useHistory()
+	const { state = {} } = useLocation()
 
 	const { fetchBankAccounts, depositConfirmation, fetchListDeposit } = props
 	const [file, setFile] = useState({})
@@ -58,7 +59,8 @@ function DepositConfirmation({ bankAccountOptions, depositCodeOptions, ...props 
 					/>
 					<Formik
 						onSubmit={handleSubmitConfirmation}
-						render={({ handleSubmit, isValid }) => (
+						initialValues={{ deposit_code: state.depositCode }}
+						render={({ handleSubmit }) => (
 							<Form layout="vertical" onSubmit={handleSubmit}>
 								<SelectInput
 									name="deposit_code"

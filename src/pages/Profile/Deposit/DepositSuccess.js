@@ -27,10 +27,10 @@ const StyledCard = styled(Card)`
 			.ant-card-body {
 				padding: 0;
 				.left {
-					padding: 1em;
+					padding: 2em;
 				}
 				.right {
-					padding: 1em;
+					padding: 2em;
 					text-align: left;
 					background-color: ${theme.greyColor[4]};
 				}
@@ -79,13 +79,12 @@ export default function ConfirmationSuccess() {
 							showIcon
 							message={
 								<span>
-									Kalo email yang berisi detail info orderan nya gak ada, jangan lupa{" "}
-									<strong>cek folder spam</strong> nya juga ya.
+									Kalo email nya gak ada, jangan lupa <strong>cek folder spam</strong> nya juga ya.
 								</span>
 							}
 						/>
 					</Col>
-					<Col lg={8} className="right">
+					<Col lg={8} xs={24} className="right">
 						<Heading content="Coba belanja lagi" subheader={usefulLinks} />
 					</Col>
 				</Row>
