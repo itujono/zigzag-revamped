@@ -141,6 +141,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 						name="repeat_password"
 						label="Ulangi password kamu"
 						placeholder="Harus sama ama password di atas ya..."
+						onPressEnter={() => handleNext("accountType")}
 					/>
 					<Row type="flex" justify="space-between">
 						<Col lg={12}></Col>
@@ -167,7 +168,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 					{/* <RadioInput name="acc_type" label="Pilih tipe akun" options={accountTypeOptions} /> */}
 					<Row style={{ marginBottom: "2em" }}>
 						{accountTypeOptions.map(item => (
-							<Col lg={24}>
+							<Col lg={24} key={item.value}>
 								<AccountCard
 									onClick={() => setAccountType(item.value)}
 									value={item.value}

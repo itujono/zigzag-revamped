@@ -65,7 +65,7 @@ function Forgot({ forgotPassword, error }) {
 				</Col>
 			</Row> */}
 			<Row type="flex" align="middle" justify="center">
-				<LeftSide lg={10}>
+				<LeftSide lg={10} xs={24}>
 					<Heading
 						bold
 						content="Lupa password?"
@@ -96,7 +96,7 @@ function Forgot({ forgotPassword, error }) {
 						/>
 					</TheCard>
 				</LeftSide>
-				<Col lg={12}>
+				<Col lg={12} xs={24}>
 					<TheImage>
 						<img
 							src="https://assets.website-files.com/5ccc8aa73871f9d0b1c81c04/5ced7f5fe2e0591aebdd3fba_sign-in.jpg"
