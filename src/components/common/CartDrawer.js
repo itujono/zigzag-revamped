@@ -115,8 +115,6 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 		handleFetchCartItems()
 	}, [handleFetchCartItems, token])
 
-	console.log({ cartItems, cartTotal })
-
 	return (
 		<Drawer
 			placement="right"

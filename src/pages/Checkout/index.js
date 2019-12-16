@@ -196,11 +196,11 @@ function Checkout({
 												/>
 											)
 										}}
-										renderItem={({ product_data, ...item }) => {
-											const quantity = Number(item.qty)
-											const price = (product_data.product_price || {}).price
+										renderItem={({ product_data, product_total_price, ...item }) => {
+											const quantity = Number(item.product_qty)
+											const price = (item.product_price || {}).price
 											const photo = (product_data.product_image || [])[0] || {}
-											const name = (product_data.products || {}).name || "-"
+											const name = item.product_name || "-"
 
 											return (
 												<CartItem>

@@ -42,6 +42,11 @@ export default function Summary({ handlers: { saveOrder } }) {
 		Number(cartTotal.discount || 0)
 
 	const handleSaveOrder = () => {
+		const adjustedCartItems = formData.cartItems.map(({ product_price, ...item }) => {
+			const { cart_id, weight_per_pcs, product_data, ...restCart } = item
+			return { ...restCart, product_price: product_price.price }
+		})
+
 		const {
 			cartItems,
 			cartTotal,
@@ -60,11 +65,11 @@ export default function Summary({ handlers: { saveOrder } }) {
 
 		const values = {
 			...restValues,
-			province_name: formData.province_name,
-			city_name: formData.city_name,
-			subdistrict_name: formData.subdistrict_name,
+			province_name: formData.province_name || formData.province,
+			city_name: formData.city_name || formData.city,
+			subdistrict_name: formData.subdistrict_name || formData.subdistrict,
 			payment_method: (formData.payment || {}).value,
-			order_detail: JSON.stringify(formData.cartItems),
+			order_detail: JSON.stringify(adjustedCartItems),
 			shipping_address: formData.address,
 			order_id: order_detail.id,
 			total_weight: cartTotal.roundedWeight,

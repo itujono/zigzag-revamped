@@ -215,7 +215,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 				<Col lg={8}>
 					<Affix offset={30}>
 						<Card title="CS kamu" style={{ marginBottom: "2em" }}>
-							<Row type="flex">
+							<Row type="flex" gutter={32}>
 								<Col lg={8}>
 									<Avatar
 										css={`
@@ -234,7 +234,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 								</Col>
 							</Row>
 						</Card>
-						{upgradeStatus === 3 && (
+						{upgradeStatus === 2 && (
 							<Alert
 								type="warning"
 								message="Konfirmasi upgrade akun?"
