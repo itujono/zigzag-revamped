@@ -10,12 +10,17 @@ import { forgotPassword } from "store/actions/authActions"
 import { TextInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
+import { media } from "helpers"
 
 const TheImage = styled.section`
 	width: 100%;
 	height: 100%;
 	margin-left: -50px;
 	z-index: 0;
+
+	${media.mobile`
+		margin-left: initial;
+	`}
 `
 
 const TheCard = styled(Card)`
@@ -26,12 +31,23 @@ const TheCard = styled(Card)`
 		.ant-card-body {
 			padding: 4em;
 		}
+
+		${media.mobile`
+			margin-bottom: 2em;
+			.ant-card-body {
+				padding: 2em;
+			}
+		`}
 	}
 `
 
 const LeftSide = styled(Col)`
 	left: 50px;
 	z-index: 1;
+
+	${media.mobile`
+		left: initial;
+	`}
 `
 
 function Forgot({ forgotPassword, error }) {

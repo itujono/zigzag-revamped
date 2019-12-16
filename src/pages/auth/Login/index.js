@@ -37,7 +37,7 @@ const TheCard = styled(Card)`
 		&& {
 			margin-bottom: 2em;
 			.ant-card-body {
-				padding: 1em;
+				padding: 2em;
 			}
 		}
 	`}
