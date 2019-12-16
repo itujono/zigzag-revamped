@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Section, Heading, Card, ButtonLink } from "components"
 import { TextInput, DateInput, SelectInput } from "components/Fields"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
@@ -7,16 +7,21 @@ import { useHistory, Link } from "react-router-dom"
 import { Formik } from "formik"
 import { SubmitButton, ResetButton } from "formik-antd"
 
-import { fetchBankAccounts, fetchOrderCodeList } from "store/actions/otherActions"
+import { fetchBankAccounts, fetchOrderCodeList, orderConfirmation } from "store/actions/otherActions"
 import { mobile } from "helpers"
 
-function PaymentConfirmation({ bankAccountOptions, ...props }) {
+function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props }) {
 	const { push } = useHistory()
-	const { fetchOrderCodeList, fetchBankAccounts } = props
+	const [file, setFile] = useState({})
+	const { fetchOrderCodeList, fetchBankAccounts, orderConfirmation } = props
 
 	const uploadProps = {
+		multiple: false,
 		name: "file",
-		action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+		beforeUpload(file) {
+			setFile(file)
+			return false
+		},
 		onChange(info) {
 			const { status } = info.file
 			if (status !== "uploading") {
@@ -31,15 +36,14 @@ function PaymentConfirmation({ bankAccountOptions, ...props }) {
 	}
 
 	const handleSubmitConfirmation = (values, { setSubmitting }) => {
-		console.log({ values })
-		push({ pathname: "/order/confirmation/success", state: { isSuccess: true } })
-		setSubmitting(false)
+		values = { ...values, bank_number_sender: values.bank_sender, evidence_file: file }
+		orderConfirmation(values, push).then(() => setSubmitting(false))
 	}
 
 	useEffect(() => {
 		fetchBankAccounts()
 		fetchOrderCodeList()
-	}, [])
+	}, [fetchBankAccounts, fetchOrderCodeList])
 
 	return (
 		<Section centered width="75%">
@@ -59,7 +63,8 @@ function PaymentConfirmation({ bankAccountOptions, ...props }) {
 										name="order_code"
 										label="Kode order"
 										placeholder="Masukkan kode order kamu..."
-										options={[]}
+										options={orderCodeOptions}
+										helpText="Silakan lihat kode order yang mau dipilih di inbox email kamu"
 									/>
 									<SelectInput
 										name="bank_receiver"
@@ -95,8 +100,7 @@ function PaymentConfirmation({ bankAccountOptions, ...props }) {
 											</p>
 										</Upload.Dragger>
 									</Form.Item>
-									<SubmitButton>Konfirmasi sekarang</SubmitButton> &nbsp;{" "}
-									<ResetButton type="link">Reset</ResetButton>
+									<SubmitButton>Konfirmasi sekarang</SubmitButton>
 								</Form>
 							)}
 						/>
@@ -119,9 +123,10 @@ const mapState = ({ other }) => {
 	}))
 
 	return {
+		orderCodeOptions: other.orderCodeOptions,
 		bankAccounts: other.bankAccounts,
 		bankAccountOptions
 	}
 }
 
-export default connect(mapState, { fetchBankAccounts, fetchOrderCodeList })(PaymentConfirmation)
+export default connect(mapState, { fetchBankAccounts, fetchOrderCodeList, orderConfirmation })(PaymentConfirmation)

@@ -15,7 +15,7 @@ export const fetchOrderCodeList = () => dispatch => {
 		.get(`/order/order_code/list`)
 		.then(({ data }) => {
 			console.log({ orderCodeList: data })
-			dispatch({ type: types.FETCH_ORDER_CODE_LIST, payload: data.result })
+			dispatch({ type: types.FETCH_ORDER_CODE_LIST, payload: data.data.orders })
 		})
 		.catch(err => console.error(err.response))
 }
@@ -61,6 +61,26 @@ export const saveOrder = (values, push) => dispatch => {
 			push({ pathname: "/order/order_success", state: { isSuccess: true } })
 		})
 		.catch(err => useRenderError(err, dispatch, types.SAVE_ORDER_ERROR))
+}
+
+export const orderConfirmation = (values, push) => dispatch => {
+	dispatch(loadingOther())
+	const formData = new FormData()
+	formData.append("order_code", values.order_code)
+	formData.append("bank_sender", values.bank_sender)
+	formData.append("bank_number_sender", values.bank_number_sender)
+	formData.append("bank_receiver", values.bank_receiver)
+	formData.append("date", values.date)
+	formData.append("total_transfer", values.total_transfer)
+	formData.append("evidence_file", values.evidence_file)
+	return instance
+		.post(`/order/confirmation_order`, values)
+		.then(({ data }) => dispatch({ type: types.ORDER_CONFIRMATION, payload: data.data }))
+		.then(() => {
+			localStorage.removeItem("formData")
+			push({ pathname: "/order/confirmation/success", state: { isSuccess: true } })
+		})
+		.catch(err => useRenderError(err, dispatch, types.ORDER_CONFIRMATION_ERROR))
 }
 
 export const fetchOrderHistory = () => dispatch => {

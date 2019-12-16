@@ -39,7 +39,6 @@ function UpgradeConfirmation({ bankAccountOptions, ...props }) {
 
 	const handleSubmitConfirmation = (values, { setSubmitting }) => {
 		values = { ...values, bank_number_sender: values.bank_sender, evidence_file: file }
-		console.log({ values })
 		upgradeConfirmation(values, push).then(() => setSubmitting(false))
 	}
 

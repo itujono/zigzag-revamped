@@ -9,8 +9,10 @@ const initial = {
 	saveOrderError: null,
 	saveCourierDetailsError: null,
 	orderHistory: [],
+	orderCodeOptions: [],
 	orderHistoryError: null,
-	cancelOrderError: null
+	cancelOrderError: null,
+	orderConfirmationError: null
 }
 
 function reducer(state = initial, action) {
@@ -19,8 +21,11 @@ function reducer(state = initial, action) {
 			return { ...state, loading: true }
 		case types.SET_CART_DRAWER_FROM_STORE:
 			return { ...state, cartDrawer: action.payload, loading: false }
+
 		case types.FETCH_ORDER_CODE_LIST:
-			return { ...state, orderCodeList: action.payload, loading: false }
+			const orderCodeOptions = action.payload.map(({ order_code }) => ({ value: order_code, label: order_code }))
+			return { ...state, orderCodeList: action.payload, orderCodeOptions, loading: false }
+
 		case types.FETCH_BANK_ACCOUNTS:
 			return {
 				...state,
@@ -35,10 +40,13 @@ function reducer(state = initial, action) {
 			return { ...state, courierDetails: action.payload, loading: false }
 		case types.SAVE_ORDER:
 			return { ...state, orderDetails: action.payload, loading: false }
+		case types.ORDER_CONFIRMATION:
+			return { ...state, loading: false }
 		case types.CANCEL_ORDER:
 			return { ...state, cancelOrder: action.payload, loading: false }
 		case types.CANCEL_ORDER_ERROR:
 			return { ...state, cancelOrderError: action.payload, loading: false }
+
 		case types.FETCH_ORDER_HISTORY:
 			const orderHistory = action.payload.map(item => {
 				const { customers, orders_detail } = item
@@ -62,6 +70,8 @@ function reducer(state = initial, action) {
 			return { ...state, orderHistoryError: action.payload, loading: false }
 		case types.SAVE_COURIER_DETAILS_ERROR:
 			return { ...state, saveCourierDetailsError: action.payload, loading: false }
+		case types.ORDER_CONFIRMATION_ERROR:
+			return { ...state, orderConfirmationError: action.payload, loading: false }
 		case types.SAVE_ORDER_ERROR:
 			return { ...state, saveOrderError: action.payload, loading: false }
 		case types.FETCH_CUSTOMER_SERVICES:
