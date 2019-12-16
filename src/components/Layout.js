@@ -18,6 +18,7 @@ const Header = styled(PageLayout.Header)`
             padding-left: 1em;
             padding-right: 1em;
 			height: auto;
+			box-shadow: 1px 4px 9px rgba(0, 0, 0, .05);
         `}
 	}
 `

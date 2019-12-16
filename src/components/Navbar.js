@@ -7,7 +7,7 @@ import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
 import { unauthUser } from "store/actions/authActions"
-import { updateCartItem, deleteCartItem } from "store/actions/productActions"
+import { updateCartItem, deleteCartItem, fetchProductCategories } from "store/actions/productActions"
 import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
@@ -93,6 +93,18 @@ const BottomBar = styled(Row)`
 	background-color: #fff;
 	border-top: 1px solid #eee;
 	margin-top: 1em;
+	.scrolling-bar {
+		flex-wrap: nowrap;
+		overflow-x: scroll;
+		width: auto;
+		-webkit-overflow-scrolling: touch;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		a {
+			color: #999;
+		}
+	}
 `
 
 function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categories, ...props }) {
@@ -101,7 +113,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 
 	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
 	const { push } = useHistory()
-	const { setCartDrawerFromStore, fetchUser, updateCartItem, deleteCartItem } = props
+	const { setCartDrawerFromStore, fetchUser, updateCartItem, deleteCartItem, fetchProductCategories } = props
 	const typeId = accountType.account_type_id
 
 	const handleLogout = () => {
@@ -121,8 +133,8 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
 		if (token) fetchUser()
-		// fetchProductCategories()
-	}, [cartDrawerFromStore, fetchUser, token])
+		fetchProductCategories()
+	}, [cartDrawerFromStore, fetchProductCategories, fetchUser, token])
 
 	return (
 		<Nav>
@@ -158,27 +170,26 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 			{mobile && (
 				<BottomBar>
 					<Col lg={24} xs={24}>
-						<Row type="flex">
-							{categories.map(item => {
+						<Row type="flex" className="scrolling-bar">
+							{categories.map(({ id, name }) => {
 								const theIcon =
-									item.id === 1 ? (
-										<HomewareIcon />
-									) : item.id === 2 ? (
-										<ShoesIcon />
-									) : item.id === 3 ? (
-										<WalletIcon />
-									) : item.id === 4 ? (
-										<LingerieIcon />
-									) : (
-										<BagIcon />
-									)
+									id === 1
+										? "icon-diamond"
+										: id === 2
+										? "icon-high-heel-boot"
+										: id === 3
+										? "icon-tubiaozhizuomoban5"
+										: id === 4
+										? "icon-bodystocking"
+										: "icon-bag"
 
 								return (
-									<Menu.Item key={item.id}>
-										<NavLink to={`/category/${item.id}-${item.name.toLowerCase()}`}>
-											{theIcon} {item.name}
+									<Col xs={7} key={id}>
+										<NavLink to={`/category/${id}-${name.toLowerCase()}`}>
+											<DynamicIcon type={theIcon} />
+											&nbsp; {name}
 										</NavLink>
-									</Menu.Item>
+									</Col>
 								)
 							})}
 						</Row>
@@ -309,8 +320,8 @@ const actions = {
 	unauthUser,
 	fetchUser,
 	updateCartItem,
-	deleteCartItem
-	// fetchProductCategories
+	deleteCartItem,
+	fetchProductCategories
 }
 
 // prettier-ignore

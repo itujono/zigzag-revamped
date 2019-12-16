@@ -11,14 +11,14 @@ const loadingRajaOngkir = () => ({ type: types.LOADING_RAJAONGKIR })
 
 export const fetchProvinces = () => dispatch => {
 	dispatch(loadingRajaOngkir())
-	return Axios.get(`${baseUrl}/province`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
+	return Axios.get(`${corsUrl}/${baseUrl}/province`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
 		.then(({ data }) => dispatch({ type: types.FETCH_PROVINCES, payload: data.rajaongkir.results }))
 		.catch(err => useRenderError(err, dispatch, types.FETCH_PROVINCES_ERROR))
 }
 
 export const fetchCities = (cityId, provinceId) => dispatch => {
 	dispatch(loadingRajaOngkir())
-	return Axios.get(`${baseUrl}/city?id=${cityId}&province=${provinceId}`, {
+	return Axios.get(`${corsUrl}/${baseUrl}/city?id=${cityId}&province=${provinceId}`, {
 		params: { key: process.env.REACT_APP_RAJAONGKIR }
 	})
 		.then(({ data }) => dispatch({ type: types.FETCH_CITIES, payload: data.rajaongkir.results }))
@@ -27,7 +27,9 @@ export const fetchCities = (cityId, provinceId) => dispatch => {
 
 export const fetchSubdistricts = cityId => dispatch => {
 	dispatch(loadingRajaOngkir())
-	return Axios.get(`${baseUrl}/subdistrict?city=${cityId}`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
+	return Axios.get(`${corsUrl}/${baseUrl}/subdistrict?city=${cityId}`, {
+		params: { key: process.env.REACT_APP_RAJAONGKIR }
+	})
 		.then(({ data }) => dispatch({ type: types.FETCH_SUBDISTRICTS, payload: data.rajaongkir.results }))
 		.catch(err => useRenderError(err, dispatch, types.FETCH_SUBDISTRICTS_ERROR))
 }

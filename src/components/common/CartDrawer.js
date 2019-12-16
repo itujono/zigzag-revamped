@@ -197,9 +197,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 																	type="danger"
 																	shape={null}
 																	icon="delete"
-																	onClick={() =>
-																		handleDeleteCart(item.product_id, name)
-																	}
+																	onClick={() => handleDeleteCart(item.cart_id, name)}
 																>
 																	Hapus
 																</Button>
