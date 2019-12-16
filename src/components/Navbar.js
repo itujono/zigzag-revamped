@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Menu, Icon, Typography, Input, message, Badge } from "antd"
+import { Row, Col, Menu, Icon, Typography, Input, message, Badge, Dropdown } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
 import { Link, withRouter, useHistory } from "react-router-dom"
@@ -64,6 +64,27 @@ const StyledCardIcon = styled(Badge)`
 	}
 `
 
+const StyledLeftMenu = styled(Col)`
+	.search-icon {
+		font-weight: bold;
+		font-size: 20px;
+	}
+`
+
+const StyledMobileMenu = styled(Menu)`
+	&& {
+		padding: 2em 1.5em;
+		width: 220px;
+		border-radius: 10px;
+		.ant-dropdown-menu-item {
+			padding-bottom: 1em;
+			i {
+				margin-right: 8px;
+			}
+		}
+	}
+`
+
 function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...props }) {
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const token = localStorage.getItem("access_token")
@@ -99,10 +120,10 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
 			/>
 			<Row type="flex" justify="space-between">
-				<Col xs={16}>
+				<StyledLeftMenu xs={16}>
 					<Logo /> &nbsp; &nbsp;
 					{mobile && (
-						<Link to="/search">
+						<Link to="/search" className="search-icon">
 							<Icon type="search" />
 						</Link>
 					)}
@@ -115,76 +136,117 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, ...prop
 							/>
 						</span>
 					)}
-				</Col>
+				</StyledLeftMenu>
 				<Col xs={8} style={{ textAlign: "right" }}>
-					{token ? (
-						<StyledMenu mode="horizontal">
-							<Menu.Item key="search">
-								<Input.Search
-									allowClear
-									name="search"
-									placeholder="Cari apa saja..."
-									style={{ width: 200 }}
-									onSearch={handleSearch}
-								/>
-							</Menu.Item>
-							<Menu.Item
-								key="notifications"
-								style={{ paddingLeft: "2em", paddingRight: 0 }}
-								onClick={handleSetCardDrawer}
-							>
-								<StyledCardIcon dot={cartItems.length > 0}>
-									<Icon type="shopping-cart" />
-								</StyledCardIcon>
-							</Menu.Item>
-							<StyledSubmenu
-								popupClassName="dropdown-menu"
-								title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}
-							>
-								<Menu.Item key="greeting">
-									<Typography.Paragraph strong>Hi, {user.name}</Typography.Paragraph>
-								</Menu.Item>
-								<Menu.Item key="profile">
-									<Link to="/profile">
-										<DynamicIcon type="icon-tubiaozhizuomoban6" /> Lihat profile
-									</Link>
-								</Menu.Item>
-								{typeId === 1 && (
-									<Menu.Item key="upgrade">
-										<Link to="/upgrade">
-											<DynamicIcon type="icon-tubiaozhizuomoban2" /> Upgrade akun
-										</Link>
-									</Menu.Item>
-								)}
-								<Menu.Divider />
-								<Menu.Item key="logout" onClick={handleLogout}>
-									Logout
-								</Menu.Item>
-							</StyledSubmenu>
-						</StyledMenu>
-					) : (
-						<StyledMenu mode="horizontal">
-							<Menu.Item key="search">
-								<Input.Search
-									allowClear
-									name="search"
-									placeholder="Cari apa saja..."
-									style={{ width: 200 }}
-									onSearch={handleSearch}
-								/>
-							</Menu.Item>
-							<Menu.Item key="login" style={{ paddingRight: 0 }}>
-								<Link to="/login">
-									<Button shape="circle" type="primary">
-										<Icon type="user" style={{ marginRight: 0 }} />
-									</Button>
-								</Link>
-							</Menu.Item>
-						</StyledMenu>
-					)}
+					<RightMenu
+						data={{ token, cartItems, user, typeId }}
+						handlers={{ handleLogout, handleSearch, handleSetCardDrawer }}
+					/>
 				</Col>
 			</Row>
 		</Nav>
+	)
+}
+
+function RightMenu({ data, handlers }) {
+	const { token, user, typeId, cartItems } = data
+	const { handleLogout, handleSetCardDrawer, handleSearch } = handlers
+
+	const menuMobile = (
+		<StyledMobileMenu>
+			<Menu.Item key="greeting">
+				<Typography.Paragraph strong>Hi, {user.name}</Typography.Paragraph>
+			</Menu.Item>
+			<Menu.Item key="profile">
+				<Link to="/profile">
+					<DynamicIcon type="icon-tubiaozhizuomoban6" /> Lihat profile
+				</Link>
+			</Menu.Item>
+			{typeId === 1 && (
+				<Menu.Item key="upgrade">
+					<Link to="/upgrade">
+						<DynamicIcon type="icon-tubiaozhizuomoban2" /> Upgrade akun
+					</Link>
+				</Menu.Item>
+			)}
+		</StyledMobileMenu>
+	)
+
+	if (token) {
+		if (mobile)
+			return (
+				<Dropdown overlay={menuMobile} trigger={["click"]}>
+					<Button type="primary" icon="more" shape="circle" />
+				</Dropdown>
+			)
+
+		return (
+			<StyledMenu mode="horizontal">
+				<Menu.Item key="search">
+					<Input.Search
+						allowClear
+						name="search"
+						placeholder="Cari apa saja..."
+						style={{ width: 200 }}
+						onSearch={handleSearch}
+					/>
+				</Menu.Item>
+				<Menu.Item
+					key="notifications"
+					style={{ paddingLeft: "2em", paddingRight: 0 }}
+					onClick={handleSetCardDrawer}
+				>
+					<StyledCardIcon dot={cartItems.length > 0}>
+						<Icon type="shopping-cart" />
+					</StyledCardIcon>
+				</Menu.Item>
+				<StyledSubmenu
+					popupClassName="dropdown-menu"
+					title={<StyledButton type="ghost" shape="circle-outline" icon="user" />}
+				>
+					<Menu.Item key="greeting">
+						<Typography.Paragraph strong>Hi, {user.name}</Typography.Paragraph>
+					</Menu.Item>
+					<Menu.Item key="profile">
+						<Link to="/profile">
+							<DynamicIcon type="icon-tubiaozhizuomoban6" /> Lihat profile
+						</Link>
+					</Menu.Item>
+					{typeId === 1 && (
+						<Menu.Item key="upgrade">
+							<Link to="/upgrade">
+								<DynamicIcon type="icon-tubiaozhizuomoban2" /> Upgrade akun
+							</Link>
+						</Menu.Item>
+					)}
+					<Menu.Divider />
+					<Menu.Item key="logout" onClick={handleLogout}>
+						Logout
+					</Menu.Item>
+				</StyledSubmenu>
+			</StyledMenu>
+		)
+	}
+
+	return (
+		<StyledMenu mode="horizontal">
+			<Menu.Item key="search">
+				<Input.Search
+					allowClear
+					name="search"
+					placeholder="Cari apa saja..."
+					style={{ width: 200 }}
+					onSearch={handleSearch}
+				/>
+			</Menu.Item>
+			<Menu.Item key="login" style={{ paddingRight: 0 }}>
+				<Link to="/login">
+					<Button shape="circle" type="primary">
+						<Icon type="user" style={{ marginRight: 0 }} />
+					</Button>
+				</Link>
+			</Menu.Item>
+		</StyledMenu>
 	)
 }
 
