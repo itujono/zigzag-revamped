@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Button, Logo, ButtonLink, Alert } from "components"
-import { Row, Col, Form, Icon, Modal } from "antd"
+import { Row, Col, Form, Icon, Modal, AutoComplete } from "antd"
 import { connect } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
 
@@ -213,11 +213,13 @@ function Register({
 						options={csOptions}
 						helpText="CS kamu adalah orang yg kamu pilih untuk selalu memandu kamu selama menggunakan website Zigzag. Atau dengan kata lain, CS adalah asisten pribadi kamu."
 					/>
-					<Alert
-						type="success"
-						message="CS kamu sudah ditentukan"
-						description="Berhubung kamu regis sebagai Partner, maka CS kamu sudah ditentukan dari kami :)"
-					/>
+					{isPartner && (
+						<Alert
+							type="success"
+							message="CS kamu sudah ditentukan"
+							description="Berhubung kamu regis sebagai Partner, maka CS kamu sudah ditentukan dari kami :)"
+						/>
+					)}
 					<Row type="flex" justify="space-between">
 						<Col lg={12}>
 							<ButtonLink
@@ -380,6 +382,7 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 	const cities = rajaOngkir.cities || []
 	const subdistricts = rajaOngkir.subdistricts || []
 	const provinceOptions = provinces.map(item => ({ value: item.province_id, label: item.province }))
+	const provinceAutocomplete = provinces.map(item => ({ value: item.province_id, text: item.province }))
 	const cityOptions = cities.map(item => ({ value: item.city_id, label: item.city_name }))
 	const subdistrictOptions = subdistricts.map(item => ({ value: item.subdistrict_id, label: item.subdistrict_name }))
 
