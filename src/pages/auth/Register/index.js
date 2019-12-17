@@ -152,7 +152,8 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 									!values.last_name ||
 									!values.email ||
 									!values.password ||
-									!values.repeat_password
+									!values.repeat_password ||
+									values.password !== values.repeat_password
 								}
 								onClick={() => handleNext("accountType")}
 							>

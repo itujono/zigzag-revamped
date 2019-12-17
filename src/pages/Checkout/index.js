@@ -116,7 +116,7 @@ function Checkout({
 				`}
 			>
 				<Row gutter={32} type="flex">
-					<Col lg={16}>
+					<Col lg={16} xs={24}>
 						<Switch>
 							<Redirect exact from="/checkout" to="/checkout/address" />
 							<Route
@@ -175,7 +175,7 @@ function Checkout({
 						</Switch>
 					</Col>
 
-					<Col lg={8}>
+					<Col lg={8} xs={24}>
 						<Sidebar>
 							<Heading
 								content="Orderan kamu"

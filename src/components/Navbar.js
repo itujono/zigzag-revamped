@@ -57,7 +57,7 @@ const StyledSubmenu = styled(Menu.SubMenu)`
 	}
 `
 
-const StyledCardIcon = styled(Badge)`
+const StyledCartIcon = styled(Badge)`
 	&& {
 		> .anticon {
 			margin-right: 3px;
@@ -231,9 +231,20 @@ function RightMenu({ data, handlers }) {
 	if (token) {
 		if (mobile)
 			return (
-				<Dropdown overlay={menuMobile} trigger={["click"]}>
-					<Button type="primary" icon="more" shape="circle" size="large" />
-				</Dropdown>
+				<>
+					<StyledCartIcon dot={cartItems.length > 0} onClick={handleSetCardDrawer}>
+						<Icon type="shopping-cart" />
+					</StyledCartIcon>
+					<Dropdown overlay={menuMobile} trigger={["click"]}>
+						<Button
+							type="primary"
+							icon="more"
+							shape="circle"
+							size="large"
+							style={{ marginLeft: "1.5em" }}
+						/>
+					</Dropdown>
+				</>
 			)
 
 		return (
@@ -252,9 +263,9 @@ function RightMenu({ data, handlers }) {
 					style={{ paddingLeft: "2em", paddingRight: 0 }}
 					onClick={handleSetCardDrawer}
 				>
-					<StyledCardIcon dot={cartItems.length > 0}>
+					<StyledCartIcon dot={cartItems.length > 0}>
 						<Icon type="shopping-cart" />
-					</StyledCardIcon>
+					</StyledCartIcon>
 				</Menu.Item>
 				<StyledSubmenu
 					popupClassName="dropdown-menu"

@@ -63,7 +63,7 @@ function SearchResult({ searchProduct, searchList, loading }) {
 		<Layout>
 			<Section centered>
 				<Row type="flex" justify="center">
-					<Col lg={12} xs={20}>
+					<Col lg={12} xs={24}>
 						<Heading content="Hasil pencarian" subheader="Cari apa saja di website Zigzag" />
 						<Input.Search
 							allowClear

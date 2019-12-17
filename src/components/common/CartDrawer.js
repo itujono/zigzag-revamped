@@ -186,6 +186,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 																number
 																name="qty"
 																width={90}
+																marginBottom={mobile && "0"}
 																placeholder="Jumlah..."
 																css="margin-bottom: 1.5em"
 															/>
@@ -220,21 +221,21 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 			)}
 			<SubtotalSection>
 				<Row type="flex" justify="space-between" align="middle" gutter={32}>
-					<Col lg={16}>
+					<Col lg={16} xs={12}>
 						<Heading content="Diskon" subheader="Jika kamu berhak dapat diskon, akan muncul di sini" />
 					</Col>
-					<Col lg={8} style={{ textAlign: "right" }}>
+					<Col lg={8} xs={12} style={{ textAlign: "right" }}>
 						<Heading content={`- Rp ${pricer(cartTotal.discount) || 0}`} className="discount" />
 					</Col>
 				</Row>
 				<Row type="flex" justify="space-between" gutter={32}>
-					<Col lg={16}>
+					<Col lg={16} xs={12}>
 						<Heading
 							content="Subtotal"
 							subheader="Ongkir dan biaya lainnya akan dikalkulasikan di bagian Checkout"
 						/>
 					</Col>
-					<Col lg={8} style={{ textAlign: "right" }}>
+					<Col lg={8} xs={12} style={{ textAlign: "right" }}>
 						<Heading content={`Rp ${pricer(subtotal)}`} subheader={roundedWeight} className="price" />
 					</Col>
 				</Row>
