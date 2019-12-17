@@ -81,10 +81,10 @@ export default function Payment({ data, handlers }) {
 				isSelected={selectedPayment.value === "transfer"}
 			>
 				<Row gutter={32} style={{ marginBottom: "2em" }}>
-					<Col lg={4}>
+					<Col lg={4} xs={12}>
 						<img src={bcaLogo} alt="BCA" width="100%" />
 					</Col>
-					<Col lg={4}>
+					<Col lg={4} xs={12}>
 						<img src={mandiriLogo} alt="Mandiri" width="100%" />
 					</Col>
 				</Row>

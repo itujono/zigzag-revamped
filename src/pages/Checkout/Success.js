@@ -74,9 +74,9 @@ function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
 						<Success />
 						<Heading
 							content="Order berhasil! 🎉🎉"
-							subheader="Mantap! Orderan kamu sudah kami terima, dan email berisi detail info orderan juga
+							subheader={`Mantap! Orderan kamu sudah kami terima, dan email berisi detail info orderan juga
 							sudah ada di inbox email kamu. Namun sebelumnya, silakan lakukan pembayaran
-							terlebih dahulu ke rekening yang tertulis di samping."
+							terlebih dahulu ke rekening yang tertulis di ${mobile ? "bawah" : "samping"}`}
 						/>
 						<Alert
 							type="info"
@@ -93,7 +93,7 @@ function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
 							Sudah melakukan pembayaran? <Link to="/order/confirmation">Konfirmasi pembayaran</Link>
 						</Section>
 					</Col>
-					<Col lg={8} className="right">
+					<Col lg={8} xs={24} className="right">
 						<Heading content="Rekening Zigzag" subheader={bankAccountText(bankAccounts)} />
 					</Col>
 				</Row>

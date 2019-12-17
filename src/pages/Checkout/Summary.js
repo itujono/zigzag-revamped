@@ -1,16 +1,20 @@
 import React, { useState } from "react"
 import { Section, Heading, Card, Button, Modal } from "components"
 import styled from "styled-components"
-import { Row, Col, Tooltip, Icon } from "antd"
+import { Row, Col, Tooltip, Icon, Checkbox } from "antd"
 import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"
-import { pricer } from "helpers"
+import { pricer, media, mobile } from "helpers"
 
 const StyledCard = styled(Card)`
 	&& {
 		padding: 2em 3em;
 		background-color: ${theme.greyColor[4]};
+
+		${media.mobile`
+			padding: 1em;
+		`}
 	}
 `
 
@@ -27,6 +31,7 @@ const StyledRow = styled(Row).attrs({
 export default function Summary({ handlers: { saveOrder } }) {
 	const { push } = useHistory()
 	const [confirmModal, setConfirmModal] = useState(false)
+	const [allGood, setAllGood] = useState(false)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -107,38 +112,38 @@ export default function Summary({ handlers: { saveOrder } }) {
 				/>
 				<Section paddingHorizontal="0">
 					<StyledRow>
-						<Col lg={12}>
+						<Col lg={12} xs={12}>
 							<Heading reverse content="Diskon" subheader="Jika ada diskon, akan muncul di sini" />
 						</Col>
-						<Col lg={8} className="right">
+						<Col lg={8} xs={12} className="right">
 							<Heading content={`Rp ${pricer(cartTotal.discount || 0)}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
-						<Col lg={12}>
+						<Col lg={12} xs={12}>
 							<Heading reverse content="Ongkos kirim" subheader="Ongkos kirim untuk orderan ini" />
 						</Col>
-						<Col lg={8} className="right">
+						<Col lg={8} xs={12} className="right">
 							<Heading content={`Rp ${pricer(order_detail.ekspedition_total)}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
-						<Col lg={12}>
+						<Col lg={12} xs={12}>
 							<Heading
 								reverse
 								content="Kode unik transfer"
 								subheader="Jangan lupakan kode unik ini ketika transfer"
 							/>
 						</Col>
-						<Col lg={8} className="right">
+						<Col lg={8} xs={12} className="right">
 							<Heading content={formData.unique_code} />
 						</Col>
 					</StyledRow>
 					<StyledRow gutter={32}>
-						<Col lg={16}>
+						<Col lg={16} xs={12}>
 							<Heading reverse content="Grand total" subheader="Total yang harus dibayar sekarang" />
 						</Col>
-						<Col lg={8} className="right">
+						<Col lg={8} xs={12} className="right">
 							<Heading
 								content={`Rp ${pricer(generalTotal || 0)}`}
 								subheader={`${cartTotal.roundedWeight} gram`}
@@ -147,8 +152,14 @@ export default function Summary({ handlers: { saveOrder } }) {
 						</Col>
 					</StyledRow>
 				</Section>
-				<Button icon="check" onClick={() => setConfirmModal(true)}>
-					Ya, semua nya sudah benar. Place order sekarang
+				<Row style={{ marginBottom: "2em" }}>
+					<Col lg={24} xs={24}>
+						<Checkbox name="allGood" checked={allGood} onChange={() => setAllGood(!allGood)} /> &nbsp; Saya
+						sudah lihat, dan saya sadar bahwa semua data sudah benar
+					</Col>
+				</Row>
+				<Button icon="check" disabled={!allGood} block={mobile} onClick={() => setConfirmModal(true)}>
+					Place order sekarang
 				</Button>
 			</StyledCard>
 		</Section>
