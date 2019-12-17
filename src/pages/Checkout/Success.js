@@ -30,10 +30,10 @@ const StyledCard = styled(Card)`
 			.ant-card-body {
 				padding: 0;
 				.left {
-					padding: 1em;
+					padding: 2em;
 				}
 				.right {
-					padding: 1em;
+					padding: 2em;
 					text-align: left;
 					background-color: ${theme.greyColor[4]};
 				}
