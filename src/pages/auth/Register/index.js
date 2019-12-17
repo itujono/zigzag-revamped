@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Section, Heading, Card, Button, Logo, ButtonLink } from "components"
+import { Section, Heading, Card, Button, Logo, ButtonLink, Alert } from "components"
 import { Row, Col, Form, Icon, Modal } from "antd"
 import { connect } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
@@ -105,7 +105,16 @@ const accountTypeOptions = [
 	}
 ]
 
-function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions, error, loading, ...props }) {
+function Register({
+	provinceOptions,
+	cityOptions,
+	csOptions,
+	subdistrictOptions,
+	error,
+	loading,
+	isPartner,
+	...props
+}) {
 	const [section, setSection] = useState("credentials")
 	const [accountType, setAccountType] = useState(1)
 	const [selectedProvince, setSelectedProvince] = useState("")
@@ -141,7 +150,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 						name="repeat_password"
 						label="Ulangi password kamu"
 						placeholder="Harus sama ama password di atas ya..."
-						onPressEnter={() => handleNext("accountType")}
+						onPressEnter={() => handleNext(isPartner ? "cs" : "accountType")}
 					/>
 					<Row type="flex" justify="space-between">
 						<Col lg={12}></Col>
@@ -155,7 +164,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 									!values.repeat_password ||
 									values.password !== values.repeat_password
 								}
-								onClick={() => handleNext("accountType")}
+								onClick={() => handleNext(isPartner ? "cs" : "accountType")}
 							>
 								Selanjutnya <Icon type="right" />
 							</Button>
@@ -200,12 +209,21 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 					<SelectInput
 						name="customer_service_id"
 						label="Pilih CS kamu"
+						disabled={isPartner}
 						options={csOptions}
 						helpText="CS kamu adalah orang yg kamu pilih untuk selalu memandu kamu selama menggunakan website Zigzag. Atau dengan kata lain, CS adalah asisten pribadi kamu."
 					/>
+					<Alert
+						type="success"
+						message="CS kamu sudah ditentukan"
+						description="Berhubung kamu regis sebagai Partner, maka CS kamu sudah ditentukan dari kami :)"
+					/>
 					<Row type="flex" justify="space-between">
 						<Col lg={12}>
-							<ButtonLink icon="left" onClick={() => handleNext("accountType")}>
+							<ButtonLink
+								icon="left"
+								onClick={() => handleNext(isPartner ? "credentials" : "accountType")}
+							>
 								Kembali
 							</ButtonLink>
 						</Col>
@@ -282,7 +300,12 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 	}
 
 	const handleRegister = (values, { setSubmitting }) => {
-		values = { ...values, acc_type: accountType, name: `${values.first_name} ${values.last_name}` }
+		values = {
+			...values,
+			acc_type: isPartner ? 3 : accountType,
+			customer_service_id: isPartner ? 6 : values.customer_service_id,
+			name: `${values.first_name} ${values.last_name}`
+		}
 		const { repeat_password, first_name, last_name, ...theValues } = values
 		Modal.confirm({
 			title: "Daftar sekarang?",
@@ -312,7 +335,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 				<LeftSide lg={10} xs={24}>
 					<Heading
 						bold
-						content="Register"
+						content={isPartner ? "Register (partner)" : "Register"}
 						level={1}
 						marginBottom="3em"
 						subheader={
@@ -324,7 +347,7 @@ function Register({ provinceOptions, cityOptions, csOptions, subdistrictOptions,
 					<TheCard noHover>
 						<Formik
 							initialValues={{
-								customer_service_id: "Pilih CS nya",
+								customer_service_id: isPartner ? 6 : "Pilih CS nya",
 								province: "Pilih provinsi kamu",
 								city: "Pilih kota/kabupaten kamu",
 								subdistrict: "Pilih kecamatan nya juga"

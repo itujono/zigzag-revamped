@@ -1,7 +1,7 @@
-import React, { useEffect } from "react"
-import { Row, Col, Button, Icon, Alert, Card } from "antd"
-import { Link, useHistory, useLocation } from "react-router-dom"
-import { Section, Heading } from "components"
+import React from "react"
+import { Row, Col, Icon, Card } from "antd"
+import { useHistory, useLocation } from "react-router-dom"
+import { Section, Heading, Button } from "components"
 import scenery from "assets/images/scenery.png"
 
 function Logout() {

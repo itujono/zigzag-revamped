@@ -102,7 +102,7 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 											<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
 										)
 									}
-									title={<a href="https://ant.design">{order_code}</a>}
+									title={order_code}
 									description={
 										<>
 											<span>

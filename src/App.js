@@ -46,6 +46,7 @@ const App = () => {
 						<Route exact path="/new-password" component={NewPassword} />
 						<Route path="/new-password/success" component={NewPasswordSuccess} />
 						<Route exact path="/register" component={Register} />
+						<Route exact path="/register/p/partner" render={() => <Register isPartner={true} />} />
 						<Route path="/register/success" component={RegisterSuccess} />
 						<Route path="/search" component={SearchResult} />
 						<Route path="/checkout" component={Checkout} />
