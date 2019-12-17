@@ -221,7 +221,7 @@ function RightMenu({ data, handlers }) {
 					</Link>
 				</Menu.Item>
 			)}
-			<Menu.Divider />
+			<Menu.Divider style={{ marginBottom: "1em" }} />
 			<Menu.Item key="logout" onClick={handleLogout}>
 				Logout
 			</Menu.Item>
