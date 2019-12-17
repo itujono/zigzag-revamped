@@ -225,7 +225,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 						<Heading content="Diskon" subheader="Jika kamu berhak dapat diskon, akan muncul di sini" />
 					</Col>
 					<Col lg={8} xs={12} style={{ textAlign: "right" }}>
-						<Heading content={`- Rp ${pricer(cartTotal.discount) || 0}`} className="discount" />
+						<Heading content={`- Rp ${pricer(cartTotal.discount || 0) || 0}`} className="discount" />
 					</Col>
 				</Row>
 				<Row type="flex" justify="space-between" gutter={32}>

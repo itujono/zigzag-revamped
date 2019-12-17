@@ -229,7 +229,7 @@ function RightMenu({ data, handlers }) {
 	)
 
 	if (token) {
-		if (mobile)
+		if (mobile) {
 			return (
 				<>
 					<StyledCartIcon dot={cartItems.length > 0} onClick={handleSetCardDrawer}>
@@ -246,6 +246,7 @@ function RightMenu({ data, handlers }) {
 					</Dropdown>
 				</>
 			)
+		}
 
 		return (
 			<StyledMenu mode="horizontal">
@@ -292,6 +293,33 @@ function RightMenu({ data, handlers }) {
 					</Menu.Item>
 				</StyledSubmenu>
 			</StyledMenu>
+		)
+	}
+
+	if (mobile) {
+		return (
+			<>
+				<StyledCartIcon dot={cartItems.length > 0} onClick={handleSetCardDrawer}>
+					<Icon type="shopping-cart" />
+				</StyledCartIcon>
+				{/* <Dropdown
+					overlay={ */}
+				{/* <Menu>
+					<Menu.Item key="login" style={{ paddingRight: 0 }}> */}
+				<Link to="/login">
+					<Button type="primary" style={{ marginLeft: "1em" }}>
+						Login&nbsp;
+						<Icon type="user" style={{ marginRight: 0 }} />
+					</Button>
+				</Link>
+				{/* </Menu.Item>
+				</Menu> */}
+				{/* // 	}
+				// 	trigger={["click"]}
+				// >
+				// 	<Button type="primary" icon="more" shape="circle" size="large" style={{ marginLeft: "1.5em" }} />
+				// </Dropdown> */}
+			</>
 		)
 	}
 
