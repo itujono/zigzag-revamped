@@ -5,7 +5,7 @@ import styled from "styled-components/macro"
 import { useParams, Link, useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 
-import { pricer } from "helpers"
+import { pricer, media } from "helpers"
 import {
 	fetchProductItem,
 	addItemToCart,
@@ -22,6 +22,14 @@ const Stats = styled.div`
 	.ant-typography {
 		margin-bottom: 0;
 	}
+
+	${media.mobile`
+		.ant-col {
+			&:first-child {
+				margin-bottom: 1em;
+			}
+		}
+	`}
 `
 
 const StyledSection = styled(Section)`
@@ -248,13 +256,13 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 						<Heading reverse content="Rating" subheader={productRating} marginBottom="2em" />
 						<Stats>
 							<Row type="flex">
-								<Col lg={8}>
+								<Col lg={8} xs={12}>
 									<Heading content="Kategori" subheader={(product.categories || {}).name} reverse />
 								</Col>
-								<Col lg={6}>
+								<Col lg={6} xs={12}>
 									<Heading content="Berat" subheader={`${product.weight} gr`} reverse />
 								</Col>
-								<Col lg={10}>
+								<Col lg={10} xs={12}>
 									<Heading content="Material" subheader={product.material} reverse />
 								</Col>
 							</Row>

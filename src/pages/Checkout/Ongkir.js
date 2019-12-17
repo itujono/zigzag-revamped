@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom"
 import jneLogo from "assets/images/jne-logo.svg"
 import jntLogo from "assets/images/j&t-logo.jpeg"
 import sicepatLogo from "assets/images/sicepat-logo.png"
-import { pricer } from "helpers"
+import { pricer, mobile, media } from "helpers"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -27,6 +27,22 @@ const StyledCard = styled(Card)`
 				}
 			}
 		}
+
+		${media.mobile`
+			&& {
+				margin-bottom: 4em;
+				.scrolling-courier {
+					padding-top: 1em;
+					flex-wrap: nowrap;
+					overflow-x: scroll;
+					width: auto;
+					-webkit-overflow-scrolling: touch;
+					&::-webkit-scrollbar {
+						display: none;
+					}
+				}
+			}
+		`}
 	}
 `
 
@@ -65,6 +81,16 @@ const CourierCol = styled.div`
 			fill: ${theme.primaryColor};
 		}
 	}
+
+	${media.mobile`
+		padding: 1em;
+	`}
+`
+
+const CourierLogo = styled.span`
+	position: absolute;
+	top: -30px;
+	left: 30px;
 `
 
 export default function Ongkir({ data, handlers, loading }) {
@@ -126,17 +152,24 @@ export default function Ongkir({ data, handlers, loading }) {
 
 				return (
 					<StyledCard noHover key={code}>
-						<Row gutter={16} type="flex">
-							<Col lg={6}>
-								<img src={courierLogo} alt={name} width="100%" />
-							</Col>
+						<Row gutter={16} type="flex" className="scrolling-courier">
+							{mobile && (
+								<CourierLogo>
+									<img src={courierLogo} alt={name} width="60" />
+								</CourierLogo>
+							)}
+							{!mobile && (
+								<Col lg={6}>
+									<img src={courierLogo} alt={name} width="100%" />
+								</Col>
+							)}
 							{costs.map((item, idx) => {
 								const { service, description, cost = [] } = item
 								const isSelected =
 									selectedCourier.code === code && selectedCourier.details.service === service
 
 								return (
-									<Col lg={6} key={service + idx}>
+									<Col lg={6} xs={10} key={service + idx}>
 										<CourierCol
 											onClick={() => handleSelectCourier({ code, details: item })}
 											isSelected={isSelected}
