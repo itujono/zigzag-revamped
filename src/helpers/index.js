@@ -35,7 +35,10 @@ export function useRenderError(err, dispatch, type, noShow = false) {
 		if (noShow) console.log({ error })
 		else message.error(error)
 	}
-	if (errResponse.status === 401) localStorage.clear()
+	if (errResponse.status === 401) {
+		localStorage.clear()
+		// dispatch({ type: LOGOU })
+	}
 
 	dispatch({ type, payload: error })
 	return error

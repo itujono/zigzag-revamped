@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Button, Logo, ButtonLink, Alert } from "components"
-import { Row, Col, Form, Icon, Modal, AutoComplete } from "antd"
+import { Row, Col, Form, Icon, Modal } from "antd"
 import { connect } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
 
@@ -13,6 +13,7 @@ import styled from "styled-components"
 import { theme } from "styles"
 import { media } from "helpers"
 import { validationSchema } from "./validation"
+import { AutoComplete } from "formik-antd"
 
 const TheImage = styled.section`
 	width: 100%;
@@ -122,7 +123,10 @@ function Register({
 	const { push } = useHistory()
 	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces, fetchCities } = props
 
-	const handleNext = section => setSection(section)
+	const handleNext = section => {
+		window.scrollTo(0, 0)
+		setSection(section)
+	}
 
 	const handleRenderCities = values => setSelectedProvince(values.province)
 	const handleRenderSubdistricts = values => setSelectedCity(values.city)
@@ -245,19 +249,30 @@ function Register({
 			return (
 				<>
 					<SelectInput
+						autocomplete
 						name="province"
 						label="Provinsi kamu"
-						options={provinceOptions}
+						placeholder="Pilih provinse mu..."
+						options={props.provinceAutocomplete}
 						onChange={handleRenderCities(values)}
 						loading={loading}
 					/>
-					<SelectInput name="city" label="Kota kamu" options={cityOptions} loading={loading} />
+					<SelectInput
+						autocomplete
+						name="city"
+						label="Kota kamu"
+						placeholder="Pilih kota/kabupaten mu..."
+						options={props.cityAutocomplete}
+						loading={loading}
+					/>
 					<Row gutter={16}>
 						<Col lg={18}>
 							<SelectInput
+								autocomplete
 								name="subdistrict"
 								label="Kecamatan kamu"
-								options={subdistrictOptions}
+								placeholder="Pilih kecamatan mu..."
+								options={props.subdistrictAutocomplete}
 								onChange={handleRenderSubdistricts(values)}
 								loading={loading}
 							/>
@@ -349,10 +364,7 @@ function Register({
 					<TheCard noHover>
 						<Formik
 							initialValues={{
-								customer_service_id: isPartner ? 6 : "Pilih CS nya",
-								province: "Pilih provinsi kamu",
-								city: "Pilih kota/kabupaten kamu",
-								subdistrict: "Pilih kecamatan nya juga"
+								customer_service_id: isPartner ? 6 : "Pilih CS nya"
 							}}
 							validationSchema={validationSchema}
 							onSubmit={handleRegister}
@@ -384,7 +396,12 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 	const provinceOptions = provinces.map(item => ({ value: item.province_id, label: item.province }))
 	const provinceAutocomplete = provinces.map(item => ({ value: item.province_id, text: item.province }))
 	const cityOptions = cities.map(item => ({ value: item.city_id, label: item.city_name }))
+	const cityAutocomplete = cities.map(item => ({ value: item.city_id, text: item.city_name }))
 	const subdistrictOptions = subdistricts.map(item => ({ value: item.subdistrict_id, label: item.subdistrict_name }))
+	const subdistrictAutocomplete = subdistricts.map(item => ({
+		value: item.subdistrict_id,
+		text: item.subdistrict_name
+	}))
 
 	return {
 		provinces: rajaOngkir.provinces,
@@ -394,7 +411,10 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 		cities,
 		cityOptions,
 		subdistrictOptions,
-		provinceOptions
+		provinceOptions,
+		provinceAutocomplete,
+		cityAutocomplete,
+		subdistrictAutocomplete
 	}
 }
 

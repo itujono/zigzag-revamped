@@ -1,10 +1,11 @@
 import React from "react"
-import { Select, FormItem } from "formik-antd"
+import { Select, FormItem, AutoComplete } from "formik-antd"
 import styled from "styled-components"
 
 const Item = styled(FormItem)`
 	&& {
 		margin-bottom: 1em;
+		width: 100%;
 		.ant-form-item-label {
 			label {
 				font-size: ${({ reverse }) => reverse && "11px"};
@@ -23,17 +24,31 @@ const Item = styled(FormItem)`
 	}
 `
 
-function SelectInput({ reverse, options, helpText, ...props }) {
+function SelectInput({ reverse, options, helpText, autocomplete, ...props }) {
 	return (
 		<Item name={props.name} reverse={reverse} label={props.label}>
-			<Select {...props}>
-				{options &&
-					options.map(item => (
-						<Select.Option key={item.value} value={item.value}>
-							{item.label}
-						</Select.Option>
-					))}
-			</Select>
+			{autocomplete ? (
+				<AutoComplete
+					{...props}
+					allowClear
+					name={props.name}
+					dataSource={options}
+					showArrow
+					filterOption={(inputValue, option) => {
+						const child = option.props.children || ""
+						return child.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+					}}
+				/>
+			) : (
+				<Select {...props}>
+					{options &&
+						options.map(item => (
+							<Select.Option key={item.value} value={item.value}>
+								{item.label}
+							</Select.Option>
+						))}
+				</Select>
+			)}
 			{helpText && <p className="help-text">{helpText}</p>}
 		</Item>
 	)
