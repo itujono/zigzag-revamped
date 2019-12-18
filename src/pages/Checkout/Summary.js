@@ -34,6 +34,7 @@ const StyledRow = styled(Row).attrs({
 `
 
 const StyledPopover = styled(Popover)`
+	cursor: pointer;
 	.ant-popover-inner-content {
 		padding: 2em;
 		text-align: center;
@@ -125,6 +126,14 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 					marginBottom="2em"
 				/>
 				<Section paddingHorizontal="0">
+					<StyledRow>
+						<Col lg={12} xs={12}>
+							<Heading reverse content="Subtotal" subheader="Total harga item di cart kamu" />
+						</Col>
+						<Col lg={8} xs={12} className="right">
+							<Heading content={`Rp ${pricer(cartTotal.price || 0)}`} />
+						</Col>
+					</StyledRow>
 					<StyledRow>
 						<Col lg={12} xs={12}>
 							<Heading reverse content="Diskon" subheader="Jika ada diskon, akan muncul di sini" />

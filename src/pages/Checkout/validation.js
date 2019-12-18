@@ -22,3 +22,14 @@ export const addressValidation = yup.object().shape({
 		.max(5, "Kode pos apaan nih?"),
 	address: yup.string().required("Alamat pengiriman wajib diisi")
 })
+
+export const confirmationSchema = yup.object().shape({
+	order_code: yup.string().required("KOde order nya wajib diisi"),
+	bank_receiver: yup.string().required("Bank penerima wajib diisi"),
+	bank_sender: yup.string().required("Bank penerima wajib diisi"),
+	total_transfer: yup
+		.number()
+		.required("Jumlah yang ditransfer wajib diisi")
+		.typeError("Harus masukin angka aja ya (tidak perlu titik atau koma)"),
+	date: yup.date("Wajib isi ya").required("Kapan ditransfer nya juga wajib diisi")
+})

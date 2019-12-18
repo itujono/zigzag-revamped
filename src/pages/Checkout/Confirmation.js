@@ -10,6 +10,7 @@ import styled from "styled-components"
 
 import { fetchBankAccounts, fetchOrderCodeList, orderConfirmation } from "store/actions/otherActions"
 import { mobile } from "helpers"
+import { confirmationSchema } from "./validation"
 
 const LogoRow = styled(Row)`
 	margin-bottom: 2em;
@@ -71,6 +72,7 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 						/>
 						<Formik
 							onSubmit={handleSubmitConfirmation}
+							validationSchema={confirmationSchema}
 							render={({ handleSubmit }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
 									<SelectInput
