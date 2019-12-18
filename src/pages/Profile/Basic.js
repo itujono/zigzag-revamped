@@ -6,7 +6,7 @@ import styled from "styled-components/macro"
 import { Link } from "react-router-dom"
 import { ResetButton, SubmitButton } from "formik-antd"
 
-import { Section, Heading, Loading, Card, ButtonLink, Alert } from "components"
+import { Section, Heading, Loading, Card, ButtonLink, Alert, DynamicIcon } from "components"
 import { TextInput, SelectInput } from "components/Fields"
 import { fetchUser, updateUserProfile, changeAvatar } from "store/actions/userActions"
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
@@ -115,22 +115,37 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 
 	const csDetails = (
 		<div>
-			<Heading
-				content="Whatsapp"
-				subheader={
-					<a
-						target="blank"
-						rel="noopener noreferrer"
-						href={`https://wa.me/${csWhatsappNumber}?text=${encodeURIComponent(
-							`Halo, ${cs.name || ""}. Saya mau tanya...`
-						)}`}
-					>
-						{cs.whatsapp}
-					</a>
-				}
-				reverse
-			/>
-			<Heading content="Line" subheader={cs.line} reverse />
+			<Row gutter={20} type="flex" align="middle">
+				<Col lg={4} xs={6}>
+					<DynamicIcon type="icon-social-whatsapp" />
+				</Col>
+				<Col lg={20} xs={18}>
+					<Heading
+						content="Whatsapp"
+						marginBottom="0"
+						subheader={
+							<a
+								target="blank"
+								rel="noopener noreferrer"
+								href={`https://wa.me/${csWhatsappNumber}?text=${encodeURIComponent(
+									`Halo, ${cs.name || ""}. Saya mau tanya...`
+								)}`}
+							>
+								{cs.whatsapp}
+							</a>
+						}
+						reverse
+					/>
+				</Col>
+			</Row>
+			<Row gutter={20} type="flex" align="middle">
+				<Col lg={4} xs={6}>
+					<DynamicIcon type="icon-lineicon_gongzuoquyu" />
+				</Col>
+				<Col lg={20} xs={18}>
+					<Heading content="Line" marginBottom="0" subheader={cs.line} reverse />
+				</Col>
+			</Row>
 		</div>
 	)
 

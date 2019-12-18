@@ -12,7 +12,6 @@ import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
 import { mobile } from "helpers"
-import { HomewareIcon, ShoesIcon, WalletIcon, LingerieIcon, BagIcon } from "./Icons"
 
 const Nav = styled.nav`
 	width: inherit;
