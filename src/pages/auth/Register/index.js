@@ -106,16 +106,7 @@ const accountTypeOptions = [
 	}
 ]
 
-function Register({
-	provinceOptions,
-	cityOptions,
-	csOptions,
-	subdistrictOptions,
-	error,
-	loading,
-	isPartner,
-	...props
-}) {
+function Register({ csOptions, error, loading, isPartner, ...props }) {
 	const [section, setSection] = useState("credentials")
 	const [accountType, setAccountType] = useState(1)
 	const [selectedProvince, setSelectedProvince] = useState("")
@@ -393,11 +384,8 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 	const provinces = rajaOngkir.provinces || []
 	const cities = rajaOngkir.cities || []
 	const subdistricts = rajaOngkir.subdistricts || []
-	const provinceOptions = provinces.map(item => ({ value: item.province_id, label: item.province }))
 	const provinceAutocomplete = provinces.map(item => ({ value: item.province_id, text: item.province }))
-	const cityOptions = cities.map(item => ({ value: item.city_id, label: item.city_name }))
 	const cityAutocomplete = cities.map(item => ({ value: item.city_id, text: item.city_name }))
-	const subdistrictOptions = subdistricts.map(item => ({ value: item.subdistrict_id, label: item.subdistrict_name }))
 	const subdistrictAutocomplete = subdistricts.map(item => ({
 		value: item.subdistrict_id,
 		text: item.subdistrict_name
@@ -409,9 +397,6 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 		error: auth.registerUserError,
 		loading: auth.loading,
 		cities,
-		cityOptions,
-		subdistrictOptions,
-		provinceOptions,
 		provinceAutocomplete,
 		cityAutocomplete,
 		subdistrictAutocomplete

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Section, Heading, Card, Button, Modal } from "components"
 import styled from "styled-components"
-import { Row, Col, Tooltip, Icon, Checkbox } from "antd"
+import { Row, Col, Tooltip, Icon, Checkbox, Popover } from "antd"
 import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"
@@ -26,9 +26,21 @@ const StyledRow = styled(Row).attrs({
 	.right {
 		text-align: right;
 	}
+	.discount {
+		h4 {
+			color: ${theme.greenColor};
+		}
+	}
 `
 
-export default function Summary({ handlers: { saveOrder } }) {
+const StyledPopover = styled(Popover)`
+	.ant-popover-inner-content {
+		padding: 2em;
+		text-align: center;
+	}
+`
+
+export default function Summary({ handlers: { saveOrder }, data: { user = {} } }) {
 	const { push } = useHistory()
 	const [confirmModal, setConfirmModal] = useState(false)
 	const [allGood, setAllGood] = useState(false)
@@ -37,6 +49,8 @@ export default function Summary({ handlers: { saveOrder } }) {
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_remark: typeRemark } = accountType
 	const isPartner = typeRemark.toLowerCase() === "partner"
+	const { customer_service: cs = {} } = user
+	const csWhatsappNumber = (cs.whatsapp || "").startsWith("0") && "62" + (cs.whatsapp || "").slice(1)
 
 	const { cartTotal, order_detail = {} } = formData
 
@@ -116,7 +130,7 @@ export default function Summary({ handlers: { saveOrder } }) {
 							<Heading reverse content="Diskon" subheader="Jika ada diskon, akan muncul di sini" />
 						</Col>
 						<Col lg={8} xs={12} className="right">
-							<Heading content={`Rp ${pricer(cartTotal.discount || 0)}`} />
+							<Heading className="discount" content={`- Rp ${pricer(cartTotal.discount || 0)}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
@@ -155,7 +169,30 @@ export default function Summary({ handlers: { saveOrder } }) {
 				<Row style={{ marginBottom: "2em" }}>
 					<Col lg={24} xs={24}>
 						<Checkbox name="allGood" checked={allGood} onChange={() => setAllGood(!allGood)} /> &nbsp; Saya
-						sudah lihat, dan saya sadar bahwa semua data sudah benar
+						sudah lihat, dan saya sadar bahwa semua data sudah benar.{" "}
+						<StyledPopover
+							trigger="click"
+							overlayClassName="cs-popover"
+							content={
+								<>
+									<Heading content="Ada yang salah?" subheader="Hubungi CS kamu sekarang" />
+									<Button block>
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href={`https://wa.me/${csWhatsappNumber}?text=${encodeURIComponent(
+												`Halo, ${cs.name ||
+													""}. Sepertinya ada yang salah dengan orderan saya...`
+											)}`}
+										>
+											Hubungi via WA
+										</a>
+									</Button>
+								</>
+							}
+						>
+							<span className="primary">Data tidak benar?</span>
+						</StyledPopover>
 					</Col>
 				</Row>
 				<Button icon="check" disabled={!allGood} block={mobile} onClick={() => setConfirmModal(true)}>

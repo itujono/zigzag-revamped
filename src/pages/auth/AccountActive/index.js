@@ -13,7 +13,7 @@ function AccountActive() {
 		</div>
 	)
 
-	if (!params.isActive || params.isActive === "false")
+	if (!params.get("isActive") || params.get("isActive") === "false")
 		return (
 			<Section textAlign="center">
 				<Row type="flex" justify="center" style={{ marginTop: "3em" }}>

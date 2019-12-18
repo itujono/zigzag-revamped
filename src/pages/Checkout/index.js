@@ -171,7 +171,7 @@ function Checkout({
 									/>
 								)}
 							/>
-							<Route path="/checkout/summary" render={() => <Summary handlers={{ saveOrder }} />} />
+							<Route path="/checkout/summary" render={() => <Summary data={{user}} handlers={{ saveOrder }} />} />
 						</Switch>
 					</Col>
 
@@ -373,7 +373,8 @@ const mapState = ({ rajaOngkir, user, product, other }) => {
 		subdistrict_name: user.user.subdistrict_name,
 		zip: user.user.zip,
 		address: user.user.address,
-		deposit: user.user.deposit
+		deposit: user.user.deposit,
+		customer_service: user.user.customer_service
 	}
 
 	return {
