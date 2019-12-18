@@ -16,7 +16,7 @@ const CancelSection = styled.div`
 export default function CancelOrder({ data, cancelOrder }) {
 	const { id: orderId, status_order } = data
 
-	const cancelledByCustomer = status_order.status_id === 10
+	const cantCancel = status_order.status_id !== 1
 
 	const handleCancelOrder = (values, { setSubmitting }) => {
 		values = { ...values, order_id: orderId }
@@ -26,12 +26,12 @@ export default function CancelOrder({ data, cancelOrder }) {
 
 	return (
 		<Section paddingHorizontal="0" style={{ paddingTop: 0 }}>
-			{cancelledByCustomer && (
+			{cantCancel && (
 				<CancelSection>
-					<Heading content="Kamu sudah membatalkan orderan ini" />
+					<Heading content="Kamu sudah tidak bisa membatalkan orderan ini" />
 				</CancelSection>
 			)}
-			{!cancelledByCustomer && (
+			{!cantCancel && (
 				<>
 					<Heading
 						content="Batal orderan ini"

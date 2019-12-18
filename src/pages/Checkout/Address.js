@@ -181,6 +181,7 @@ export default function Address({ data, handlers, initialLoading }) {
 										<Row gutter={16}>
 											<Col lg={12}>
 												<SelectInput
+													autocomplete
 													name="province"
 													placeholder="Provinsi kamu..."
 													options={provinceOptions}
@@ -189,6 +190,7 @@ export default function Address({ data, handlers, initialLoading }) {
 											</Col>
 											<Col lg={12}>
 												<SelectInput
+													autocomplete
 													name="city"
 													placeholder="Kota/kabupaten kamu..."
 													options={cityOptions}
@@ -197,6 +199,7 @@ export default function Address({ data, handlers, initialLoading }) {
 											</Col>
 											<Col lg={12}>
 												<SelectInput
+													autocomplete
 													name="subdistrict"
 													placeholder="Kecamatan kamu..."
 													options={subdistrictOptions}

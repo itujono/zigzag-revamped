@@ -171,7 +171,10 @@ function Checkout({
 									/>
 								)}
 							/>
-							<Route path="/checkout/summary" render={() => <Summary data={{user}} handlers={{ saveOrder }} />} />
+							<Route
+								path="/checkout/summary"
+								render={() => <Summary data={{ user }} handlers={{ saveOrder }} />}
+							/>
 						</Switch>
 					</Col>
 
@@ -385,11 +388,11 @@ const mapState = ({ rajaOngkir, user, product, other }) => {
 		cartTotal: product.cartTotal,
 		loading: rajaOngkir.loading || user.loading,
 		dataOnSidebar: { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar },
-		cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, label: item.city_name })),
-		provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, label: item.province })),
+		cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, text: item.city_name })),
+		provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, text: item.province })),
 		subdistrictOptions: rajaOngkir.subdistricts.map(item => ({
 			value: item.subdistrict_id,
-			label: item.subdistrict_name
+			text: item.subdistrict_name
 		}))
 	}
 }

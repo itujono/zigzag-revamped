@@ -32,7 +32,7 @@ export function useRenderError(err, dispatch, type, noShow = false) {
 	console.error(errResponse)
 	const error = (errResponse.data || {}).message || ""
 	if (error) {
-		if (noShow) console.log({ error })
+		if (noShow) return
 		else message.error(error)
 	}
 	if (errResponse.status === 401) {
