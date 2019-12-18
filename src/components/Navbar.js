@@ -15,6 +15,9 @@ import { mobile } from "helpers"
 
 const Nav = styled.nav`
 	width: inherit;
+	background-color: #fff;
+	padding-left: 1em;
+	padding-right: 1em;
 `
 
 const StyledButton = styled(props => <Button {...props} />)`

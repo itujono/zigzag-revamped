@@ -20,7 +20,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 						content="Profil kamu"
 						reverse
 						marginBottom="0"
-						style={{ paddingLeft: "1em", paddingTop: "2em" }}
+						style={{ paddingLeft: "1em", paddingTop: "4em" }}
 					/>
 					<Menu>
 						<Menu.Item key="basic">
@@ -56,7 +56,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 						content="Produk kami"
 						reverse
 						marginBottom="0"
-						style={{ paddingLeft: "1em", paddingTop: "2em" }}
+						style={{ paddingLeft: "1em", paddingTop: "4em" }}
 					/>
 					<Menu>
 						{categories.map(item => {

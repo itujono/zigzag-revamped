@@ -4,6 +4,7 @@ import { Navbar, Logo, Heading } from "components"
 import styled from "styled-components"
 import { withRouter, NavLink } from "react-router-dom"
 import { media, mobile } from "helpers"
+import Headroom from "react-headroom"
 
 import SidebarMenu from "./_SidebarMenu"
 
@@ -76,7 +77,9 @@ function Layout({ basic = false, sidebar = false, children, breadcrumb = false, 
 		<PageLayout>
 			{!basic && (
 				<Header>
-					<Navbar />
+					<Headroom>
+						<Navbar />
+					</Headroom>
 				</Header>
 			)}
 
