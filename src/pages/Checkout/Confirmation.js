@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react"
-import { Section, Heading, Card, ButtonLink } from "components"
+import { Section, Heading, Card, ButtonLink, Logo } from "components"
 import { TextInput, DateInput, SelectInput } from "components/Fields"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { connect } from "react-redux"
 import { useHistory, Link } from "react-router-dom"
 import { Formik } from "formik"
-import { SubmitButton, ResetButton } from "formik-antd"
+import { SubmitButton } from "formik-antd"
+import styled from "styled-components"
 
 import { fetchBankAccounts, fetchOrderCodeList, orderConfirmation } from "store/actions/otherActions"
 import { mobile } from "helpers"
+
+const LogoRow = styled(Row)`
+	margin-bottom: 2em;
+	.ant-col {
+		text-align: right;
+	}
+`
 
 function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props }) {
 	const { push } = useHistory()
@@ -48,9 +56,15 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 	return (
 		<Section centered width="75%">
 			<Card noHover padding={mobile ? "1.5em" : "4em"}>
+				<LogoRow type="flex" justify="center">
+					<Col lg={24}>
+						<Logo width="90" />
+					</Col>
+				</LogoRow>
 				<Row>
 					<Col lg={24}>
 						<Heading
+							bold
 							content="Konfirmasi pembayaran"
 							subheader="Konfirmasi pembayaran kamu di sini supaya cepat kami proses"
 							marginBottom="3em"
