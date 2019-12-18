@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react"
-import { Section, Heading, Loading, Card, ButtonLink, Alert } from "components"
 import { Formik } from "formik"
-import { TextInput, SelectInput } from "components/Fields"
 import { Form, Divider, Button, Row, Col, Avatar, Affix, Upload } from "antd"
 import { connect } from "react-redux"
 import styled from "styled-components/macro"
 import { Link } from "react-router-dom"
+import { ResetButton, SubmitButton } from "formik-antd"
 
+import { Section, Heading, Loading, Card, ButtonLink, Alert } from "components"
+import { TextInput, SelectInput } from "components/Fields"
 import { fetchUser, updateUserProfile, changeAvatar } from "store/actions/userActions"
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
-import { ResetButton, SubmitButton } from "formik-antd"
+import levitate from "assets/gifs/levitate.gif"
+import { media } from "helpers"
 
 const formItemLayout = {
 	labelCol: {
@@ -46,9 +48,33 @@ const StyledForm = styled(Form)`
 	}
 `
 
+const CsCard = styled(Card)`
+	&& {
+		margin-bottom: 2em;
+	}
+	.ant-card-body {
+		padding-left: 0;
+		.ant-col {
+			&:first-child {
+				padding-right: 1em;
+			}
+			img {
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+	}
+
+	${media.mobile`
+		.ant-card-body {
+			padding-left: 2em;
+		}
+	`}
+`
+
 const CsHeading = styled(Heading)`
 	> h4.ant-typography {
-		font-size: 1em;
+		font-size: 1.6em;
 		margin-bottom: 1.5em;
 	}
 `
@@ -74,6 +100,9 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 
 	const handleRenderCities = value => fetchCities("", value)
 	const handleRenderSubdistricts = value => fetchSubdistricts(value)
+	const csWhatsappNumber = (cs.whatsapp || "").startsWith("0")
+		? "62" + (cs.whatsapp || "").slice(1)
+		: cs.whatsapp || ""
 	const accountType = (user.acc_type || {}).account_type_remark
 	const accountTypeText = (
 		<span>
@@ -90,8 +119,10 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 				content="Whatsapp"
 				subheader={
 					<a
-						href={`https://wa.me/6285667651688?text=${encodeURIComponent(
-							"Halo, Zigzag. Saya mau tanya..."
+						target="blank"
+						rel="noopener noreferrer"
+						href={`https://wa.me/${csWhatsappNumber}?text=${encodeURIComponent(
+							`Halo, ${cs.name || ""}. Saya mau tanya...`
 						)}`}
 					>
 						{cs.whatsapp}
@@ -176,6 +207,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 								<Divider />
 								<Heading content="Detail alamat" />
 								<SelectInput
+									autocomplete
 									name="province"
 									label="Provinsi kamu"
 									placeholder="Pilih salah satu..."
@@ -183,6 +215,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 									options={provinceOptions}
 								/>
 								<SelectInput
+									autocomplete
 									name="city"
 									label="Kota/kabupaten kamu"
 									placeholder="Pilih salah satu..."
@@ -190,6 +223,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 									options={cityOptions}
 								/>
 								<SelectInput
+									autocomplete
 									name="subdistrict"
 									label="Kecamatan kamu"
 									placeholder="Pilih salah satu..."
@@ -214,26 +248,16 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 				</Col>
 				<Col lg={8}>
 					<Affix offset={30}>
-						<Card title="CS kamu" style={{ marginBottom: "2em" }}>
-							<Row type="flex" gutter={32}>
-								<Col lg={8}>
-									<Avatar
-										css={`
-											&& {
-												width: 80px;
-												height: 80px;
-											}
-										`}
-										src="https://source.unsplash.com/random/"
-										size="large"
-										shape="circle"
-									/>
+						<CsCard>
+							<Row type="flex">
+								<Col lg={12}>
+									<img src={levitate} width="100%" alt="CS kamu" />
 								</Col>
-								<Col lg={16}>
-									<CsHeading content={cs.name} subheader={csDetails} />
+								<Col lg={12}>
+									<CsHeading content={`Halo, sis! Saya ${cs.name || ""}`} subheader={csDetails} />
 								</Col>
 							</Row>
-						</Card>
+						</CsCard>
 						{upgradeStatus === 2 && (
 							<Alert
 								type="warning"
@@ -259,9 +283,9 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 const mapState = ({ user, rajaOngkir }) => ({
 	user: user.user,
 	loading: user.loading,
-	provinceOptions: rajaOngkir.provinceOptions,
-	cityOptions: rajaOngkir.cityOptions,
-	subdistrictOptions: rajaOngkir.subdistrictOptions
+	provinceOptions: rajaOngkir.provinceOptions.map(item => ({ value: item.value, text: item.label })),
+	cityOptions: rajaOngkir.cityOptions.map(item => ({ value: item.value, text: item.label })),
+	subdistrictOptions: rajaOngkir.subdistrictOptions.map(item => ({ value: item.value, text: item.label }))
 })
 
 const actions = { fetchUser, fetchCities, fetchSubdistricts, fetchProvinces, updateUserProfile, changeAvatar }
