@@ -24,7 +24,8 @@ export const addressValidation = yup.object().shape({
 })
 
 export const confirmationSchema = yup.object().shape({
-	order_code: yup.string().required("KOde order nya wajib diisi"),
+	// ==> untuk Payment Confirmation && Upgrade Confirmation
+	order_code: yup.string().required("Kode order nya wajib diisi"),
 	bank_receiver: yup.string().required("Bank penerima wajib diisi"),
 	bank_sender: yup.string().required("Bank penerima wajib diisi"),
 	total_transfer: yup
@@ -32,4 +33,15 @@ export const confirmationSchema = yup.object().shape({
 		.required("Jumlah yang ditransfer wajib diisi")
 		.typeError("Harus masukin angka aja ya (tidak perlu titik atau koma)"),
 	date: yup.date("Wajib isi ya").required("Kapan ditransfer nya juga wajib diisi")
+})
+
+export const depositSchema = yup.object().shape({
+	deposit_code: yup.string().required("Kode deposit nya wajib diisi"),
+	bank_receiver: yup.string().required("Bank penerima wajib diisi"),
+	bank_sender: yup.string().required("Bank penerima wajib diisi"),
+	total_transfer: yup
+		.number()
+		.required("Jumlah yang ditransfer wajib diisi")
+		.typeError("Harus masukin angka aja ya (tidak perlu titik atau koma)"),
+	transfer_date: yup.date("Wajib isi ya").required("Kapan ditransfer nya juga wajib diisi")
 })

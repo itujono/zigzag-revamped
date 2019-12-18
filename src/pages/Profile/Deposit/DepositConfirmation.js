@@ -10,6 +10,7 @@ import { fetchBankAccounts } from "store/actions/otherActions"
 import { Heading, Layout, Logo } from "components"
 import { SelectInput, TextInput, DateInput } from "components/Fields"
 import styled from "styled-components/macro"
+import { depositSchema } from "pages/Checkout/validation"
 
 const LogoRow = styled(Row)`
 	margin-bottom: 2em;
@@ -72,6 +73,7 @@ function DepositConfirmation({ bankAccountOptions, depositCodeOptions, ...props 
 					/>
 					<Formik
 						onSubmit={handleSubmitConfirmation}
+						validationSchema={depositSchema}
 						initialValues={{ deposit_code: state.depositCode }}
 						render={({ handleSubmit }) => (
 							<Form layout="vertical" onSubmit={handleSubmit}>
