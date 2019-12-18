@@ -7,9 +7,16 @@ import { useHistory } from "react-router-dom"
 
 import { upgradeConfirmation, fetchUpgradeCodeList } from "store/actions/userActions"
 import { fetchBankAccounts } from "store/actions/otherActions"
-import { Heading } from "components"
+import { Heading, Logo } from "components"
 import { SelectInput, TextInput, DateInput } from "components/Fields"
 import styled from "styled-components/macro"
+
+const LogoRow = styled(Row)`
+	margin-bottom: 2em;
+	.ant-col {
+		text-align: right;
+	}
+`
 
 function UpgradeConfirmation({ bankAccountOptions, ...props }) {
 	const { push } = useHistory()
@@ -49,6 +56,11 @@ function UpgradeConfirmation({ bankAccountOptions, ...props }) {
 
 	return (
 		<Row type="flex" justify="center" css="padding: 2em">
+			<LogoRow type="flex" justify="center">
+				<Col lg={24}>
+					<Logo width="90" />
+				</Col>
+			</LogoRow>
 			<Col lg={20}>
 				<Heading
 					content="Konfirmasi upgrade akun"

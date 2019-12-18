@@ -7,9 +7,16 @@ import { useHistory, useLocation } from "react-router-dom"
 
 import { fetchListDeposit, depositConfirmation } from "store/actions/userActions"
 import { fetchBankAccounts } from "store/actions/otherActions"
-import { Heading, Layout } from "components"
+import { Heading, Layout, Logo } from "components"
 import { SelectInput, TextInput, DateInput } from "components/Fields"
 import styled from "styled-components/macro"
+
+const LogoRow = styled(Row)`
+	margin-bottom: 2em;
+	.ant-col {
+		text-align: right;
+	}
+`
 
 function DepositConfirmation({ bankAccountOptions, depositCodeOptions, ...props }) {
 	const { push } = useHistory()
@@ -51,8 +58,14 @@ function DepositConfirmation({ bankAccountOptions, depositCodeOptions, ...props 
 	return (
 		<Layout>
 			<Row type="flex" justify="center" css="padding: 2em">
+				<LogoRow type="flex" justify="center">
+					<Col lg={24}>
+						<Logo width="90" />
+					</Col>
+				</LogoRow>
 				<Col lg={16}>
 					<Heading
+						bold
 						content="Konfirmasi deposit"
 						subheader="Konfirmasi deposit kamu di sini supaya cepat kami proses"
 						marginBottom="3em"

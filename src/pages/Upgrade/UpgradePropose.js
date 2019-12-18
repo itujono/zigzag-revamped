@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import { Row, Col, Icon } from "antd"
 import styled from "styled-components"
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import { connect } from "react-redux"
 
-import { upgradeAccount } from "store/actions/userActions"
+import { upgradeAccount, fetchUser } from "store/actions/userActions"
 import { Heading, Button, Modal, ButtonLink } from "components"
 import scenery from "assets/images/scenery.png"
 import { theme } from "styles"
@@ -26,6 +26,15 @@ const upgradeText = (
 )
 
 const StyledRow = styled(Row)`
+	&.has-proposed {
+		.ant-col {
+			text-align: center;
+			padding: 2em;
+			.image {
+				margin-bottom: 2em;
+			}
+		}
+	}
 	.left {
 		padding: 2em 3em;
 		background-color: ${theme.greyColor[4]};
@@ -47,12 +56,32 @@ const StyledRow = styled(Row)`
 	}
 `
 
-function UpgradePropose({ upgradeAccount }) {
+function UpgradePropose({ upgradeAccount, user: { customer_upgrade = {} } }) {
 	const [confirmationModal, setConfirmationModal] = useState(false)
 	const { push } = useHistory()
 
-	const handlePropose = () => {
-		upgradeAccount(push)
+	const hasProposed = customer_upgrade.id && customer_upgrade.id === 2
+
+	const handlePropose = () => upgradeAccount(push)
+
+	if (hasProposed) {
+		return (
+			<StyledRow type="flex" justify="center" className="has-proposed">
+				<Col lg={16} xs={24}>
+					<div className="image">
+						<img src={scenery} alt="Benefit jadi VIP member" width="160" />
+					</div>
+					<Heading
+						content="Kamu sudah mengajukan"
+						subheader="Oke, kamu sudah mengajukan untuk jadi member VIP kami. That's good! :)"
+						marginBottom="3em"
+					/>
+					<p>
+						Sudah bayar? <Link to="/upgrade/confirmation">Konfirmasi upgrade sekarang</Link>
+					</p>
+				</Col>
+			</StyledRow>
+		)
 	}
 
 	return (
@@ -77,10 +106,10 @@ function UpgradePropose({ upgradeAccount }) {
 					content="Upgrade jadi VIP sekarang"
 					subheader="Dengan menge-klik tombol di bawah ini, kamu setuju untuk propose menjadi member VIP di Zigzag Online Shop"
 				/>
-				<Button onClick={handlePropose}>Jadi member VIP sekarang</Button>
+				<Button onClick={() => setConfirmationModal(true)}>Jadi member VIP sekarang</Button>
 			</Col>
 		</StyledRow>
 	)
 }
 
-export default connect(null, { upgradeAccount })(UpgradePropose)
+export default connect(({ user }) => ({ user: user.user }), { upgradeAccount, fetchUser })(UpgradePropose)
