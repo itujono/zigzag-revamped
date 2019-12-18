@@ -11,7 +11,7 @@ import { TextInput, SelectInput } from "components/Fields"
 import { fetchUser, updateUserProfile, changeAvatar } from "store/actions/userActions"
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
 import levitate from "assets/gifs/levitate.gif"
-import { media } from "helpers"
+import { media, mobile } from "helpers"
 
 const formItemLayout = {
 	labelCol: {
@@ -76,6 +76,7 @@ const CsHeading = styled(Heading)`
 	> h4.ant-typography {
 		font-size: 1.6em;
 		margin-bottom: 1.5em;
+		line-height: 1.2;
 	}
 `
 
@@ -262,7 +263,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 					/>
 				</Col>
 				<Col lg={8}>
-					<Affix offset={30}>
+					<Affix offset={mobile ? -20 : 30}>
 						<CsCard>
 							<Row type="flex">
 								<Col lg={12}>
