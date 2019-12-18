@@ -10,6 +10,7 @@ import { fetchBankAccounts } from "store/actions/otherActions"
 import { Heading, Logo } from "components"
 import { SelectInput, TextInput, DateInput } from "components/Fields"
 import styled from "styled-components/macro"
+import { confirmationSchema } from "pages/Checkout/validation"
 
 const LogoRow = styled(Row)`
 	margin-bottom: 2em;
@@ -69,6 +70,7 @@ function UpgradeConfirmation({ bankAccountOptions, ...props }) {
 				/>
 				<Formik
 					onSubmit={handleSubmitConfirmation}
+					validationSchema={confirmationSchema}
 					render={({ handleSubmit }) => (
 						<Form layout="vertical" onSubmit={handleSubmit}>
 							<SelectInput
