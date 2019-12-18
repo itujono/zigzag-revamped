@@ -1,6 +1,8 @@
 import axios from "axios"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { css } from "styled-components"
+import createActivityDetector from "activity-detector"
+
 import { useHistory } from "react-router-dom"
 import { unauthUser } from "store/actions/authActions"
 import { message } from "antd"
@@ -37,11 +39,23 @@ export function useRenderError(err, dispatch, type, noShow = false) {
 	}
 	if (errResponse.status === 401) {
 		localStorage.clear()
-		// dispatch({ type: LOGOU })
 	}
 
 	dispatch({ type, payload: error })
 	return error
+}
+
+export function useIdle(options) {
+	const [isIdle, setIsIdle] = useState(false)
+
+	useEffect(() => {
+		const activityDetector = createActivityDetector(options)
+		activityDetector.on("idle", () => setIsIdle(true))
+		activityDetector.on("active", () => setIsIdle(false))
+		return () => activityDetector.stop()
+	}, [options])
+
+	return isIdle
 }
 
 export function useFetchData(url, param) {

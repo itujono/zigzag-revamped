@@ -18,6 +18,7 @@ const Cardee = styled(Card)`
 			padding: ${({ mode }) => mode === "mini" && "24px 12px"};
 		}
 		.ant-card-meta-title {
+			font-weight: bold;
 			font-size: ${({ mode }) => mode === "mini" && "13px"};
 		}
 		.ant-card-cover {
@@ -48,11 +49,11 @@ function ProductCard({ data, mode, loading = false, ...props }) {
 						<Col lg={18}>
 							<Card.Meta title={data.title} description={`Rp ${pricer(data.price)}`} />
 						</Col>
-						<Col lg={6} style={{ textAlign: "right" }}>
+						{/* <Col lg={6} style={{ textAlign: "right" }}>
 							<Tag style={tagStyle} color="magenta">
 								{data.category}
 							</Tag>
-						</Col>
+						</Col> */}
 					</Row>
 				)}
 			</Cardee>

@@ -13,7 +13,7 @@ const HeadingSection = styled(Row).attrs({
 	gutter: 16
 })`
 	${media.mobile`
-		> .ant-col{
+		> .ant-col {
 			&:last-child {
 				margin-bottom: 2em;
 			}
@@ -72,13 +72,14 @@ function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 						</Form>
 					</Col>
 				</HeadingSection>
-				<Row gutter={16}>
+				<Row gutter={32}>
 					{products.map(item => (
 						<Col xs={12} lg={6} key={item.id}>
 							<ProductCard
 								key={item.id}
 								mode="mini"
 								loading={loading}
+								style={{ marginBottom: "2em" }}
 								data={{
 									src: item.product_image[0].picture,
 									title: item.name,

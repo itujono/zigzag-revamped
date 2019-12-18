@@ -2,7 +2,7 @@ import React, { Suspense } from "react"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { Provider } from "react-redux"
 import { createAppStore } from "./store"
-import { Loading } from "components"
+import { Loading, Modal, Heading, Button } from "components"
 import Login from "pages/auth/Login"
 import Register from "pages/auth/Register"
 import RegisterSuccess from "pages/auth/Register/RegisterSuccess"
@@ -22,6 +22,7 @@ import Logout from "pages/auth/Logout"
 import SearchResult from "pages/Home/SearchResult"
 import DepositConfirmation from "pages/Profile/Deposit/DepositConfirmation"
 import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
+import { useIdle } from "helpers"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -29,9 +30,21 @@ const Category = React.lazy(() => import("pages/Category"))
 const Profile = React.lazy(() => import("pages/Profile"))
 
 const App = () => {
+	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 10, inactivityEvents: [] })
+
 	return (
 		<Provider store={createAppStore()}>
 			<BrowserRouter>
+				<Modal visible={isIdle} closable={false}>
+					<Heading
+						content="Sesi kamu tidak aktif"
+						subheader="Kamu tidak melakukan aktifitas apa-apa selama beberapa waktu. Harap refresh halaman ini untuk me-restore sesi kamu."
+						marginBottom="3em"
+					/>
+					<Button icon="reload" onClick={() => window.location.reload(true)}>
+						Refresh halaman
+					</Button>
+				</Modal>
 				<Suspense fallback={<Loading />}>
 					<Switch>
 						<Redirect exact from="/profile" to="/profile/basic" />

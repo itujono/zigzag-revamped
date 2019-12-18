@@ -27,13 +27,14 @@ function Category({ products, fetchProducts, loading }) {
 					subheader={`Liat produk ${name} terbaik di Zigzag`}
 					marginBottom="3em"
 				/>
-				<Row gutter={16}>
+				<Row gutter={32}>
 					{products.map(item => (
 						<Col xs={12} lg={6} key={item.id}>
 							<ProductCard
 								key={item.id}
 								mode="mini"
 								loading={loading}
+								style={{ marginBottom: "2em" }}
 								data={{
 									src: item.product_image[0].picture,
 									title: item.name,
