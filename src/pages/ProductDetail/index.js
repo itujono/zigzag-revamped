@@ -71,7 +71,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const [temporaryRating, setTemporaryRating] = useState(0)
 	const { id: productId } = useParams()
 	const { push } = useHistory()
-	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem } = props
+	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating, loadingCart } = props
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
@@ -302,7 +302,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 								icon="shopping-cart"
 								disabled={isShoes ? colorIsNotSelected || sizeIsNotSelected : colorIsNotSelected}
 								onClick={handleAddToCart}
-								loading={loading}
+								loading={loadingCart}
 							>
 								Tambahkan ke cart
 							</Button>{" "}
@@ -328,7 +328,8 @@ const mapState = ({ product }) => {
 		productPrice: product.productPrice,
 		vipPrice: vipPrice.price || 0,
 		regulerPrice: regulerPrice.price || 0,
-		loading: product.loading
+		loading: product.loading,
+		loadingCart: product.loadingCart
 	}
 }
 

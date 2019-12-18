@@ -61,22 +61,20 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 					<Menu>
 						{categories.map(item => {
 							const theIcon =
-								item.id === 1 ? (
-									<HomewareIcon />
-								) : item.id === 2 ? (
-									<ShoesIcon />
-								) : item.id === 3 ? (
-									<WalletIcon />
-								) : item.id === 4 ? (
-									<LingerieIcon />
-								) : (
-									<BagIcon />
-								)
+								item.id === 1
+									? "icon-diamond"
+									: item.id === 2
+									? "icon-high-heel-boot"
+									: item.id === 3
+									? "icon-wallet1"
+									: item.id === 4
+									? "icon-bodystocking"
+									: "icon-bag"
 
 							return (
 								<Menu.Item key={item.id}>
 									<NavLink to={`/category/${item.id}-${item.name.toLowerCase()}`}>
-										{theIcon} {item.name}
+										<DynamicIcon type={theIcon} /> {item.name}
 									</NavLink>
 								</Menu.Item>
 							)
@@ -91,7 +89,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 					<Menu>
 						<Menu.Item key="promo">
 							<NavLink to="/products/promo">
-								<BagIcon /> Lagi promo!
+								<DynamicIcon type="icon-tubiaozhizuomoban" /> Lagi promo!
 							</NavLink>
 						</Menu.Item>
 						<Menu.Item key="about">

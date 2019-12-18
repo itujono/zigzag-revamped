@@ -8,6 +8,7 @@ const initialState = {
 	products: [],
 	restockProducts: [],
 	loading: false,
+	loadingCart: false,
 	product: {},
 	productPrice: 0,
 	cartItems: [],
@@ -19,7 +20,8 @@ const initialState = {
 	searchError: null,
 	productError: null,
 	cartError: null,
-	promoProductsError: null
+	promoProductsError: null,
+	productCategoriesError: null
 }
 
 const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -63,6 +65,9 @@ function reducer(state = initialState, action) {
 	switch (action.type) {
 		case types.LOADING_PRODUCT:
 			return { ...state, loading: true }
+		case types.LOADING_CART:
+			return { ...state, loadingCart: true }
+
 		case types.FETCH_PRODUCT_ITEM:
 			const productPrice = action.payload.product_price
 				.filter(({ price_type }) => {
@@ -125,15 +130,15 @@ function reducer(state = initialState, action) {
 				...state,
 				cartItems,
 				cartTotal: { price: totalPrice, weight: totalWeight, discount, qty: totalQty, roundedWeight },
-				loading: false
+				loadingCart: false
 			}
 
 		case types.ADD_ITEM_TO_CART:
-			return { ...state, loading: false }
+			return { ...state, loadingCart: false }
 		case types.UPDATE_CART_ITEM:
-			return { ...state, loading: false }
+			return { ...state, loadingCart: false }
 		case types.DELETE_CART_ITEM:
-			return { ...state, loading: false }
+			return { ...state, loadingCart: false }
 		case types.ADD_RATING:
 			return { ...state, loading: false }
 
@@ -174,6 +179,8 @@ function reducer(state = initialState, action) {
 			return { ...state, cartError: action.payload, loading: false }
 		case types.FETCH_PROMO_PRODUCTS_ERROR:
 			return { ...state, promoProductsError: action.payload, loading: false }
+		case types.FETCH_PRODUCT_CATEGORIES_ERROR:
+			return { ...state, productCategoriesError: action.payload, loading: false }
 		default:
 			return state
 	}

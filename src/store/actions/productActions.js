@@ -3,7 +3,8 @@ import * as types from "../types"
 import { instance, useRenderError } from "helpers"
 import { message } from "antd"
 
-const loadingProduct = condition => ({ type: types.LOADING_PRODUCT, payload: condition })
+const loadingProduct = () => ({ type: types.LOADING_PRODUCT })
+const loadingCart = () => ({ type: types.LOADING_CART })
 
 const token = localStorage.getItem("access_token")
 const formData = JSON.parse(localStorage.getItem("formData")) || {}
@@ -47,22 +48,27 @@ export const fetchProductCategories = () => dispatch => {
 	return instance
 		.get(`/category/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_PRODUCT_CATEGORIES, payload: data.data.category_data }))
-		.catch(err => console.error(err.response))
+		.catch(err => useRenderError(err, dispatch, types.FETCH_PRODUCT_CATEGORIES_ERROR))
 }
 
 export const fetchCartItems = () => dispatch => {
-	dispatch(loadingProduct())
+	dispatch(loadingCart())
 	return instance
 		.get(`/cart/list`)
 		.then(({ data }) => {
 			dispatch({ type: types.FETCH_CART_ITEMS, payload: data.data.cart_data })
 			localStorage.setItem("formData", JSON.stringify({ ...formData, cartItems: data.data.cart_data }))
 		})
-		.catch(err => useRenderError(err, dispatch, types.FETCH_CART_ITEMS_ERROR, true))
+		.catch(err => {
+			if (err.response.status === 404) {
+				dispatch({ type: types.FETCH_CART_ITEMS, payload: [] })
+			}
+			useRenderError(err, dispatch, types.FETCH_CART_ITEMS_ERROR, true)
+		})
 }
 
 export const addItemToCart = item => dispatch => {
-	dispatch(loadingProduct())
+	dispatch(loadingCart())
 	return instance
 		.post(`/cart/save`, item)
 		.then(({ data }) => dispatch({ type: types.ADD_ITEM_TO_CART, payload: data }))
@@ -72,7 +78,7 @@ export const addItemToCart = item => dispatch => {
 }
 
 export const updateCartItem = ({ cart_id, qty, weight, total_price }, name) => dispatch => {
-	dispatch(loadingProduct())
+	dispatch(loadingCart())
 	return instance
 		.put(`/cart/update?cart_id=${cart_id}&qty=${qty}&weight=${weight}&total_price=${total_price}`)
 		.then(({ data }) => dispatch({ type: types.UPDATE_CART_ITEM, payload: data }))
@@ -88,8 +94,8 @@ export const updateCartItem = ({ cart_id, qty, weight, total_price }, name) => d
 		.catch(err => useRenderError(err, dispatch, types.UPDATE_CART_ITEM_ERROR))
 }
 
-export const deleteCartItem = ({ cart_id }, name = "Heheh") => dispatch => {
-	dispatch(loadingProduct())
+export const deleteCartItem = ({ cart_id }, name = "") => dispatch => {
+	dispatch(loadingCart())
 	return instance
 		.delete(`/cart/delete?cart_id=${cart_id}`)
 		.then(({ data }) => dispatch({ type: types.UPDATE_CART_ITEM, payload: data }))
@@ -102,13 +108,7 @@ export const deleteCartItem = ({ cart_id }, name = "Heheh") => dispatch => {
 				1
 			)
 		)
-		.catch(err => {
-			const error = (err.response.data || {}).message || ""
-			if (err.response) {
-				message.error(error)
-			}
-			dispatch({ type: types.UPDATE_CART_ITEM_ERROR, payload: error })
-		})
+		.catch(err => useRenderError(err, dispatch, types.DELETE_CART_ITEM_ERROR))
 }
 
 export const addItemToWishlist = item => dispatch => {

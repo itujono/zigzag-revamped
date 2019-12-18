@@ -180,7 +180,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 										: id === 2
 										? "icon-high-heel-boot"
 										: id === 3
-										? "icon-tubiaozhizuomoban5"
+										? "icon-wallet1"
 										: id === 4
 										? "icon-bodystocking"
 										: "icon-bag"

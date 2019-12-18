@@ -113,7 +113,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 
 	useEffect(() => {
 		handleFetchCartItems()
-	}, [handleFetchCartItems, token])
+	}, [handleFetchCartItems])
 
 	return (
 		<Drawer
@@ -252,7 +252,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 const mapState = ({ product }) => ({
 	cartItems: product.cartItems,
 	cartTotal: product.cartTotal,
-	loading: product.loading
+	loading: product.loadingCart
 })
 
 export default connect(mapState, { fetchCartItems, updateCartItem, deleteCartItem })(CartDrawer)
