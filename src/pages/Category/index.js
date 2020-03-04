@@ -36,7 +36,7 @@ function Category({ products, fetchProducts, loading }) {
 								loading={loading}
 								style={{ marginBottom: "2em" }}
 								data={{
-									src: item.product_image[0].picture,
+									src: (item.product_image[0] || {}).picture,
 									title: item.name,
 									price: item.product_price.price,
 									to: `/product/${item.id}-${item.name}`,
