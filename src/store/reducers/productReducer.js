@@ -1,5 +1,5 @@
 import * as types from "../types"
-import { akunKoko } from "helpers"
+import { ID_AKUN_KOKO } from "helpers/constants"
 
 const initialState = {
 	user: {},
@@ -31,7 +31,7 @@ const userId = Number(localStorage.getItem("user_id"))
 
 const renderPrice = productPrice => {
 	const price = productPrice.filter(({ price_type }) => {
-		if (!token || userId === akunKoko) return price_type === "REGULER"
+		if (!token || userId === ID_AKUN_KOKO) return price_type === "REGULER"
 		return price_type.toLowerCase() === typeRemark.toLowerCase()
 	})[0]
 	return { product_price: price }
@@ -71,7 +71,7 @@ function reducer(state = initialState, action) {
 		case types.FETCH_PRODUCT_ITEM:
 			const productPrice = action.payload.product_price
 				.filter(({ price_type }) => {
-					if (!token || userId === akunKoko) return price_type === "REGULER"
+					if (!token || userId === ID_AKUN_KOKO) return price_type === "REGULER"
 					return price_type.toLowerCase() === typeRemark.toLowerCase()
 				})
 				.map(({ price }) => price)[0]
@@ -83,7 +83,6 @@ function reducer(state = initialState, action) {
 				const { product_price } = renderPrice(item.product_price)
 				return { ...item, product_price }
 			})
-
 			return { ...state, products, loading: false }
 
 		case types.FETCH_RESTOCK_PRODUCTS:

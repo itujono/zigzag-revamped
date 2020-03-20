@@ -1,5 +1,5 @@
 import React from "react"
-import { Section, Heading, Card, Button, Logo } from "components"
+import { Section, Heading, Card, Button, Logo, GifPlayer } from "components"
 import { Row, Col, Form } from "antd"
 import { Link, useHistory } from "react-router-dom"
 import { Formik } from "formik"
@@ -113,12 +113,7 @@ function Login({ authUser }) {
 					</TheCard>
 				</LeftSide>
 				<Col lg={12}>
-					<TheImage>
-						<img
-							src="https://assets.website-files.com/5ccc8aa73871f9d0b1c81c04/5ced7f5fe2e0591aebdd3fba_sign-in.jpg"
-							width="100%"
-						/>
-					</TheImage>
+					<GifPlayer src="https://assets7.lottiefiles.com/packages/lf20_VcQkr6.json" />
 				</Col>
 			</Row>
 		</Section>

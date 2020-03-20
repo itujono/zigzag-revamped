@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { Section, Heading, Layout, ProductCard, ButtonLink } from "components"
-import { connect } from "react-redux"
-import { fetchProductItem, fetchProducts, fetchRestockProducts } from "store/actions/productActions"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchProducts, fetchRestockProducts } from "store/actions/productActions"
 import { Carousel, Row, Col, Icon } from "antd"
 import { mobile, media } from "helpers"
 import styled from "styled-components"
@@ -13,11 +13,16 @@ const SelengkapButton = styled(ButtonLink)`
 	margin-right: 0;
 `
 
-function Home({ fetchProducts, products, fetchRestockProducts, restockProducts }) {
+function Home() {
+	const dispatch = useDispatch()
+	const product = useSelector(({ product }) => product)
+	const products = useSelector(({ product }) => product.products)
+	const restockProducts = useSelector(({ product }) => product.restockProducts)
+
 	useEffect(() => {
-		fetchProducts(0, 6)
-		fetchRestockProducts(0, 6)
-	}, [fetchProducts, fetchRestockProducts])
+		dispatch(fetchProducts(0, 6))
+		dispatch(fetchRestockProducts(0, 6))
+	}, [dispatch])
 
 	return (
 		<Layout sidebar>
@@ -130,11 +135,4 @@ function Home({ fetchProducts, products, fetchRestockProducts, restockProducts }
 	)
 }
 
-const mapState = ({ product }) => ({
-	product: product.product,
-	products: product.products,
-	restockProducts: product.restockProducts
-})
-
-// prettier-ignore
-export default connect(mapState, { fetchProductItem, fetchProducts, fetchRestockProducts } )(Home)
+export default Home

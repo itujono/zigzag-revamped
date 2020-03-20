@@ -14,6 +14,7 @@ import Modal from "./Modal"
 import Alert from "./Alert"
 import Empty from "./Empty"
 import DynamicIcon from "./DynamicIcon"
+import GifPlayer from "./GifPlayer"
 
 export {
 	Heading,
@@ -31,5 +32,6 @@ export {
 	Modal,
 	Alert,
 	Empty,
-	DynamicIcon
+	DynamicIcon,
+	GifPlayer
 }

@@ -1,5 +1,5 @@
 import * as types from "../types"
-import { akunKoko } from "helpers"
+import { ID_AKUN_KOKO } from "helpers/constants"
 
 const initial = {
 	cartDrawer: false,
@@ -51,7 +51,7 @@ function reducer(state = initial, action) {
 			const orderHistory = action.payload.map(item => {
 				const { customers, orders_detail } = item
 
-				if (customers.id === akunKoko) {
+				if (customers.id === ID_AKUN_KOKO) {
 					return {
 						...item,
 						orders_detail: orders_detail.map(detail => ({

@@ -7,7 +7,7 @@ import Axios from "axios"
 const loadingProduct = () => ({ type: types.LOADING_PRODUCT })
 const loadingCart = () => ({ type: types.LOADING_CART })
 
-const token = localStorage.getItem("access_token")
+// const token = localStorage.getItem("access_token")
 const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
 export const fetchProductItem = id => async dispatch => {
@@ -22,9 +22,9 @@ export const fetchProductItem = id => async dispatch => {
 
 export const fetchProducts = (category = 0, limit = 10) => async dispatch => {
 	dispatch(loadingProduct())
-	const { data } = await Axios.get(`https://json.geoiplookup.io/`)
+	// const { data } = await Axios.get(`https://json.geoiplookup.io/`)
 	return instance
-		.get(`/product/list?category=${category}&limit=${limit}&ip=${data.ip}`)
+		.get(`/product/list?category=${category}&limit=${limit}`)
 		.then(({ data }) => dispatch({ type: types.FETCH_PRODUCTS, payload: data.data.product_data }))
 		.catch(err => console.error(err.response))
 }
