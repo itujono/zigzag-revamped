@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Button, Logo, ButtonLink, Alert } from "components"
-import { Row, Col, Form, Icon, Modal } from "antd"
+import { Row, Col, Form, Icon, Modal, PageHeader } from "antd"
 import { connect } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
 
@@ -111,7 +111,7 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 	const [accountType, setAccountType] = useState(1)
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
-	const { push } = useHistory()
+	const { push, goBack } = useHistory()
 	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces, fetchCities } = props
 
 	const handleNext = section => {
@@ -341,30 +341,29 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 			</Row> */}
 			<Row type="flex" align="middle" justify="center">
 				<LeftSide lg={10} xs={24}>
-					<Heading
-						bold
-						content={isPartner ? "Register (partner)" : "Register"}
-						level={1}
-						marginBottom="3em"
-						subheader={
-							<p>
-								Atau <Link to="/login">login saja</Link> langsung
-							</p>
-						}
+					<PageHeader
+						className="pl0 mb2em"
+						onBack={() => goBack()}
+						title={isPartner ? "Register (partner)" : "Register"}
+						subTitle="Silakan isi data kamu dulu untuk registrasi"
 					/>
 					<TheCard noHover>
 						<Formik
-							initialValues={{
-								customer_service_id: isPartner ? 6 : "Pilih CS nya"
-							}}
+							initialValues={{ customer_service_id: isPartner ? 6 : "Pilih CS nya" }}
 							validationSchema={validationSchema}
 							onSubmit={handleRegister}
-							render={({ handleSubmit, values }) => (
-								<Form layout="vertical" onSubmit={handleSubmit}>
+						>
+							{({ handleSubmit, values }) => (
+								<Form layout="vertical" onSubmit={handleSubmit} className="mb4em">
 									{renderForm(values)}
 								</Form>
 							)}
-						/>
+						</Formik>
+						<Row type="flex" justify="center">
+							<Col lg={12} xs={24} className="ta-center">
+								Atau <Link to="/login">login</Link> aja langsung
+							</Col>
+						</Row>
 					</TheCard>
 				</LeftSide>
 				<Col lg={12}>

@@ -1,6 +1,6 @@
 import React from "react"
-import { Section, Heading, Card, Button, Logo, GifPlayer } from "components"
-import { Row, Col, Form } from "antd"
+import { Section, Heading, Card, Button, Logo, GifPlayer, ButtonLink } from "components"
+import { Row, Col, Form, PageHeader } from "antd"
 import { Link, useHistory } from "react-router-dom"
 import { Formik } from "formik"
 import { connect, useSelector } from "react-redux"
@@ -53,7 +53,7 @@ const LeftSide = styled(Col)`
 `
 
 function Login({ authUser }) {
-	const { push } = useHistory()
+	const { push, goBack } = useHistory()
 
 	const handleLogin = (values, { setSubmitting }) => {
 		authUser(values, setSubmitting, push)
@@ -68,25 +68,22 @@ function Login({ authUser }) {
 					<Logo />
 				</Col>
 			</Row> */}
-			<Row type="flex" align="middle" justify="center">
+			<Row type="flex" align="middle" justify="center" className="mb2em">
 				<LeftSide lg={10} xs={24}>
-					<Heading
-						bold
-						content="Login"
-						level={1}
-						marginBottom="3em"
-						subheader={
-							<p>
-								Atau <Link to="/register">register dulu</Link>
-							</p>
-						}
+					<PageHeader
+						className="pl0 mb2em"
+						onBack={() => goBack()}
+						title="Login"
+						subTitle="Silakan login dulu untuk melanjutkan"
 					/>
 					<TheCard>
 						<Formik
 							onSubmit={handleLogin}
+							initialValues={{ email: "" }}
 							validationSchema={validationSchema}
-							render={({ handleSubmit }) => (
-								<Form layout="vertical" onSubmit={handleSubmit}>
+						>
+							{({ handleSubmit }) => (
+								<Form layout="vertical" onSubmit={handleSubmit} className="mb4em">
 									<TextInput
 										type="email"
 										name="email"
@@ -109,7 +106,12 @@ function Login({ authUser }) {
 									</Button>
 								</Form>
 							)}
-						/>
+						</Formik>
+						<Row type="flex" justify="center">
+							<Col lg={12} xs={24} className="ta-center">
+								Atau <Link to="/register">register</Link> dulu
+							</Col>
+						</Row>
 					</TheCard>
 				</LeftSide>
 				<Col lg={12}>
