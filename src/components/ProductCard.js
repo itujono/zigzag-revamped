@@ -3,12 +3,14 @@ import { Card, Row, Col, Icon, Tag } from "antd"
 import styled from "styled-components"
 import { pricer } from "helpers"
 import { Link } from "react-router-dom"
+import { theme } from "styles"
 
 const Cardee = styled(Card)`
 	&& {
 		border-radius: 8px;
 		margin-bottom: 1em;
 		transition: all 0.2s ease;
+		border: 2px solid ${theme.greyColor[3]};
 		img {
 			width: 100%;
 			height: 100%;

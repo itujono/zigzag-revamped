@@ -7,10 +7,10 @@ import { mobile, media } from "helpers"
 import styled from "styled-components"
 
 const SelengkapButton = styled(ButtonLink)`
-	${media.mobile`
-		padding-left: 0;
-	`}
 	margin-right: 0;
+	/* ${media.mobile`
+		padding-left: 0;
+	`} */
 `
 
 function Home() {
@@ -33,9 +33,9 @@ function Home() {
 					autoplay
 					pauseOnHover
 					infinite
-					centerMode
+					// centerMode
 					slidesToShow={mobile ? 1 : 3}
-					centerPadding="60px"
+					// centerPadding="60px"
 					style={{ marginBottom: "2em" }}
 				>
 					<div>
