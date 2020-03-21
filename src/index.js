@@ -6,6 +6,7 @@ import "./styles/index.less"
 import App from "./App"
 import * as serviceWorker from "./serviceWorker"
 import "moment/locale/id"
+import "@lottiefiles/lottie-player"
 
 moment.locale("id")
 

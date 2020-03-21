@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Section, Heading, Card, Button, Logo, ButtonLink, Alert } from "components"
+import { Section, Heading, Card, Button, Logo, ButtonLink, Alert, GifPlayer } from "components"
 import { Row, Col, Form, Icon, Modal, PageHeader } from "antd"
 import { connect } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
@@ -334,12 +334,7 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 
 	return (
 		<Section centered>
-			{/* <Row style={{ marginBottom: "2em" }}>
-				<Col lg={12}>
-					<Logo />
-				</Col>
-			</Row> */}
-			<Row type="flex" align="middle" justify="center">
+			<Row type="flex" align="middle" justify="center" className="mb2em">
 				<LeftSide lg={10} xs={24}>
 					<PageHeader
 						className="pl0 mb2em"
@@ -367,12 +362,13 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 					</TheCard>
 				</LeftSide>
 				<Col lg={12}>
-					<TheImage>
-						<img
-							src="https://assets.website-files.com/5ccc8aa73871f9d0b1c81c04/5ced813ed73b74c8b6b95728_sign-up-compressor.jpg"
-							width="100%"
-						/>
-					</TheImage>
+					<GifPlayer src="https://assets6.lottiefiles.com/datafiles/8I4VBobfLT0ZhRnzi3ZZl61uKHJ6yUtXkb7aKe4Z/bag.json" />
+				</Col>
+			</Row>
+
+			<Row type="flex" justify="center">
+				<Col lg={12} className="ta-center">
+					<Logo />
 				</Col>
 			</Row>
 		</Section>

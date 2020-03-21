@@ -1,9 +1,9 @@
 import React from "react"
-import { Section, Heading, Card, Button, Logo, GifPlayer, ButtonLink } from "components"
+import { Section, Card, Button, GifPlayer, Logo } from "components"
 import { Row, Col, Form, PageHeader } from "antd"
 import { Link, useHistory } from "react-router-dom"
 import { Formik } from "formik"
-import { connect, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
 import { authUser } from "store/actions/authActions"
@@ -46,17 +46,18 @@ const TheCard = styled(Card)`
 const LeftSide = styled(Col)`
 	left: 50px;
 	z-index: 1;
-
+	margin-right: 6em;
 	${media.mobile`
-		left: initial;
-	`}
+		left: 40px;
+	`};
 `
 
-function Login({ authUser }) {
+function Login() {
 	const { push, goBack } = useHistory()
+	const dispatch = useDispatch()
 
 	const handleLogin = (values, { setSubmitting }) => {
-		authUser(values, setSubmitting, push)
+		dispatch(authUser(values, setSubmitting, push))
 	}
 
 	if (localStorage.getItem("access_token")) push("/404")
@@ -114,12 +115,20 @@ function Login({ authUser }) {
 						</Row>
 					</TheCard>
 				</LeftSide>
-				<Col lg={12}>
-					<GifPlayer src="https://assets7.lottiefiles.com/packages/lf20_VcQkr6.json" />
+
+				<Col lg={12} className="pt4em pt-initial__mobile">
+					<GifPlayer src="https://assets6.lottiefiles.com/datafiles/8I4VBobfLT0ZhRnzi3ZZl61uKHJ6yUtXkb7aKe4Z/bag.json" />
+					{/* <GifPlayer src="https://assets7.lottiefiles.com/packages/lf20_VcQkr6.json" /> */}
+				</Col>
+			</Row>
+
+			<Row type="flex" justify="center">
+				<Col lg={12} className="ta-center">
+					<Logo />
 				</Col>
 			</Row>
 		</Section>
 	)
 }
 
-export default connect(null, { authUser })(Login)
+export default Login
