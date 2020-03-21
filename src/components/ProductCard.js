@@ -6,13 +6,14 @@ import { Link } from "react-router-dom"
 
 const Cardee = styled(Card)`
 	&& {
-		/* border-radius: 8px; */
+		border-radius: 8px;
 		margin-bottom: 1em;
 		transition: all 0.2s ease;
 		img {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+			border-radius: 8px 8px 0 0;
 		}
 		.ant-card-body {
 			padding: ${({ mode }) => mode === "mini" && "24px 12px"};
@@ -22,7 +23,7 @@ const Cardee = styled(Card)`
 			font-size: ${({ mode }) => mode === "mini" && "13px"};
 		}
 		.ant-card-cover {
-			height: ${({ mode }) => (mode === "mini" ? "200px" : "320px")};
+			height: ${({ mode }) => (mode === "mini" ? "180px" : "290px")};
 			overflow: hidden;
 		}
 		&:hover {
@@ -47,7 +48,7 @@ function ProductCard({ data, mode, loading = false, ...props }) {
 				) : (
 					<Row gutter={16} type="flex" justify="space-between" align="middle">
 						<Col lg={18}>
-							<Card.Meta title={data.title} description={`Rp ${pricer(data.price)}`} />
+							<Card.Meta title={data.title || "Untitled"} description={`Rp ${pricer(data.price)}`} />
 						</Col>
 						{/* <Col lg={6} style={{ textAlign: "right" }}>
 							<Tag style={tagStyle} color="magenta">

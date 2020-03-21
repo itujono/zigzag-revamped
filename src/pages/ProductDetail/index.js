@@ -80,7 +80,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const isShoes = (product.categories || {}).id === 2
 	const sizeIsNotSelected = Object.keys(selectedSize).length === 0
 	const colorIsNotSelected = Object.keys(selectedColor).length === 0
-	const isInCart = cartItems.find(item => item.product_id === Number(productId)) || {}
+	// const isInCart = cartItems.find(item => item.product_id === Number(productId)) || {}
 
 	// console.log({ isInCart })
 
@@ -100,36 +100,36 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		)) ||
 		(token && isVip && "Great! Kamu berhak dapat harga spesial karena kamu adalah member VIP kami! 🎉")
 
-	const productRating = (
-		<Popconfirm
-			title={
-				<span>
-					Kamu yakin mau kasih produk ini <strong>{temporaryRating} bintang</strong>?
-				</span>
-			}
-			onConfirm={handleRate}
-		>
-			<StyledRating
-				name="rating_product"
-				value={product.rating_product}
-				onChange={value => setTemporaryRating(value)}
-				allowHalf
-			/>{" "}
-			&nbsp;
-			{product.count_user_rating > 0
-				? `${product.count_user_rating} orang kasih rating`
-				: "Belum ada yang kasih rating"}
-			{product.is_rated_by_customer === 1 && (
-				<p
-					css={`
-						color: ${theme.greyColor[2]};
-					`}
-				>
-					Kamu sudah kasih rating untuk produk ini
-				</p>
-			)}
-		</Popconfirm>
-	)
+	// const productRating = (
+	// 	<Popconfirm
+	// 		title={
+	// 			<span>
+	// 				Kamu yakin mau kasih produk ini <strong>{temporaryRating} bintang</strong>?
+	// 			</span>
+	// 		}
+	// 		onConfirm={handleRate}
+	// 	>
+	// 		<StyledRating
+	// 			name="rating_product"
+	// 			value={product.rating_product}
+	// 			onChange={value => setTemporaryRating(value)}
+	// 			allowHalf
+	// 		/>{" "}
+	// 		&nbsp;
+	// 		{product.count_user_rating > 0
+	// 			? `${product.count_user_rating} orang kasih rating`
+	// 			: "Belum ada yang kasih rating"}
+	// 		{product.is_rated_by_customer === 1 && (
+	// 			<p
+	// 				css={`
+	// 					color: ${theme.greyColor[2]};
+	// 				`}
+	// 			>
+	// 				Kamu sudah kasih rating untuk produk ini
+	// 			</p>
+	// 		)}
+	// 	</Popconfirm>
+	// )
 
 	const handleSelectColor = (color, stock, isShoes) => {
 		if (!isShoes && (stock === "STOCK HABIS" || stock === 0)) return
@@ -253,7 +253,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 								style={{ textAlign: "left", marginBottom: "2em" }}
 							/>
 						)}
-						<Heading reverse content="Rating" subheader={productRating} marginBottom="2em" />
+						{/* <Heading reverse content="Rating" subheader={productRating} marginBottom="2em" /> */}
 						<Stats>
 							<Row type="flex">
 								<Col lg={8} xs={12}>

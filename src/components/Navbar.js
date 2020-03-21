@@ -145,7 +145,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 				onCartDrawer={{ cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore }}
 			/>
 			<Row type="flex" justify="space-between">
-				<StyledLeftMenu xs={16}>
+				<StyledLeftMenu xs={14}>
 					<Logo width="60" /> &nbsp; &nbsp;
 					{mobile && (
 						<Link to="/search" className="search-icon">
@@ -162,7 +162,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 						</span>
 					)}
 				</StyledLeftMenu>
-				<Col xs={8} style={{ textAlign: "right" }}>
+				<Col xs={10} style={{ textAlign: "right" }}>
 					<RightMenu
 						data={{ token, cartItems, user, typeId }}
 						handlers={{ handleLogout, handleSearch, handleSetCardDrawer }}
@@ -172,7 +172,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 			{mobile && (
 				<BottomBar>
 					<Col lg={24} xs={24}>
-						<Row type="flex" className="scrolling-bar">
+						<Row type="flex" gutter={16} className="scrolling-bar">
 							{categories.map(({ id, name }) => {
 								const theIcon =
 									id === 1
@@ -186,10 +186,10 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 										: "icon-bag"
 
 								return (
-									<Col xs={7} key={id}>
+									<Col xs={8} key={id}>
 										<NavLink to={`/category/${id}-${name.toLowerCase()}`}>
 											<DynamicIcon type={theIcon} />
-											&nbsp; {name}
+											&nbsp;{name}
 										</NavLink>
 									</Col>
 								)

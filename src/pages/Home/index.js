@@ -26,7 +26,7 @@ function Home() {
 
 	return (
 		<Layout sidebar>
-			<Section paddingHorizontal="2.5em">
+			<Section paddingHorizontal="1.5em">
 				<Heading bold content="Ini Homepage" subheader="Kamu adalah apa yang kamu makan, eheheh" />
 				<Carousel
 					className="center"
