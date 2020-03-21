@@ -5,9 +5,11 @@ import { pricer } from "helpers"
 import { Link } from "react-router-dom"
 import { theme } from "styles"
 
+const RADIUS = "12px"
+
 const Cardee = styled(Card)`
 	&& {
-		border-radius: 8px;
+		border-radius: ${RADIUS};
 		margin-bottom: 1em;
 		transition: all 0.2s ease;
 		border: 2px solid ${theme.greyColor[3]};
@@ -15,7 +17,7 @@ const Cardee = styled(Card)`
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
-			border-radius: 8px 8px 0 0;
+			border-radius: ${RADIUS} ${RADIUS} 0 0;
 		}
 		.ant-card-body {
 			padding: ${({ mode }) => mode === "mini" && "24px 12px"};

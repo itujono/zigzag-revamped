@@ -25,6 +25,19 @@ export { instance }
 
 /////////////////////////////////
 
+export const shareToSocialMedia = ({ title, text, url }, setModal) => {
+	if (navigator.share) {
+		navigator
+			.share({ title, text, url })
+			.then(() => message.success("Oke, sudah berhasil di-share"))
+			.catch(err => message.error("Oops, ada sesuatu nih: ", err))
+			.finally(() => setModal(false))
+		return
+	}
+
+	message.error("Oops ada sesuatu nih heheh...")
+}
+
 export const randomCode = () => Math.floor(Math.random() * (100 - 10)) + 10
 
 export function useRenderError(err, dispatch, type, noShow = false) {

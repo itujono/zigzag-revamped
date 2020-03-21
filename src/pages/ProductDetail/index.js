@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading, Button, ButtonLink, Alert } from "components"
-import { Row, Col, Tag, Divider, Typography, Carousel, message, Rate, Popconfirm } from "antd"
+import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal } from "components"
+import { Row, Col, Tag, Divider, Typography, Carousel, message, Rate, Popconfirm, Input } from "antd"
 import styled from "styled-components/macro"
-import { useParams, Link, useHistory } from "react-router-dom"
+import { useParams, Link, useHistory, useLocation } from "react-router-dom"
 import { connect } from "react-redux"
 
-import { pricer, media } from "helpers"
+import { pricer, media, shareToSocialMedia, mobile } from "helpers"
 import {
 	fetchProductItem,
 	addItemToCart,
@@ -14,6 +14,8 @@ import {
 	updateCartItem
 } from "store/actions/productActions"
 import { theme } from "styles"
+import { URL_ZIZGAG } from "helpers/constants"
+import { TextInput } from "components/Fields"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -69,8 +71,10 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const [selectedColor, setSelectedColor] = useState({})
 	const [selectedSize, setSelectedSize] = useState({})
 	const [temporaryRating, setTemporaryRating] = useState(0)
+	const [modalShare, setModalShare] = useState(false)
 	const { id: productId } = useParams()
 	const { push } = useHistory()
+	const { pathname } = useLocation()
 	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating, loadingCart } = props
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -209,12 +213,38 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		}
 	}
 
+	const handleShare = () => {
+		shareToSocialMedia(
+			{
+				title: product.name + " di Zigzag Online Shop",
+				text: `Belanja ${product.name} hanya di Zigzag Online Shop`,
+				url: URL_ZIZGAG + pathname
+			},
+			setModalShare
+		)
+	}
+
+	const handleCopy = () => {
+		return navigator.clipboard.readText().then(text => {
+			text = URL_ZIZGAG + pathname
+			return text
+		})
+	}
+
 	useEffect(() => {
 		fetchProductItem(Number(productId))
 	}, [fetchProductItem, product.rating_product, productId])
 
 	return (
 		<Layout sidebar>
+			<Modal visible={modalShare} onCancel={() => setModalShare(false)}>
+				<Paragraph className="mb2em">Share produk ini</Paragraph>
+				<Text copyable={{ text: URL_ZIZGAG + pathname }}>Copy link produk</Text>
+				<Input name="input" value={URL_ZIZGAG + pathname} className="mb2em" />
+				<Button block onClick={handleShare}>
+					Share ke social media...
+				</Button>
+			</Modal>
 			<Section>
 				<Row gutter={64} type="flex">
 					<Col lg={14} xs={24}>
@@ -227,24 +257,38 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 						</Carousel>
 					</Col>
 					<Col lg={10} xs={24}>
-						<Heading
-							bold
-							content={product.name}
-							subheader={
-								<Paragraph>
-									{isVip ? (
-										<>
-											<Text delete disabled>
-												Rp {pricer(regulerPrice)}
-											</Text>{" "}
-											&nbsp; Rp {pricer(productPrice)}
-										</>
-									) : (
-										`Rp ${pricer(productPrice)}`
-									)}
-								</Paragraph>
-							}
-						/>
+						<Row>
+							<Col lg={24} xs={12}>
+								<Heading
+									bold
+									content={product.name}
+									subheader={
+										<Paragraph>
+											{isVip ? (
+												<>
+													<Text delete disabled>
+														Rp {pricer(regulerPrice)}
+													</Text>{" "}
+													&nbsp; Rp {pricer(productPrice)}
+												</>
+											) : (
+												`Rp ${pricer(productPrice)}`
+											)}
+										</Paragraph>
+									}
+								/>
+							</Col>
+							{mobile && (
+								<Col lg={12} className="ta-right">
+									<Button
+										icon="more"
+										type="ghost"
+										shape="circle"
+										onClick={() => setModalShare(true)}
+									/>
+								</Col>
+							)}
+						</Row>
 						{typeId && typeId !== 3 && (
 							<Alert
 								message={marketingText}
