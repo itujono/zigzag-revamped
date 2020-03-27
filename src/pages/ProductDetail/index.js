@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal } from "components"
-import { Row, Col, Tag, Divider, Typography, Carousel, message, Rate, Popconfirm, Input } from "antd"
+import { Row, Col, Tag, Divider, Typography, Carousel, message, Input } from "antd"
 import styled from "styled-components/macro"
 import { useParams, Link, useHistory, useLocation } from "react-router-dom"
 import { connect } from "react-redux"
@@ -15,7 +15,7 @@ import {
 } from "store/actions/productActions"
 import { theme } from "styles"
 import { URL_ZIZGAG } from "helpers/constants"
-import { TextInput } from "components/Fields"
+// import { TextInput } from "components/Fields"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -41,17 +41,17 @@ const StyledSection = styled(Section)`
 	}
 `
 
-const StyledRating = styled(Rate)`
-	.ant-rate-star {
-		margin-left: 0;
-		&:first-child {
-			margin-left: 0;
-		}
-		&:not(:last-child) {
-			margin-right: 4px;
-		}
-	}
-`
+// const StyledRating = styled(Rate)`
+// 	.ant-rate-star {
+// 		margin-left: 0;
+// 		&:first-child {
+// 			margin-left: 0;
+// 		}
+// 		&:not(:last-child) {
+// 			margin-right: 4px;
+// 		}
+// 	}
+// `
 
 const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize }) => ({
 	color: (id === selectedColor.id && "#2db7f5") || (id === selectedSize.id && "#87d068")
@@ -65,12 +65,17 @@ const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize 
 	}
 `
 
+const PhotoCarousel = styled(Carousel)`
+	img {
+		user-select: contain;
+	}
+`
+
 const { Paragraph, Text } = Typography
 
 function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading, cartItems, ...props }) {
 	const [selectedColor, setSelectedColor] = useState({})
 	const [selectedSize, setSelectedSize] = useState({})
-	const [temporaryRating, setTemporaryRating] = useState(0)
 	const [modalShare, setModalShare] = useState(false)
 	const { id: productId } = useParams()
 	const { push } = useHistory()
@@ -88,12 +93,12 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 
 	// console.log({ isInCart })
 
-	const handleRate = () => {
-		if (!token) {
-			push("/login")
-			message.error("Kalo mau nge-rate, harus login dulu ya")
-		} else addRating(productId, temporaryRating)
-	}
+	// const handleRate = () => {
+	// 	if (!token) {
+	// 		push("/login")
+	// 		message.error("Kalo mau nge-rate, harus login dulu ya")
+	// 	} else addRating(productId, temporaryRating)
+	// }
 
 	const marketingText =
 		((!token || typeId === 1) && (
@@ -224,12 +229,12 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		)
 	}
 
-	const handleCopy = () => {
-		return navigator.clipboard.readText().then(text => {
-			text = URL_ZIZGAG + pathname
-			return text
-		})
-	}
+	// const handleCopy = () => {
+	// 	return navigator.clipboard.readText().then(text => {
+	// 		text = URL_ZIZGAG + pathname
+	// 		return text
+	// 	})
+	// }
 
 	useEffect(() => {
 		fetchProductItem(Number(productId))
@@ -248,13 +253,13 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 			<Section>
 				<Row gutter={64} type="flex">
 					<Col lg={14} xs={24}>
-						<Carousel autoplay adaptiveHeight infinite style={{ marginBottom: "2em" }}>
+						<PhotoCarousel autoplay adaptiveHeight infinite accessibility style={{ marginBottom: "2em" }}>
 							{(product.product_image || []).map(item => (
-								<div key={item.id}>
-									<img src={item.picture} alt={item.caption} width="100%" />
-								</div>
+								// <div key={item.id}>
+								<img key={item.id} draggable src={item.picture} alt={item.caption} width="100%" />
+								// {/* </div> */}
 							))}
-						</Carousel>
+						</PhotoCarousel>
 					</Col>
 					<Col lg={10} xs={24}>
 						<Row>

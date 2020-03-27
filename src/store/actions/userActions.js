@@ -1,7 +1,6 @@
 import * as types from "../types"
 import { instance, renderError } from "helpers"
 import { message } from "antd"
-import { unauthUser } from "./authActions"
 
 const loadingUser = () => ({ type: types.LOADING_USER })
 
