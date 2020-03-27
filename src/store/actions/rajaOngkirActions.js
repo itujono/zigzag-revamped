@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import * as types from "store/types"
 import Axios from "axios"
-import { useRenderError } from "helpers"
+import { renderError } from "helpers"
 
 const baseUrl = `https://pro.rajaongkir.com/api`
 const corsUrl = `https://cors-anywhere.herokuapp.com`
@@ -13,7 +13,7 @@ export const fetchProvinces = () => dispatch => {
 	dispatch(loadingRajaOngkir())
 	return Axios.get(`${corsUrl}/${baseUrl}/province`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
 		.then(({ data }) => dispatch({ type: types.FETCH_PROVINCES, payload: data.rajaongkir.results }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_PROVINCES_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_PROVINCES_ERROR))
 }
 
 export const fetchCities = (cityId, provinceId) => dispatch => {
@@ -22,7 +22,7 @@ export const fetchCities = (cityId, provinceId) => dispatch => {
 		params: { key: process.env.REACT_APP_RAJAONGKIR }
 	})
 		.then(({ data }) => dispatch({ type: types.FETCH_CITIES, payload: data.rajaongkir.results }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_CITIES_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_CITIES_ERROR))
 }
 
 export const fetchSubdistricts = cityId => dispatch => {
@@ -31,7 +31,7 @@ export const fetchSubdistricts = cityId => dispatch => {
 		params: { key: process.env.REACT_APP_RAJAONGKIR }
 	})
 		.then(({ data }) => dispatch({ type: types.FETCH_SUBDISTRICTS, payload: data.rajaongkir.results }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_SUBDISTRICTS_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_SUBDISTRICTS_ERROR))
 }
 
 export const fetchCouriers = data => dispatch => {
@@ -40,7 +40,7 @@ export const fetchCouriers = data => dispatch => {
 		headers: { key: process.env.REACT_APP_RAJAONGKIR }
 	})
 		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.rajaongkir.results }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_COURIERS_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_COURIERS_ERROR))
 }
 
 export const fetchAirwayBill = ({ waybill, courier }) => dispatch => {
@@ -53,5 +53,5 @@ export const fetchAirwayBill = ({ waybill, courier }) => dispatch => {
 		}
 	)
 		.then(({ data }) => dispatch({ type: types.FETCH_AIRWAY_BILL, payload: data.rajaongkir.result }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_AIRWAY_BILL_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_AIRWAY_BILL_ERROR))
 }

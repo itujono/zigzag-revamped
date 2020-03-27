@@ -40,16 +40,20 @@ export const shareToSocialMedia = ({ title, text, url }, setModal) => {
 
 export const randomCode = () => Math.floor(Math.random() * (100 - 10)) + 10
 
-export function useRenderError(err, dispatch, type, noShow = false) {
+export function renderError(err, dispatch, type, noShow = false) {
 	const errResponse = err.response || {}
-	console.error(errResponse)
 	const error = (errResponse.data || {}).message || ""
+	const { push } = useHistory()
+
+	if (localStorage.getItem("access_token") && errResponse.status === 401) {
+		localStorage.clear()
+		dispatch(unauthUser(push))
+		return
+	}
+
 	if (error) {
 		if (noShow) return
 		else message.error(error)
-	}
-	if (errResponse.status === 401) {
-		localStorage.clear()
 	}
 
 	dispatch({ type, payload: error })

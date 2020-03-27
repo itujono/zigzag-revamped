@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react"
 import { Section, Button, Heading, ProductCard, Layout, Loading } from "components"
 import { Row, Col, Select, Form } from "antd"
 import { useParams } from "react-router-dom"
-import { connect } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 import { fetchPromoProducts, fetchProductCategories } from "store/actions/productActions"
 import { upperCase, mobile, media } from "helpers"
@@ -21,22 +21,23 @@ const HeadingSection = styled(Row).attrs({
 	`}
 `
 
-function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
+function MiscPage() {
+	const dispatch = useDispatch()
 	const { name } = useParams()
 	const [selectedCategory, setSelectedCategory] = useState(0)
 
-	const handleFilterCategory = useCallback(
-		value => {
-			setSelectedCategory(value)
-			fetchPromoProducts(value, 50)
-		},
-		[fetchPromoProducts]
-	)
+	const products = useSelector(({ product }) => product.promoProducts)
+	const loading = useSelector(({ product }) => product.loading)
+	const categoryOptions = useSelector(({ product }) => product.categoryOptions)
+
+	const handleFilterCategory = value => {
+		setSelectedCategory(value)
+	}
 
 	useEffect(() => {
-		fetchPromoProducts(0, 50)
-		fetchProductCategories()
-	}, [fetchPromoProducts])
+		dispatch(fetchPromoProducts(selectedCategory, 75))
+		dispatch(fetchProductCategories())
+	}, [dispatch, selectedCategory])
 
 	return (
 		<Layout sidebar>
@@ -58,11 +59,11 @@ function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 							<Form.Item name="filter" label="Filter">
 								<Select
 									name="filter"
-									defaultValue="Filter kategori..."
+									defaultValue={0}
 									style={{ width: 200 }}
 									onChange={handleFilterCategory}
 								>
-									{categoryOptions.map(item => (
+									{[{ value: 0, label: "Semua" }, ...categoryOptions].map(item => (
 										<Select.Option key={item.value} value={item.value}>
 											{item.label}
 										</Select.Option>
@@ -72,7 +73,7 @@ function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 						</Form>
 					</Col>
 				</HeadingSection>
-				<Row gutter={32}>
+				<Row gutter={32} type="flex">
 					{products.map(item => (
 						<Col xs={12} lg={6} key={item.id}>
 							<ProductCard
@@ -96,10 +97,4 @@ function MiscPage({ products, fetchPromoProducts, loading, categoryOptions }) {
 	)
 }
 
-const mapState = ({ product }) => ({
-	categoryOptions: product.categoryOptions,
-	products: product.promoProducts,
-	loading: product.loading
-})
-
-export default connect(mapState, { fetchPromoProducts, fetchProductCategories })(MiscPage)
+export default MiscPage

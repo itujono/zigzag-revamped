@@ -75,21 +75,25 @@ function Home() {
 								</SelengkapButton>
 							</Col>
 						</Row>
-						<Row gutter={16}>
-							{products.map(item => (
-								<Col xs={12} lg={8} key={item.id}>
-									<ProductCard
-										mode="mini"
-										data={{
-											src: (item.product_image[0] || {}).picture,
-											title: item.name,
-											price: item.product_price.price,
-											to: `/product/${item.id}-${item.name}`,
-											category: item.categories.name
-										}}
-									/>
-								</Col>
-							))}
+						<Row gutter={16} type="flex">
+							{products.map(item => {
+								const to = item.name ? `/product/${item.id}-${item.name}` : null
+
+								return (
+									<Col xs={12} lg={8} key={item.id}>
+										<ProductCard
+											mode="mini"
+											data={{
+												to,
+												src: (item.product_image[0] || {}).picture,
+												title: item.name,
+												price: item.product_price.price,
+												category: item.categories.name
+											}}
+										/>
+									</Col>
+								)
+							})}
 						</Row>
 					</Col>
 					<Col lg={12} style={{ marginBottom: mobile && "2em" }}>
@@ -112,21 +116,25 @@ function Home() {
 								</SelengkapButton>
 							</Col>
 						</Row>
-						<Row gutter={16}>
-							{restockProducts.map(item => (
-								<Col xs={12} lg={8} key={item.id}>
-									<ProductCard
-										mode="mini"
-										data={{
-											src: item.product_image[0].picture,
-											title: item.name,
-											price: item.product_price.price,
-											to: `/product/${item.id}-${item.name}`,
-											category: item.categories.name
-										}}
-									/>
-								</Col>
-							))}
+						<Row gutter={16} type="flex">
+							{restockProducts.map(item => {
+								const to = item.name ? `/product/${item.id}-${item.name}` : null
+
+								return (
+									<Col xs={12} lg={8} key={item.id}>
+										<ProductCard
+											mode="mini"
+											data={{
+												to,
+												src: item.product_image[0].picture,
+												title: item.name,
+												price: item.product_price.price,
+												category: item.categories.name
+											}}
+										/>
+									</Col>
+								)
+							})}
 						</Row>
 					</Col>
 				</Row>

@@ -1,5 +1,5 @@
 import React from "react"
-import { Card, Row, Col, Icon, Tag } from "antd"
+import { Card, Row, Col, Icon, Tag, message } from "antd"
 import styled from "styled-components"
 import { pricer } from "helpers"
 import { Link } from "react-router-dom"
@@ -44,8 +44,12 @@ const tagStyle = {
 }
 
 function ProductCard({ data, mode, loading = false, ...props }) {
+	const handleClick = () => {
+		if (!data.to) message.error("Produk ini tidak bisa dibuka.")
+	}
+
 	return (
-		<Link to={data.to}>
+		<Link to={data.to} onClick={handleClick}>
 			<Cardee {...props} mode={mode} hoverable cover={<img alt={data.title} src={data.src} />}>
 				{loading ? (
 					<p style={{ textAlign: "center" }}>Mohon tunggu...</p>

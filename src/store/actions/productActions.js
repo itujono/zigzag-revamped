@@ -1,6 +1,6 @@
 import React from "react"
 import * as types from "../types"
-import { instance, useRenderError } from "helpers"
+import { instance, renderError } from "helpers"
 import { message } from "antd"
 import Axios from "axios"
 
@@ -42,7 +42,7 @@ export const fetchPromoProducts = (category = 0, limit = 10) => dispatch => {
 	return instance
 		.get(`/product/list?category=${category}&limit=${limit}&promo=1`)
 		.then(({ data }) => dispatch({ type: types.FETCH_PROMO_PRODUCTS, payload: data.data.product_data }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_PROMO_PRODUCTS_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_PROMO_PRODUCTS_ERROR))
 }
 
 export const fetchProductCategories = () => dispatch => {
@@ -50,7 +50,7 @@ export const fetchProductCategories = () => dispatch => {
 	return instance
 		.get(`/category/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_PRODUCT_CATEGORIES, payload: data.data.category_data }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_PRODUCT_CATEGORIES_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_PRODUCT_CATEGORIES_ERROR))
 }
 
 export const fetchCartItems = () => dispatch => {
@@ -64,8 +64,9 @@ export const fetchCartItems = () => dispatch => {
 		.catch(err => {
 			if (err.response.status === 404) {
 				dispatch({ type: types.FETCH_CART_ITEMS, payload: [] })
+				return
 			}
-			useRenderError(err, dispatch, types.FETCH_CART_ITEMS_ERROR, true)
+			renderError(err, dispatch, types.FETCH_CART_ITEMS_ERROR, true)
 		})
 }
 
@@ -76,7 +77,7 @@ export const addItemToCart = item => dispatch => {
 		.then(({ data }) => dispatch({ type: types.ADD_ITEM_TO_CART, payload: data }))
 		.then(() => dispatch(fetchCartItems()))
 		.then(() => message.success("Produk berhasil ditambahkan ke cart"))
-		.catch(err => useRenderError(err, dispatch, types.ADD_ITEM_TO_CART_ERROR))
+		.catch(err => renderError(err, dispatch, types.ADD_ITEM_TO_CART_ERROR))
 }
 
 export const updateCartItem = ({ cart_id, qty, weight, total_price }, name) => dispatch => {
@@ -93,7 +94,7 @@ export const updateCartItem = ({ cart_id, qty, weight, total_price }, name) => d
 				1
 			)
 		)
-		.catch(err => useRenderError(err, dispatch, types.UPDATE_CART_ITEM_ERROR))
+		.catch(err => renderError(err, dispatch, types.UPDATE_CART_ITEM_ERROR))
 }
 
 export const deleteCartItem = ({ cart_id }, name = "") => dispatch => {
@@ -110,7 +111,7 @@ export const deleteCartItem = ({ cart_id }, name = "") => dispatch => {
 				1
 			)
 		)
-		.catch(err => useRenderError(err, dispatch, types.DELETE_CART_ITEM_ERROR))
+		.catch(err => renderError(err, dispatch, types.DELETE_CART_ITEM_ERROR))
 }
 
 export const addItemToWishlist = item => dispatch => {
@@ -140,7 +141,7 @@ export const fetchWishlistItems = () => dispatch => {
 			dispatch({ type: types.FETCH_WISHLIST_ITEMS, payload: data.data.wishlist_data })
 		})
 		.catch(err => {
-			useRenderError(err, dispatch, types.FETCH_WISHLIST_ITEMS_ERROR)
+			renderError(err, dispatch, types.FETCH_WISHLIST_ITEMS_ERROR)
 		})
 }
 
@@ -170,7 +171,7 @@ export const searchProduct = query => dispatch => {
 		.then(({ data }) => {
 			dispatch({ type: types.SEARCH_PRODUCT, payload: data.data.product_data })
 		})
-		.catch(err => useRenderError(err, dispatch, types.SEARCH_PRODUCT_ERROR))
+		.catch(err => renderError(err, dispatch, types.SEARCH_PRODUCT_ERROR))
 }
 
 export const addRating = (id, rate) => dispatch => {

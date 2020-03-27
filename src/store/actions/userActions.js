@@ -1,6 +1,7 @@
 import * as types from "../types"
-import { instance, useRenderError } from "helpers"
+import { instance, renderError } from "helpers"
 import { message } from "antd"
+import { unauthUser } from "./authActions"
 
 const loadingUser = () => ({ type: types.LOADING_USER })
 
@@ -9,7 +10,7 @@ export const fetchUser = () => dispatch => {
 	return instance
 		.get(`/customer/view`)
 		.then(({ data }) => dispatch({ type: types.FETCH_USER, payload: data.data.account_customer }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_USER, true))
+		.catch(err => renderError(err, dispatch, types.FETCH_USER, true))
 }
 
 export const updateUserProfile = values => dispatch => {
@@ -19,7 +20,7 @@ export const updateUserProfile = values => dispatch => {
 		.then(({ data }) => dispatch({ type: types.UPDATE_USER_PROFILE, payload: data.data }))
 		.then(() => dispatch(fetchUser()))
 		.then(() => message.success("Profil kamu berhasil di-update"))
-		.catch(err => useRenderError(err, dispatch, types.UPDATE_USER_PROFILE_ERROR))
+		.catch(err => renderError(err, dispatch, types.UPDATE_USER_PROFILE_ERROR))
 }
 
 export const changeProfilePassword = values => dispatch => {
@@ -30,7 +31,7 @@ export const changeProfilePassword = values => dispatch => {
 		.then(() => {
 			message.loading("Mohon tunggu...").then(() => message.success("Password kamu sudah berhasil terganti"))
 		})
-		.catch(err => useRenderError(err, dispatch, types.CHANGE_PROFILE_PASSWORD_ERROR))
+		.catch(err => renderError(err, dispatch, types.CHANGE_PROFILE_PASSWORD_ERROR))
 }
 
 export const changeAvatar = photoFile => dispatch => {
@@ -42,7 +43,7 @@ export const changeAvatar = photoFile => dispatch => {
 		})
 		.then(() => message.loading("Mohon tunggu...").then(() => dispatch(fetchUser())))
 		.then(() => message.success("Avatar kamu sudah berhasil terganti"))
-		.catch(err => useRenderError(err, dispatch, types.CHANGE_AVATAR_ERROR))
+		.catch(err => renderError(err, dispatch, types.CHANGE_AVATAR_ERROR))
 }
 
 export const fetchListDeposit = () => dispatch => {
@@ -52,7 +53,7 @@ export const fetchListDeposit = () => dispatch => {
 		.then(({ data }) => {
 			dispatch({ type: types.FETCH_LIST_DEPOSIT, payload: data.data.deposit_data })
 		})
-		.catch(err => useRenderError(err, dispatch, types.FETCH_LIST_DEPOSIT_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_LIST_DEPOSIT_ERROR))
 }
 
 export const addNewDeposit = amount => dispatch => {
@@ -64,7 +65,7 @@ export const addNewDeposit = amount => dispatch => {
 		})
 		.then(() => dispatch(fetchListDeposit()))
 		.then(() => message.success("Kamu sudah berhasil melakukan permintaan deposit"))
-		.catch(err => useRenderError(err, dispatch, types.ADD_NEW_DEPOSIT_ERROR))
+		.catch(err => renderError(err, dispatch, types.ADD_NEW_DEPOSIT_ERROR))
 }
 
 export const depositConfirmation = (values, push) => dispatch => {
@@ -87,7 +88,7 @@ export const depositConfirmation = (values, push) => dispatch => {
 				.loading("Memverifikasi data...", 1)
 				.then(() => push({ pathname: "/deposit/confirmation_success", state: { isSuccess: true } }))
 		})
-		.catch(err => useRenderError(err, dispatch, types.DEPOSIT_CONFIRMATION_ERROR))
+		.catch(err => renderError(err, dispatch, types.DEPOSIT_CONFIRMATION_ERROR))
 }
 
 export const upgradeConfirmation = (values, push) => dispatch => {
@@ -109,7 +110,7 @@ export const upgradeConfirmation = (values, push) => dispatch => {
 				.loading("Memverifikasi data...", 1)
 				.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
 		})
-		.catch(err => useRenderError(err, dispatch, types.UPGRADE_CONFIRMATION_ERROR))
+		.catch(err => renderError(err, dispatch, types.UPGRADE_CONFIRMATION_ERROR))
 }
 
 export const upgradeAccount = push => dispatch => {
@@ -122,7 +123,7 @@ export const upgradeAccount = push => dispatch => {
 		})
 		.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
 		.catch(err => {
-			useRenderError(err, dispatch, types.UPGRADE_ACCOUNT_ERROR)
+			renderError(err, dispatch, types.UPGRADE_ACCOUNT_ERROR)
 		})
 }
 
@@ -136,6 +137,6 @@ export const fetchUpgradeCodeList = push => dispatch => {
 		})
 		.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
 		.catch(err => {
-			useRenderError(err, dispatch, types.FETCH_UPGRADE_CODE_LIST_ERROR)
+			renderError(err, dispatch, types.FETCH_UPGRADE_CODE_LIST_ERROR)
 		})
 }

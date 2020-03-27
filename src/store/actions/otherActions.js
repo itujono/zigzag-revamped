@@ -1,5 +1,5 @@
 import * as types from "../types"
-import { instance, useRenderError } from "helpers"
+import { instance, renderError } from "helpers"
 import { message } from "antd"
 
 const loadingOther = () => ({ type: types.LOADING_OTHER })
@@ -45,7 +45,7 @@ export const saveCourierDetails = (values, formData, push) => dispatch => {
 			localStorage.setItem("formData", JSON.stringify({ ...formData, order_detail: data.data.order_id }))
 		})
 		.then(() => push("/checkout/payment"))
-		.catch(err => useRenderError(err, dispatch, types.SAVE_COURIER_DETAILS_ERROR))
+		.catch(err => renderError(err, dispatch, types.SAVE_COURIER_DETAILS_ERROR))
 }
 
 export const saveOrder = (values, push) => dispatch => {
@@ -60,7 +60,7 @@ export const saveOrder = (values, push) => dispatch => {
 			localStorage.removeItem("formData")
 			push({ pathname: "/order/order_success", state: { isSuccess: true } })
 		})
-		.catch(err => useRenderError(err, dispatch, types.SAVE_ORDER_ERROR))
+		.catch(err => renderError(err, dispatch, types.SAVE_ORDER_ERROR))
 }
 
 export const orderConfirmation = (values, push) => dispatch => {
@@ -80,7 +80,7 @@ export const orderConfirmation = (values, push) => dispatch => {
 			localStorage.removeItem("formData")
 			push({ pathname: "/order/confirmation/success", state: { isSuccess: true } })
 		})
-		.catch(err => useRenderError(err, dispatch, types.ORDER_CONFIRMATION_ERROR))
+		.catch(err => renderError(err, dispatch, types.ORDER_CONFIRMATION_ERROR))
 }
 
 export const fetchOrderHistory = () => dispatch => {
@@ -88,7 +88,7 @@ export const fetchOrderHistory = () => dispatch => {
 	return instance
 		.get(`/order/history_order/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_ORDER_HISTORY, payload: data.data.order_data }))
-		.catch(err => useRenderError(err, dispatch, types.FETCH_ORDER_HISTORY_ERROR))
+		.catch(err => renderError(err, dispatch, types.FETCH_ORDER_HISTORY_ERROR))
 }
 
 export const cancelOrder = values => dispatch => {
@@ -103,5 +103,5 @@ export const cancelOrder = values => dispatch => {
 					message.success("Oke, orderan ini telah di-cancel. Silakan cek email untuk info pembatalannya")
 				)
 		})
-		.catch(err => useRenderError(err, dispatch, types.CANCEL_ORDER_ERROR))
+		.catch(err => renderError(err, dispatch, types.CANCEL_ORDER_ERROR))
 }

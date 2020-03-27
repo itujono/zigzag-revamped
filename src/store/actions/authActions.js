@@ -1,4 +1,4 @@
-import { instance, useRenderError } from "helpers"
+import { instance, renderError } from "helpers"
 import * as types from "../types"
 import { message } from "antd"
 
@@ -15,7 +15,7 @@ export const authUser = ({ email, password }, setSubmitting, push) => dispatch =
 			localStorage.setItem("user_id", data.data.customer_id)
 		})
 		.then(() => message.loading("Mohon tunggu...", 1).then(() => window.location.replace("/")))
-		.catch(err => useRenderError(err, dispatch, types.AUTH_USER_ERROR))
+		.catch(err => renderError(err, dispatch, types.AUTH_USER_ERROR))
 		.finally(() => setSubmitting(false))
 }
 
@@ -59,7 +59,7 @@ export const registerUser = (values, accountType, push) => dispatch => {
 		.then(() => {
 			push({ pathname: "/register/success", state: { success: true, isVip: accountType === 2 } })
 		})
-		.catch(err => useRenderError(err, dispatch, types.REGISTER_USER_ERROR))
+		.catch(err => renderError(err, dispatch, types.REGISTER_USER_ERROR))
 }
 
 export const forgotPassword = ({ email }, push) => dispatch => {
@@ -73,7 +73,7 @@ export const forgotPassword = ({ email }, push) => dispatch => {
 		.then(() => {
 			push({ pathname: "/forgot_password/success", state: { success: true } })
 		})
-		.catch(err => useRenderError(err, dispatch, types.FORGOT_PASSWORD_ERROR))
+		.catch(err => renderError(err, dispatch, types.FORGOT_PASSWORD_ERROR))
 }
 
 export const changeNewPassword = (values, push) => dispatch => {
@@ -87,5 +87,5 @@ export const changeNewPassword = (values, push) => dispatch => {
 		.then(() => {
 			push({ pathname: "/new-password/success", state: { success: true } })
 		})
-		.catch(err => useRenderError(err, dispatch, types.CHANGE_NEW_PASSWORD_ERROR))
+		.catch(err => renderError(err, dispatch, types.CHANGE_NEW_PASSWORD_ERROR))
 }
