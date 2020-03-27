@@ -95,6 +95,7 @@ const BottomBar = styled(Row)`
 	background-color: #fff;
 	border-top: 1px solid #eee;
 	margin-top: 1em;
+	padding: 1.5em 0;
 	.scrolling-bar {
 		flex-wrap: nowrap;
 		overflow-x: scroll;
@@ -105,6 +106,9 @@ const BottomBar = styled(Row)`
 		}
 		a {
 			color: #999;
+		}
+		.ant-col {
+			line-height: 2;
 		}
 	}
 `
@@ -175,21 +179,17 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 						<Row type="flex" gutter={16} className="scrolling-bar">
 							{categories.map(({ id, name }) => {
 								const theIcon =
-									id === 1
-										? "icon-diamond"
-										: id === 2
-										? "icon-high-heel-boot"
-										: id === 3
-										? "icon-wallet1"
-										: id === 4
-										? "icon-bodystocking"
-										: "icon-bag"
+									(id === 1 && "icon-diamond") ||
+									(id === 2 && "icon-high-heel-boot") ||
+									(id === 3 && "icon-wallet1") ||
+									(id === 4 && "icon-bodystocking") ||
+									"icon-bag"
 
 								return (
-									<Col xs={8} key={id}>
+									<Col key={id} className="ta-center">
 										<NavLink to={`/category/${id}-${name.toLowerCase()}`}>
 											<DynamicIcon type={theIcon} />
-											&nbsp;{name}
+											{name}
 										</NavLink>
 									</Col>
 								)
