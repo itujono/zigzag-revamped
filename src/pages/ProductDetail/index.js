@@ -284,16 +284,13 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 						>
 							{(product.product_image || []).map(item => (
 								// <div key={item.id}>
-								<a /* href={item.picture} */ key={item.id} download={item.picture}>
-									<img
-										// key={item.id}
-										src={item.picture}
-										alt={item.caption}
-										width="100%"
-										// onClick={() => setSelectedPhoto(item)}
-									/>
-									{/* <Button onClick={() => download.download()}>Download</Button> */}
-								</a>
+								<img
+									key={item.id}
+									src={item.picture}
+									alt={item.caption}
+									width="100%"
+									onClick={() => setSelectedPhoto(item)}
+								/>
 								// {/* </div> */}
 							))}
 						</PhotoCarousel>
