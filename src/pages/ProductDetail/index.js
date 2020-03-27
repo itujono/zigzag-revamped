@@ -71,12 +71,27 @@ const PhotoCarousel = styled(Carousel)`
 	}
 `
 
+const PhotoModal = styled(Modal)`
+	&& {
+		.ant-modal-body {
+			padding: 0;
+			.ant-typography {
+				position: absolute;
+				bottom: 20px;
+				left: 20px;
+				color: #fff;
+			}
+		}
+	}
+`
+
 const { Paragraph, Text } = Typography
 
 function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading, cartItems, ...props }) {
 	const [selectedColor, setSelectedColor] = useState({})
 	const [selectedSize, setSelectedSize] = useState({})
 	const [modalShare, setModalShare] = useState(false)
+	const [selectedPhoto, setSelectedPhoto] = useState({})
 	const { id: productId } = useParams()
 	const { push } = useHistory()
 	const { pathname } = useLocation()
@@ -250,13 +265,35 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 					Share ke social media...
 				</Button>
 			</Modal>
+
+			<PhotoModal visible={Object.keys(selectedPhoto).length} onCancel={() => setSelectedPhoto({})}>
+				<img src={selectedPhoto.picture} alt={selectedPhoto.caption} width="100%" />
+				<Typography.Paragraph>{selectedPhoto.caption}</Typography.Paragraph>
+			</PhotoModal>
+
 			<Section>
 				<Row gutter={64} type="flex">
 					<Col lg={14} xs={24}>
-						<PhotoCarousel autoplay adaptiveHeight infinite accessibility style={{ marginBottom: "2em" }}>
+						<PhotoCarousel
+							autoplay
+							adaptiveHeight
+							infinite
+							pauseOnFocus
+							pauseOnHover
+							style={{ marginBottom: "2em" }}
+						>
 							{(product.product_image || []).map(item => (
 								// <div key={item.id}>
-								<img key={item.id} draggable src={item.picture} alt={item.caption} width="100%" />
+								<a /* href={item.picture} */ key={item.id} download={item.picture}>
+									<img
+										// key={item.id}
+										src={item.picture}
+										alt={item.caption}
+										width="100%"
+										// onClick={() => setSelectedPhoto(item)}
+									/>
+									{/* <Button onClick={() => download.download()}>Download</Button> */}
+								</a>
 								// {/* </div> */}
 							))}
 						</PhotoCarousel>
