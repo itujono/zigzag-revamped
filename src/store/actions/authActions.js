@@ -19,7 +19,7 @@ export const authUser = ({ email, password }, setSubmitting, push) => dispatch =
 		.finally(() => setSubmitting(false))
 }
 
-export const unauthUser = push => dispatch => {
+export const unauthUser = (push = null) => dispatch => {
 	dispatch(loadingAuth())
 	return instance
 		.get(`/customer/logout`)
@@ -30,7 +30,10 @@ export const unauthUser = push => dispatch => {
 		.then(() => {
 			message
 				.loading("Mohon tunggu...")
-				.then(() => push({ pathname: "/logout", state: { success: true } }))
+				.then(() => {
+					if (!push) return window.location.replace("/logout")
+					push({ pathname: "/logout", state: { success: true } })
+				})
 				.then(() => message.success("Kamu udah keluar. Please come back! :)"))
 		})
 		.catch(err => {
@@ -40,7 +43,10 @@ export const unauthUser = push => dispatch => {
 				localStorage.clear()
 				message
 					.loading("Mohon tunggu...", 1)
-					.then(() => push({ pathname: "/logout", state: { success: true } }))
+					.then(() => {
+						if (!push) return window.location.replace("/logout")
+						push({ pathname: "/logout", state: { success: true } })
+					})
 					.then(() => message.success("Session kamu sudah berakhir. Mohon login kembali :)"))
 			}
 

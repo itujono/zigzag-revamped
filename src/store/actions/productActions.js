@@ -2,7 +2,6 @@ import React from "react"
 import * as types from "../types"
 import { instance, renderError } from "helpers"
 import { message } from "antd"
-import Axios from "axios"
 
 const loadingProduct = () => ({ type: types.LOADING_PRODUCT })
 const loadingCart = () => ({ type: types.LOADING_CART })

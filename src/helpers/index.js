@@ -6,7 +6,7 @@ import createActivityDetector from "activity-detector"
 import { useHistory } from "react-router-dom"
 import { unauthUser } from "store/actions/authActions"
 import { message } from "antd"
-import { FETCH_USER } from "store/types"
+// import { FETCH_USER } from "store/types"
 
 const instance = axios.create({
 	baseURL: "https://zigzagbatam.com:9000/api/v1/frontend",
@@ -43,11 +43,10 @@ export const randomCode = () => Math.floor(Math.random() * (100 - 10)) + 10
 export function renderError(err, dispatch, type, noShow = false) {
 	const errResponse = err.response || {}
 	const error = (errResponse.data || {}).message || ""
-	const { push } = useHistory()
 
 	if (localStorage.getItem("access_token") && errResponse.status === 401) {
 		localStorage.clear()
-		dispatch(unauthUser(push))
+		dispatch(unauthUser())
 		return
 	}
 

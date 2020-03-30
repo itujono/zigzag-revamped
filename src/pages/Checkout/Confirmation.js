@@ -49,6 +49,8 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 		orderConfirmation(values, push).then(() => setSubmitting(false))
 	}
 
+	if (!localStorage.getItem("access_token")) push("/404")
+
 	useEffect(() => {
 		fetchBankAccounts()
 		fetchOrderCodeList()
