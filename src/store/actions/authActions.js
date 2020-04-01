@@ -65,7 +65,10 @@ export const registerUser = (values, accountType, push) => dispatch => {
 		.then(() => {
 			push({ pathname: "/register/success", state: { success: true, isVip: accountType === 2 } })
 		})
-		.catch(err => renderError(err, dispatch, types.REGISTER_USER_ERROR))
+		.catch(err => {
+			console.error({ err })
+			renderError(err, dispatch, types.REGISTER_USER_ERROR)
+		})
 }
 
 export const forgotPassword = ({ email }, push) => dispatch => {

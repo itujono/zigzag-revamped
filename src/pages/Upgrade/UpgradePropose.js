@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Row, Col, Icon } from "antd"
+import { Row, Col, Icon, Typography } from "antd"
 import styled from "styled-components"
 import { useHistory, Link } from "react-router-dom"
 import { connect } from "react-redux"
@@ -13,13 +13,16 @@ const upgradeText = (
 	<div className="benefits">
 		<ul>
 			<li>
-				<Icon type="check-circle" theme="filled" /> &nbsp; Dapat pahala dan amal jariyah
+				<Icon type="check-circle" theme="filled" style={{ color: theme.greenColor }} /> &nbsp; Dapat pahala dan
+				amal jariyah
 			</li>
 			<li>
-				<Icon type="check-circle" theme="filled" /> &nbsp; Dapat potongan harga yang super gede
+				<Icon type="check-circle" theme="filled" style={{ color: theme.greenColor }} /> &nbsp; Dapat potongan
+				harga yang super gede
 			</li>
 			<li>
-				<Icon type="check-circle" theme="filled" /> &nbsp; Dapat pahala dan amal jariyah lagi
+				<Icon type="check-circle" theme="filled" style={{ color: theme.greenColor }} /> &nbsp; Dapat pahala dan
+				amal jariyah lagi
 			</li>
 		</ul>
 	</div>
@@ -104,7 +107,19 @@ function UpgradePropose({ upgradeAccount, user: { customer_upgrade = {} } }) {
 			<Col lg={12} className="right">
 				<Heading
 					content="Upgrade jadi VIP sekarang"
-					subheader="Dengan menge-klik tombol di bawah ini, kamu setuju untuk propose menjadi member VIP di Zigzag Online Shop"
+					titleMargin={{ mb: "1em" }}
+					subheader={
+						<Typography>
+							<Typography.Paragraph>
+								Dengan menge-klik tombol di bawah ini, kamu setuju untuk propose menjadi member VIP di
+								Zigzag Online Shop
+							</Typography.Paragraph>
+							<Typography.Text type="secondary">
+								Note: akun VIP kamu akan di-reset menjadi Reguler jika kamu nggak bisa belanja minimal 4
+								item/bulan. Reset dilakukan tiap tanggal awal bulan.
+							</Typography.Text>
+						</Typography>
+					}
 				/>
 				<Button onClick={() => setConfirmationModal(true)}>Jadi member VIP sekarang</Button>
 			</Col>

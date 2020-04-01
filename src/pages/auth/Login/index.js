@@ -9,7 +9,7 @@ import styled from "styled-components"
 import { authUser } from "store/actions/authActions"
 import { TextInput } from "components/Fields"
 import { theme } from "styles"
-import { media } from "helpers"
+import { media, mobile } from "helpers"
 import { validationSchema } from "./validation"
 
 const TheImage = styled.section`
@@ -69,7 +69,8 @@ function Login() {
 					<Logo />
 				</Col>
 			</Row> */}
-			<Row type="flex" align="middle" justify="center" className="mb2em">
+
+			<Row type="flex" align="middle" justify="center" className="mb4em">
 				<LeftSide lg={10} xs={24}>
 					<PageHeader
 						className="pl0 mb2em"
@@ -124,7 +125,7 @@ function Login() {
 
 			<Row type="flex" justify="center">
 				<Col lg={12} className="ta-center">
-					<Logo />
+					<Logo width={!mobile && 140} />
 				</Col>
 			</Row>
 		</Section>

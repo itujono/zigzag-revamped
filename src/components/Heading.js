@@ -9,7 +9,8 @@ const Typo = styled(Typography)`
 const Title = styled(Typography.Title)`
 	&& {
 		font-weight: ${({ bold }) => bold && "bold"};
-		margin-bottom: 0;
+		margin: ${({ titleMargin = {} }) =>
+			`${titleMargin.mt || 0} ${titleMargin.mr || 0} ${titleMargin.mb || 0} ${titleMargin.ml || 0}`};
 	}
 `
 
@@ -26,10 +27,10 @@ const reverseStyle = {
 	color: "#bbb"
 }
 
-function Heading({ bold, reverse, level, content, subheader, ...props }) {
+function Heading({ bold, reverse, level, content, subheader, titleMargin, ...props }) {
 	return (
 		<Typo {...props}>
-			<Title bold={bold} style={reverse ? reverseStyle : ""} level={level || 4}>
+			<Title bold={bold} style={reverse ? reverseStyle : ""} titleMargin={titleMargin} level={level || 4}>
 				{content}
 			</Title>
 			{subheader && <Paragraph bold={bold}>{subheader}</Paragraph>}

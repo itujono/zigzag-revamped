@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Button, Logo, ButtonLink, Alert, GifPlayer } from "components"
 import { Row, Col, Form, Icon, Modal, PageHeader } from "antd"
-import { connect } from "react-redux"
+import { connect, useSelector } from "react-redux"
 import { Link, useHistory } from "react-router-dom"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts } from "store/actions/rajaOngkirActions"
@@ -13,18 +13,25 @@ import styled from "styled-components"
 import { theme } from "styles"
 import { media } from "helpers"
 import { validationSchema } from "./validation"
-import { AutoComplete } from "formik-antd"
+// import { AutoComplete } from "formik-antd"
 
-const TheImage = styled.section`
-	width: 100%;
-	height: 100%;
-	margin-left: -50px;
-	z-index: 0;
+// const TheImage = styled.section`
+// 	width: 100%;
+// 	height: 100%;
+// 	margin-left: -50px;
+// 	z-index: 0;
 
-	${media.mobile`
-		margin-left: initial;
-	`}
-`
+// 	${media.mobile`
+// 		margin-left: initial;
+// 	`}
+// `
+
+// ███████╗████████╗██╗   ██╗██╗     ███████╗███████╗
+// ██╔════╝╚══██╔══╝╚██╗ ██╔╝██║     ██╔════╝██╔════╝
+// ███████╗   ██║    ╚████╔╝ ██║     █████╗  ███████╗
+// ╚════██║   ██║     ╚██╔╝  ██║     ██╔══╝  ╚════██║
+// ███████║   ██║      ██║   ███████╗███████╗███████║
+// ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝╚══════╝
 
 const TheCard = styled(Card)`
 	&& {
@@ -112,6 +119,7 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 	const [selectedProvince, setSelectedProvince] = useState("")
 	const [selectedCity, setSelectedCity] = useState("")
 	const { push, goBack } = useHistory()
+	const registerError = useSelector(({ auth }) => auth.registerUserError)
 	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces, fetchCities } = props
 
 	const handleNext = section => {
@@ -243,7 +251,7 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 						autocomplete
 						name="province"
 						label="Provinsi kamu"
-						placeholder="Pilih provinse mu..."
+						placeholder="Pilih provinsi mu..."
 						options={props.provinceAutocomplete}
 						onChange={handleRenderCities(values)}
 						loading={loading}
@@ -379,10 +387,10 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 	const provinces = rajaOngkir.provinces || []
 	const cities = rajaOngkir.cities || []
 	const subdistricts = rajaOngkir.subdistricts || []
-	const provinceAutocomplete = provinces.map(item => ({ value: item.province_id, text: item.province }))
-	const cityAutocomplete = cities.map(item => ({ value: item.city_id, text: item.city_name }))
+	const provinceAutocomplete = provinces.map(item => ({ value: Number(item.province_id), text: item.province }))
+	const cityAutocomplete = cities.map(item => ({ value: Number(item.city_id), text: item.city_name }))
 	const subdistrictAutocomplete = subdistricts.map(item => ({
-		value: item.subdistrict_id,
+		value: Number(item.subdistrict_id),
 		text: item.subdistrict_name
 	}))
 

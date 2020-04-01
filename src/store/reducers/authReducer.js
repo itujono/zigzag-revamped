@@ -1,7 +1,11 @@
 import * as types from "../types"
 
 const initialState = {
-	isLoggedin: false
+	isLoggedin: false,
+	registerUserError: null,
+	authUserError: null,
+	forgotError: null,
+	newPasswordError: null
 }
 
 function reducer(state = initialState, action) {

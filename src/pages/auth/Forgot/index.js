@@ -54,7 +54,7 @@ function Forgot({ forgotPassword, error }) {
 	const { push } = useHistory()
 
 	const handleForgot = (values, { setSubmitting }) => {
-		forgotPassword({ email: values.email }, push).finally(() => setSubmitting)
+		forgotPassword({ email: values.email }, push).finally(() => setSubmitting(false))
 	}
 
 	return (
