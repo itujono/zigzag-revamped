@@ -30,6 +30,12 @@ const Cardee = styled(Card)`
 			height: ${({ mode }) => (mode === "mini" ? "180px" : "290px")};
 			overflow: hidden;
 		}
+		.ant-tag {
+			position: absolute;
+			top: -10px;
+			right: 0;
+			z-index: 10;
+		}
 		&:hover {
 			box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.1);
 			border: 1px solid #66ceb2;
@@ -65,6 +71,8 @@ function ProductCard({ data, mode, loading = false, ...props }) {
 						</Col> */}
 					</Row>
 				)}
+				{data.isOutOfStock && <Tag color="orange">Stok habis</Tag>}
+				{/* <Tag color="orange">Stok habis</Tag> */}
 			</Cardee>
 		</Link>
 	)

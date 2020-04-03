@@ -78,6 +78,9 @@ function Home() {
 						<Row gutter={16} type="flex">
 							{products.map(item => {
 								const to = item.name ? `/product/${item.id}-${item.name}` : null
+								const isOutOfStock = item.product_detail
+									.map(item => item.product_stock.every(item => item.stock === "STOCK HABIS"))
+									.every(item => Boolean(item))
 
 								return (
 									<Col xs={12} lg={6} key={item.id}>
@@ -88,7 +91,8 @@ function Home() {
 												src: (item.product_image[0] || {}).picture,
 												title: item.name,
 												price: item.product_price.price,
-												category: item.categories.name
+												category: item.categories.name,
+												isOutOfStock
 											}}
 										/>
 									</Col>
@@ -122,6 +126,9 @@ function Home() {
 						<Row gutter={16} type="flex">
 							{restockProducts.map(item => {
 								const to = item.name ? `/product/${item.id}-${item.name}` : null
+								const isOutOfStock = item.product_detail
+									.map(item => item.product_stock.every(item => item.stock === "STOCK HABIS"))
+									.every(item => Boolean(item))
 
 								return (
 									<Col xs={12} lg={6} key={item.id}>
@@ -132,7 +139,8 @@ function Home() {
 												src: item.product_image[0].picture,
 												title: item.name,
 												price: item.product_price.price,
-												category: item.categories.name
+												category: item.categories.name,
+												isOutOfStock
 											}}
 										/>
 									</Col>
