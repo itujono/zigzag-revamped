@@ -232,7 +232,7 @@ export default function Address({ data, handlers, initialLoading }) {
 										noHover
 										title={
 											<div>
-												Dropshipper &nbsp; <Switch name="isDropshipper" />
+												Pengirim &nbsp; <Switch name="isDropshipper" />
 											</div>
 										}
 									>
@@ -240,7 +240,7 @@ export default function Address({ data, handlers, initialLoading }) {
 											<Col lg={8}>
 												<TextInput
 													name="dropshipper_name"
-													placeholder="Nama kamu sebagai dropshipper..."
+													placeholder="Nama kamu sebagai pengirim..."
 													disabled={!values.isDropshipper}
 													onChange={handleChange}
 												/>
@@ -248,7 +248,7 @@ export default function Address({ data, handlers, initialLoading }) {
 											<Col lg={8}>
 												<TextInput
 													name="dropshipper_tele"
-													placeholder="Nomor HP kamu sebagai dropshipper..."
+													placeholder="Nomor HP kamu sebagai pengirim..."
 													disabled={!values.isDropshipper}
 													onChange={handleChange}
 												/>
@@ -256,7 +256,7 @@ export default function Address({ data, handlers, initialLoading }) {
 											<Col lg={8}>
 												<TextInput
 													name="jne_online_booking"
-													placeholder="JNE Online Booking..."
+													placeholder="Online Booking..."
 													disabled={!values.isDropshipper}
 													onChange={handleChange}
 												/>

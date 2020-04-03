@@ -15,13 +15,13 @@ const SelengkapButton = styled(ButtonLink)`
 
 function Home() {
 	const dispatch = useDispatch()
-	const product = useSelector(({ product }) => product)
+	// const product = useSelector(({ product }) => product)
 	const products = useSelector(({ product }) => product.products)
 	const restockProducts = useSelector(({ product }) => product.restockProducts)
 
 	useEffect(() => {
-		dispatch(fetchProducts(0, 6))
-		dispatch(fetchRestockProducts(0, 6))
+		dispatch(fetchProducts(0, 12))
+		dispatch(fetchRestockProducts(0, 12))
 	}, [dispatch])
 
 	return (
@@ -54,8 +54,8 @@ function Home() {
 						<img src="https://source.unsplash.com/599x301" alt="599x301" />
 					</div>
 				</Carousel>
-				<Row style={{ marginTop: "4em" }} gutter={64}>
-					<Col lg={12} style={{ marginBottom: mobile && "2em" }}>
+				<Row className="mt4m mb4em" gutter={64}>
+					<Col lg={24} style={{ marginBottom: mobile && "2em" }}>
 						<Row
 							type="flex"
 							justify="space-between"
@@ -80,7 +80,7 @@ function Home() {
 								const to = item.name ? `/product/${item.id}-${item.name}` : null
 
 								return (
-									<Col xs={12} lg={8} key={item.id}>
+									<Col xs={12} lg={6} key={item.id}>
 										<ProductCard
 											mode="mini"
 											data={{
@@ -96,7 +96,10 @@ function Home() {
 							})}
 						</Row>
 					</Col>
-					<Col lg={12} style={{ marginBottom: mobile && "2em" }}>
+				</Row>
+
+				<Row gutter={64}>
+					<Col lg={24} style={{ marginBottom: mobile && "2em" }}>
 						<Row
 							type="flex"
 							justify="space-between"
@@ -121,7 +124,7 @@ function Home() {
 								const to = item.name ? `/product/${item.id}-${item.name}` : null
 
 								return (
-									<Col xs={12} lg={8} key={item.id}>
+									<Col xs={12} lg={6} key={item.id}>
 										<ProductCard
 											mode="mini"
 											data={{
