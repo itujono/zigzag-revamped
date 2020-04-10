@@ -38,7 +38,8 @@ const Cardee = styled(Card)`
 		}
 		&:hover {
 			box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.1);
-			border: 1px solid #66ceb2;
+			border: 2px solid #66ceb2;
+			transform: translateY(-1px);
 		}
 	}
 `

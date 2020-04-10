@@ -5,6 +5,7 @@ import { fetchProducts, fetchRestockProducts } from "store/actions/productAction
 import { Carousel, Row, Col, Icon } from "antd"
 import { mobile, media, isOutOfStock } from "helpers"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 const SelengkapButton = styled(ButtonLink)`
 	margin-right: 0;
@@ -71,7 +72,9 @@ function Home() {
 							</Col>
 							<Col>
 								<SelengkapButton>
-									Selengkapnya &nbsp; <Icon type="right" />
+									<Link to="/products/latest">
+										Selengkapnya &nbsp; <Icon type="right" />
+									</Link>
 								</SelengkapButton>
 							</Col>
 						</Row>
@@ -117,7 +120,9 @@ function Home() {
 							</Col>
 							<Col>
 								<SelengkapButton>
-									Selengkapnya &nbsp; <Icon type="right" />
+									<Link to="/products/restock">
+										Selengkapnya &nbsp; <Icon type="right" />
+									</Link>
 								</SelengkapButton>
 							</Col>
 						</Row>
