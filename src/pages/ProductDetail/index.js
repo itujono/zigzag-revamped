@@ -15,7 +15,6 @@ import {
 } from "store/actions/productActions"
 import { theme } from "styles"
 import { URL_ZIZGAG } from "helpers/constants"
-// import { TextInput } from "components/Fields"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -41,18 +40,6 @@ const StyledSection = styled(Section)`
 	}
 `
 
-// const StyledRating = styled(Rate)`
-// 	.ant-rate-star {
-// 		margin-left: 0;
-// 		&:first-child {
-// 			margin-left: 0;
-// 		}
-// 		&:not(:last-child) {
-// 			margin-right: 4px;
-// 		}
-// 	}
-// `
-
 const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize }) => ({
 	color: (id === selectedColor.id && "#2db7f5") || (id === selectedSize.id && "#87d068")
 }))`
@@ -65,9 +52,37 @@ const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize 
 	}
 `
 
-const PhotoCarousel = styled(Carousel)`
-	img {
-		user-select: contain;
+const PhotoCarousel = styled(Carousel).attrs({
+	infinite: true,
+	pauseOnFocus: true,
+	pauseOnHover: true,
+	autoPlay: false
+})`
+	&& {
+		/* .slick-list {
+			height: auto;
+			max-height: 400px;
+		} */
+		.slick-dots {
+			li {
+				button {
+					background: #999;
+					height: 16px;
+					border-radius: 100px;
+				}
+				&.slick-active {
+					button {
+						background: ${theme.primaryColor};
+						height: 16px;
+						border-radius: 100px;
+					}
+				}
+			}
+		}
+		img {
+			user-select: contain;
+			object-fit: cover;
+		}
 	}
 `
 
@@ -164,7 +179,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		setSelectedSize(size)
 	}
 
-	const color = (product.product_detail || []).map(item => {
+	const color = (product.product_detail || []).map((item) => {
 		const stock = item.product_more[0].stock || 0
 		return (
 			<StyledTag
@@ -180,9 +195,9 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		)
 	})
 
-	const size = typeId => {
+	const size = (typeId) => {
 		if (typeId === 2)
-			return (selectedColor.product_more || []).map(item => (
+			return (selectedColor.product_more || []).map((item) => (
 				<StyledTag
 					key={item.id}
 					id={item.id}
@@ -266,31 +281,30 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				</Button>
 			</Modal>
 
-			<PhotoModal visible={Object.keys(selectedPhoto).length} onCancel={() => setSelectedPhoto({})}>
-				<img src={selectedPhoto.picture} alt={selectedPhoto.caption} width="100%" />
-				<Typography.Paragraph>{selectedPhoto.caption}</Typography.Paragraph>
-			</PhotoModal>
+			{mobile && (
+				<PhotoModal visible={Object.keys(selectedPhoto).length} onCancel={() => setSelectedPhoto({})}>
+					<img src={selectedPhoto.picture} alt={selectedPhoto.caption} width="100%" />
+					<Typography.Paragraph>{selectedPhoto.caption}</Typography.Paragraph>
+				</PhotoModal>
+			)}
 
 			<Section>
 				<Row gutter={64} type="flex">
 					<Col lg={14} xs={24}>
-						<PhotoCarousel
-							autoplay
-							adaptiveHeight
-							infinite
-							pauseOnFocus
-							pauseOnHover
-							style={{ marginBottom: "2em" }}
-						>
-							{(product.product_image || []).map(item => (
+						<PhotoCarousel style={{ marginBottom: "2em" }}>
+							{(product.product_image || []).map((item) => (
 								// <div key={item.id}>
-								<img
-									key={item.id}
-									src={item.picture}
-									alt={item.caption}
-									width="100%"
-									onClick={() => setSelectedPhoto(item)}
-								/>
+								<>
+									<img
+										key={item.id}
+										src={item.picture}
+										alt={item.caption}
+										width="100%"
+										className="mb2em"
+										onClick={() => setSelectedPhoto(item)}
+									/>
+									<Text type="secondary">{item.caption}</Text>
+								</>
 								// {/* </div> */}
 							))}
 						</PhotoCarousel>
@@ -402,8 +416,8 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 }
 
 const mapState = ({ product }) => {
-	const vipPrice = (product.product.product_price || []).find(item => item.price_type === "VIP") || {}
-	const regulerPrice = (product.product.product_price || []).find(item => item.price_type === "REGULER") || {}
+	const vipPrice = (product.product.product_price || []).find((item) => item.price_type === "VIP") || {}
+	const regulerPrice = (product.product.product_price || []).find((item) => item.price_type === "REGULER") || {}
 
 	return {
 		product: product.product,
