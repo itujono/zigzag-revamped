@@ -35,7 +35,7 @@ function Logout() {
 									: "Oke, jangan lupa balik lagi ya, dan hamburkan duit belanja ibumu!"
 							}
 						/>
-						<Button type="primary" onClick={() => window.location.replace("/")}>
+						<Button type="primary" onClick={() => push("/")}>
 							<Icon type="home" /> &nbsp; Balik ke Home
 						</Button>
 					</Card>

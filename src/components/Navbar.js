@@ -11,7 +11,7 @@ import { updateCartItem, deleteCartItem, fetchProductCategories } from "store/ac
 import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
-import { mobile } from "helpers"
+import { mobile, pricer } from "helpers"
 
 const Nav = styled.nav`
 	width: inherit;
@@ -20,7 +20,7 @@ const Nav = styled.nav`
 	padding-right: 1em;
 `
 
-const StyledButton = styled(props => <Button {...props} />)`
+const StyledButton = styled((props) => <Button {...props} />)`
 	&& {
 		.anticon {
 			margin-right: 0;
@@ -131,7 +131,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 		setCartDrawer(true)
 	}
 
-	const handleSearch = value => {
+	const handleSearch = (value) => {
 		localStorage.setItem("keywordFromNavbar", value)
 		message.loading("Mohon tunggu...", 1).then(() => push({ pathname: "/search" }))
 	}
@@ -277,6 +277,14 @@ function RightMenu({ data, handlers }) {
 					<Menu.Item key="greeting">
 						<Typography.Paragraph strong>Hi, {user.name}</Typography.Paragraph>
 					</Menu.Item>
+					<Menu.Item key="deposit_amount">
+						<Link to="/profile/deposit">
+							<Button type="ghost">
+								<DynamicIcon type="icon-coin-dollar" />
+								Rp {pricer(user.deposit)}
+							</Button>
+						</Link>
+					</Menu.Item>
 					<Menu.Item key="profile">
 						<Link to="/profile">
 							<DynamicIcon type="icon-tubiaozhizuomoban6" /> Lihat profile
@@ -353,7 +361,7 @@ const mapState = ({ user, auth, other, product }) => ({
 	cartDrawerFromStore: other.cartDrawer,
 	cartItems: product.cartItems,
 	cartTotal: product.cartTotal,
-	categories: product.categories.filter(item => item.parent === 0)
+	categories: product.categories.filter((item) => item.parent === 0)
 })
 
 const actions = {

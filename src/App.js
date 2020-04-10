@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import React, { Suspense, useEffect } from "react"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { Provider } from "react-redux"
 import { createAppStore } from "./store"
@@ -14,6 +14,7 @@ import Logout from "pages/auth/Logout"
 import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
 
 import { useIdle } from "helpers"
+import { message } from "antd"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -30,7 +31,7 @@ const NewPassword = React.lazy(() => import("pages/auth/NewPassword"))
 const SearchResult = React.lazy(() => import("pages/Home/SearchResult"))
 const DepositConfirmation = React.lazy(() => import("pages/Profile/Deposit/DepositConfirmation"))
 
-const App = () => {
+function App() {
 	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 10, inactivityEvents: [] })
 
 	return (

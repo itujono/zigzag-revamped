@@ -3,9 +3,9 @@ import { useState, useEffect } from "react"
 import { css } from "styled-components"
 import createActivityDetector from "activity-detector"
 
-import { useHistory } from "react-router-dom"
 import { unauthUser } from "store/actions/authActions"
 import { message } from "antd"
+import { TEXT_STOCK_HABIS } from "./constants"
 // import { FETCH_USER } from "store/types"
 
 const instance = axios.create({
@@ -16,7 +16,7 @@ const instance = axios.create({
 	}
 })
 
-instance.interceptors.request.use(config => {
+instance.interceptors.request.use((config) => {
 	config.headers["x-access-token"] = localStorage.getItem("access_token")
 	return config
 })
@@ -30,7 +30,7 @@ export const shareToSocialMedia = ({ title, text, url }, setModal) => {
 		navigator
 			.share({ title, text, url })
 			.then(() => message.success("Oke, sudah berhasil di-share"))
-			.catch(err => message.error("Oops, ada sesuatu nih: ", err))
+			.catch((err) => message.error("Oops, ada sesuatu nih: ", err))
 			.finally(() => setModal(false))
 		return
 	}
@@ -39,6 +39,12 @@ export const shareToSocialMedia = ({ title, text, url }, setModal) => {
 }
 
 export const randomCode = () => Math.floor(Math.random() * (100 - 10)) + 10
+
+export const isOutOfStock = (product_detail = []) => {
+	return product_detail
+		.map((item) => item.product_stock.every((item) => item.stock === TEXT_STOCK_HABIS))
+		.every((item) => Boolean(item))
+}
 
 export function renderError(err, dispatch, type, noShow = false) {
 	const errResponse = err.response || {}
@@ -75,7 +81,7 @@ export function useIdle(options) {
 export function useFetchData(url, param) {
 	const [data, setData] = useState([])
 
-	instance.get(url, param).then(res => {
+	instance.get(url, param).then((res) => {
 		setData(res.data)
 	})
 
@@ -91,7 +97,7 @@ export const pricer = (price, withComma = false) => {
 	return theValue
 }
 
-export const upperCase = word => word && word[0].toUpperCase() + word.slice(1)
+export const upperCase = (word) => word && word[0].toUpperCase() + word.slice(1)
 
 // Media queries Styled-Components
 const sizes = {

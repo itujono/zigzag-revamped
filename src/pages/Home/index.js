@@ -3,7 +3,7 @@ import { Section, Heading, Layout, ProductCard, ButtonLink } from "components"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchProducts, fetchRestockProducts } from "store/actions/productActions"
 import { Carousel, Row, Col, Icon } from "antd"
-import { mobile, media } from "helpers"
+import { mobile, media, isOutOfStock } from "helpers"
 import styled from "styled-components"
 
 const SelengkapButton = styled(ButtonLink)`
@@ -76,11 +76,9 @@ function Home() {
 							</Col>
 						</Row>
 						<Row gutter={16} type="flex">
-							{products.map(item => {
+							{products.map((item) => {
 								const to = item.name ? `/product/${item.id}-${item.name}` : null
-								const isOutOfStock = item.product_detail
-									.map(item => item.product_stock.every(item => item.stock === "STOCK HABIS"))
-									.every(item => Boolean(item))
+								const outOfStock = isOutOfStock(item.product_detail)
 
 								return (
 									<Col xs={12} lg={6} key={item.id}>
@@ -92,7 +90,7 @@ function Home() {
 												title: item.name,
 												price: item.product_price.price,
 												category: item.categories.name,
-												isOutOfStock
+												isOutOfStock: outOfStock
 											}}
 										/>
 									</Col>
@@ -124,11 +122,9 @@ function Home() {
 							</Col>
 						</Row>
 						<Row gutter={16} type="flex">
-							{restockProducts.map(item => {
+							{restockProducts.map((item) => {
 								const to = item.name ? `/product/${item.id}-${item.name}` : null
-								const isOutOfStock = item.product_detail
-									.map(item => item.product_stock.every(item => item.stock === "STOCK HABIS"))
-									.every(item => Boolean(item))
+								const outOfStock = isOutOfStock(item.product_detail)
 
 								return (
 									<Col xs={12} lg={6} key={item.id}>
@@ -140,7 +136,7 @@ function Home() {
 												title: item.name,
 												price: item.product_price.price,
 												category: item.categories.name,
-												isOutOfStock
+												isOutOfStock: outOfStock
 											}}
 										/>
 									</Col>

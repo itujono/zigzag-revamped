@@ -4,8 +4,15 @@ import { Heading } from "components"
 import { NavLink } from "react-router-dom"
 import { connect } from "react-redux"
 import { fetchProductCategories } from "store/actions/productActions"
-import { BagIcon, ShoesIcon, LingerieIcon, WalletIcon, HomewareIcon } from "components/Icons"
 import DynamicIcon from "./DynamicIcon"
+
+const profileMenu = [
+	{ key: "basic", label: "Basic", url: "/profile/basic", icon: "icon-tubiaozhizuomoban6" },
+	{ key: "history", label: "History order", url: "/profile/history", icon: "icon-tubiaozhizuomoban3" },
+	{ key: "wishlist", label: "Wishlist", url: "/profile/wishlist", icon: "icon-tubiaozhizuomoban" },
+	{ key: "deposit", label: "Deposit", url: "/profile/deposit", icon: "icon-tubiaozhizuomoban5" },
+	{ key: "settings", label: "Settings", url: "/profile/settings", icon: "icon-tubiaozhizuomoban1" }
+]
 
 function SidebarMenu({ page, fetchProductCategories, categories }) {
 	useEffect(() => {
@@ -23,31 +30,13 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 						style={{ paddingLeft: "1em", paddingTop: "4em" }}
 					/>
 					<Menu>
-						<Menu.Item key="basic">
-							<NavLink to="/profile/basic">
-								<DynamicIcon type="icon-tubiaozhizuomoban6" /> Basic
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="history">
-							<NavLink to="/profile/history">
-								<DynamicIcon type="icon-tubiaozhizuomoban3" /> History order
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="wishlist">
-							<NavLink to="/profile/wishlist">
-								<DynamicIcon type="icon-tubiaozhizuomoban" /> Wishlist
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="deposit">
-							<NavLink to="/profile/deposit">
-								<DynamicIcon type="icon-tubiaozhizuomoban5" /> Deposit
-							</NavLink>
-						</Menu.Item>
-						<Menu.Item key="settings">
-							<NavLink to="/profile/settings">
-								<DynamicIcon type="icon-tubiaozhizuomoban1" /> Settings
-							</NavLink>
-						</Menu.Item>
+						{profileMenu.map((item) => (
+							<Menu.Item key={item.key}>
+								<NavLink to={`/profile/${item.url}`}>
+									<DynamicIcon type={item.icon} /> {item.label}
+								</NavLink>
+							</Menu.Item>
+						))}
 					</Menu>
 				</>
 			) : (
@@ -59,7 +48,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 						style={{ paddingLeft: "1em", paddingTop: "4em" }}
 					/>
 					<Menu>
-						{categories.map(item => {
+						{categories.map((item) => {
 							const theIcon =
 								item.id === 1
 									? "icon-diamond"
@@ -110,7 +99,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 }
 
 const mapState = ({ product }) => ({
-	categories: product.categories.filter(item => item.parent === 0)
+	categories: product.categories.filter((item) => item.parent === 0)
 })
 
 export default connect(mapState, { fetchProductCategories })(SidebarMenu)
