@@ -3,31 +3,32 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { Provider } from "react-redux"
 import { createAppStore } from "./store"
 import { Loading, Modal, Heading, Button } from "components"
-import Login from "pages/auth/Login"
-import Register from "pages/auth/Register"
 import RegisterSuccess from "pages/auth/Register/RegisterSuccess"
-import Forgot from "pages/auth/Forgot"
 import ForgotSuccess from "pages/auth/Forgot/ForgotSuccess"
-import MiscPage from "pages/Category/MiscPage"
-import Checkout from "pages/Checkout"
 import CheckoutSuccess from "pages/Checkout/Success"
-import Confirmation from "pages/Checkout/Confirmation"
 import ConfirmationSuccess from "pages/Checkout/ConfirmationSuccess"
 import NotFound from "pages/NotFound"
-import AccountUpgrade from "pages/Upgrade"
 import AccountActive from "pages/auth/AccountActive"
-import NewPassword from "pages/auth/NewPassword"
 import NewPasswordSuccess from "pages/auth/NewPassword/NewPasswordSuccess"
 import Logout from "pages/auth/Logout"
-import SearchResult from "pages/Home/SearchResult"
-import DepositConfirmation from "pages/Profile/Deposit/DepositConfirmation"
 import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
-import { useIdle } from "helpers"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
 const Category = React.lazy(() => import("pages/Category"))
 const Profile = React.lazy(() => import("pages/Profile"))
+const MiscPage = React.lazy(() => import("pages/Category/MiscPage"))
+const Register = React.lazy(() => import("pages/auth/Register"))
+const Login = React.lazy(() => import("pages/auth/Login"))
+const Forgot = React.lazy(() => import("pages/auth/Forgot"))
+const Checkout = React.lazy(() => import("pages/Checkout"))
+const AccountUpgrade = React.lazy(() => import("pages/Upgrade"))
+const Confirmation = React.lazy(() => import("pages/Checkout/Confirmation"))
+const NewPassword = React.lazy(() => import("pages/auth/NewPassword"))
+const SearchResult = React.lazy(() => import("pages/Home/SearchResult"))
+const DepositConfirmation = React.lazy(() => import("pages/Profile/Deposit/DepositConfirmation"))
+
+import { useIdle } from "helpers"
 
 const App = () => {
 	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 10, inactivityEvents: [] })
