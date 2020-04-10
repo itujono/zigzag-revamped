@@ -13,6 +13,8 @@ import NewPasswordSuccess from "pages/auth/NewPassword/NewPasswordSuccess"
 import Logout from "pages/auth/Logout"
 import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
 
+import { useIdle } from "helpers"
+
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
 const Category = React.lazy(() => import("pages/Category"))
@@ -27,8 +29,6 @@ const Confirmation = React.lazy(() => import("pages/Checkout/Confirmation"))
 const NewPassword = React.lazy(() => import("pages/auth/NewPassword"))
 const SearchResult = React.lazy(() => import("pages/Home/SearchResult"))
 const DepositConfirmation = React.lazy(() => import("pages/Profile/Deposit/DepositConfirmation"))
-
-import { useIdle } from "helpers"
 
 const App = () => {
 	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 10, inactivityEvents: [] })
