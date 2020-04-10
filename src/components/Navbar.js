@@ -209,7 +209,17 @@ function RightMenu({ data, handlers }) {
 	const menuMobile = (
 		<StyledMobileMenu>
 			<Menu.Item key="greeting">
-				<Typography.Paragraph strong>Hi, {user.name}</Typography.Paragraph>
+				<Typography.Paragraph strong className="mb0">
+					Hi, {user.name}
+				</Typography.Paragraph>
+			</Menu.Item>
+			<Menu.Item key="deposit_amount">
+				<Link to="/profile/deposit">
+					<Button type="ghost">
+						<DynamicIcon type="icon-coin-dollar" />
+						Rp {pricer(user.deposit)}
+					</Button>
+				</Link>
 			</Menu.Item>
 			<Menu.Item key="profile">
 				<Link to="/profile">
