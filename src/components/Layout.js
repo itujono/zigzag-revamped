@@ -15,6 +15,10 @@ const Header = styled(PageLayout.Header)`
 		height: 5em;
 		border-bottom: 1px solid #eee;
 
+		.headroom {
+			z-index: 11;
+		}
+
 		${media.mobile`
             padding-left: 1em;
             padding-right: 1em;
