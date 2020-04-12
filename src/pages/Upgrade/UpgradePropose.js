@@ -1,8 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Row, Col, Icon, Typography } from "antd"
 import styled from "styled-components"
 import { useHistory, Link } from "react-router-dom"
-import { connect } from "react-redux"
+import { connect, useDispatch, useSelector } from "react-redux"
 
 import { upgradeAccount, fetchUser } from "store/actions/userActions"
 import { Heading, Button, Modal, ButtonLink } from "components"
@@ -59,13 +59,21 @@ const StyledRow = styled(Row)`
 	}
 `
 
-function UpgradePropose({ upgradeAccount, user: { customer_upgrade = {} } }) {
+function UpgradePropose() {
 	const [confirmationModal, setConfirmationModal] = useState(false)
 	const { push } = useHistory()
+	const dispatch = useDispatch()
 
-	const hasProposed = customer_upgrade.id && customer_upgrade.id === 2
+	const user = useSelector(({ user }) => user.user)
+	const { customer_upgrade = [] } = user
 
-	const handlePropose = () => upgradeAccount(push)
+	const hasProposed = customer_upgrade[0] && (customer_upgrade[0].status || {}).status_id === 2
+
+	const handlePropose = () => dispatch(upgradeAccount(push))
+
+	useEffect(() => {
+		dispatch(fetchUser())
+	}, [dispatch])
 
 	if (hasProposed) {
 		return (
@@ -127,4 +135,4 @@ function UpgradePropose({ upgradeAccount, user: { customer_upgrade = {} } }) {
 	)
 }
 
-export default connect(({ user }) => ({ user: user.user }), { upgradeAccount, fetchUser })(UpgradePropose)
+export default UpgradePropose

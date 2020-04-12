@@ -215,7 +215,7 @@ function RightMenu({ data, handlers }) {
 			</Menu.Item>
 			<Menu.Item key="deposit_amount">
 				<Link to="/profile/deposit">
-					<Button type="ghost">
+					<Button type="ghost" block>
 						<DynamicIcon type="icon-coin-dollar" />
 						Rp {pricer(user.deposit)}
 					</Button>
@@ -289,7 +289,7 @@ function RightMenu({ data, handlers }) {
 					</Menu.Item>
 					<Menu.Item key="deposit_amount">
 						<Link to="/profile/deposit">
-							<Button type="ghost">
+							<Button type="ghost" block>
 								<DynamicIcon type="icon-coin-dollar" />
 								Rp {pricer(user.deposit)}
 							</Button>

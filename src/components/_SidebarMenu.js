@@ -32,7 +32,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 					<Menu>
 						{profileMenu.map((item) => (
 							<Menu.Item key={item.key}>
-								<NavLink to={`/profile/${item.url}`}>
+								<NavLink to={item.url}>
 									<DynamicIcon type={item.icon} /> {item.label}
 								</NavLink>
 							</Menu.Item>
