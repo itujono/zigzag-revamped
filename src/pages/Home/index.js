@@ -1,22 +1,18 @@
 import React, { useEffect } from "react"
-import { Section, Heading, Layout, ProductCard, ButtonLink } from "components"
+import { Section, Heading, Layout, ProductCard, ButtonLink, Carousel } from "components"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchProducts, fetchRestockProducts } from "store/actions/productActions"
-import { Carousel, Row, Col, Icon } from "antd"
-import { mobile, media, isOutOfStock } from "helpers"
+import { Row, Col, Icon } from "antd"
+import { mobile, isOutOfStock } from "helpers"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 
 const SelengkapButton = styled(ButtonLink)`
 	margin-right: 0;
-	/* ${media.mobile`
-		padding-left: 0;
-	`} */
 `
 
 function Home() {
 	const dispatch = useDispatch()
-	// const product = useSelector(({ product }) => product)
 	const products = useSelector(({ product }) => product.products)
 	const restockProducts = useSelector(({ product }) => product.restockProducts)
 
@@ -29,16 +25,7 @@ function Home() {
 		<Layout sidebar>
 			<Section paddingHorizontal="1.5em">
 				<Heading bold content="Ini Homepage" subheader="Kamu adalah apa yang kamu makan, eheheh" />
-				<Carousel
-					className="center"
-					autoplay
-					pauseOnHover
-					infinite
-					// centerMode
-					slidesToShow={mobile ? 1 : 3}
-					// centerPadding="60px"
-					style={{ marginBottom: "2em" }}
-				>
+				<Carousel className="center mb2em" slidesToShow={mobile ? 1 : 3}>
 					<div>
 						<img src="https://source.unsplash.com/600x300" alt="Disclaimer" />
 					</div>
