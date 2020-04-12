@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from "react"
-import { Section, Heading, Card, Button, Loading } from "components"
+import { Section, Heading, Card, Button, Loading, Alert } from "components"
 import { Row, Col, Badge, Icon } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
@@ -8,6 +8,7 @@ import jneLogo from "assets/images/jne-logo.svg"
 import jntLogo from "assets/images/j&t-logo.jpeg"
 import sicepatLogo from "assets/images/sicepat-logo.png"
 import { pricer, mobile, media } from "helpers"
+import { ORIGIN } from "helpers/constants"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -91,6 +92,7 @@ const CourierLogo = styled.span`
 	position: absolute;
 	top: -30px;
 	left: 30px;
+	z-index: 11;
 `
 
 export default function Ongkir({ data, handlers, loading }) {
@@ -102,10 +104,10 @@ export default function Ongkir({ data, handlers, loading }) {
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
 	const { cartTotal = {}, subdistrict, subdistrict_id } = formData
 
-	const handleSelectCourier = courier => setSelectedCourier(courier)
+	const handleSelectCourier = (courier) => setSelectedCourier(courier)
 	const handleFetchCouriers = useCallback(() => {
 		const data = {
-			origin: "48",
+			origin: ORIGIN.cityId,
 			destination: typeof subdistrict_id === "number" ? subdistrict_id : subdistrict,
 			weight: cartTotal.roundedWeight,
 			destinationType: subdistrict ? "subdistrict" : "city",
@@ -139,13 +141,17 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	return (
 		<Section paddingHorizontal="0">
-			<Heading
-				content="Pilih kurir"
-				subheader="Pilih kurir dan ongkir yang paling sesuai untuk kamu"
-				marginBottom="3em"
+			<Heading content="Pilih kurir" subheader="Pilih kurir dan ongkir yang paling sesuai untuk kamu" />
+			<Alert
+				showIcon
+				type="info"
+				className="mb4em"
+				message={`Semua kiriman dikirim dari ${ORIGIN.city}, ${ORIGIN.province}`}
 			/>
+
 			{loading && <Loading />}
-			{couriers.map(courier => {
+
+			{couriers.map((courier) => {
 				const { code, costs = [], name } = courier
 				const courierLogo =
 					code === "jne" ? jneLogo : code === "J&T" ? jntLogo : code === "sicepat" ? sicepatLogo : ""
@@ -195,7 +201,7 @@ export default function Ongkir({ data, handlers, loading }) {
 				<Button
 					onClick={handleSaveCourier}
 					disabled={Object.values(selectedCourier).some(
-						item => item === "" || Object.keys(item).length === 0
+						(item) => item === "" || Object.keys(item).length === 0
 					)}
 				>
 					Lanjut ke Pembayaran <Icon type="right" />

@@ -132,8 +132,14 @@ span.primary {
 	color: @primaryColor;
 }
 
-input.ant-input {
+input.ant-input,
+.ant-select-auto-complete.ant-select .ant-input {
 	height: 40px !important;
+	border: 2px solid #ddd;
+	border-radius: 0 !important;
+}
+
+form textarea.ant-input {
 	border: 2px solid #ddd;
 	border-radius: 0 !important;
 }

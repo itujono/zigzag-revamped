@@ -45,13 +45,22 @@ const ListItem = styled(List.Item)`
 		.ant-list-item-meta-title {
 			.time {
 				color: ${theme.greyColor[2]};
-				font-weight: normal;
 			}
 			.amount {
 				color: ${theme.color[0]};
 			}
 		}
 	}
+
+	${media.mobile`
+		.ant-list-item-meta {
+			.ant-list-item-meta-title {
+				.time {
+					display: block;
+				}
+			}
+		}
+	`}
 `
 
 function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance, loading }) {
@@ -107,26 +116,28 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 							return (
 								<ListItem>
 									<Row>
-										<Col lg={2}>
-											<div>
-												<Icon
-													type="check-circle"
-													theme="twoTone"
-													twoToneColor="#52c41a"
-													style={{ fontSize: 20 }}
-												/>
-											</div>
-										</Col>
+										{!mobile && (
+											<Col lg={2}>
+												<div>
+													<Icon
+														type="check-circle"
+														theme="twoTone"
+														twoToneColor="#52c41a"
+														style={{ fontSize: 20 }}
+													/>
+												</div>
+											</Col>
+										)}
 										<Col lg={22}>
 											<List.Item.Meta
 												title={
-													<span>
+													<Typography>
 														Kamu deposit sebesar{" "}
 														<span className="amount">Rp {pricer(item.total)}</span> &nbsp;{" "}
 														<span className="time">
 															{moment(item.created_date).fromNow()}
 														</span>
-													</span>
+													</Typography>
 												}
 												description={
 													<div>

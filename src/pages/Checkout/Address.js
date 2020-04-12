@@ -8,6 +8,7 @@ import styled from "styled-components"
 import { theme } from "styles"
 import { Switch } from "formik-antd"
 import { addressValidation } from "./validation"
+import { mobile } from "helpers"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -47,22 +48,22 @@ export default function Address({ data, handlers, initialLoading }) {
 		selectedCity
 	} = data
 
-	const renderInitialValues = property => {
+	const renderInitialValues = (property) => {
 		return formData[property] ? formData[property] : user[property]
 	}
 
-	const handleRenderCities = value => {
+	const handleRenderCities = (value) => {
 		fetchCities("", value)
-		setSelectedProvince(provinceOptions.find(item => item.value === value) || {})
+		setSelectedProvince(provinceOptions.find((item) => item.value === value) || {})
 	}
 
-	const handleRenderSubdistricts = value => {
+	const handleRenderSubdistricts = (value) => {
 		fetchSubdistricts(value)
-		setSelectedCity(cityOptions.find(item => item.value === value) || {})
+		setSelectedCity(cityOptions.find((item) => item.value === value) || {})
 	}
 
-	const handleSelectSubdistrict = value => {
-		setSelectedSubdistrict(subdistrictOptions.find(item => item.value === value) || {})
+	const handleSelectSubdistrict = (value) => {
+		setSelectedSubdistrict(subdistrictOptions.find((item) => item.value === value) || {})
 	}
 
 	const handleSaveAddress = (values, { setSubmitting }) => {
@@ -109,18 +110,19 @@ export default function Address({ data, handlers, initialLoading }) {
 					dropshipper_tele: renderInitialValues("dropshipper_tele"),
 					jne_online_booking: renderInitialValues("jne_online_booking")
 				}}
-				render={({ handleSubmit, values }) => {
+			>
+				{({ handleSubmit, values }) => {
 					const { dropshipper_name, dropshipper_tele, jne_online_booking, ...restValues } = values
-					const handleChange = e => {
+					const handleChange = (e) => {
 						const name = e.target.name
-						setFormValues(formValues => ({ ...formValues, [name]: e.target.value }))
+						setFormValues((formValues) => ({ ...formValues, [name]: e.target.value }))
 					}
 
-					const handleChangeSelect = name => value => {
+					const handleChangeSelect = (name) => (value) => {
 						if (name === "province") handleRenderCities(value)
 						if (name === "city") handleRenderSubdistricts(value)
 						if (name === "subdistrict") handleSelectSubdistrict(value)
-						setFormValues(formValues => ({ ...formValues, [name]: value }))
+						setFormValues((formValues) => ({ ...formValues, [name]: value }))
 					}
 
 					return (
@@ -154,7 +156,7 @@ export default function Address({ data, handlers, initialLoading }) {
 												<TextInput
 													name="name"
 													placeholder="Nama kamu..."
-													marginBottom="0"
+													marginBottom={mobile ? "1em" : 0}
 													onChange={handleChange}
 												/>
 											</Col>
@@ -162,7 +164,7 @@ export default function Address({ data, handlers, initialLoading }) {
 												<TextInput
 													name="email"
 													placeholder="Email kamu..."
-													marginBottom="0"
+													marginBottom={mobile ? "1em" : 0}
 													onChange={handleChange}
 												/>
 											</Col>
@@ -170,7 +172,7 @@ export default function Address({ data, handlers, initialLoading }) {
 												<TextInput
 													name="tele"
 													placeholder="Nomor handphone kamu..."
-													marginBottom="0"
+													marginBottom={mobile ? "1em" : 0}
 													onChange={handleChange}
 												/>
 											</Col>
@@ -270,7 +272,7 @@ export default function Address({ data, handlers, initialLoading }) {
 								<Button
 									htmlType="submit"
 									type="primary"
-									disabled={Object.values(restValues).some(item => item === "" || !item)}
+									disabled={Object.values(restValues).some((item) => item === "" || !item)}
 								>
 									Lanjut ke Ongkir <Icon type="right" />
 								</Button>
@@ -278,7 +280,7 @@ export default function Address({ data, handlers, initialLoading }) {
 						</Form>
 					)
 				}}
-			/>
+			</Formik>
 		</Section>
 	)
 }

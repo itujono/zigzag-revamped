@@ -14,6 +14,7 @@ function Profile() {
 
 	useEffect(() => {
 		if (!localStorage.getItem("access_token")) push("/404")
+		window.scrollTo(0, 0)
 	}, [push])
 
 	return (
