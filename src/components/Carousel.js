@@ -2,6 +2,7 @@ import React from "react"
 import { Carousel as _Carousel } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
+import { media } from "helpers"
 
 const StyledCarousel = styled(_Carousel).attrs({
 	infinite: true,
@@ -34,6 +35,14 @@ const StyledCarousel = styled(_Carousel).attrs({
 			object-fit: cover;
 		}
 	}
+
+	${media.mobile`
+		.slick-dots {
+			&.slick-dots-bottom {
+				bottom: -10px;
+			}
+		}
+	`}
 `
 
 export default function Carousel({ children, ...props }) {
