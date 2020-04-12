@@ -1,5 +1,5 @@
 import * as types from "../types"
-import { ID_AKUN_KOKO } from "helpers/constants"
+import { ID_AKUN_KOKO, TEXT_FEATURED } from "helpers/constants"
 
 const initialState = {
 	user: {},
@@ -29,7 +29,7 @@ const { account_type_remark: typeRemark } = accountType
 const token = localStorage.getItem("access_token")
 const userId = Number(localStorage.getItem("user_id"))
 
-const renderPrice = productPrice => {
+const renderPrice = (productPrice) => {
 	const price = productPrice.filter(({ price_type }) => {
 		if (!token || userId === ID_AKUN_KOKO) return price_type === "REGULER"
 		return price_type.toLowerCase() === typeRemark.toLowerCase()
@@ -37,7 +37,7 @@ const renderPrice = productPrice => {
 	return { product_price: price }
 }
 
-const roundupWeight = number => {
+const roundupWeight = (number) => {
 	let prefix = number.slice(0, number.length - 3)
 	let suffix = number.slice(-3)
 	if (Number(suffix[0]) > 3) {
@@ -76,24 +76,31 @@ function reducer(state = initialState, action) {
 				})
 				.map(({ price }) => price)[0]
 
-			return { ...state, product: action.payload, productPrice, loading: false }
+			const product_image = action.payload.product_image.sort((a, b) => {
+				const FEATURED = TEXT_FEATURED.toLowerCase()
+				const aCaption = a.caption.toLowerCase()
+				const bCaption = b.caption.toLowerCase()
+				return aCaption.includes(FEATURED) ? -1 : bCaption.includes(FEATURED) ? 1 : 0
+			})
+
+			return { ...state, product: { ...action.payload, product_image }, productPrice, loading: false }
 
 		case types.FETCH_PRODUCTS:
-			const products = action.payload.map(item => {
+			const products = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
 				return { ...item, product_price }
 			})
 			return { ...state, products, loading: false }
 
 		case types.FETCH_RESTOCK_PRODUCTS:
-			const restockProducts = action.payload.map(item => {
+			const restockProducts = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
 				return { ...item, product_price }
 			})
 			return { ...state, restockProducts, loading: false }
 
 		case types.FETCH_PROMO_PRODUCTS:
-			const promoProducts = action.payload.map(item => {
+			const promoProducts = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
 				return { ...item, product_price }
 			})
@@ -142,7 +149,7 @@ function reducer(state = initialState, action) {
 			return { ...state, loading: false }
 
 		case types.FETCH_WISHLIST_ITEMS:
-			const theItems = action.payload.map(item => {
+			const theItems = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
 				return { ...item, product_price }
 			})
@@ -152,7 +159,7 @@ function reducer(state = initialState, action) {
 			return { ...state, loading: false }
 
 		case types.SEARCH_PRODUCT:
-			const items = action.payload.map(item => {
+			const items = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
 				return { ...item, product_price }
 			})

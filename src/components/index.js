@@ -15,6 +15,7 @@ import Alert from "./Alert"
 import Empty from "./Empty"
 import DynamicIcon from "./DynamicIcon"
 import GifPlayer from "./GifPlayer"
+import Carousel from "./Carousel"
 
 export {
 	Heading,
@@ -33,5 +34,6 @@ export {
 	Alert,
 	Empty,
 	DynamicIcon,
-	GifPlayer
+	GifPlayer,
+	Carousel
 }

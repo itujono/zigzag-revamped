@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal } from "components"
-import { Row, Col, Tag, Divider, Typography, Carousel, message, Input } from "antd"
+import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal, Carousel } from "components"
+import { Row, Col, Tag, Divider, Typography, message, Input } from "antd"
 import styled from "styled-components/macro"
 import { useParams, Link, useHistory, useLocation } from "react-router-dom"
 import { connect } from "react-redux"
@@ -48,40 +48,6 @@ const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize 
 		margin-bottom: 5px;
 		.stock-text {
 			color: ${({ id, selectedSize }) => (id === selectedSize.id && "#fff") || theme.greyColor[2]};
-		}
-	}
-`
-
-const PhotoCarousel = styled(Carousel).attrs({
-	infinite: true,
-	pauseOnFocus: true,
-	pauseOnHover: true,
-	autoPlay: false
-})`
-	&& {
-		/* .slick-list {
-			height: auto;
-			max-height: 400px;
-		} */
-		.slick-dots {
-			li {
-				button {
-					background: #999;
-					height: 16px;
-					border-radius: 100px;
-				}
-				&.slick-active {
-					button {
-						background: ${theme.primaryColor};
-						height: 16px;
-						border-radius: 100px;
-					}
-				}
-			}
-		}
-		img {
-			user-select: contain;
-			object-fit: cover;
 		}
 	}
 `
@@ -291,7 +257,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 			<Section>
 				<Row gutter={64} type="flex">
 					<Col lg={14} xs={24}>
-						<PhotoCarousel style={{ marginBottom: "2em" }}>
+						<Carousel className="mb2em">
 							{(product.product_image || []).map((item) => (
 								// <div key={item.id}>
 								<>
@@ -307,7 +273,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 								</>
 								// {/* </div> */}
 							))}
-						</PhotoCarousel>
+						</Carousel>
 					</Col>
 					<Col lg={10} xs={24}>
 						<Row>
