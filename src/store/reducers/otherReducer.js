@@ -30,7 +30,7 @@ function reducer(state = initial, action) {
 			return {
 				...state,
 				bankAccounts: action.payload,
-				bankAccountOptions: action.payload.map(item => ({
+				bankAccountOptions: action.payload.map((item) => ({
 					value: `${item.bank_name} ${item.bank_account}`,
 					label: `${item.bank_name} ${item.bank_account} an ${item.under_name}`
 				})),
@@ -47,25 +47,28 @@ function reducer(state = initial, action) {
 		case types.CANCEL_ORDER_ERROR:
 			return { ...state, cancelOrderError: action.payload, loading: false }
 
-		case types.FETCH_ORDER_HISTORY:
-			const orderHistory = action.payload.map(item => {
-				const { customers, orders_detail } = item
+		case types.FETCH_ORDER_HISTORY: {
+			const orderHistory = action.payload
+				.sort((a, b) => Date.parse(b.created_date) - Date.parse(a.created_date))
+				.map((item) => {
+					const { customers, orders_detail } = item
 
-				if (customers.id === ID_AKUN_KOKO) {
-					return {
-						...item,
-						orders_detail: orders_detail.map(detail => ({
-							...detail,
-							product_price: "-",
-							product_total_price: "-"
-						}))
+					if (customers.id === ID_AKUN_KOKO) {
+						return {
+							...item,
+							orders_detail: orders_detail.map((detail) => ({
+								...detail,
+								product_price: "-",
+								product_total_price: "-"
+							}))
+						}
 					}
-				}
 
-				return item
-			})
-
+					return item
+				})
 			return { ...state, orderHistory, loading: false }
+		}
+
 		case types.FETCH_ORDER_HISTORY_ERROR:
 			return { ...state, orderHistoryError: action.payload, loading: false }
 		case types.SAVE_COURIER_DETAILS_ERROR:
@@ -78,7 +81,7 @@ function reducer(state = initial, action) {
 			return {
 				...state,
 				cs: action.payload,
-				csOptions: action.payload.map(item => ({
+				csOptions: action.payload.map((item) => ({
 					value: item.id,
 					label: `${item.name} - Whatsapp: ${item.whatsapp}, Line: ${item.line}`
 				})),

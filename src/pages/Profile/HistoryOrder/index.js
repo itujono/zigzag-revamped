@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Section, Heading, Button, ButtonLink, Empty } from "components"
-import { List, Icon, Avatar, Row, Col, Menu, Tabs } from "antd"
+import { List, Icon, Avatar, Row, Col, Menu, Tabs, Typography } from "antd"
 import styled from "styled-components/macro"
-import { connect } from "react-redux"
+import { connect, useDispatch, useSelector } from "react-redux"
 
 import { fetchOrderHistory, cancelOrder } from "store/actions/otherActions"
 import { fetchAirwayBill } from "store/actions/rajaOngkirActions"
@@ -30,38 +30,28 @@ const ContentDetail = styled.div`
 	`}
 `
 
-function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
+function HistoryOrder() {
 	const [selectedItem, setSelectedItem] = useState({})
+	const dispatch = useDispatch()
+	const orderHistory = useSelector(({ other }) => other.orderHistory)
+	const loading = useSelector(({ other }) => other.loading)
+	const airwayBill = useSelector(({ rajaOngkir }) => rajaOngkir.airwayBill)
 
-	const { fetchOrderHistory, fetchAirwayBill, cancelOrder } = props
-
-	const handleSelect = item => {
+	const handleSelect = (item) => {
 		if (selectedItem.order_code === item.order_code) setSelectedItem({})
 		else setSelectedItem(item)
 	}
 
-	const handleFetchAirwayBill = useCallback(
-		(resi_order, courier) => {
-			fetchAirwayBill({ waybill: resi_order, courier })
-		},
-		[fetchAirwayBill]
-	)
-
 	useEffect(() => {
-		fetchOrderHistory()
+		dispatch(fetchOrderHistory())
 		if (selectedItem.resi_order) {
-			handleFetchAirwayBill(selectedItem.resi_order, (selectedItem.ekspedition_data || {}).ekspedition_code)
+			const courier = (selectedItem.ekspedition_data || {}).ekspedition_code
+			dispatch(fetchAirwayBill({ waybill: selectedItem.resi_order, courier }))
 		}
-	}, [
-		fetchAirwayBill,
-		fetchOrderHistory,
-		handleFetchAirwayBill,
-		selectedItem.ekspedition_data,
-		selectedItem.resi_order
-	])
+	}, [dispatch])
 
 	return (
-		<Section width="80%" centered>
+		<Section width="100%" centered>
 			<Heading content="History Order" marginBottom="3em" bold />
 			<List
 				itemLayout="horizontal"
@@ -76,10 +66,15 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 						/>
 					)
 				}}
-				renderItem={item => {
+				renderItem={(item) => {
 					const { order_code, ekspedition_data: courier = {}, grandtotal_order, status_order } = item
 					const isSelected = order_code === selectedItem.order_code
 					const isNotPaid = status_order.status_id === 1
+
+					const handleCancelOrder = (values, { setSubmitting }) => {
+						values = { ...values, order_id: item.id }
+						dispatch(cancelOrder(values)).finally(() => setSubmitting(false))
+					}
 
 					return (
 						<div style={{ marginBottom: "1.5em" }}>
@@ -104,16 +99,17 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 									}
 									title={order_code}
 									description={
-										<>
-											<span>
-												<Icon type="clock-circle" /> &nbsp;{" "}
-												{moment(item.created_date).format("dddd, DD MMMM YYYY")}
-											</span>{" "}
-											&nbsp; &middot; &nbsp;
-											<span>
-												<Icon type="dollar" /> &nbsp; Rp {pricer(grandtotal_order)}
-											</span>
-										</>
+										<Typography>
+											<Typography.Text>
+												<Icon type="clock-circle" />
+												&nbsp; {moment(item.created_date).format("dddd, DD MMMM YYYY")}
+											</Typography.Text>{" "}
+											{!mobile && <>&nbsp; &middot; &nbsp;</>}
+											<Typography.Text className="display-block__mobile">
+												<Icon type="dollar" />
+												&nbsp; Rp {pricer(grandtotal_order)}
+											</Typography.Text>
+										</Typography>
 									}
 								/>
 							</ListItem>
@@ -167,7 +163,7 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 											<Waybill data={airwayBill} />
 										</Tabs.TabPane>
 										<Tabs.TabPane key="cancel" tab="Batal order" className="cancel">
-											<CancelOrder data={item} cancelOrder={cancelOrder} />
+											<CancelOrder data={item} cancelOrder={handleCancelOrder} />
 										</Tabs.TabPane>
 									</Tabs>
 									{isNotPaid && (
@@ -189,10 +185,4 @@ function HistoryOrder({ orderHistory, loading, airwayBill, ...props }) {
 	)
 }
 
-const mapState = ({ other, rajaOngkir }) => ({
-	orderHistory: other.orderHistory.sort((a, b) => Date.parse(b.created_date) - Date.parse(a.created_date)),
-	loading: other.loading,
-	airwayBill: rajaOngkir.airwayBill
-})
-
-export default connect(mapState, { fetchOrderHistory, fetchAirwayBill, cancelOrder })(HistoryOrder)
+export default HistoryOrder

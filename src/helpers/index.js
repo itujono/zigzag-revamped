@@ -6,6 +6,7 @@ import createActivityDetector from "activity-detector"
 import { unauthUser } from "store/actions/authActions"
 import { message } from "antd"
 import { TEXT_STOCK_HABIS } from "./constants"
+import { useLocation } from "react-router"
 // import { FETCH_USER } from "store/types"
 
 const instance = axios.create({
@@ -24,6 +25,16 @@ instance.interceptors.request.use((config) => {
 export { instance }
 
 /////////////////////////////////
+
+export default function ScrollToTop() {
+	const { pathname } = useLocation()
+
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	}, [pathname])
+
+	return null
+}
 
 export const shareToSocialMedia = ({ title, text, url }, setModal) => {
 	if (navigator.share) {

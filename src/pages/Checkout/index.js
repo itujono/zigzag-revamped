@@ -78,7 +78,7 @@ function Checkout({
 		? "-"
 		: `${selectedCourier.details.service || ""} (${selectedCourier.details.description || ""})`
 
-	const renderFormValues = prop => {
+	const renderFormValues = (prop) => {
 		const values = Object.keys(formValues).length === 0 ? formData : formValues
 		if (prop === "province" || prop === "city" || prop === "subdistrict") return values[`${prop}_name`]
 		return values[prop] === "" ? "-" : values[prop] ? values[prop] : user[prop]
@@ -359,10 +359,10 @@ function Checkout({
 }
 
 const mapState = ({ rajaOngkir, user, product, other }) => {
-	const provinceOnSidebar = province => rajaOngkir.provinces.find(item => item.province_id === province) || {}
-	const cityOnSidebar = city => rajaOngkir.cities.find(item => item.city_id === city) || {}
-	const subdistrictOnSidebar = subdistrict => {
-		return rajaOngkir.subdistricts.find(item => item.subdistrict_id === subdistrict) || {}
+	const provinceOnSidebar = (province) => rajaOngkir.provinces.find((item) => item.province_id === province) || {}
+	const cityOnSidebar = (city) => rajaOngkir.cities.find((item) => item.city_id === city) || {}
+	const subdistrictOnSidebar = (subdistrict) => {
+		return rajaOngkir.subdistricts.find((item) => item.subdistrict_id === subdistrict) || {}
 	}
 	const userDetails = {
 		name: user.user.name,
@@ -388,9 +388,9 @@ const mapState = ({ rajaOngkir, user, product, other }) => {
 		cartTotal: product.cartTotal,
 		loading: rajaOngkir.loading || user.loading,
 		dataOnSidebar: { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar },
-		cityOptions: rajaOngkir.cities.map(item => ({ value: item.city_id, text: item.city_name })),
-		provinceOptions: rajaOngkir.provinces.map(item => ({ value: item.province_id, text: item.province })),
-		subdistrictOptions: rajaOngkir.subdistricts.map(item => ({
+		cityOptions: rajaOngkir.cities.map((item) => ({ value: item.city_id, text: item.city_name })),
+		provinceOptions: rajaOngkir.provinces.map((item) => ({ value: item.province_id, text: item.province })),
+		subdistrictOptions: rajaOngkir.subdistricts.map((item) => ({
 			value: item.subdistrict_id,
 			text: item.subdistrict_name
 		}))

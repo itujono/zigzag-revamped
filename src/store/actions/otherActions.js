@@ -4,12 +4,12 @@ import { message } from "antd"
 
 const loadingOther = () => ({ type: types.LOADING_OTHER })
 
-export const setCartDrawerFromStore = cartDrawer => ({
+export const setCartDrawerFromStore = (cartDrawer) => ({
 	type: types.SET_CART_DRAWER_FROM_STORE,
 	payload: cartDrawer
 })
 
-export const fetchOrderCodeList = () => dispatch => {
+export const fetchOrderCodeList = () => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.get(`/order/order_code/list`)
@@ -17,26 +17,26 @@ export const fetchOrderCodeList = () => dispatch => {
 			console.log({ orderCodeList: data })
 			dispatch({ type: types.FETCH_ORDER_CODE_LIST, payload: data.data.orders })
 		})
-		.catch(err => console.error(err.response))
+		.catch((err) => console.error(err.response))
 }
 
-export const fetchBankAccounts = () => dispatch => {
+export const fetchBankAccounts = () => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.get(`/order/bank_accounts/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_BANK_ACCOUNTS, payload: data.data.bank_accounts_data }))
-		.catch(err => console.error(err.response))
+		.catch((err) => console.error(err.response))
 }
 
-export const fetchCustomerServices = () => dispatch => {
+export const fetchCustomerServices = () => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.get(`/customer_service/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_CUSTOMER_SERVICES, payload: data.data.customer_service_data }))
-		.catch(err => console.error(err.response))
+		.catch((err) => console.error(err.response))
 }
 
-export const saveCourierDetails = (values, formData, push) => dispatch => {
+export const saveCourierDetails = (values, formData, push) => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.post(`/order/save_expedition`, values)
@@ -45,10 +45,10 @@ export const saveCourierDetails = (values, formData, push) => dispatch => {
 			localStorage.setItem("formData", JSON.stringify({ ...formData, order_detail: data.data.order_id }))
 		})
 		.then(() => push("/checkout/payment"))
-		.catch(err => renderError(err, dispatch, types.SAVE_COURIER_DETAILS_ERROR))
+		.catch((err) => renderError(err, dispatch, types.SAVE_COURIER_DETAILS_ERROR))
 }
 
-export const saveOrder = (values, push) => dispatch => {
+export const saveOrder = (values, push) => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.post(`/order/save`, values)
@@ -60,10 +60,10 @@ export const saveOrder = (values, push) => dispatch => {
 			localStorage.removeItem("formData")
 			push({ pathname: "/order/order_success", state: { isSuccess: true } })
 		})
-		.catch(err => renderError(err, dispatch, types.SAVE_ORDER_ERROR))
+		.catch((err) => renderError(err, dispatch, types.SAVE_ORDER_ERROR))
 }
 
-export const orderConfirmation = (values, push) => dispatch => {
+export const orderConfirmation = (values, push) => (dispatch) => {
 	dispatch(loadingOther())
 	const formData = new FormData()
 	formData.append("order_code", values.order_code)
@@ -80,22 +80,23 @@ export const orderConfirmation = (values, push) => dispatch => {
 			localStorage.removeItem("formData")
 			push({ pathname: "/order/confirmation/success", state: { isSuccess: true } })
 		})
-		.catch(err => renderError(err, dispatch, types.ORDER_CONFIRMATION_ERROR))
+		.catch((err) => renderError(err, dispatch, types.ORDER_CONFIRMATION_ERROR))
 }
 
-export const fetchOrderHistory = () => dispatch => {
+export const fetchOrderHistory = () => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.get(`/order/history_order/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_ORDER_HISTORY, payload: data.data.order_data }))
-		.catch(err => renderError(err, dispatch, types.FETCH_ORDER_HISTORY_ERROR))
+		.catch((err) => renderError(err, dispatch, types.FETCH_ORDER_HISTORY_ERROR))
 }
 
-export const cancelOrder = values => dispatch => {
+export const cancelOrder = (values) => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.post(`/order/cancel_order`, values)
 		.then(({ data }) => dispatch({ type: types.CANCEL_ORDER, payload: data.data }))
+		.then(() => dispatch(fetchOrderHistory()))
 		.then(() => {
 			message
 				.loading("Memproses batal order...")
@@ -103,5 +104,5 @@ export const cancelOrder = values => dispatch => {
 					message.success("Oke, orderan ini telah di-cancel. Silakan cek email untuk info pembatalannya")
 				)
 		})
-		.catch(err => renderError(err, dispatch, types.CANCEL_ORDER_ERROR))
+		.catch((err) => renderError(err, dispatch, types.CANCEL_ORDER_ERROR))
 }

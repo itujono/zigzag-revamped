@@ -13,7 +13,7 @@ import NewPasswordSuccess from "pages/auth/NewPassword/NewPasswordSuccess"
 import Logout from "pages/auth/Logout"
 import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
 
-import { useIdle } from "helpers"
+import ScrollToTop, { useIdle } from "helpers"
 import { message } from "antd"
 
 const Home = React.lazy(() => import("pages/Home"))
@@ -47,6 +47,7 @@ function App() {
 						Refresh halaman
 					</Button>
 				</Modal>
+				<ScrollToTop />
 				<Suspense fallback={<Loading />}>
 					<Switch>
 						<Redirect exact from="/profile" to="/profile/basic" />

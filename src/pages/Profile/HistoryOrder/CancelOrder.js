@@ -5,7 +5,6 @@ import { Formik } from "formik"
 import { Form } from "antd"
 import { SubmitButton } from "formik-antd"
 import styled from "styled-components"
-import { theme } from "styles"
 
 const CancelSection = styled.div`
 	padding: 2em;
@@ -14,21 +13,22 @@ const CancelSection = styled.div`
 `
 
 export default function CancelOrder({ data, cancelOrder }) {
-	const { id: orderId, status_order } = data
+	const { status_order } = data
 
 	const cantCancel = status_order.status_id !== 1
-
-	const handleCancelOrder = (values, { setSubmitting }) => {
-		values = { ...values, order_id: orderId }
-		cancelOrder(values).finally(() => setSubmitting(false))
-		console.log({ values })
-	}
+	const canceledByCustomer = status_order.status_id === 10
 
 	return (
 		<Section paddingHorizontal="0" style={{ paddingTop: 0 }}>
 			{cantCancel && (
 				<CancelSection>
-					<Heading content="Kamu sudah tidak bisa membatalkan orderan ini" />
+					<Heading
+						content={
+							canceledByCustomer
+								? "Kamu sudah membatalkan pesanan ini :("
+								: "Kamu sudah tidak bisa membatalkan orderan ini"
+						}
+					/>
 				</CancelSection>
 			)}
 			{!cantCancel && (
@@ -37,9 +37,8 @@ export default function CancelOrder({ data, cancelOrder }) {
 						content="Batal orderan ini"
 						subheader="Kamu bisa mengajukan pembatalan order. Sebutkan alasannya di bawah"
 					/>
-					<Formik
-						onSubmit={handleCancelOrder}
-						render={({ handleSubmit }) => (
+					<Formik onSubmit={cancelOrder} initialValues={{ remark_cancel: "" }}>
+						{({ handleSubmit }) => (
 							<Form layout="vertical" onSubmit={handleSubmit}>
 								<TextInput
 									textarea
@@ -51,7 +50,7 @@ export default function CancelOrder({ data, cancelOrder }) {
 								<SubmitButton>Batal orderan ini sekarang</SubmitButton>
 							</Form>
 						)}
-					/>
+					</Formik>
 				</>
 			)}
 		</Section>
