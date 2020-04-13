@@ -61,6 +61,14 @@ const getDiscount = (cartItems = [], qty) => {
 	return discount
 }
 
+const sortImages = (product_image = []) =>
+	product_image.sort((a, b) => {
+		const FEATURED = TEXT_FEATURED.toLowerCase()
+		const aCaption = a.caption.toLowerCase()
+		const bCaption = b.caption.toLowerCase()
+		return aCaption.includes(FEATURED) ? -1 : bCaption.includes(FEATURED) ? 1 : 0
+	})
+
 function reducer(state = initialState, action) {
 	switch (action.type) {
 		case types.LOADING_PRODUCT:
@@ -76,19 +84,20 @@ function reducer(state = initialState, action) {
 				})
 				.map(({ price }) => price)[0]
 
-			const product_image = action.payload.product_image.sort((a, b) => {
-				const FEATURED = TEXT_FEATURED.toLowerCase()
-				const aCaption = a.caption.toLowerCase()
-				const bCaption = b.caption.toLowerCase()
-				return aCaption.includes(FEATURED) ? -1 : bCaption.includes(FEATURED) ? 1 : 0
-			})
+			const imagesSorted = sortImages(action.payload.product_image)
 
-			return { ...state, product: { ...action.payload, product_image }, productPrice, loading: false }
+			return {
+				...state,
+				product: { ...action.payload, product_image: imagesSorted },
+				productPrice,
+				loading: false
+			}
 
 		case types.FETCH_PRODUCTS:
 			const products = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
-				return { ...item, product_price }
+				const product_image = sortImages(item.product_image)
+				return { ...item, product_price, product_image }
 			})
 			return { ...state, products, loading: false }
 
