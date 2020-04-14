@@ -1,7 +1,7 @@
 import React from "react"
 import { Section, Card, Button, GifPlayer, Logo } from "components"
 import { Row, Col, Form, PageHeader } from "antd"
-import { Link, useHistory } from "react-router-dom"
+import { Link, useHistory, useLocation } from "react-router-dom"
 import { Formik } from "formik"
 import { useDispatch } from "react-redux"
 import styled from "styled-components"
@@ -55,9 +55,12 @@ const LeftSide = styled(Col)`
 function Login() {
 	const { push, goBack } = useHistory()
 	const dispatch = useDispatch()
+	const { state = {} } = useLocation()
+
+	const previousUrl = state.previousUrl || ""
 
 	const handleLogin = (values, { setSubmitting }) => {
-		dispatch(authUser(values, setSubmitting, push))
+		dispatch(authUser(values, setSubmitting, previousUrl))
 	}
 
 	if (localStorage.getItem("access_token")) push("/404")

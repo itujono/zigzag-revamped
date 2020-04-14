@@ -182,7 +182,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const handleAddToCart = () => {
 		if (!token) {
 			message.loading("Mengalihkan ke Login...", 1).then(() => {
-				push("/login")
+				push({ pathname: "/login", state: { previousUrl: pathname } })
 				message.error("Kamu harus login dulu ya")
 			})
 		} else {

@@ -4,7 +4,7 @@ import { message } from "antd"
 
 const loadingAuth = () => ({ type: types.LOADING_USER })
 
-export const authUser = ({ email, password }, setSubmitting, push) => (dispatch) => {
+export const authUser = ({ email, password }, setSubmitting, previousUrl) => (dispatch) => {
 	dispatch(loadingAuth())
 	return instance
 		.post(`/customer/login`, { email, password })
@@ -14,7 +14,7 @@ export const authUser = ({ email, password }, setSubmitting, push) => (dispatch)
 			localStorage.setItem("account_type", JSON.stringify(data.data.account_type))
 			localStorage.setItem("user_id", data.data.customer_id)
 		})
-		.then(() => window.location.replace("/"))
+		.then(() => window.location.replace(previousUrl ? previousUrl : "/"))
 		.catch((err) => renderError(err, dispatch, types.AUTH_USER_ERROR))
 		.finally(() => setSubmitting(false))
 }
