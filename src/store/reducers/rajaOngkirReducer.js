@@ -26,21 +26,49 @@ function reducer(state = initialStates, action) {
 			return { ...state, loading: true }
 		case types.FETCH_PROVINCES:
 			const provinceOptions = action.payload.map((item) => ({ value: item.province_id, label: item.province }))
+			const provinceOptionsAuto = action.payload.map((item) => ({
+				value: Number(item.province_id),
+				text: item.province
+			}))
 			const provinceOnSidebar = (province) => action.payload.find((item) => item.province_id === province) || {}
-			return { ...state, provinces: action.payload, provinceOptions, provinceOnSidebar, loading: false }
+			return {
+				...state,
+				provinces: action.payload,
+				provinceOptions,
+				provinceOnSidebar,
+				provinceOptionsAuto,
+				loading: false
+			}
+
 		case types.FETCH_CITIES:
 			const cityOptions = action.payload.map((item) => ({ value: item.city_id, label: item.city_name }))
 			const cityOnSidebar = (city) => action.payload.find((item) => item.city_id === city) || {}
-			return { ...state, cities: action.payload, cityOptions, cityOnSidebar, loading: false }
+			const cityOptionsAuto = action.payload.map((item) => ({
+				value: Number(item.city_id),
+				text: item.city_name
+			}))
+			return { ...state, cities: action.payload, cityOptions, cityOnSidebar, cityOptionsAuto, loading: false }
+
 		case types.FETCH_SUBDISTRICTS:
 			const subdistrictOptions = action.payload.map((item) => ({
 				value: item.subdistrict_id,
 				label: item.subdistrict_name
 			}))
+			const subdistrictOptionsAuto = action.payload.map((item) => ({
+				value: Number(item.subdistrict_id),
+				text: item.subdistrict_name
+			}))
 			const subdistrictOnSidebar = (subdistrict) => {
 				return action.payload.find((item) => item.subdistrict_id === subdistrict) || {}
 			}
-			return { ...state, subdistricts: action.payload, subdistrictOptions, subdistrictOnSidebar, loading: false }
+			return {
+				...state,
+				subdistricts: action.payload,
+				subdistrictOptions,
+				subdistrictOnSidebar,
+				subdistrictOptionsAuto,
+				loading: false
+			}
 		case types.FETCH_COURIERS:
 			return { ...state, couriers: action.payload, loading: false }
 

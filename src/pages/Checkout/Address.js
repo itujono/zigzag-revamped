@@ -9,7 +9,7 @@ import { theme } from "styles"
 import { Switch } from "formik-antd"
 import { addressValidation } from "./validation"
 import { mobile } from "helpers"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -24,9 +24,10 @@ const StyledCard = styled(Card)`
 
 export default function Address({ data, handlers, initialLoading }) {
 	const { push } = useHistory()
-	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptions)
-	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptions)
-	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptions)
+	const dispatch = useDispatch()
+	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptionsAuto)
+	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptionsAuto)
+	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptionsAuto)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -47,12 +48,12 @@ export default function Address({ data, handlers, initialLoading }) {
 	}
 
 	const handleRenderCities = (value) => {
-		fetchCities("", value)
+		dispatch(fetchCities(("", value)))
 		setSelectedProvince(provinceOptions.find((item) => item.value === value) || {})
 	}
 
 	const handleRenderSubdistricts = (value) => {
-		fetchSubdistricts(value)
+		dispatch(fetchSubdistricts(value))
 		setSelectedCity(cityOptions.find((item) => item.value === value) || {})
 	}
 
@@ -113,9 +114,9 @@ export default function Address({ data, handlers, initialLoading }) {
 					}
 
 					const handleChangeSelect = (name) => (value) => {
-						if (name === "province") handleRenderCities(value)
-						if (name === "city") handleRenderSubdistricts(value)
-						if (name === "subdistrict") handleSelectSubdistrict(value)
+						if (name === "province") return handleRenderCities(value)
+						if (name === "city") return handleRenderSubdistricts(value)
+						if (name === "subdistrict") return handleSelectSubdistrict(value)
 						setFormValues((formValues) => ({ ...formValues, [name]: value }))
 					}
 

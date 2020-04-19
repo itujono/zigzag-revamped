@@ -90,14 +90,16 @@ function Checkout(props) {
 		return values[prop] === "" ? "-" : values[prop] ? values[prop] : user[prop]
 	}
 
+	const updatedCartTotal = JSON.stringify({ ...formData, cartTotal })
+
 	useEffect(() => {
 		const handleUpdateCartTotal = () => {
-			localStorage.setItem("formData", JSON.stringify({ ...formData, cartTotal }))
+			localStorage.setItem("formData", updatedCartTotal)
 		}
 		dispatch(fetchProvinces())
 		dispatch(fetchCartItems()).then(() => handleUpdateCartTotal())
 		dispatch(fetchUser()).then(() => setInitialLoading(false))
-	}, [dispatch, cartTotal.price, cartTotal.qty, cartTotal.weight, cartTotal.roundedWeight])
+	}, [dispatch, updatedCartTotal])
 
 	return (
 		<Layout sidebar page="checkout">
