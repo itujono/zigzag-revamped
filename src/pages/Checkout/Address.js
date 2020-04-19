@@ -9,6 +9,7 @@ import { theme } from "styles"
 import { Switch } from "formik-antd"
 import { addressValidation } from "./validation"
 import { mobile } from "helpers"
+import { useSelector } from "react-redux"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -23,6 +24,9 @@ const StyledCard = styled(Card)`
 
 export default function Address({ data, handlers, initialLoading }) {
 	const { push } = useHistory()
+	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptions)
+	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptions)
+	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptions)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -36,17 +40,7 @@ export default function Address({ data, handlers, initialLoading }) {
 		setSelectedProvince,
 		setSelectedCity
 	} = handlers
-	const {
-		cityOptions,
-		provinceOptions,
-		subdistrictOptions,
-		user,
-		cartItems,
-		cartTotal,
-		selectedSubdistrict,
-		selectedProvince,
-		selectedCity
-	} = data
+	const { user, cartItems, cartTotal, selectedSubdistrict, selectedProvince, selectedCity } = data
 
 	const renderInitialValues = (property) => {
 		return formData[property] ? formData[property] : user[property]

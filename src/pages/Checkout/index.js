@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState, useCallback, Suspense } from "react"
 import { Section, Layout, Heading, ButtonLink, Empty, Button, Loading } from "components"
 import { Switch, Route, Redirect, Link } from "react-router-dom"
-import { connect } from "react-redux"
+import { connect, useDispatch, useSelector, shallowEqual } from "react-redux"
 import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
 import styled from "styled-components/macro"
 
@@ -9,11 +9,12 @@ import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "s
 import { setCartDrawerFromStore, saveCourierDetails, saveOrder } from "store/actions/otherActions"
 import { fetchUser } from "store/actions/userActions"
 import { fetchCartItems } from "store/actions/productActions"
-import Address from "./Address"
-import Ongkir from "./Ongkir"
-import Payment from "./Payment"
-import Summary from "./Summary"
 import { pricer } from "helpers"
+
+const Address = React.lazy(() => import("./Address"))
+const Ongkir = React.lazy(() => import("./Ongkir"))
+const Payment = React.lazy(() => import("./Payment"))
+const Summary = React.lazy(() => import("./Summary"))
 
 const Sidebar = styled.div`
 	padding: 2em;
@@ -43,19 +44,7 @@ const CartItem = styled(List.Item)`
 	}
 `
 
-function Checkout({
-	provinceOptions,
-	cityOptions,
-	subdistrictOptions,
-	dataOnSidebar,
-	user,
-	loading,
-	cartItems,
-	cartTotal,
-	courierDetails,
-	couriers,
-	...props
-}) {
+function Checkout(props) {
 	const [formValues, setFormValues] = useState({})
 	const [initialLoading, setInitialLoading] = useState(true)
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
@@ -63,8 +52,28 @@ function Checkout({
 	const [selectedProvince, setSelectedProvince] = useState({})
 	const [selectedCity, setSelectedCity] = useState({})
 	const [selectedSubdistrict, setSelectedSubdistrict] = useState({})
+
+	const dispatch = useDispatch()
+	const user = useSelector(({ user }) => user.user)
+	const couriers = useSelector(({ rajaOngkir }) => rajaOngkir.couriers)
+	const courierDetails = useSelector(({ other }) => other.courierDetails)
+	const rajaOngkirLoading = useSelector(({ rajaOngkir }) => rajaOngkir.loading)
+	const userLoading = useSelector(({ user }) => user.loading)
+	const cartItems = useSelector(({ product }) => product.cartItems)
+	const cartTotal = useSelector(({ product }) => product.cartTotal)
+	const dataOnSidebar = useSelector(
+		({ rajaOngkir }) => ({
+			provinceOnSidebar: rajaOngkir.provinceOnSidebar,
+			cityOnSidebar: rajaOngkir.cityOnSidebar,
+			subdistrictOnSidebar: rajaOngkir.subdistrictOnSidebar
+		}),
+		shallowEqual
+	)
+
 	// prettier-ignore
-	const { fetchCities, fetchSubdistricts, saveCourierDetails, saveOrder, fetchProvinces, fetchCartItems, fetchUser } = props
+	// const { fetchCities, fetchSubdistricts, saveCourierDetails, saveOrder, fetchProvinces, fetchCartItems, fetchUser } = props
+
+	const loading = rajaOngkirLoading || userLoading
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
@@ -88,21 +97,10 @@ function Checkout({
 		const handleUpdateCartTotal = () => {
 			localStorage.setItem("formData", JSON.stringify({ ...formData, cartTotal }))
 		}
-		fetchProvinces()
-		fetchCartItems().then(() => handleUpdateCartTotal())
-		fetchUser().then(() => setInitialLoading(false))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		fetchProvinces,
-		fetchCartItems,
-		fetchUser,
-		fetchCities,
-		fetchSubdistricts,
-		cartTotal.price,
-		cartTotal.qty,
-		cartTotal.weight,
-		cartTotal.roundedWeight
-	])
+		dispatch(fetchProvinces())
+		dispatch(fetchCartItems()).then(() => handleUpdateCartTotal())
+		dispatch(fetchUser()).then(() => setInitialLoading(false))
+	}, [dispatch, cartTotal.price, cartTotal.qty, cartTotal.weight, cartTotal.roundedWeight])
 
 	return (
 		<Layout sidebar page="checkout">
@@ -117,65 +115,64 @@ function Checkout({
 			>
 				<Row gutter={32} type="flex">
 					<Col lg={16} xs={24}>
-						<Switch>
-							<Redirect exact from="/checkout" to="/checkout/address" />
-							<Route
-								path="/checkout/address"
-								render={() => (
-									<Address
-										loading={loading}
-										initialLoading={initialLoading}
-										data={{
-											provinceOptions,
-											cityOptions,
-											subdistrictOptions,
-											formValues,
-											user,
-											cartTotal,
-											cartItems,
-											selectedCity,
-											selectedProvince,
-											selectedSubdistrict
-										}}
-										handlers={{
-											fetchCities,
-											fetchSubdistricts,
-											setFormValues,
-											setSelectedCity,
-											setSelectedProvince,
-											setSelectedSubdistrict
-										}}
-									/>
-								)}
-							/>
-							<Route
-								path="/checkout/ongkir"
-								render={() => (
-									<Ongkir
-										loading={loading}
-										data={{ couriers, formValues, selectedCourier, cartTotal, courierDetails }}
-										handlers={{
-											setSelectedCourier,
-											fetchCouriers: props.fetchCouriers,
-											saveCourierDetails
-										}}
-									/>
-								)}
-							/>
-							<Route
-								path="/checkout/payment"
-								render={() => (
-									<Payment
-										data={{ selectedPayment, user, cartTotal }}
-										handlers={{ setSelectedPayment }}
-									/>
-								)}
-							/>
-							<Route
-								path="/checkout/summary"
-								render={() => <Summary data={{ user }} handlers={{ saveOrder }} />}
-							/>
-						</Switch>
+						<Suspense fallback={<Loading />}>
+							<Switch>
+								<Redirect exact from="/checkout" to="/checkout/address" />
+								<Route
+									path="/checkout/address"
+									render={() => (
+										<Address
+											loading={loading}
+											initialLoading={initialLoading}
+											data={{
+												formValues,
+												user,
+												cartTotal,
+												cartItems,
+												selectedCity,
+												selectedProvince,
+												selectedSubdistrict
+											}}
+											handlers={{
+												fetchCities,
+												fetchSubdistricts,
+												setFormValues,
+												setSelectedCity,
+												setSelectedProvince,
+												setSelectedSubdistrict
+											}}
+										/>
+									)}
+								/>
+								<Route
+									path="/checkout/ongkir"
+									render={() => (
+										<Ongkir
+											loading={loading}
+											data={{ couriers, formValues, selectedCourier, cartTotal, courierDetails }}
+											handlers={{
+												setSelectedCourier,
+												fetchCouriers: props.fetchCouriers,
+												saveCourierDetails
+											}}
+										/>
+									)}
+								/>
+								<Route
+									path="/checkout/payment"
+									render={() => (
+										<Payment
+											data={{ selectedPayment, user, cartTotal }}
+											handlers={{ setSelectedPayment }}
+										/>
+									)}
+								/>
+								<Route
+									path="/checkout/summary"
+									render={() => <Summary data={{ user }} handlers={{ saveOrder }} />}
+								/>
+							</Switch>
+						</Suspense>
 					</Col>
 
 					<Col lg={8} xs={24}>
@@ -358,56 +355,4 @@ function Checkout({
 	)
 }
 
-const mapState = ({ rajaOngkir, user, product, other }) => {
-	const provinceOnSidebar = (province) => rajaOngkir.provinces.find((item) => item.province_id === province) || {}
-	const cityOnSidebar = (city) => rajaOngkir.cities.find((item) => item.city_id === city) || {}
-	const subdistrictOnSidebar = (subdistrict) => {
-		return rajaOngkir.subdistricts.find((item) => item.subdistrict_id === subdistrict) || {}
-	}
-	const userDetails = {
-		name: user.user.name,
-		email: user.user.email,
-		tele: user.user.tele,
-		province: user.user.province,
-		province_name: user.user.province_name,
-		city: user.user.city,
-		city_name: user.user.city_name,
-		subdistrict: user.user.subdistrict,
-		subdistrict_name: user.user.subdistrict_name,
-		zip: user.user.zip,
-		address: user.user.address,
-		deposit: user.user.deposit,
-		customer_service: user.user.customer_service
-	}
-
-	return {
-		user: userDetails,
-		couriers: rajaOngkir.couriers,
-		courierDetails: other.courierDetails,
-		cartItems: product.cartItems,
-		cartTotal: product.cartTotal,
-		loading: rajaOngkir.loading || user.loading,
-		dataOnSidebar: { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar },
-		cityOptions: rajaOngkir.cities.map((item) => ({ value: item.city_id, text: item.city_name })),
-		provinceOptions: rajaOngkir.provinces.map((item) => ({ value: item.province_id, text: item.province })),
-		subdistrictOptions: rajaOngkir.subdistricts.map((item) => ({
-			value: item.subdistrict_id,
-			text: item.subdistrict_name
-		}))
-	}
-}
-
-const actions = {
-	fetchCities,
-	fetchProvinces,
-	fetchSubdistricts,
-	fetchCouriers,
-	setCartDrawerFromStore,
-	fetchUser,
-	fetchCartItems,
-	saveCourierDetails,
-	saveOrder
-}
-
-// prettier-ignore
-export default connect(mapState, actions)(Checkout)
+export default Checkout

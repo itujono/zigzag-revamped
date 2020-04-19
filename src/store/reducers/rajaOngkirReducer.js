@@ -9,6 +9,7 @@ const initialStates = {
 	provinceOptions: [],
 	cityOptions: [],
 	subdistrictOptions: [],
+
 	airwayBillError: null,
 	couriersError: null,
 	provincesError: null,
@@ -21,17 +22,22 @@ function reducer(state = initialStates, action) {
 		case types.LOADING_RAJAONGKIR:
 			return { ...state, loading: true }
 		case types.FETCH_PROVINCES:
-			const provinceOptions = action.payload.map(item => ({ value: item.province_id, label: item.province }))
-			return { ...state, provinces: action.payload, provinceOptions, loading: false }
+			const provinceOptions = action.payload.map((item) => ({ value: item.province_id, label: item.province }))
+			const provinceOnSidebar = (province) => action.payload.find((item) => item.province_id === province) || {}
+			return { ...state, provinces: action.payload, provinceOptions, provinceOnSidebar, loading: false }
 		case types.FETCH_CITIES:
-			const cityOptions = action.payload.map(item => ({ value: item.city_id, label: item.city_name }))
-			return { ...state, cities: action.payload, cityOptions, loading: false }
+			const cityOptions = action.payload.map((item) => ({ value: item.city_id, label: item.city_name }))
+			const cityOnSidebar = (city) => action.payload.find((item) => item.city_id === city) || {}
+			return { ...state, cities: action.payload, cityOptions, cityOnSidebar, loading: false }
 		case types.FETCH_SUBDISTRICTS:
-			const subdistrictOptions = action.payload.map(item => ({
+			const subdistrictOptions = action.payload.map((item) => ({
 				value: item.subdistrict_id,
 				label: item.subdistrict_name
 			}))
-			return { ...state, subdistricts: action.payload, subdistrictOptions, loading: false }
+			const subdistrictOnSidebar = (subdistrict) => {
+				return action.payload.find((item) => item.subdistrict_id === subdistrict) || {}
+			}
+			return { ...state, subdistricts: action.payload, subdistrictOptions, subdistrictOnSidebar, loading: false }
 		case types.FETCH_COURIERS:
 			return { ...state, couriers: action.payload, loading: false }
 		case types.FETCH_COURIERS_ERROR:
