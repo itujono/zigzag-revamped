@@ -101,6 +101,8 @@ function Checkout(props) {
 		dispatch(fetchUser()).then(() => setInitialLoading(false))
 	}, [dispatch, updatedCartTotal])
 
+	console.log({ province, city, subdistrict })
+
 	return (
 		<Layout sidebar page="checkout">
 			<Section
@@ -151,7 +153,7 @@ function Checkout(props) {
 											data={{ couriers, formValues, selectedCourier, cartTotal, courierDetails }}
 											handlers={{
 												setSelectedCourier,
-												fetchCouriers: props.fetchCouriers,
+												fetchCouriers,
 												saveCourierDetails
 											}}
 										/>
@@ -229,9 +231,7 @@ function Checkout(props) {
 																		</span>
 																	</p>
 																	<ButtonLink
-																		onClick={() =>
-																			props.setCartDrawerFromStore(true)
-																		}
+																		onClick={() => setCartDrawerFromStore(true)}
 																	>
 																		Ubah
 																	</ButtonLink>

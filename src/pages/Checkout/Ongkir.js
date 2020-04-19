@@ -9,6 +9,7 @@ import jntLogo from "assets/images/j&t-logo.jpeg"
 import sicepatLogo from "assets/images/sicepat-logo.png"
 import { pricer, mobile, media } from "helpers"
 import { ORIGIN } from "helpers/constants"
+import { useDispatch } from "react-redux"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -97,12 +98,17 @@ const CourierLogo = styled.span`
 
 export default function Ongkir({ data, handlers, loading }) {
 	const { push } = useHistory()
+	const dispatch = useDispatch()
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
 	const { couriers = [], selectedCourier } = data
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
 	const { cartTotal = {}, subdistrict, subdistrict_id } = formData
+
+	const courierNotSelected = Object.values(selectedCourier).some(
+		(item) => item === "" || Object.keys(item).length === 0
+	)
 
 	const handleSelectCourier = (courier) => setSelectedCourier(courier)
 	const handleFetchCouriers = useCallback(() => {
@@ -115,8 +121,8 @@ export default function Ongkir({ data, handlers, loading }) {
 			courier: "jne:jnt:sicepat"
 		}
 
-		fetchCouriers(data)
-	}, [subdistrict_id, subdistrict, cartTotal.roundedWeight, fetchCouriers])
+		dispatch(fetchCouriers(data))
+	}, [subdistrict_id, subdistrict, cartTotal.roundedWeight, dispatch])
 
 	const handleSaveCourier = () => {
 		const order_detail = {
@@ -130,7 +136,7 @@ export default function Ongkir({ data, handlers, loading }) {
 			expedition_remark: `${selectedCourier.details.service} - ${selectedCourier.details.description}`,
 			expedition_total: selectedCourier.details.cost[0].value
 		}
-		saveCourierDetails(order_detail, formData, push)
+		dispatch(saveCourierDetails(order_detail, formData, push))
 	}
 
 	useEffect(() => {
@@ -198,12 +204,7 @@ export default function Ongkir({ data, handlers, loading }) {
 				)
 			})}
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button
-					onClick={handleSaveCourier}
-					disabled={Object.values(selectedCourier).some(
-						(item) => item === "" || Object.keys(item).length === 0
-					)}
-				>
+				<Button onClick={handleSaveCourier} disabled={courierNotSelected}>
 					Lanjut ke Pembayaran <Icon type="right" />
 				</Button>
 			</Section>

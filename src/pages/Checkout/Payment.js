@@ -37,6 +37,8 @@ const StyledCard = styled(Card)`
 	}
 `
 
+const random = randomCode()
+
 export default function Payment({ data, handlers }) {
 	const { push } = useHistory()
 
@@ -45,7 +47,7 @@ export default function Payment({ data, handlers }) {
 	// prettier-ignore
 	const { selectedPayment } = data
 	const { setSelectedPayment } = handlers
-	const random = randomCode()
+
 	const uniqueCode = formData.unique_code ? Number(formData.unique_code) : Number(random)
 	const cartTotal = formData.cartTotal.price
 	const discount = formData.cartTotal.discount
