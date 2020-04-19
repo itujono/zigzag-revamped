@@ -61,7 +61,7 @@ function Checkout(props) {
 	const userLoading = useSelector(({ user }) => user.loading)
 	const cartItems = useSelector(({ product }) => product.cartItems)
 	const cartTotal = useSelector(({ product }) => product.cartTotal)
-	const dataOnSidebar = useSelector(
+	const { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar } = useSelector(
 		({ rajaOngkir }) => ({
 			provinceOnSidebar: rajaOngkir.provinceOnSidebar,
 			cityOnSidebar: rajaOngkir.cityOnSidebar,
@@ -70,16 +70,13 @@ function Checkout(props) {
 		shallowEqual
 	)
 
-	// prettier-ignore
-	// const { fetchCities, fetchSubdistricts, saveCourierDetails, saveOrder, fetchProvinces, fetchCartItems, fetchUser } = props
-
 	const loading = rajaOngkirLoading || userLoading
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
-	const { province } = dataOnSidebar.provinceOnSidebar(formValues.province)
-	const { city_name: city } = dataOnSidebar.cityOnSidebar(formValues.city)
-	const { subdistrict_name: subdistrict } = dataOnSidebar.subdistrictOnSidebar(formValues.subdistrict)
+	const { province } = provinceOnSidebar(formValues.province) || {}
+	const { city_name: city } = cityOnSidebar(formValues.city) || {}
+	const { subdistrict_name: subdistrict } = subdistrictOnSidebar(formValues.subdistrict) || {}
 	const courierData = (selectedCourier.details || {}).cost || []
 	const courierOnSidebar = formData.order_detail
 		? `${formData.order_detail.ekspedition_company || ""} (${formData.order_detail.ekspedition_remark || ""})`
