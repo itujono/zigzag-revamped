@@ -104,7 +104,7 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const { couriers = [], selectedCourier } = data
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
-	const { cartTotal = {}, subdistrict, subdistrict_id } = formData
+	const { cartTotal = {}, subdistrict = {}, subdistrict_id } = formData
 
 	const courierNotSelected = Object.values(selectedCourier).some(
 		(item) => item === "" || Object.keys(item).length === 0
@@ -114,9 +114,11 @@ export default function Ongkir({ data, handlers, loading }) {
 	const handleFetchCouriers = useCallback(() => {
 		const data = {
 			origin: ORIGIN.cityId,
-			destination: typeof subdistrict_id === "number" ? subdistrict_id : subdistrict,
+			destination: subdistrict.value,
+			// destination: typeof subdistrict_id === "number" ? subdistrict_id : subdistrict,
+
 			weight: cartTotal.roundedWeight,
-			destinationType: subdistrict ? "subdistrict" : "city",
+			destinationType: subdistrict.value ? "subdistrict" : "city",
 			originType: "city",
 			courier: "jne:jnt:sicepat"
 		}

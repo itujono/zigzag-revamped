@@ -54,11 +54,13 @@ export default function Address({ data, handlers, initialLoading }) {
 	}
 
 	const handleRenderSubdistricts = (value) => {
+		value = Number(value)
 		dispatch(fetchSubdistricts(value))
 		setSelectedCity(cityOptions.find((item) => item.value === value) || {})
 	}
 
 	const handleSelectSubdistrict = (value) => {
+		value = Number(value)
 		setSelectedSubdistrict(subdistrictOptions.find((item) => item.value === value) || {})
 	}
 
@@ -69,12 +71,12 @@ export default function Address({ data, handlers, initialLoading }) {
 			cartItems,
 			cartTotal,
 			deposit: user.deposit,
-			// province: values.province_id,
-			province_name: selectedProvince.label,
-			// city: values.city_id,
-			city_name: selectedCity.label,
-			// subdistrict: values.subdistrict_id,
-			subdistrict_name: selectedSubdistrict.label
+			province: { value: selectedProvince.value, text: selectedProvince.text },
+			province_name: selectedProvince.text,
+			city: { value: selectedCity.value, text: selectedCity.text },
+			city_name: selectedCity.text,
+			subdistrict: { value: selectedSubdistrict.value, text: selectedSubdistrict.text },
+			subdistrict_name: selectedSubdistrict.text
 		}
 		localStorage.setItem("formData", JSON.stringify(values))
 		setSubmitting(false)

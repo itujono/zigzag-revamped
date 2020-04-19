@@ -53,8 +53,8 @@ function Checkout(props) {
 	const [selectedCity, setSelectedCity] = useState({})
 	const [selectedSubdistrict, setSelectedSubdistrict] = useState({})
 
-	const dispatch = useDispatch()
 	const user = useSelector(({ user }) => user.user)
+	const dispatch = useDispatch()
 	const couriers = useSelector(({ rajaOngkir }) => rajaOngkir.couriers)
 	const courierDetails = useSelector(({ other }) => other.courierDetails)
 	const rajaOngkirLoading = useSelector(({ rajaOngkir }) => rajaOngkir.loading)
@@ -73,10 +73,10 @@ function Checkout(props) {
 	const loading = rajaOngkirLoading || userLoading
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
+	const initialStates = Object.keys(formData).length ? formData : user
 
-	const { province } = provinceOnSidebar(formValues.province) || {}
-	const { city_name: city } = cityOnSidebar(formValues.city) || {}
-	const { subdistrict_name: subdistrict } = subdistrictOnSidebar(formValues.subdistrict) || {}
+	const { province = {}, city = {}, subdistrict = {} } = initialStates
+
 	const courierData = (selectedCourier.details || {}).cost || []
 	const courierOnSidebar = formData.order_detail
 		? `${formData.order_detail.ekspedition_company || ""} (${formData.order_detail.ekspedition_remark || ""})`
@@ -94,6 +94,10 @@ function Checkout(props) {
 
 	useEffect(() => {
 		const handleUpdateCartTotal = () => localStorage.setItem("formData", updatedCartTotal)
+
+		setSelectedProvince({ value: province.value, text: province.text })
+		setSelectedCity({ value: city.value, text: city.text })
+		setSelectedSubdistrict({ value: subdistrict.value, text: subdistrict.text })
 
 		dispatch(fetchProvinces())
 		dispatch(fetchCartItems()).then(() => handleUpdateCartTotal())
@@ -260,14 +264,18 @@ function Checkout(props) {
 											<Heading
 												reverse
 												content="Provinsi"
-												subheader={province || formData.province_name || user.province_name}
+												subheader={
+													selectedProvince.text ||
+													formData.province_name ||
+													user.province_name
+												}
 											/>
 										</Col>
 										<Col lg={12}>
 											<Heading
 												reverse
 												content="Kota/Kabupaten"
-												subheader={city || formData.city_name || user.city_name}
+												subheader={selectedCity.text || formData.city_name || user.city_name}
 											/>
 										</Col>
 										<Col lg={12}>
@@ -275,7 +283,9 @@ function Checkout(props) {
 												reverse
 												content="Kecamatan"
 												subheader={
-													subdistrict || formData.subdistrict_name || user.subdistrict_name
+													selectedSubdistrict.text ||
+													formData.subdistrict_name ||
+													user.subdistrict_name
 												}
 											/>
 										</Col>
