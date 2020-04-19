@@ -93,15 +93,12 @@ function Checkout(props) {
 	const updatedCartTotal = JSON.stringify({ ...formData, cartTotal })
 
 	useEffect(() => {
-		const handleUpdateCartTotal = () => {
-			localStorage.setItem("formData", updatedCartTotal)
-		}
+		const handleUpdateCartTotal = () => localStorage.setItem("formData", updatedCartTotal)
+
 		dispatch(fetchProvinces())
 		dispatch(fetchCartItems()).then(() => handleUpdateCartTotal())
 		dispatch(fetchUser()).then(() => setInitialLoading(false))
 	}, [dispatch, updatedCartTotal])
-
-	console.log({ province, city, subdistrict })
 
 	return (
 		<Layout sidebar page="checkout">

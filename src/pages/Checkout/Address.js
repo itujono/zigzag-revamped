@@ -48,7 +48,8 @@ export default function Address({ data, handlers, initialLoading }) {
 	}
 
 	const handleRenderCities = (value) => {
-		dispatch(fetchCities(("", value)))
+		value = Number(value)
+		dispatch(fetchCities("", value))
 		setSelectedProvince(provinceOptions.find((item) => item.value === value) || {})
 	}
 
