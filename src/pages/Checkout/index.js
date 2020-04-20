@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback, Suspense } from "react"
-import { Section, Layout, Heading, ButtonLink, Empty, Button, Loading } from "components"
-import { Switch, Route, Redirect, Link } from "react-router-dom"
-import { connect, useDispatch, useSelector, shallowEqual } from "react-redux"
+import React, { useEffect, useState, Suspense } from "react"
+import { Section, Layout, Heading, ButtonLink, Empty, Loading } from "components"
+import { Switch, Route, Redirect } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
 import styled from "styled-components/macro"
 
@@ -61,14 +61,6 @@ function Checkout(props) {
 	const userLoading = useSelector(({ user }) => user.loading)
 	const cartItems = useSelector(({ product }) => product.cartItems)
 	const cartTotal = useSelector(({ product }) => product.cartTotal)
-	const { provinceOnSidebar, cityOnSidebar, subdistrictOnSidebar } = useSelector(
-		({ rajaOngkir }) => ({
-			provinceOnSidebar: rajaOngkir.provinceOnSidebar,
-			cityOnSidebar: rajaOngkir.cityOnSidebar,
-			subdistrictOnSidebar: rajaOngkir.subdistrictOnSidebar
-		}),
-		shallowEqual
-	)
 
 	const loading = rajaOngkirLoading || userLoading
 
@@ -85,9 +77,6 @@ function Checkout(props) {
 		: `${selectedCourier.details.service || ""} (${selectedCourier.details.description || ""})`
 
 	const renderFormValues = (prop) => {
-		// const values = Object.keys(formValues).length === 0 ? formData : formValues
-		// if (prop === "province" || prop === "city" || prop === "subdistrict") return values[`${prop}_name`]
-		// return !values[prop] ? "-" : values[prop] ? values[prop] : user[prop]
 		return formValues[prop] || formData[prop] || user[prop] || "-"
 	}
 

@@ -10,6 +10,7 @@ import { Switch } from "formik-antd"
 import { addressValidation } from "./validation"
 import { mobile } from "helpers"
 import { useSelector, useDispatch } from "react-redux"
+import { useUserDetails } from "helpers/hooks"
 
 const StyledCard = styled(Card)`
 	&& {
