@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"
 import { pricer, media, mobile } from "helpers"
+import { useDispatch } from "react-redux"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -43,6 +44,7 @@ const StyledPopover = styled(Popover)`
 
 export default function Summary({ handlers: { saveOrder }, data: { user = {} } }) {
 	const { push } = useHistory()
+	const dispatch = useDispatch()
 	const [confirmModal, setConfirmModal] = useState(false)
 	const [allGood, setAllGood] = useState(false)
 
@@ -85,9 +87,9 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 
 		const values = {
 			...restValues,
-			province_name: formData.province_name || formData.province,
-			city_name: formData.city_name || formData.city,
-			subdistrict_name: formData.subdistrict_name || formData.subdistrict,
+			province_name: formData.province.text,
+			city_name: formData.city.text,
+			subdistrict_name: formData.subdistrict.text,
 			payment_method: (formData.payment || {}).value,
 			order_detail: JSON.stringify(adjustedCartItems),
 			shipping_address: formData.address,
@@ -96,7 +98,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 			discount: cartTotal.discount || 0
 		}
 
-		saveOrder(values, push)
+		dispatch(saveOrder(values, push))
 	}
 
 	if (!isPartner && !formData.payment) push("/404")
@@ -190,8 +192,9 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 											target="_blank"
 											rel="noopener noreferrer"
 											href={`https://wa.me/${csWhatsappNumber}?text=${encodeURIComponent(
-												`Halo, ${cs.name ||
-													""}. Sepertinya ada yang salah dengan orderan saya...`
+												`Halo, ${
+													cs.name || ""
+												}. Sepertinya ada yang salah dengan orderan saya...`
 											)}`}
 										>
 											Hubungi via WA
