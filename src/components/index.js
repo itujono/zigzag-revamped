@@ -16,6 +16,7 @@ import Empty from "./Empty"
 import DynamicIcon from "./DynamicIcon"
 import GifPlayer from "./GifPlayer"
 import Carousel from "./Carousel"
+import ScrollingRow from "./ScrollingRow"
 
 export {
 	Heading,
@@ -35,5 +36,6 @@ export {
 	Empty,
 	DynamicIcon,
 	GifPlayer,
-	Carousel
+	Carousel,
+	ScrollingRow
 }

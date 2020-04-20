@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal, Carousel } from "components"
+import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal, Carousel, ScrollingRow } from "components"
 import { Row, Col, Tag, Divider, Typography, message, Input } from "antd"
 import styled from "styled-components/macro"
 import { useParams, Link, useHistory, useLocation } from "react-router-dom"
@@ -66,6 +66,17 @@ const PhotoModal = styled(Modal)`
 	}
 `
 
+const StyledScrolling = styled(ScrollingRow)`
+	position: relative;
+	.ant-col {
+		height: 240px;
+		img {
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+`
+
 const { Paragraph, Text } = Typography
 
 function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading, cartItems, ...props }) {
@@ -85,16 +96,6 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const isShoes = (product.categories || {}).id === 2
 	const sizeIsNotSelected = Object.keys(selectedSize).length === 0
 	const colorIsNotSelected = Object.keys(selectedColor).length === 0
-	// const isInCart = cartItems.find(item => item.product_id === Number(productId)) || {}
-
-	// console.log({ isInCart })
-
-	// const handleRate = () => {
-	// 	if (!token) {
-	// 		push("/login")
-	// 		message.error("Kalo mau nge-rate, harus login dulu ya")
-	// 	} else addRating(productId, temporaryRating)
-	// }
 
 	const marketingText =
 		((!token || typeId === 1) && (
@@ -104,37 +105,6 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 			</span>
 		)) ||
 		(token && isVip && "Great! Kamu berhak dapat harga spesial karena kamu adalah member VIP kami! 🎉")
-
-	// const productRating = (
-	// 	<Popconfirm
-	// 		title={
-	// 			<span>
-	// 				Kamu yakin mau kasih produk ini <strong>{temporaryRating} bintang</strong>?
-	// 			</span>
-	// 		}
-	// 		onConfirm={handleRate}
-	// 	>
-	// 		<StyledRating
-	// 			name="rating_product"
-	// 			value={product.rating_product}
-	// 			onChange={value => setTemporaryRating(value)}
-	// 			allowHalf
-	// 		/>{" "}
-	// 		&nbsp;
-	// 		{product.count_user_rating > 0
-	// 			? `${product.count_user_rating} orang kasih rating`
-	// 			: "Belum ada yang kasih rating"}
-	// 		{product.is_rated_by_customer === 1 && (
-	// 			<p
-	// 				css={`
-	// 					color: ${theme.greyColor[2]};
-	// 				`}
-	// 			>
-	// 				Kamu sudah kasih rating untuk produk ini
-	// 			</p>
-	// 		)}
-	// 	</Popconfirm>
-	// )
 
 	const handleSelectColor = (color, stock, isShoes) => {
 		if (!isShoes && (stock === "STOCK HABIS" || stock === 0)) return
@@ -257,23 +227,38 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 			<Section>
 				<Row gutter={64} type="flex">
 					<Col lg={14} xs={24}>
-						<Carousel className="mb2em">
-							{(product.product_image || []).map((item) => (
-								// <div key={item.id}>
-								<>
-									<img
-										key={item.id}
-										src={item.picture}
-										alt={item.caption}
-										width="100%"
-										className="mb2em"
-										onClick={() => setSelectedPhoto(item)}
-									/>
-									<Text type="secondary">{item.caption}</Text>
-								</>
-								// {/* </div> */}
-							))}
-						</Carousel>
+						{mobile ? (
+							<StyledScrolling alwaysSnapStop height="300px">
+								{(product.product_image || []).map((item) => (
+									<Col xs={24} key={item.id}>
+										<img
+											src={item.picture}
+											alt={item.caption}
+											width="100%"
+											height="100%"
+											className="mb2em"
+											onClick={() => setSelectedPhoto(item)}
+										/>
+										<Text type="secondary">{item.caption}</Text>
+									</Col>
+								))}
+							</StyledScrolling>
+						) : (
+							<Carousel className="mb2em">
+								{(product.product_image || []).map((item) => (
+									<>
+										<img
+											key={item.id}
+											src={item.picture}
+											alt={item.caption}
+											width="100%"
+											className="mb2em"
+										/>
+										<Text type="secondary">{item.caption}</Text>
+									</>
+								))}
+							</Carousel>
+						)}
 					</Col>
 					<Col lg={10} xs={24}>
 						<Row>
