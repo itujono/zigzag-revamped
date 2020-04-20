@@ -78,16 +78,17 @@ function Checkout(props) {
 	const { province = {}, city = {}, subdistrict = {} } = initialStates
 
 	const courierData = (selectedCourier.details || {}).cost || []
-	const courierOnSidebar = formData.order_detail
-		? `${formData.order_detail.ekspedition_company || ""} (${formData.order_detail.ekspedition_remark || ""})`
-		: Object.keys(selectedCourier).length === 0
+	const courierOnSidebar = !selectedCourier.code
 		? "-"
+		: formData.order_detail
+		? `${formData.order_detail.ekspedition_company || ""} (${formData.order_detail.ekspedition_remark || ""})`
 		: `${selectedCourier.details.service || ""} (${selectedCourier.details.description || ""})`
 
 	const renderFormValues = (prop) => {
-		const values = Object.keys(formValues).length === 0 ? formData : formValues
-		if (prop === "province" || prop === "city" || prop === "subdistrict") return values[`${prop}_name`]
-		return values[prop] === "" ? "-" : values[prop] ? values[prop] : user[prop]
+		// const values = Object.keys(formValues).length === 0 ? formData : formValues
+		// if (prop === "province" || prop === "city" || prop === "subdistrict") return values[`${prop}_name`]
+		// return !values[prop] ? "-" : values[prop] ? values[prop] : user[prop]
+		return formValues[prop] || formData[prop] || user[prop] || "-"
 	}
 
 	const updatedCartTotal = JSON.stringify({ ...formData, cartTotal })

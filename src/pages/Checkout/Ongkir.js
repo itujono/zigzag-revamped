@@ -106,7 +106,7 @@ export default function Ongkir({ data, handlers, loading }) {
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
 	const { cartTotal = {}, subdistrict = {}, subdistrict_id } = formData
 
-	const courierNotSelected = Object.values(selectedCourier).some(
+	const courierNotSelectedYet = Object.values(selectedCourier).some(
 		(item) => item === "" || Object.keys(item).length === 0
 	)
 
@@ -124,7 +124,7 @@ export default function Ongkir({ data, handlers, loading }) {
 		}
 
 		dispatch(fetchCouriers(data))
-	}, [subdistrict_id, subdistrict, cartTotal.roundedWeight, dispatch])
+	}, [subdistrict.value, cartTotal.roundedWeight, dispatch, fetchCouriers])
 
 	const handleSaveCourier = () => {
 		const order_detail = {
@@ -151,6 +151,11 @@ export default function Ongkir({ data, handlers, loading }) {
 		<Section paddingHorizontal="0">
 			<Heading content="Pilih kurir" subheader="Pilih kurir dan ongkir yang paling sesuai untuk kamu" />
 			<Alert
+				icon={
+					<span role="img" aria-label="Airplane">
+						✈️
+					</span>
+				}
 				showIcon
 				type="info"
 				className="mb4em"
@@ -206,7 +211,7 @@ export default function Ongkir({ data, handlers, loading }) {
 				)
 			})}
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button onClick={handleSaveCourier} disabled={courierNotSelected}>
+				<Button onClick={handleSaveCourier} disabled={courierNotSelectedYet}>
 					Lanjut ke Pembayaran <Icon type="right" />
 				</Button>
 			</Section>

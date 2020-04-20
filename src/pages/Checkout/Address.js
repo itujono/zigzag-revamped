@@ -65,17 +65,25 @@ export default function Address({ data, handlers, initialLoading }) {
 	}
 
 	const handleSaveAddress = (values, { setSubmitting }) => {
+		const province = {
+			value: selectedProvince.value || user.province,
+			text: selectedProvince.text || user.province_name
+		}
+		const city = { value: selectedCity.value || user.city, text: selectedCity.text || user.city_name }
+		const subdistrict = {
+			value: selectedSubdistrict.value || user.subdistrict,
+			text: selectedSubdistrict.text || user.subdistrict_name
+		}
 		values = {
-			// ...formData,
 			...values,
+			province,
+			city,
+			subdistrict,
 			cartItems,
 			cartTotal,
 			deposit: user.deposit,
-			province: { value: selectedProvince.value, text: selectedProvince.text },
 			province_name: selectedProvince.text,
-			city: { value: selectedCity.value, text: selectedCity.text },
 			city_name: selectedCity.text,
-			subdistrict: { value: selectedSubdistrict.value, text: selectedSubdistrict.text },
 			subdistrict_name: selectedSubdistrict.text
 		}
 		localStorage.setItem("formData", JSON.stringify(values))
