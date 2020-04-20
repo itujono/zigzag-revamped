@@ -217,12 +217,12 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				</Button>
 			</Modal>
 
-			{mobile && (
+			{/* {mobile && (
 				<PhotoModal visible={Object.keys(selectedPhoto).length} onCancel={() => setSelectedPhoto({})}>
 					<img src={selectedPhoto.picture} alt={selectedPhoto.caption} width="100%" />
 					<Typography.Paragraph>{selectedPhoto.caption}</Typography.Paragraph>
 				</PhotoModal>
-			)}
+			)} */}
 
 			<Section>
 				<Row gutter={64} type="flex">
