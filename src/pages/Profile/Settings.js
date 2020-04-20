@@ -38,19 +38,19 @@ function Settings({ changeProfilePassword, loading }) {
 											password
 											name="new_password"
 											label="Masukkan password baru kamu"
-											placeholder="Eheheh..."
+											placeholder="Jangan pake nama hewan peliharaan ya..."
 										/>
 										<TextInput
 											password
 											name="new_password_confirmation"
 											label="Ulangi password baru kamu"
-											placeholder="Eheheh..."
+											placeholder="Ulangi password kamu di atas..."
 										/>
 										<TextInput
 											password
 											name="old_password"
 											label="Masukkan password lama kamu"
-											placeholder="Eheheh..."
+											placeholder="Jangan lupa dulu sama password lama kamu..."
 										/>
 										<Divider />
 										<SubmitButton type="primary" icon="check" loading={loading}>
@@ -69,10 +69,7 @@ function Settings({ changeProfilePassword, loading }) {
 }
 
 const validationSchema = yup.object().shape({
-	new_password: yup
-		.string()
-		.required("Jangan lupa password baru nya ya")
-		.min(8, "Minimal 8 karakter ya"),
+	new_password: yup.string().required("Jangan lupa password baru nya ya").min(8, "Minimal 8 karakter ya"),
 	new_password_confirmation: yup
 		.string()
 		.required("Ulangi password kamu di atas")
