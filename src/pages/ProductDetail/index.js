@@ -87,7 +87,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	const { id: productId } = useParams()
 	const { push } = useHistory()
 	const { pathname } = useLocation()
-	const { fetchProductItem, addItemToCart, addItemToWishlist, addRating, loadingCart } = props
+	const { fetchProductItem, addItemToCart, addItemToWishlist, loadingCart } = props
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
