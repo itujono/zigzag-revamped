@@ -37,10 +37,14 @@ function reducer(state = initialState, action) {
 					label: deposit_code
 				}))
 
+			const depositList = ((action.payload[0] || {}).deposits || []).sort(
+				(a, b) => Date.parse(b.created_date) - Date.parse(a.created_date)
+			)
+
 			return {
 				...state,
 				depositCodeOptions,
-				depositList: action.payload,
+				depositList,
 				depositBalance: (action.payload[0] || {}).customer,
 				loading: false
 			}

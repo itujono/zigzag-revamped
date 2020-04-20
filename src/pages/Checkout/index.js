@@ -320,14 +320,14 @@ function Checkout(props) {
 										<Col lg={12}>
 											<Heading
 												reverse
-												content="Nama dropshipper"
+												content="Nama pengirim"
 												subheader={renderFormValues("dropshipper_name")}
 											/>
 										</Col>
 										<Col lg={12}>
 											<Heading
 												reverse
-												content="Nomor HP dropshipper"
+												content="Nomor HP pengirim"
 												subheader={renderFormValues("dropshipper_tele")}
 											/>
 										</Col>

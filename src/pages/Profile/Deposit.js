@@ -4,11 +4,11 @@ import styled from "styled-components"
 import moment from "moment"
 import { SubmitButton } from "formik-antd"
 import { Formik } from "formik"
-import { connect } from "react-redux"
+import { connect, useDispatch, useSelector } from "react-redux"
 import * as yup from "yup"
 
-import { fetchListDeposit, addNewDeposit, fetchUser } from "store/actions/userActions"
-import { Section, Heading, Button, ButtonLink } from "components"
+import { fetchListDeposit, addNewDeposit } from "store/actions/userActions"
+import { Section, Heading } from "components"
 import { pricer, media, mobile } from "helpers"
 import { theme } from "styles"
 import { TextInput } from "components/Fields"
@@ -63,10 +63,15 @@ const ListItem = styled(List.Item)`
 	`}
 `
 
-function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance, loading }) {
+function Deposit() {
+	const dispatch = useDispatch()
+	const depositList = useSelector(({ user }) => user.depositList)
+	const depositBalance = useSelector(({ user }) => user.depositBalance.deposit)
+	const loading = useSelector(({ user }) => user.loading)
+
 	useEffect(() => {
-		fetchListDeposit()
-	}, [fetchListDeposit])
+		dispatch(fetchListDeposit())
+	}, [dispatch])
 
 	return (
 		<Section width="80%" centered>
@@ -81,7 +86,7 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 						<Formik
 							onSubmit={(values, { setSubmitting }) => {
 								setSubmitting(false)
-								addNewDeposit(values)
+								dispatch(addNewDeposit(values))
 							}}
 							validationSchema={validationSchema}
 							render={({ handleSubmit }) => (
@@ -110,6 +115,7 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 						locale={{ emptyText: "Kamu belum ada ngelakuin deposit" }}
 						renderItem={({ status, deposit_code, ...item }) => {
 							const statusId = status.status_id
+							const actionLabel = `Kamu ${statusId === 4 ? "belanja" : "deposit"} sebesar `
 							const statusDepo =
 								statusId === 1 ? "warning" : statusId === 6 || statusId === 2 ? "error" : "success"
 
@@ -132,8 +138,10 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 											<List.Item.Meta
 												title={
 													<Typography>
-														Kamu deposit sebesar{" "}
-														<span className="amount">Rp {pricer(item.total)}</span> &nbsp;{" "}
+														{actionLabel}
+														<span className="amount">
+															Rp {pricer(item.total)}
+														</span> &nbsp;{" "}
 														<span className="time">
 															{moment(item.created_date).fromNow()}
 														</span>
@@ -172,18 +180,6 @@ function Deposit({ depositList, fetchListDeposit, addNewDeposit, depositBalance,
 	)
 }
 
-const mapState = ({ user }) => {
-	const depositList = ((user.depositList[0] || {}).deposits || []).sort(
-		(a, b) => Date.parse(b.created_date) - Date.parse(a.created_date)
-	)
-
-	return {
-		depositList,
-		depositBalance: user.depositBalance.deposit,
-		loading: user.loading
-	}
-}
-
 const validationSchema = yup.object().shape({
 	total_deposit: yup
 		.number()
@@ -192,4 +188,4 @@ const validationSchema = yup.object().shape({
 		.typeError("Harus masukin angka aja ya")
 })
 
-export default connect(mapState, { fetchListDeposit, addNewDeposit, fetchUser })(Deposit)
+export default Deposit

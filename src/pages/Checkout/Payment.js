@@ -51,6 +51,8 @@ export default function Payment({ data, handlers }) {
 	const uniqueCode = formData.unique_code ? Number(formData.unique_code) : Number(random)
 	const cartTotal = formData.cartTotal.price
 	const discount = formData.cartTotal.discount
+	const ongkir = formData.order_detail.ekspedition_total
+	const subTotal = cartTotal + uniqueCode - discount + ongkir
 	const depositNotSufficient = formData.deposit < Number(cartTotal)
 
 	const handleSavePayment = () => {
@@ -123,7 +125,7 @@ export default function Payment({ data, handlers }) {
 								<ul style={{ paddingLeft: 20 }}>
 									<li>
 										Jumlah deposit di akun kamu akan dikurangi sebanyak{" "}
-										<strong>Rp {pricer(cartTotal + uniqueCode - discount)}</strong>
+										<strong>Rp {pricer(subTotal)}</strong>
 									</li>
 									<li>Dapat pahala dan amal jariyah</li>
 								</ul>
