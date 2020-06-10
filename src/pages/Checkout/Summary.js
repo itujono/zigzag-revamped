@@ -69,28 +69,15 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 			return { ...restCart, product_price: product_price.price }
 		})
 
-		const {
-			cartItems,
-			cartTotal,
-			province,
-			province_id,
-			city,
-			city_id,
-			subdistrict,
-			subdistrict_id,
-			order_detail,
-			address,
-			payment,
-			deposit,
-			...restValues
-		} = formData
+		// prettier-ignore
+		const { cartItems, cartTotal, province, province_id, city, city_id, subdistrict, subdistrict_id, order_detail, address, payment, deposit, ...restValues } = formData
 
 		const values = {
 			...restValues,
 			province_name: formData.province.text,
 			city_name: formData.city.text,
 			subdistrict_name: formData.subdistrict.text,
-			payment_method: (formData.payment || {}).value,
+			payment_method: formData.payment?.value,
 			order_detail: JSON.stringify(adjustedCartItems),
 			shipping_address: formData.address,
 			order_id: order_detail.id,

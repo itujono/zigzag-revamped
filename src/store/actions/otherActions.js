@@ -52,10 +52,7 @@ export const saveOrder = (values, push) => (dispatch) => {
 	dispatch(loadingOther())
 	return instance
 		.post(`/order/save`, values)
-		.then(({ data }) => {
-			console.log({ saveOrder: data })
-			dispatch({ type: types.SAVE_ORDER, payload: data.data })
-		})
+		.then(({ data }) => dispatch({ type: types.SAVE_ORDER, payload: data.data }))
 		.then(() => {
 			localStorage.removeItem("formData")
 			push({ pathname: "/order/order_success", state: { isSuccess: true, paymentMethod: values.payment_method } })
