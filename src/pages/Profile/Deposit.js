@@ -115,7 +115,11 @@ function Deposit() {
 						locale={{ emptyText: "Kamu belum ada ngelakuin deposit" }}
 						renderItem={({ status, deposit_code, ...item }) => {
 							const statusId = status.status_id
-							const actionLabel = `Kamu ${statusId === 4 ? "belanja" : "deposit"} sebesar `
+							const deducted = statusId === 4
+							const deductedByAdmin = statusId === 7
+							const actionLabel = deductedByAdmin
+								? `Dikurangi sebesar `
+								: `Kamu ${deducted ? "belanja" : "deposit"} sebesar `
 							const statusDepo =
 								statusId === 1 ? "warning" : statusId === 6 || statusId === 2 ? "error" : "success"
 

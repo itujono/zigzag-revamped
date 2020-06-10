@@ -42,9 +42,9 @@ const StyledCard = styled(Card)`
 	`}
 `
 
-const bankAccountText = bankAccounts => (
+const bankAccountText = (bankAccounts) => (
 	<ul style={{ marginTop: "2em" }}>
-		{bankAccounts.map(item => (
+		{bankAccounts.map((item) => (
 			<li key={item.id}>
 				<Heading
 					reverse
@@ -60,9 +60,10 @@ function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
 	const { state = {} } = useLocation()
 	const { push } = useHistory()
 
+	const withDeposit = state.paymentMethod && state.paymentMethod === "deposit"
+
 	useEffect(() => {
 		if (!state.isSuccess) push("/404")
-
 		fetchBankAccounts()
 	}, [fetchBankAccounts, push, state.isSuccess])
 
@@ -72,26 +73,37 @@ function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
 				<Row type="flex">
 					<Col lg={16} className="left">
 						<Success />
-						<Heading
-							content="Order berhasil! 🎉🎉"
-							subheader={`Mantap! Orderan kamu sudah kami terima, dan email berisi detail info orderan juga
-							sudah ada di inbox email kamu. Namun sebelumnya, silakan lakukan pembayaran
-							terlebih dahulu ke rekening yang tertulis di ${mobile ? "bawah" : "samping"}`}
-						/>
-						<Alert
-							type="info"
-							showIcon
-							message={
-								<span>
-									Kalo kamu belum melakukan{" "}
-									<Link to="/order/confirmation">konfirmasi pembayaran</Link> lebih dari 2 jam, maka
-									orderan kamu akan <strong>dibatalkan otomatis</strong> oleh sistem
-								</span>
-							}
-						/>
-						<Section textAlign="center">
-							Sudah melakukan pembayaran? <Link to="/order/confirmation">Konfirmasi pembayaran</Link>
-						</Section>
+						{withDeposit ? (
+							<Heading
+								content="Order berhasil! 🎉🎉"
+								subheader={`Mantap! Orderan kamu sudah kami terima, dan pembayaran kamu juga sudah diterima. Email berisi detail info orderan juga sudah ada di inbox email kamu. Tidak ada yg perlu dilakukan, cukup duduk manis saja menunggu kabar selanjutnya dari kami.`}
+							/>
+						) : (
+							<Heading
+								content="Order berhasil! 🎉🎉"
+								subheader={`Mantap! Orderan kamu sudah kami terima, dan email berisi detail info orderan juga sudah ada di inbox email kamu. Namun sebelumnya, silakan lakukan pembayaran terlebih dahulu ke rekening yang tertulis di ${
+									mobile ? "bawah" : "samping"
+								}`}
+							/>
+						)}
+						{!withDeposit && (
+							<Alert
+								type="info"
+								showIcon
+								message={
+									<span>
+										Kalo kamu belum melakukan{" "}
+										<Link to="/order/confirmation">konfirmasi pembayaran</Link> lebih dari 2 jam,
+										maka orderan kamu akan <strong>dibatalkan otomatis</strong> oleh sistem
+									</span>
+								}
+							/>
+						)}
+						{!withDeposit && (
+							<Section textAlign="center">
+								Sudah melakukan pembayaran? <Link to="/order/confirmation">Konfirmasi pembayaran</Link>
+							</Section>
+						)}
 					</Col>
 					<Col lg={8} xs={24} className="right">
 						<Heading content="Rekening Zigzag" subheader={bankAccountText(bankAccounts)} />

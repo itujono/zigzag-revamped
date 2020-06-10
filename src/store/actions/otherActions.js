@@ -58,7 +58,7 @@ export const saveOrder = (values, push) => (dispatch) => {
 		})
 		.then(() => {
 			localStorage.removeItem("formData")
-			push({ pathname: "/order/order_success", state: { isSuccess: true } })
+			push({ pathname: "/order/order_success", state: { isSuccess: true, paymentMethod: values.payment_method } })
 		})
 		.catch((err) => renderError(err, dispatch, types.SAVE_ORDER_ERROR))
 }
