@@ -7,10 +7,9 @@ import { unauthUser } from "store/actions/authActions"
 import { message } from "antd"
 import { TEXT_STOCK_HABIS } from "./constants"
 import { useLocation } from "react-router"
-// import { FETCH_USER } from "store/types"
 
 const instance = axios.create({
-	baseURL: "https://zigzagbatam.com:9000/api/v1/frontend",
+	baseURL: "https://api.zigzagfashion.id/api/v1/frontend",
 	headers: {
 		api_key: "3c72dde0-c72f-ZIGZAG-4656-8143-ee95e52f58b4",
 		Accept: "*/*"
