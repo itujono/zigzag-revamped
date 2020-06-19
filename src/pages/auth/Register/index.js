@@ -122,15 +122,15 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 	const registerError = useSelector(({ auth }) => auth.registerUserError)
 	const { fetchSubdistricts, fetchCustomerServices, fetchProvinces, fetchCities } = props
 
-	const handleNext = section => {
+	const handleNext = (section) => {
 		window.scrollTo(0, 0)
 		setSection(section)
 	}
 
-	const handleRenderCities = values => setSelectedProvince(values.province)
-	const handleRenderSubdistricts = values => setSelectedCity(values.city)
+	const handleRenderCities = (values) => setSelectedProvince(values.province)
+	const handleRenderSubdistricts = (values) => setSelectedCity(values.city)
 
-	const renderForm = values => {
+	const renderForm = (values) => {
 		if (section === "credentials") {
 			return (
 				<>
@@ -180,7 +180,7 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 				<>
 					{/* <RadioInput name="acc_type" label="Pilih tipe akun" options={accountTypeOptions} /> */}
 					<Row style={{ marginBottom: "2em" }}>
-						{accountTypeOptions.map(item => (
+						{accountTypeOptions.map((item) => (
 							<Col lg={24} key={item.value}>
 								<AccountCard
 									onClick={() => setAccountType(item.value)}
@@ -335,7 +335,7 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 
 	useEffect(() => {
 		fetchProvinces()
-		fetchCities("", selectedProvince)
+		fetchCities(selectedProvince)
 		fetchCustomerServices()
 		if (selectedCity) fetchSubdistricts(selectedCity)
 	}, [selectedProvince, selectedCity, fetchProvinces, fetchCities, fetchCustomerServices, fetchSubdistricts])
@@ -387,9 +387,9 @@ const mapState = ({ rajaOngkir, other, auth }) => {
 	const provinces = rajaOngkir.provinces || []
 	const cities = rajaOngkir.cities || []
 	const subdistricts = rajaOngkir.subdistricts || []
-	const provinceAutocomplete = provinces.map(item => ({ value: Number(item.province_id), text: item.province }))
-	const cityAutocomplete = cities.map(item => ({ value: Number(item.city_id), text: item.city_name }))
-	const subdistrictAutocomplete = subdistricts.map(item => ({
+	const provinceAutocomplete = provinces.map((item) => ({ value: Number(item.province_id), text: item.province }))
+	const cityAutocomplete = cities.map((item) => ({ value: Number(item.city_id), text: item.city_name }))
+	const subdistrictAutocomplete = subdistricts.map((item) => ({
 		value: Number(item.subdistrict_id),
 		text: item.subdistrict_name
 	}))

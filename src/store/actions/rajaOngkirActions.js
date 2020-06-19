@@ -1,45 +1,44 @@
 /* eslint-disable no-undef */
 import * as types from "store/types"
 import Axios from "axios"
-import { renderError } from "helpers"
+import { renderError, instance } from "helpers"
 
 const baseUrl = `https://pro.rajaongkir.com/api`
 const corsUrl = `https://cors-anywhere.herokuapp.com`
 // const rajaOngkirKey = `c03222c90f4b9b6ee35230d270d616ab`
+const tempUrl = `/order/province/list`
 
 const loadingRajaOngkir = () => ({ type: types.LOADING_RAJAONGKIR })
 
 export const fetchProvinces = () => (dispatch) => {
 	dispatch(loadingRajaOngkir())
-	return Axios.get(`${corsUrl}/${baseUrl}/province`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
-		.then(({ data }) => dispatch({ type: types.FETCH_PROVINCES, payload: data.rajaongkir.results }))
+	return instance
+		.get(`/order/province/list`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
+		.then(({ data }) => dispatch({ type: types.FETCH_PROVINCES, payload: data.data.provinces.province }))
 		.catch((err) => renderError(err, dispatch, types.FETCH_PROVINCES_ERROR))
 }
 
-export const fetchCities = (cityId, provinceId) => (dispatch) => {
+export const fetchCities = (province_id) => (dispatch) => {
 	dispatch(loadingRajaOngkir())
-	return Axios.get(`${corsUrl}/${baseUrl}/city?id=${cityId}&province=${provinceId}`, {
-		params: { key: process.env.REACT_APP_RAJAONGKIR }
-	})
-		.then(({ data }) => dispatch({ type: types.FETCH_CITIES, payload: data.rajaongkir.results }))
+	return instance
+		.get(`/order/city/list`, { params: { province_id } })
+		.then(({ data }) => dispatch({ type: types.FETCH_CITIES, payload: data.data.cities?.city }))
 		.catch((err) => renderError(err, dispatch, types.FETCH_CITIES_ERROR))
 }
 
-export const fetchSubdistricts = (cityId) => (dispatch) => {
+export const fetchSubdistricts = (city_id) => (dispatch) => {
 	dispatch(loadingRajaOngkir())
-	return Axios.get(`${corsUrl}/${baseUrl}/subdistrict?city=${cityId}`, {
-		params: { key: process.env.REACT_APP_RAJAONGKIR }
-	})
-		.then(({ data }) => dispatch({ type: types.FETCH_SUBDISTRICTS, payload: data.rajaongkir.results }))
+	return instance
+		.get(`/order/subdistrict/list`, { params: { city_id } })
+		.then(({ data }) => dispatch({ type: types.FETCH_SUBDISTRICTS, payload: data.data.subdistrict?.subdistrict }))
 		.catch((err) => renderError(err, dispatch, types.FETCH_SUBDISTRICTS_ERROR))
 }
 
-export const fetchCouriers = (data) => (dispatch) => {
+export const fetchCouriers = ({ origin, originType, destination, destinationType, weight }) => (dispatch) => {
 	dispatch(loadingRajaOngkir())
-	return Axios.post(`${corsUrl}/${baseUrl}/cost`, data, {
-		headers: { key: process.env.REACT_APP_RAJAONGKIR }
-	})
-		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.rajaongkir.results }))
+	return instance
+		.get(`/order/expedition-cost`, { params: { origin, originType, destination, destinationType, weight } })
+		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.data }))
 		.catch((err) => renderError(err, dispatch, types.FETCH_COURIERS_ERROR))
 }
 

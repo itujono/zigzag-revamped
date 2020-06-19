@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Section, Heading, Card, Button, Modal } from "components"
 import styled from "styled-components"
-import { Row, Col, Tooltip, Icon, Checkbox, Popover } from "antd"
+import { Row, Col, Checkbox, Popover } from "antd"
 import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"

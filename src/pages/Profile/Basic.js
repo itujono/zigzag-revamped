@@ -99,8 +99,8 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 	const upgradeStatus = (customer_upgrade.status || {}).status_id || 0
 	const [media, setMedia] = useState({})
 
-	const handleRenderCities = value => fetchCities("", value)
-	const handleRenderSubdistricts = value => fetchSubdistricts(value)
+	const handleRenderCities = (value) => fetchCities(value)
+	const handleRenderSubdistricts = (value) => fetchSubdistricts(value)
 	const csWhatsappNumber = (cs.whatsapp || "").startsWith("0")
 		? "62" + (cs.whatsapp || "").slice(1)
 		: cs.whatsapp || ""
@@ -154,7 +154,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 		updateUserProfile(values).finally(() => setSubmitting(false))
 	}
 
-	const handleBeforeUpload = media => {
+	const handleBeforeUpload = (media) => {
 		setMedia(media)
 		return false
 	}
@@ -299,9 +299,9 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 const mapState = ({ user, rajaOngkir }) => ({
 	user: user.user,
 	loading: user.loading,
-	provinceOptions: rajaOngkir.provinceOptions.map(item => ({ value: item.value, text: item.label })),
-	cityOptions: rajaOngkir.cityOptions.map(item => ({ value: item.value, text: item.label })),
-	subdistrictOptions: rajaOngkir.subdistrictOptions.map(item => ({ value: item.value, text: item.label }))
+	provinceOptions: rajaOngkir.provinceOptions.map((item) => ({ value: item.value, text: item.label })),
+	cityOptions: rajaOngkir.cityOptions.map((item) => ({ value: item.value, text: item.label })),
+	subdistrictOptions: rajaOngkir.subdistrictOptions.map((item) => ({ value: item.value, text: item.label }))
 })
 
 const actions = { fetchUser, fetchCities, fetchSubdistricts, fetchProvinces, updateUserProfile, changeAvatar }

@@ -50,7 +50,7 @@ export default function Address({ data, handlers, initialLoading }) {
 
 	const handleRenderCities = (value) => {
 		value = Number(value)
-		dispatch(fetchCities("", value))
+		dispatch(fetchCities(value))
 		setSelectedProvince(provinceOptions.find((item) => item.value === value) || {})
 	}
 
@@ -187,8 +187,8 @@ export default function Address({ data, handlers, initialLoading }) {
 									</StyledCard>
 
 									<StyledCard noHover title="Alamat">
-										<Row gutter={16}>
-											<Col lg={12}>
+										<Row type="flex" gutter={16}>
+											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
 													name="province"
@@ -197,7 +197,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													onChange={handleChangeSelect("province")}
 												/>
 											</Col>
-											<Col lg={12}>
+											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
 													name="city"
@@ -206,7 +206,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													onChange={handleChangeSelect("city")}
 												/>
 											</Col>
-											<Col lg={12}>
+											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
 													name="subdistrict"
@@ -215,7 +215,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													onChange={handleChangeSelect("subdistrict")}
 												/>
 											</Col>
-											<Col lg={12}>
+											<Col lg={12} xs={24}>
 												<TextInput
 													name="zip"
 													placeholder="Kode pos kamu..."

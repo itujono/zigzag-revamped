@@ -160,7 +160,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 						<span>
 							<Heading
 								bold
-								content="Zigzag Batam"
+								content="Zigzag Surabaya"
 								style={{ display: "inline-block", verticalAlign: "sub" }}
 							/>
 						</span>
