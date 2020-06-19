@@ -62,7 +62,7 @@ export const fetchCartItems = () => (dispatch) => {
 			localStorage.setItem("formData", JSON.stringify({ ...formData, cartItems: data.data.cart_data }))
 		})
 		.catch((err) => {
-			if (err.response.status === 404) {
+			if (err.response?.status === 404) {
 				dispatch({ type: types.FETCH_CART_ITEMS, payload: [] })
 				return
 			}

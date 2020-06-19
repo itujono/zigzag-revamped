@@ -164,7 +164,7 @@ export default function Ongkir({ data, handlers, loading }) {
 
 			{loading && <Loading />}
 
-			{couriers.map((courier) => {
+			{/* {couriers.map((courier) => {
 				const { code, costs = [], name } = courier
 				const courierLogo =
 					code === "jne" ? jneLogo : code === "J&T" ? jntLogo : code === "sicepat" ? sicepatLogo : ""
@@ -209,7 +209,8 @@ export default function Ongkir({ data, handlers, loading }) {
 						</Row>
 					</StyledCard>
 				)
-			})}
+			})} */}
+
 			<Section textAlign="right" paddingHorizontal="0">
 				<Button onClick={handleSaveCourier} disabled={courierNotSelectedYet}>
 					Lanjut ke Pembayaran <Icon type="right" />

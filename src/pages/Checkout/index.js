@@ -44,7 +44,7 @@ const CartItem = styled(List.Item)`
 	}
 `
 
-function Checkout(props) {
+function Checkout() {
 	const [formValues, setFormValues] = useState({})
 	const [initialLoading, setInitialLoading] = useState(true)
 	const [selectedCourier, setSelectedCourier] = useState({ code: "", details: {} })
