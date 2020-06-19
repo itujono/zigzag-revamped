@@ -2,16 +2,22 @@ import React, { useEffect } from "react"
 import { Section, Heading, ProductCard, Layout } from "components"
 import { Row, Col } from "antd"
 import { useParams } from "react-router-dom"
-import { connect } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { fetchProducts } from "store/actions/productActions"
 import { upperCase, isOutOfStock } from "helpers"
 
-function Category({ products, fetchProducts, loading }) {
+function Category() {
 	const { name, id } = useParams()
+	const dispatch = useDispatch()
+	const productsError = useSelector(({ product }) => product.productsError)
+	let loading = useSelector(({ product }) => product.loading)
+	const products = useSelector(({ product }) => product.products)
+
+	loading = productsError ? false : loading
 
 	useEffect(() => {
-		fetchProducts(id, 0)
-	}, [name, id, fetchProducts])
+		dispatch(fetchProducts(id, 0))
+	}, [name, id, dispatch])
 
 	return (
 		<Layout sidebar>
@@ -54,9 +60,4 @@ function Category({ products, fetchProducts, loading }) {
 	)
 }
 
-const mapState = ({ product }) => ({
-	products: product.products,
-	loading: product.loading
-})
-
-export default connect(mapState, { fetchProducts })(Category)
+export default Category

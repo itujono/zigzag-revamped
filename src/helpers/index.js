@@ -68,7 +68,10 @@ export function renderError(err, dispatch, type, noShow = false) {
 
 	if (error) {
 		if (noShow) return
-		else message.error(error)
+		else {
+			console.log({ error })
+			message.error(error)
+		}
 	}
 
 	dispatch({ type, payload: error })

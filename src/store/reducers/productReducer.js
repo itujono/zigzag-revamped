@@ -14,9 +14,11 @@ const initialState = {
 	cartItems: [],
 	cartTotal: {},
 	wishlistItems: [],
-	wishlistError: null,
 	searchList: [],
 	promoProducts: [],
+
+	productsError: null,
+	wishlistError: null,
 	searchError: null,
 	productError: null,
 	cartError: null,
@@ -176,8 +178,12 @@ function reducer(state = initialState, action) {
 
 		case types.DELETE_WISHLIST_ITEM:
 			return { ...state, loading: false }
+
 		case types.DELETE_WISHLIST_ITEM_ERROR:
 			return { ...state, wishlistError: action.payload, loading: false }
+		case types.FETCH_PRODUCTS_ERROR:
+			console.log({ productsError: action.payload })
+			return { ...state, productsError: action.payload, loading: false }
 		case types.FETCH_WISHLIST_ITEMS_ERROR:
 			return { ...state, wishlistError: action.payload, loading: false }
 		case types.ADD_ITEM_TO_WISHLIST_ERROR:
