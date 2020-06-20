@@ -24,16 +24,16 @@ const Item = styled(FormItem)`
 	}
 `
 
-function SelectInput({ reverse, options, helpText, autocomplete, ...props }) {
+function SelectInput({ reverse, options, helpText, autocomplete, allowClear = true, ...props }) {
 	return (
 		<Item name={props.name} reverse={reverse} label={props.label}>
 			{autocomplete ? (
 				<AutoComplete
 					{...props}
-					allowClear
+					// showArrow
+					allowClear={allowClear}
 					name={props.name}
 					dataSource={options}
-					showArrow
 					filterOption={(inputValue, option) => {
 						const child = option.props.children || ""
 						return child.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
@@ -42,7 +42,7 @@ function SelectInput({ reverse, options, helpText, autocomplete, ...props }) {
 			) : (
 				<Select {...props}>
 					{options &&
-						options.map(item => (
+						options.map((item) => (
 							<Select.Option key={item.value} value={item.value}>
 								{item.label}
 							</Select.Option>

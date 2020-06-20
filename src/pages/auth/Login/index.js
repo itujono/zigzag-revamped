@@ -96,6 +96,7 @@ function Login() {
 										placeholder="Masukkan email kamu..."
 									/>
 									<TextInput
+										password
 										type="password"
 										name="password"
 										label="Password"

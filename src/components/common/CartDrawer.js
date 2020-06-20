@@ -180,7 +180,8 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 												<Formik
 													onSubmit={handleUpdateCart}
 													initialValues={{ qty: Number(item.product_qty) }}
-													render={({ handleSubmit }) => (
+												>
+													{({ handleSubmit }) => (
 														<Form layout="inline" onSubmit={handleSubmit}>
 															<TextInput
 																number
@@ -205,7 +206,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 															</Form.Item>
 														</Form>
 													)}
-												/>
+												</Formik>
 												<p className="price-weight">
 													Rp {pricer(product_total_price)} &middot;{" "}
 													<span>{item.weight_per_pcs * quantity} gram</span>

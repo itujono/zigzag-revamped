@@ -8,7 +8,8 @@ const StyledCarousel = styled(_Carousel).attrs({
 	infinite: true,
 	pauseOnFocus: true,
 	pauseOnHover: true,
-	autoPlay: true
+	autoPlay: true,
+	adaptiveHeight: true
 })`
 	&& {
 		/* .slick-list {

@@ -98,7 +98,7 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 									<TextInput
 										name="total_transfer"
 										label="Jumlah yang ditransfer (Rp)"
-										placeholder="Misal: 50000"
+										placeholder="Misal: 100091"
 									/>
 									<DateInput
 										name="date"
@@ -135,7 +135,7 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 }
 
 const mapState = ({ other }) => {
-	const bankAccountOptions = other.bankAccounts.map(item => ({
+	const bankAccountOptions = other.bankAccounts.map((item) => ({
 		value: `${item.bank_name} ${item.bank_account}`,
 		label: `${item.bank_name} ${item.bank_account} an ${item.under_name}`
 	}))
