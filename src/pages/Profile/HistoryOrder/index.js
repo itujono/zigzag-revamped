@@ -102,7 +102,7 @@ function HistoryOrder() {
 										<Typography>
 											<Typography.Text>
 												<Icon type="clock-circle" />
-												&nbsp; {moment(item.created_date).format("dddd, DD MMMM YYYY")}
+												&nbsp; {moment(item.created_date).format("ddd, DD MMM YYYY HH:mm")}
 											</Typography.Text>{" "}
 											{!mobile && <>&nbsp; &middot; &nbsp;</>}
 											<Typography.Text className="display-block__mobile">
