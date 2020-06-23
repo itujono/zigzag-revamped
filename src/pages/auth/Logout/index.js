@@ -8,8 +8,6 @@ function Logout() {
 	const { push } = useHistory()
 	const { state = {} } = useLocation()
 
-	if (!state.success) push("/404")
-
 	const isWashingHands = true
 
 	return (

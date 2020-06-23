@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { Formik } from "formik"
 import { SubmitButton } from "formik-antd"
 import { Link } from "react-router-dom"
-import { List, Avatar, Row, Col, Icon, Form, Tooltip } from "antd"
+import { List, Avatar, Row, Col, Icon, Form, Tooltip, message } from "antd"
 
 import Drawer from "components/Drawer"
 import Heading from "components/Heading"
@@ -146,6 +146,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 						const price = (item.product_price || {}).price
 						const photo = (product_data.product_image || [])[0] || {}
 						const name = item.product_name || "-"
+						const stock = product_data.product_detail?.stock
 
 						const handleUpdateCart = (values, { setSubmitting }) => {
 							values = {
@@ -153,6 +154,11 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 								cart_id: item.cart_id,
 								weight: item.weight_per_pcs * values.qty,
 								total_price: values.qty * price
+							}
+
+							if (values.qty > stock) {
+								setSubmitting(false)
+								return message.error("Stock nggak cukup")
 							}
 
 							updateCartItem(values, name).finally(() => setSubmitting(false))

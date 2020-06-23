@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react"
-import { Section, Heading, Button, ButtonLink, Empty } from "components"
-import { List, Icon, Avatar, Row, Col, Menu, Tabs, Typography } from "antd"
+import React, { useState, useEffect } from "react"
+import { Section, Heading, ButtonLink, Empty } from "components"
+import { List, Icon, Avatar, Row, Col, Tabs, Typography } from "antd"
 import styled from "styled-components/macro"
-import { connect, useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import { fetchOrderHistory, cancelOrder } from "store/actions/otherActions"
 import { fetchAirwayBill } from "store/actions/rajaOngkirActions"

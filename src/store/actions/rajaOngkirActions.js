@@ -38,7 +38,7 @@ export const fetchCouriers = ({ origin, originType, destination, destinationType
 	dispatch(loadingRajaOngkir())
 	return instance
 		.get(`/order/expedition-cost`, { params: { origin, originType, destination, destinationType, weight } })
-		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.data }))
+		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.data.pushData }))
 		.catch((err) => renderError(err, dispatch, types.FETCH_COURIERS_ERROR))
 }
 

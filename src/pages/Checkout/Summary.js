@@ -65,6 +65,8 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 
 	const handleSaveOrder = () => {
 		const adjustedCartItems = formData.cartItems.map(({ product_price, ...item }) => {
+			product_price =
+				product_price.find((item) => item.price_type.toLowerCase() === typeRemark.toLowerCase()) || {}
 			const { cart_id, weight_per_pcs, product_data, ...restCart } = item
 			return { ...restCart, product_price: product_price.price }
 		})
