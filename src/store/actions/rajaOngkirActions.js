@@ -42,6 +42,14 @@ export const fetchCouriers = ({ origin, originType, destination, destinationType
 		.catch((err) => renderError(err, dispatch, types.FETCH_COURIERS_ERROR))
 }
 
+export const fetchCouriersBackend = () => (dispatch) => {
+	dispatch(loadingRajaOngkir())
+	return instance
+		.get(`/backend/expedition/list`)
+		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS_BACKEND, payload: data.data.ekspedition_data }))
+		.catch((err) => renderError(err, dispatch, types.FETCH_COURIERS_BACKEND_ERROR))
+}
+
 export const fetchAirwayBill = ({ waybill, courier }) => (dispatch) => {
 	dispatch(loadingRajaOngkir())
 	return instance(`/order/airwaybill`, { waybill, courier })

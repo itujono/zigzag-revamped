@@ -5,6 +5,7 @@ const initialStates = {
 	cities: [],
 	subdistricts: [],
 	couriers: [],
+	couriersBackend: [],
 	airwayBill: {},
 	provinceOptions: [],
 	cityOptions: [],
@@ -20,7 +21,8 @@ const initialStates = {
 	couriersError: null,
 	provincesError: null,
 	citiesError: null,
-	subdistrictsError: null
+	subdistrictsError: null,
+	couriersBackendError: null
 }
 
 function reducer(state = initialStates, action) {
@@ -74,6 +76,8 @@ function reducer(state = initialStates, action) {
 			}
 		case types.FETCH_COURIERS:
 			return { ...state, couriers: action.payload, loading: false }
+		case types.FETCH_COURIERS_BACKEND:
+			return { ...state, couriersBackend: action.payload, loading: false }
 
 		case types.FETCH_COURIERS_ERROR:
 			return { ...state, couriersError: action.payload, loading: false }
@@ -87,6 +91,8 @@ function reducer(state = initialStates, action) {
 			return { ...state, airwayBill: action.payload, loading: false }
 		case types.FETCH_AIRWAY_BILL_ERROR:
 			return { ...state, airwayBillError: action.payload, loading: false }
+		case types.FETCH_COURIERS_BACKEND_ERROR:
+			return { ...state, couriersBackendError: action.payload, loading: false }
 		default:
 			return state
 	}

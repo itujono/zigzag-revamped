@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from "react"
-import { Section, Heading, Card, Button, Loading, Alert } from "components"
+import { Section, Heading, Card, Button, Loading, Alert, Empty } from "components"
 import { Row, Col, Badge, Icon } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
@@ -145,7 +145,7 @@ export default function Ongkir({ data, handlers, loading }) {
 		if (!formData.address) push("/404")
 
 		handleFetchCouriers()
-	}, [formData.address, handleFetchCouriers, push])
+	}, [formData.address, handleFetchCouriers, push, dispatch])
 
 	return (
 		<Section paddingHorizontal="0">
@@ -159,10 +159,12 @@ export default function Ongkir({ data, handlers, loading }) {
 				showIcon
 				type="info"
 				className="mb4em"
-				message={`Semua kiriman dikirim dari ${ORIGIN.city}, ${ORIGIN.province}`}
+				message={` Semua kiriman dikirim dari ${ORIGIN.city}, ${ORIGIN.province}`}
 			/>
 
 			{loading && <Loading />}
+
+			{couriers.length === 0 && <Empty />}
 
 			{couriers.map((courier) => {
 				const { code, costs = [], name } = courier
