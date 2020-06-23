@@ -44,13 +44,7 @@ export const fetchCouriers = ({ origin, originType, destination, destinationType
 
 export const fetchAirwayBill = ({ waybill, courier }) => (dispatch) => {
 	dispatch(loadingRajaOngkir())
-	return Axios.post(
-		`${corsUrl}/${baseUrl}/waybill`,
-		{ waybill, courier },
-		{
-			headers: { key: process.env.REACT_APP_RAJAONGKIR }
-		}
-	)
-		.then(({ data }) => dispatch({ type: types.FETCH_AIRWAY_BILL, payload: data.rajaongkir.result }))
+	return instance(`/order/airwaybill`, { waybill, courier })
+		.then(({ data }) => dispatch({ type: types.FETCH_AIRWAY_BILL, payload: data.data.airwayBill }))
 		.catch((err) => renderError(err, dispatch, types.FETCH_AIRWAY_BILL_ERROR))
 }
