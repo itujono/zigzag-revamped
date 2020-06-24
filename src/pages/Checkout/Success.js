@@ -43,7 +43,7 @@ const StyledCard = styled(Card)`
 `
 
 const bankAccountText = (bankAccounts) => (
-	<ul style={{ marginTop: "2em" }}>
+	<ul className="mt2em pl0">
 		{bankAccounts.map((item) => (
 			<li key={item.id}>
 				<Heading
@@ -106,7 +106,8 @@ function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
 						)}
 					</Col>
 					<Col lg={8} xs={24} className="right">
-						<Heading content="Rekening Zigzag" subheader={bankAccountText(bankAccounts)} />
+						<Heading content="Rekening Zigzag" subheader="Jika kamu memilih metode pembayaran transfer" />
+						{bankAccountText(bankAccounts)}
 					</Col>
 				</Row>
 			</StyledCard>

@@ -72,19 +72,21 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 		})
 
 		// prettier-ignore
-		const { cartItems, cartTotal, province, province_id, city, city_id, subdistrict, subdistrict_id, order_detail, address, payment, deposit, ...restValues } = formData
+		const { cartItems, cartTotal, province, province_id, city, city_id, subdistrict, subdistrict_id, order_detail = {}, address, payment, deposit, ...restValues } = formData
 
 		const values = {
 			...restValues,
 			province_name: formData.province.text,
 			city_name: formData.city.text,
 			subdistrict_name: formData.subdistrict.text,
-			payment_method: formData.payment?.value,
+			payment_method: formData.isSelfPickup ? "deposit" : formData.payment?.value,
 			order_detail: JSON.stringify(adjustedCartItems),
 			shipping_address: formData.address,
-			order_id: order_detail.id,
+			order_id: order_detail.id || 0,
 			total_weight: cartTotal.roundedWeight,
-			discount: cartTotal.discount || 0
+			discount: cartTotal.discount || 0,
+			pickupGudang: formData.isSelfPickup ? 1 : 0,
+			unique_code: formData.unique_code || 0
 		}
 
 		dispatch(saveOrder(values, push))
@@ -138,7 +140,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 							<Heading reverse content="Ongkos kirim" subheader="Ongkos kirim untuk orderan ini" />
 						</Col>
 						<Col lg={8} xs={12} className="right">
-							<Heading content={`Rp ${pricer(order_detail.ekspedition_total)}`} />
+							<Heading content={`Rp ${pricer(order_detail.ekspedition_total || 0)}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
