@@ -9,3 +9,7 @@ export const ORIGIN = {
 	province: "Jawa Timur",
 	provinceId: "11"
 }
+export const Discount = {
+	NORMAL: 5000,
+	MORE_THAN_19: 10000
+}

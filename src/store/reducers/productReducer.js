@@ -1,5 +1,5 @@
 import * as types from "../types"
-import { ID_AKUN_KOKO, TEXT_FEATURED } from "helpers/constants"
+import { ID_AKUN_KOKO, TEXT_FEATURED, Discount } from "helpers/constants"
 
 const initialState = {
 	user: {},
@@ -54,9 +54,14 @@ const getDiscount = (cartItems = [], qty) => {
 	let discount = 0
 
 	if (typeRemark.toLowerCase() === "reguler") {
-		if (qty > 2) {
-			const itemsNotPromo = cartItems.filter(({ product_data }) => product_data.is_promo === 0)
-			discount = 10000 * itemsNotPromo.reduce((acc, curr) => acc + Number(curr.product_qty), 0)
+		const itemsNotPromo = cartItems.filter(({ product_data }) => product_data.is_promo === 0)
+
+		if (qty > 19) {
+			discount = Discount.MORE_THAN_19 * itemsNotPromo.reduce((acc, curr) => acc + Number(curr.product_qty), 0)
+		}
+
+		if (qty > 2 && qty < 20) {
+			discount = Discount.NORMAL * itemsNotPromo.reduce((acc, curr) => acc + Number(curr.product_qty), 0)
 		}
 	}
 
