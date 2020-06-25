@@ -10,7 +10,6 @@ import { Switch } from "formik-antd"
 import { addressValidation } from "./validation"
 import { mobile } from "helpers"
 import { useSelector, useDispatch } from "react-redux"
-import { useUserDetails } from "helpers/hooks"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -193,7 +192,6 @@ export default function Address({ data, handlers, initialLoading }) {
 											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
-													// allowClear={false}
 													name="province"
 													placeholder="Provinsi kamu..."
 													options={provinceOptions}
@@ -203,7 +201,6 @@ export default function Address({ data, handlers, initialLoading }) {
 											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
-													// allowClear={false}
 													name="city"
 													placeholder="Kota/kabupaten kamu..."
 													options={cityOptions}
@@ -213,7 +210,6 @@ export default function Address({ data, handlers, initialLoading }) {
 											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
-													// allowClear={false}
 													name="subdistrict"
 													placeholder="Kecamatan kamu..."
 													options={subdistrictOptions}

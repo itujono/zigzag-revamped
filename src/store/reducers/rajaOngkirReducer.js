@@ -74,8 +74,32 @@ function reducer(state = initialStates, action) {
 				subdistrictOptionsAuto,
 				loading: false
 			}
+
 		case types.FETCH_COURIERS:
-			return { ...state, couriers: action.payload, loading: false }
+			const couriers = action.payload.map((item) => {
+				if (item.code === "shopeecashless") {
+					item.costs = [
+						{
+							service: "Shopee Cashless",
+							description: "Wajib isi nomor Online Booking",
+							cost: [{ value: 0, etd: "", note: "" }]
+						}
+					]
+				}
+				if (item.code === "gosend") {
+					item.costs = [
+						{
+							service: "GoSend -- bebas ongkir ",
+							description: "Khusus bayar di tempat",
+							cost: [{ value: 0, etd: "", note: "" }]
+						}
+					]
+				}
+
+				return item
+			})
+			return { ...state, couriers, loading: false }
+
 		case types.FETCH_COURIERS_BACKEND:
 			return { ...state, couriersBackend: action.payload, loading: false }
 
