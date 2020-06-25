@@ -103,9 +103,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 			unique_code: formData.unique_code || 0
 		}
 
-		console.log({ values })
-
-		// dispatch(saveOrder(values, push))
+		dispatch(saveOrder(values, push))
 	}
 
 	if (!isPartner && !formData.payment) push("/404")
