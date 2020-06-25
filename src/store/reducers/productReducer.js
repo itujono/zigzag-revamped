@@ -129,6 +129,7 @@ function reducer(state = initialState, action) {
 					product_id,
 					product_data,
 					product_price,
+					product_price_pokok: item.product_price.find((item) => item.price_type === "POKOK") || {},
 					weight_per_pcs: product_data.weight_per_pcs
 				}
 			})

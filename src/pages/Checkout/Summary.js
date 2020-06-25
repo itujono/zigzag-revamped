@@ -75,6 +75,8 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 					product_price =
 						product_price.find((item) => item.price_type.toLowerCase() === role.toLowerCase()) || {}
 				}
+			} else {
+				product_price = isKoko ? item.product_price_pokok : product_price
 			}
 
 			product_total_price = isKoko ? product_price.price * item.product_qty : product_total_price
@@ -101,7 +103,9 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 			unique_code: formData.unique_code || 0
 		}
 
-		dispatch(saveOrder(values, push))
+		console.log({ values })
+
+		// dispatch(saveOrder(values, push))
 	}
 
 	if (!isPartner && !formData.payment) push("/404")

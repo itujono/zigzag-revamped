@@ -44,6 +44,8 @@ export default function Address({ data, handlers, initialLoading }) {
 	} = handlers
 	const { user, cartItems, cartTotal, selectedSubdistrict, selectedProvince, selectedCity } = data
 
+	console.log({ cartItems })
+
 	const renderInitialValues = (property) => {
 		return formData[property] ? formData[property] : user[property]
 	}
