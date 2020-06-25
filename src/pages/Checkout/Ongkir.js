@@ -120,7 +120,7 @@ export default function Ongkir({ data, handlers, loading }) {
 			weight: cartTotal.roundedWeight,
 			destinationType: subdistrict.value ? "subdistrict" : "city",
 			originType: "city",
-			courier: "jne:jnt:sicepat"
+			courier: "jne:pos:tiki:rpx:pcp:sicepat:jnt:sap:jet:ncs:star:ninja:lion:idl"
 		}
 
 		dispatch(fetchCouriers(data))
@@ -167,21 +167,21 @@ export default function Ongkir({ data, handlers, loading }) {
 			{couriers.length === 0 && <Empty />}
 
 			{couriers.map((courier) => {
-				const { code, costs = [], name } = courier
-				const courierLogo =
-					code === "jne" ? jneLogo : code === "J&T" ? jntLogo : code === "sicepat" ? sicepatLogo : ""
+				const { code, costs = [], name, picture } = courier
+				// const courierLogo =
+				// 	code === "jne" ? jneLogo : code === "J&T" ? jntLogo : code === "sicepat" ? sicepatLogo : ""
 
 				return (
 					<StyledCard noHover key={code}>
 						<Row gutter={16} type="flex" className="scrolling-courier">
 							{mobile && (
 								<CourierLogo>
-									<img src={courierLogo} alt={name} width="60" />
+									<img src={picture} alt={name} width="60" />
 								</CourierLogo>
 							)}
 							{!mobile && (
 								<Col lg={6}>
-									<img src={courierLogo} alt={name} width="100%" />
+									<img src={picture} alt={name} width="100%" />
 								</Col>
 							)}
 							{costs.map((item, idx) => {
