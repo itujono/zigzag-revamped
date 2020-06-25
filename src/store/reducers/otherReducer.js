@@ -56,6 +56,7 @@ function reducer(state = initial, action) {
 					if (customers.id === ID_AKUN_KOKO) {
 						return {
 							...item,
+							grandtotal_order: "-",
 							orders_detail: orders_detail.map((detail) => ({
 								...detail,
 								product_price: "-",
