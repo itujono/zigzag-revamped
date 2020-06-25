@@ -13,6 +13,7 @@ const initialState = {
 	productPrice: 0,
 	cartItems: [],
 	cartTotal: {},
+	cartTotalKoko: {},
 	wishlistItems: [],
 	searchList: [],
 	promoProducts: [],
@@ -139,13 +140,21 @@ function reducer(state = initialState, action) {
 				})
 				.reduce((acc, curr) => acc + curr, 0)
 			const totalQty = action.payload.reduce((acc, curr) => acc + curr.product_qty, 0)
-			const roundedWeight = roundupWeight(String(totalWeight))
 			const discount = getDiscount(cartItems, totalQty)
+			const roundedWeight = roundupWeight(String(totalWeight))
+			const cartTotal = { price: totalPrice, weight: totalWeight, discount, qty: totalQty, roundedWeight }
+			const priceForKoko = action.payload
+				.map((item) => {
+					const product_price = item.product_price.find((price) => price.price_type === "POKOK")
+					return product_price.price * item.product_qty
+				})
+				.reduce((acc, curr) => acc + curr, 0)
 
 			return {
 				...state,
 				cartItems,
-				cartTotal: { price: totalPrice, weight: totalWeight, discount, qty: totalQty, roundedWeight },
+				cartTotal,
+				cartTotalKoko: { ...cartTotal, price: priceForKoko },
 				loadingCart: false
 			}
 

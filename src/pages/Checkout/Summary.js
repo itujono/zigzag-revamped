@@ -6,7 +6,8 @@ import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"
 import { pricer, media, mobile } from "helpers"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { ID_AKUN_KOKO } from "helpers/constants"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -47,29 +48,39 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 	const dispatch = useDispatch()
 	const [confirmModal, setConfirmModal] = useState(false)
 	const [allGood, setAllGood] = useState(false)
+	const userId = localStorage.getItem("user_id")
+	const isKoko = Number(userId) === ID_AKUN_KOKO
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
-	const { account_type_remark: typeRemark } = accountType
-	const isPartner = typeRemark.toLowerCase() === "partner"
+	const { account_type_remark: role = "" } = accountType
+	const isPartner = role.toLowerCase() === "partner"
 	const { customer_service: cs = {} } = user
 	const csWhatsappNumber = (cs.whatsapp || "").startsWith("0") && "62" + (cs.whatsapp || "").slice(1)
 
 	const { cartTotal, order_detail = {} } = formData
 
 	const generalTotal =
-		Number(order_detail.ekspedition_total) +
+		Number(order_detail.ekspedition_total || 0) +
 		Number(cartTotal.price) +
 		Number(formData.unique_code || 0) -
 		Number(cartTotal.discount || 0)
 
 	const handleSaveOrder = () => {
-		const adjustedCartItems = formData.cartItems.map(({ product_price, ...item }) => {
-			product_price = Array.isArray(product_price)
-				? product_price.find((item) => item.price_type.toLowerCase() === typeRemark.toLowerCase()) || {}
-				: product_price
+		const adjustedCartItems = formData.cartItems.map(({ product_price, product_total_price, ...item }) => {
+			if (Array.isArray(product_price)) {
+				if (isKoko) {
+					product_price = product_price.find((item) => item.price_type.toLowerCase() === "pokok") || {}
+				} else {
+					product_price =
+						product_price.find((item) => item.price_type.toLowerCase() === role.toLowerCase()) || {}
+				}
+			}
+
+			product_total_price = isKoko ? product_price.price * item.product_qty : product_total_price
+
 			const { cart_id, weight_per_pcs, product_data, ...restCart } = item
-			return { ...restCart, product_price: product_price.price }
+			return { ...restCart, product_price: product_price.price, product_total_price }
 		})
 
 		// prettier-ignore
@@ -153,7 +164,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 							/>
 						</Col>
 						<Col lg={8} xs={12} className="right">
-							<Heading content={formData.unique_code} />
+							<Heading content={formData.unique_code || 0} />
 						</Col>
 					</StyledRow>
 					<StyledRow gutter={32}>
