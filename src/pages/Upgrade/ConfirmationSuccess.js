@@ -14,7 +14,7 @@ const usefulLinks = (
 			<Heading reverse content="Dompet" subheader={<Link to="/category/3-dompet">Belanja dompet</Link>} />
 		</li>
 		<li>
-			<Heading reverse content="Lingerie" subheader={<Link to="/category/4-lingerie">Belanja lingerie</Link>} />
+			<Heading reverse content="Sepatu" subheader={<Link to="/category/2-sepatu">Belanja sepatu</Link>} />
 		</li>
 	</ul>
 )
