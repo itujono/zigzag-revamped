@@ -58,11 +58,11 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 	const { customer_service: cs = {} } = user
 	const csWhatsappNumber = (cs.whatsapp || "").startsWith("0") && "62" + (cs.whatsapp || "").slice(1)
 
-	const { cartTotal, order_detail = {} } = formData
+	const { cartTotal = {}, order_detail = {} } = formData
 
 	const generalTotal =
 		Number(order_detail.ekspedition_total || 0) +
-		Number(cartTotal.price) +
+		Number(cartTotal.price || 0) +
 		Number(formData.unique_code || 0) -
 		Number(cartTotal.discount || 0)
 
