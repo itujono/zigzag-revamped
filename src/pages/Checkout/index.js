@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Suspense } from "react"
 import { Section, Layout, Heading, ButtonLink, Empty, Loading } from "components"
-import { Switch, Route, Redirect } from "react-router-dom"
+import { Switch, Route, Redirect, Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
 import styled from "styled-components/macro"
@@ -205,8 +205,14 @@ function Checkout() {
 															/>
 														}
 														title={
-															<p style={{ marginBottom: 0 }}>
-																<a href="https://ant.design">{name}</a> &middot;{" "}
+															<p className="mb0">
+																<Link
+																	to={`/product/${item.product_id}-${name}`}
+																	target="_blank"
+																>
+																	{name}
+																</Link>{" "}
+																&middot;{" "}
 																<span>
 																	{quantity} x Rp {pricer(price)}/pcs
 																</span>
