@@ -35,9 +35,9 @@ const DepositConfirmation = React.lazy(() => import("pages/Profile/Deposit/Depos
 const sequence = ["ArrowUp", "ArrowDown", "x", "x", "x", "Enter"]
 
 function App() {
-	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 10, inactivityEvents: [] })
+	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 4, inactivityEvents: [] })
 
-	useHotKey(sequence, () => console.log("Last uploaded: "))
+	useHotKey(sequence, () => console.log("Last deployed: Jumat - 13:55"))
 
 	return (
 		<Provider store={createAppStore()}>

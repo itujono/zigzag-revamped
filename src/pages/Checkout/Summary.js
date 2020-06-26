@@ -62,7 +62,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 
 	const generalTotal =
 		Number(order_detail.ekspedition_total || 0) +
-		Number(cartTotal.price || 0) +
+		Number(cartTotal?.price || 0) +
 		Number(formData.unique_code || 0) -
 		Number(cartTotal.discount || 0)
 
@@ -79,10 +79,10 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 				product_price = isKoko ? item.product_price_pokok : product_price
 			}
 
-			product_total_price = isKoko ? product_price.price * item.product_qty : product_total_price
+			product_total_price = isKoko ? product_price?.price * item.product_qty : product_total_price
 
 			const { cart_id, weight_per_pcs, product_data, ...restCart } = item
-			return { ...restCart, product_price: product_price.price, product_total_price }
+			return { ...restCart, product_price: product_price?.price, product_total_price }
 		})
 
 		// prettier-ignore
@@ -138,7 +138,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 							<Heading reverse content="Subtotal" subheader="Total harga item di cart kamu" />
 						</Col>
 						<Col lg={8} xs={12} className="right">
-							<Heading content={`Rp ${pricer(cartTotal.price || 0)}`} />
+							<Heading content={`Rp ${pricer(cartTotal?.price || 0)}`} />
 						</Col>
 					</StyledRow>
 					<StyledRow>
