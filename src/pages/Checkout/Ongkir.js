@@ -104,7 +104,7 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const { couriers = [], selectedCourier } = data
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
-	const { cartTotal = {}, subdistrict = {}, subdistrict_id } = formData
+	const { cartTotal = {}, subdistrict = {} } = formData
 
 	const courierNotSelectedYet = Object.values(selectedCourier).some(
 		(item) => item === "" || Object.keys(item).length === 0

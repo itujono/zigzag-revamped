@@ -15,6 +15,7 @@ import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
 
 import ScrollToTop, { useIdle } from "helpers"
 import { message } from "antd"
+import { useHotKey } from "helpers/hooks"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -31,8 +32,12 @@ const NewPassword = React.lazy(() => import("pages/auth/NewPassword"))
 const SearchResult = React.lazy(() => import("pages/Home/SearchResult"))
 const DepositConfirmation = React.lazy(() => import("pages/Profile/Deposit/DepositConfirmation"))
 
+const sequence = ["ArrowUp", "ArrowDown", "x", "x", "x", "Enter"]
+
 function App() {
 	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 10, inactivityEvents: [] })
+
+	useHotKey(sequence, () => console.log("Last uploaded: "))
 
 	return (
 		<Provider store={createAppStore()}>
