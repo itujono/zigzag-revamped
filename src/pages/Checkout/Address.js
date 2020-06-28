@@ -6,11 +6,11 @@ import { useHistory } from "react-router-dom"
 import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
-import { Switch, FormikDebug } from "formik-antd"
+import { Switch } from "formik-antd"
 import { addressValidation } from "./validation"
 import { mobile } from "helpers"
 import { useSelector, useDispatch } from "react-redux"
-import { ID_AKUN_KOKO, UserType } from "helpers/constants"
+import { UserType } from "helpers/constants"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -29,8 +29,6 @@ export default function Address({ data, handlers, initialLoading }) {
 	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptionsAuto)
 	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptionsAuto)
 	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptionsAuto)
-	const userId = Number(localStorage.getItem("user_id"))
-	const isKoko = userId === ID_AKUN_KOKO
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -116,19 +114,11 @@ export default function Address({ data, handlers, initialLoading }) {
 					address: renderInitialValues("address"),
 					dropshipper_name: renderInitialValues("dropshipper_name"),
 					dropshipper_tele: renderInitialValues("dropshipper_tele"),
-					jne_online_booking: renderInitialValues("jne_online_booking"),
-					isSelfPickup: role === UserType.PARTNER
+					jne_online_booking: renderInitialValues("jne_online_booking")
 				}}
 			>
 				{({ handleSubmit, values, setFieldValue }) => {
-					const {
-						dropshipper_name,
-						dropshipper_tele,
-						jne_online_booking,
-						zip,
-						isSelfPickup,
-						...restValues
-					} = values
+					const { dropshipper_name, dropshipper_tele, jne_online_booking, zip, ...restValues } = values
 
 					const handleChange = (e) => {
 						const name = e.target.name
@@ -139,6 +129,7 @@ export default function Address({ data, handlers, initialLoading }) {
 						if (name === "province") return handleSelectProvince(value)
 						if (name === "city") return handleSelectCity(value)
 						if (name === "subdistrict") return handleSelectSubdistrict(value)
+						return
 					}
 
 					const handleFocus = (handler, regionType, name) => {
@@ -149,8 +140,6 @@ export default function Address({ data, handlers, initialLoading }) {
 						)
 					}
 
-					console.log({ restValues })
-
 					return (
 						<Form layout="vertical" onSubmit={handleSubmit}>
 							{role === UserType.PARTNER && (
@@ -158,7 +147,7 @@ export default function Address({ data, handlers, initialLoading }) {
 									<div className="mb2em">
 										<Switch name="isSelfPickup" /> &nbsp; Saya bersedia jemput di gudang Zigzag
 										&nbsp;{" "}
-										<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu hanya punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
+										<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
 											<Icon type="question-circle" theme="filled" />
 										</Tooltip>
 									</div>
@@ -174,7 +163,7 @@ export default function Address({ data, handlers, initialLoading }) {
 								</Section>
 							)}
 
-							{values.isSelfPickup || isKoko ? null : (
+							{values.isSelfPickup ? null : (
 								<>
 									<StyledCard noHover title="Info kontak">
 										<Row gutter={16}>
@@ -299,17 +288,11 @@ export default function Address({ data, handlers, initialLoading }) {
 								</>
 							)}
 
-							<FormikDebug />
-
 							<Section textAlign="right" paddingHorizontal="0">
 								<Button
 									htmlType="submit"
 									type="primary"
-									disabled={
-										role === UserType.PARTNER
-											? !values.isSelfPickup
-											: Object.values(restValues).some((item) => !item)
-									}
+									disabled={Object.values(restValues).some((item) => !item)}
 								>
 									Lanjut ke Ongkir <Icon type="right" />
 								</Button>
