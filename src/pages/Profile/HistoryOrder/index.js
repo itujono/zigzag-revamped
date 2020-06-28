@@ -70,6 +70,7 @@ function HistoryOrder() {
 					const { order_code, ekspedition_data: courier = {}, grandtotal_order, status_order } = item
 					const isSelected = order_code === selectedItem.order_code
 					const isNotPaid = status_order.status_id === 1
+					const zip = item.zip === 0 ? "(tidak ada kode pos)" : item.zip
 
 					const handleCancelOrder = (values, { setSubmitting }) => {
 						values = { ...values, order_id: item.id }
@@ -127,7 +128,7 @@ function HistoryOrder() {
 													<Heading
 														reverse
 														content="Alamat pengiriman"
-														subheader={`${item.shipping_address}, ${item.province_name}, ${item.city_name}, ${item.subdistrict_name} ${item.zip}`}
+														subheader={`${item.shipping_address}, ${item.province_name}, ${item.city_name}, ${item.subdistrict_name} ${zip}`}
 													/>
 												</Col>
 												<Col lg={8}>

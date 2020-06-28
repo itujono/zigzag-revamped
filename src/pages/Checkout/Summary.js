@@ -57,13 +57,14 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 	const isPartner = role.toLowerCase() === "partner"
 	const { customer_service: cs = {} } = user
 	const csWhatsappNumber = (cs.whatsapp || "").startsWith("0") && "62" + (cs.whatsapp || "").slice(1)
+	const uniqueCode = formData.payment?.value === "deposit" ? 0 : Number(formData.unique_code || 0)
 
 	const { cartTotal = {}, order_detail = {} } = formData
 
 	const generalTotal =
 		Number(order_detail.ekspedition_total || 0) +
 		Number(cartTotal?.price || 0) +
-		Number(formData.unique_code || 0) -
+		uniqueCode -
 		Number(cartTotal.discount || 0)
 
 	const handleSaveOrder = () => {
@@ -100,7 +101,8 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 			total_weight: cartTotal.roundedWeight,
 			discount: cartTotal.discount || 0,
 			pickupGudang: formData.isSelfPickup ? 1 : 0,
-			unique_code: formData.unique_code || 0
+			unique_code: uniqueCode,
+			zip: formData.zip || 0
 		}
 
 		dispatch(saveOrder(values, push))
@@ -166,7 +168,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 							/>
 						</Col>
 						<Col lg={8} xs={12} className="right">
-							<Heading content={formData.unique_code || 0} />
+							<Heading content={uniqueCode} />
 						</Col>
 					</StyledRow>
 					<StyledRow gutter={32}>

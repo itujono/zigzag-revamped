@@ -120,7 +120,8 @@ export default function Address({ data, handlers, initialLoading }) {
 				}}
 			>
 				{({ handleSubmit, values, setFieldValue }) => {
-					const { dropshipper_name, dropshipper_tele, jne_online_booking, ...restValues } = values
+					const { dropshipper_name, dropshipper_tele, jne_online_booking, zip, ...restValues } = values
+
 					const handleChange = (e) => {
 						const name = e.target.name
 						setFormValues((formValues) => ({ ...formValues, [name]: e.target.value }))
