@@ -18,8 +18,8 @@ const Summary = React.lazy(() => import("./Summary"))
 
 const Sidebar = styled.div`
 	padding: 2em;
-	height: 100vh;
-	overflow-y: auto;
+	/* height: 100vh;
+	overflow-y: auto; */
 	background-color: #f9f9f9;
 `
 

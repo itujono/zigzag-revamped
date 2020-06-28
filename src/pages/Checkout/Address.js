@@ -1,15 +1,17 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Section, Heading, Card, Loading, Button } from "components"
 import { Formik } from "formik"
 import { Form, Row, Col, Icon, Tooltip } from "antd"
 import { useHistory } from "react-router-dom"
-import { TextInput, SelectInput } from "components/Fields"
+import { TextInput, SelectInput, CascadeInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
-import { Switch } from "formik-antd"
+import { Switch, FormikDebug } from "formik-antd"
 import { addressValidation } from "./validation"
 import { mobile } from "helpers"
 import { useSelector, useDispatch } from "react-redux"
+import { ID_AKUN_KOKO, UserType } from "helpers/constants"
+import { fetchAllRegions, fetchProvinces } from "store/actions/rajaOngkirActions"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -28,6 +30,10 @@ export default function Address({ data, handlers, initialLoading }) {
 	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptionsAuto)
 	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptionsAuto)
 	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptionsAuto)
+	const provinceList = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptions)
+	const userId = Number(localStorage.getItem("user_id"))
+	const isKoko = userId === ID_AKUN_KOKO
+	const [regionOptions, setRegionOptions] = useState(provinceList)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -42,8 +48,6 @@ export default function Address({ data, handlers, initialLoading }) {
 		setSelectedCity
 	} = handlers
 	const { user, cartItems, cartTotal, selectedSubdistrict, selectedProvince, selectedCity } = data
-
-	console.log({ cartItems })
 
 	const renderInitialValues = (property) => {
 		return formData[property] ? formData[property] : user[property]
@@ -94,6 +98,16 @@ export default function Address({ data, handlers, initialLoading }) {
 		push(url)
 	}
 
+	const handleLoadData = (selected) => {
+		const target = selected[selected.length - 1]
+		console.log({ target })
+	}
+
+	useEffect(() => {
+		dispatch(fetchAllRegions())
+		dispatch(fetchProvinces()).then(() => setRegionOptions(provinceList))
+	}, [dispatch])
+
 	if (initialLoading) return <Loading />
 
 	return (
@@ -128,16 +142,19 @@ export default function Address({ data, handlers, initialLoading }) {
 
 					const handleChangeSelect = (name) => (value) => {
 						if (name === "province") return handleRenderCities(value)
-						if (name === "city") return handleRenderSubdistricts(value)
+						if (name === "city") {
+							if (!values.city) dispatch(fetchCities(values.province_id))
+							return handleRenderSubdistricts(value)
+						}
 						if (name === "subdistrict") return handleSelectSubdistrict(value)
 						setFormValues((formValues) => ({ ...formValues, [name]: value }))
 					}
 
 					return (
 						<Form layout="vertical" onSubmit={handleSubmit}>
-							{typeRemark === "partner" && (
+							{typeRemark === UserType.PARTNER && (
 								<Section paddingHorizontal="0">
-									<div style={{ marginBottom: "2em" }}>
+									<div className="mb0">
 										<Switch name="isSelfPickup" /> &nbsp; Saya bersedia jemput di gudang Zigzag
 										&nbsp;{" "}
 										<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu hanya punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
@@ -156,7 +173,7 @@ export default function Address({ data, handlers, initialLoading }) {
 								</Section>
 							)}
 
-							{!values.isSelfPickup && (
+							{(!values.isSelfPickup || !isKoko) && (
 								<>
 									<StyledCard noHover title="Info kontak">
 										<Row gutter={16}>
@@ -189,13 +206,24 @@ export default function Address({ data, handlers, initialLoading }) {
 
 									<StyledCard noHover title="Alamat">
 										<Row type="flex" gutter={16}>
+											{/* <Col lg={12} xs={24}>
+												<CascadeInput
+													name="regions"
+													loadData={handleLoadData}
+													options={regionOptions}
+													onChange={(value, selected) => console.log({ value, selected })}
+													label="Wilayah"
+												/>
+											</Col> */}
 											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
+													backfill
 													name="province"
 													placeholder="Provinsi kamu..."
 													options={provinceOptions}
 													onChange={handleChangeSelect("province")}
+													onFocus={() => console.log("province")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -205,6 +233,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kota/kabupaten kamu..."
 													options={cityOptions}
 													onChange={handleChangeSelect("city")}
+													onFocus={() => console.log("city")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -214,6 +243,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kecamatan kamu..."
 													options={subdistrictOptions}
 													onChange={handleChangeSelect("subdistrict")}
+													onFocus={() => console.log("subdistrict")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -275,6 +305,8 @@ export default function Address({ data, handlers, initialLoading }) {
 									</StyledCard>
 								</>
 							)}
+
+							<FormikDebug />
 
 							<Section textAlign="right" paddingHorizontal="0">
 								<Button

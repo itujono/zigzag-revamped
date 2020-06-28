@@ -16,13 +16,15 @@ const initialStates = {
 	provinceOnSidebar: () => null,
 	cityOnSidebar: () => null,
 	subdistrictOnSidebar: () => null,
+	allRegions: {},
 
 	airwayBillError: null,
 	couriersError: null,
 	provincesError: null,
 	citiesError: null,
 	subdistrictsError: null,
-	couriersBackendError: null
+	couriersBackendError: null,
+	allRegionsError: null
 }
 
 function reducer(state = initialStates, action) {
@@ -76,30 +78,34 @@ function reducer(state = initialStates, action) {
 			}
 
 		case types.FETCH_COURIERS:
-			const couriers = action.payload.map((item) => {
-				if (item.code === "shopeecashless") {
-					item.costs = [
-						{
-							service: "Shopee Cashless",
-							description: "Wajib isi nomor Online Booking",
-							cost: [{ value: 0, etd: "", note: "" }]
-						}
-					]
-				}
-				if (item.code === "gosend") {
-					item.costs = [
-						{
-							service: "GoSend -- bebas ongkir ",
-							description: "Khusus bayar di tempat",
-							cost: [{ value: 0, etd: "", note: "" }]
-						}
-					]
-				}
+			const couriers = action.payload
+				.filter((item) => item.costs.length > 0)
+				.map((item) => {
+					if (item.code === "shopeecashless") {
+						item.costs = [
+							{
+								service: "Shopee Cashless",
+								description: "Wajib isi nomor Online Booking",
+								cost: [{ value: 0, etd: "", note: "" }]
+							}
+						]
+					}
+					if (item.code === "gosend") {
+						item.costs = [
+							{
+								service: "GoSend -- bebas ongkir ",
+								description: "Khusus bayar di tempat",
+								cost: [{ value: 0, etd: "", note: "" }]
+							}
+						]
+					}
 
-				return item
-			})
+					return item
+				})
 			return { ...state, couriers, loading: false }
 
+		case types.FETCH_ALL_REGIONS:
+			return { ...state, allRegions: action.payload, loading: false }
 		case types.FETCH_COURIERS_BACKEND:
 			return { ...state, couriersBackend: action.payload, loading: false }
 
@@ -117,6 +123,8 @@ function reducer(state = initialStates, action) {
 			return { ...state, airwayBillError: action.payload, loading: false }
 		case types.FETCH_COURIERS_BACKEND_ERROR:
 			return { ...state, couriersBackendError: action.payload, loading: false }
+		case types.FETCH_ALL_REGIONS_ERROR:
+			return { ...state, allRegionsError: action.payload, loading: false }
 		default:
 			return state
 	}
