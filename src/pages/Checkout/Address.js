@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Section, Heading, Card, Loading, Button } from "components"
 import { Formik } from "formik"
 import { Form, Row, Col, Icon, Tooltip } from "antd"
 import { useHistory } from "react-router-dom"
-import { TextInput, SelectInput, CascadeInput } from "components/Fields"
+import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
 import { Switch, FormikDebug } from "formik-antd"
@@ -11,7 +11,6 @@ import { addressValidation } from "./validation"
 import { mobile } from "helpers"
 import { useSelector, useDispatch } from "react-redux"
 import { ID_AKUN_KOKO, UserType } from "helpers/constants"
-import { fetchAllRegions, fetchProvinces } from "store/actions/rajaOngkirActions"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -30,7 +29,6 @@ export default function Address({ data, handlers, initialLoading }) {
 	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptionsAuto)
 	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptionsAuto)
 	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptionsAuto)
-	// const provinceList = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptions)
 	const userId = Number(localStorage.getItem("user_id"))
 	const isKoko = userId === ID_AKUN_KOKO
 
@@ -95,10 +93,6 @@ export default function Address({ data, handlers, initialLoading }) {
 		push(url)
 	}
 
-	useEffect(() => {
-		dispatch(fetchAllRegions())
-	}, [dispatch])
-
 	if (initialLoading) return <Loading />
 
 	return (
@@ -125,7 +119,7 @@ export default function Address({ data, handlers, initialLoading }) {
 					jne_online_booking: renderInitialValues("jne_online_booking")
 				}}
 			>
-				{({ handleSubmit, values }) => {
+				{({ handleSubmit, values, setFieldValue }) => {
 					const { dropshipper_name, dropshipper_tele, jne_online_booking, ...restValues } = values
 					const handleChange = (e) => {
 						const name = e.target.name
@@ -136,12 +130,11 @@ export default function Address({ data, handlers, initialLoading }) {
 						if (name === "province") return handleSelectProvince(value)
 						if (name === "city") return handleSelectCity(value)
 						if (name === "subdistrict") return handleSelectSubdistrict(value)
-
-						setFormValues((formValues) => ({ ...formValues, [name]: value }))
 					}
 
-					const handleFocus = (handler, regionType) => {
+					const handleFocus = (handler, regionType, name) => {
 						const region = isNaN(values[regionType]) ? regionType + "_id" : regionType
+						setFieldValue(name, "")
 						return dispatch(
 							handler(typeof values[region] === "object" ? values[region].value : values[region])
 						)
@@ -203,15 +196,6 @@ export default function Address({ data, handlers, initialLoading }) {
 
 									<StyledCard noHover title="Alamat">
 										<Row type="flex" gutter={16}>
-											{/* <Col lg={12} xs={24}>
-												<CascadeInput
-													name="regions"
-													loadData={handleLoadData}
-													options={regionOptions}
-													onChange={(value, selected) => console.log({ value, selected })}
-													label="Wilayah"
-												/>
-											</Col> */}
 											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
@@ -219,6 +203,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Provinsi kamu..."
 													options={provinceOptions}
 													onChange={handleChangeSelect("province")}
+													onFocus={() => setFieldValue("province", "")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -228,7 +213,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kota/kabupaten kamu..."
 													options={cityOptions}
 													onChange={handleChangeSelect("city")}
-													onFocus={() => handleFocus(fetchCities, "province")}
+													onFocus={() => handleFocus(fetchCities, "province", "city")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -238,7 +223,9 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kecamatan kamu..."
 													options={subdistrictOptions}
 													onChange={handleChangeSelect("subdistrict")}
-													onFocus={() => handleFocus(fetchSubdistricts, "city")}
+													onFocus={() =>
+														handleFocus(fetchSubdistricts, "city", "subdistrict")
+													}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -300,8 +287,6 @@ export default function Address({ data, handlers, initialLoading }) {
 									</StyledCard>
 								</>
 							)}
-
-							<FormikDebug />
 
 							<Section textAlign="right" paddingHorizontal="0">
 								<Button

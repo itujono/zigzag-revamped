@@ -24,7 +24,7 @@ const Item = styled(FormItem)`
 	}
 `
 
-function SelectInput({ reverse, options, helpText, autocomplete, allowClear = true, ...props }) {
+function SelectInput({ reverse, options, helpText, autocomplete, allowClear = false, ...props }) {
 	return (
 		<Item name={props.name} reverse={reverse} label={props.label}>
 			{autocomplete ? (
