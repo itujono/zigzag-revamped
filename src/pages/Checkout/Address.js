@@ -97,7 +97,6 @@ export default function Address({ data, handlers, initialLoading }) {
 		<Section paddingHorizontal="0">
 			<Heading content="Alamat kamu" subheader="Isi kontak dan alamat pengiriman nya" marginBottom="3em" />
 			<Formik
-				enableReinitialize
 				onSubmit={handleSaveAddress}
 				validationSchema={role !== UserType.PARTNER && addressValidation}
 				initialValues={{
