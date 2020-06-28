@@ -3,7 +3,7 @@ import { Section, Heading, Card, Button, Loading, Alert, Empty } from "component
 import { Row, Col, Badge, Icon } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 // import jneLogo from "assets/images/jne-logo.svg"
 // import jntLogo from "assets/images/j&t-logo.jpeg"
 // import sicepatLogo from "assets/images/sicepat-logo.png"
@@ -99,6 +99,7 @@ const CourierLogo = styled.span`
 export default function Ongkir({ data, handlers, loading }) {
 	const { push } = useHistory()
 	const dispatch = useDispatch()
+	const { state = {} } = useLocation()
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
@@ -142,10 +143,10 @@ export default function Ongkir({ data, handlers, loading }) {
 	}
 
 	useEffect(() => {
-		if (!formData.address) push("/404")
+		if (!formData.address || !state.granted) push("/404")
 
 		handleFetchCouriers()
-	}, [formData.address, handleFetchCouriers, push, dispatch])
+	}, [formData.address, handleFetchCouriers, push, dispatch, state.granted])
 
 	return (
 		<Section paddingHorizontal="0">

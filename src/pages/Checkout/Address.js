@@ -34,7 +34,7 @@ export default function Address({ data, handlers, initialLoading }) {
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
-	const typeRemark = (accountType.account_type_remark || "").toLowerCase()
+	const role = accountType.account_type_remark?.toLowerCase()
 
 	const {
 		fetchCities,
@@ -90,7 +90,7 @@ export default function Address({ data, handlers, initialLoading }) {
 		localStorage.setItem("formData", JSON.stringify(values))
 		setSubmitting(false)
 		const url = values.isSelfPickup ? "/checkout/summary" : "/checkout/ongkir"
-		push(url)
+		push({ pathname: url, state: { granted: true } })
 	}
 
 	if (initialLoading) return <Loading />
@@ -101,7 +101,7 @@ export default function Address({ data, handlers, initialLoading }) {
 			<Formik
 				enableReinitialize
 				onSubmit={handleSaveAddress}
-				validationSchema={addressValidation}
+				validationSchema={role !== UserType.PARTNER && addressValidation}
 				initialValues={{
 					name: renderInitialValues("name"),
 					email: renderInitialValues("email"),
@@ -116,11 +116,19 @@ export default function Address({ data, handlers, initialLoading }) {
 					address: renderInitialValues("address"),
 					dropshipper_name: renderInitialValues("dropshipper_name"),
 					dropshipper_tele: renderInitialValues("dropshipper_tele"),
-					jne_online_booking: renderInitialValues("jne_online_booking")
+					jne_online_booking: renderInitialValues("jne_online_booking"),
+					isSelfPickup: role === UserType.PARTNER
 				}}
 			>
 				{({ handleSubmit, values, setFieldValue }) => {
-					const { dropshipper_name, dropshipper_tele, jne_online_booking, zip, ...restValues } = values
+					const {
+						dropshipper_name,
+						dropshipper_tele,
+						jne_online_booking,
+						zip,
+						isSelfPickup,
+						...restValues
+					} = values
 
 					const handleChange = (e) => {
 						const name = e.target.name
@@ -141,11 +149,13 @@ export default function Address({ data, handlers, initialLoading }) {
 						)
 					}
 
+					console.log({ restValues })
+
 					return (
 						<Form layout="vertical" onSubmit={handleSubmit}>
-							{typeRemark === UserType.PARTNER && (
+							{role === UserType.PARTNER && (
 								<Section paddingHorizontal="0">
-									<div className="mb0">
+									<div className="mb2em">
 										<Switch name="isSelfPickup" /> &nbsp; Saya bersedia jemput di gudang Zigzag
 										&nbsp;{" "}
 										<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu hanya punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
@@ -164,7 +174,7 @@ export default function Address({ data, handlers, initialLoading }) {
 								</Section>
 							)}
 
-							{(!values.isSelfPickup || !isKoko) && (
+							{values.isSelfPickup || isKoko ? null : (
 								<>
 									<StyledCard noHover title="Info kontak">
 										<Row gutter={16}>
@@ -289,11 +299,17 @@ export default function Address({ data, handlers, initialLoading }) {
 								</>
 							)}
 
+							<FormikDebug />
+
 							<Section textAlign="right" paddingHorizontal="0">
 								<Button
 									htmlType="submit"
 									type="primary"
-									disabled={Object.values(restValues).some((item) => item === "" || !item)}
+									disabled={
+										role === UserType.PARTNER
+											? !values.isSelfPickup
+											: Object.values(restValues).some((item) => !item)
+									}
 								>
 									Lanjut ke Ongkir <Icon type="right" />
 								</Button>
