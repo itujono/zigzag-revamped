@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback } from "react"
+import React, { useEffect, useCallback, useState } from "react"
 import { Section, Heading, Card, Button, Loading, Alert, Empty } from "components"
-import { Row, Col, Badge, Icon } from "antd"
+import { Row, Col, Badge, Icon, Form } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
 import { useHistory, useLocation } from "react-router-dom"
@@ -10,6 +10,8 @@ import { useHistory, useLocation } from "react-router-dom"
 import { pricer, mobile, media } from "helpers"
 import { ORIGIN } from "helpers/constants"
 import { useDispatch } from "react-redux"
+import { Formik } from "formik"
+import { TextInput, SelectInput } from "components/Fields"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -100,12 +102,16 @@ export default function Ongkir({ data, handlers, loading }) {
 	const { push } = useHistory()
 	const dispatch = useDispatch()
 	const { state = {} } = useLocation()
+	const [shopeeInfo, setShopeeInfo] = useState({ online_booking: "", expedition: "" })
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
 	const { couriers = [], selectedCourier } = data
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
 	const { cartTotal = {}, subdistrict = {} } = formData
+	const courierOptions = couriers
+		.filter((item) => item.code !== "shopeecashless" && item.code !== "gosend")
+		.map((item) => ({ value: item.name, label: item.name }))
 
 	const courierNotSelectedYet = Object.values(selectedCourier).some(
 		(item) => item === "" || Object.keys(item).length === 0
@@ -116,7 +122,6 @@ export default function Ongkir({ data, handlers, loading }) {
 		const data = {
 			origin: ORIGIN.cityId,
 			destination: subdistrict.value,
-			// destination: typeof subdistrict_id === "number" ? subdistrict_id : subdistrict,
 
 			weight: cartTotal.roundedWeight,
 			destinationType: subdistrict.value ? "subdistrict" : "city",
@@ -128,16 +133,17 @@ export default function Ongkir({ data, handlers, loading }) {
 	}, [subdistrict.value, cartTotal.roundedWeight, dispatch, fetchCouriers])
 
 	const handleSaveCourier = () => {
+		const { code, details = {} } = selectedCourier
+		const remarkData = `${details.service} - ${details.description}`
+		const expedition_remark =
+			code === "shopeecashless"
+				? `${remarkData}; Online booking: ${shopeeInfo.online_booking}; Ekspedisi: ${shopeeInfo.expedition}`
+				: remarkData
 		const order_detail = {
-			expedition_code: selectedCourier.code,
-			expedition_company:
-				selectedCourier.code === "jne"
-					? "JNE"
-					: selectedCourier.code === "sicepat"
-					? "SiCepat"
-					: selectedCourier.code,
-			expedition_remark: `${selectedCourier.details.service} - ${selectedCourier.details.description}`,
-			expedition_total: selectedCourier.details.cost[0].value
+			expedition_remark,
+			expedition_code: code,
+			expedition_company: code === "jne" ? "JNE" : code === "sicepat" ? "SiCepat" : code,
+			expedition_total: details.cost?.[0].value
 		}
 		dispatch(saveCourierDetails(order_detail, formData, push))
 	}
@@ -169,8 +175,6 @@ export default function Ongkir({ data, handlers, loading }) {
 
 			{couriers.map((courier) => {
 				const { code, costs = [], name, picture } = courier
-				// const courierLogo =
-				// 	code === "jne" ? jneLogo : code === "J&T" ? jntLogo : code === "sicepat" ? sicepatLogo : ""
 
 				return (
 					<StyledCard noHover key={code}>
@@ -191,22 +195,55 @@ export default function Ongkir({ data, handlers, loading }) {
 									selectedCourier.code === code && selectedCourier.details.service === service
 
 								return (
-									<Col lg={6} xs={10} key={service + idx}>
-										<CourierCol
-											onClick={() => handleSelectCourier({ code, details: item })}
-											isSelected={isSelected}
-										>
-											<Badge count={<Icon type="check-circle" theme="filled" />} />
-											<Heading
-												content={service}
-												subheader={
-													<div>
-														{description} <p>Rp {pricer(cost[0].value)}</p>
-													</div>
-												}
-											/>
-										</CourierCol>
-									</Col>
+									<>
+										<Col lg={6} xs={10} key={service + idx}>
+											<CourierCol
+												onClick={() => handleSelectCourier({ code, details: item })}
+												isSelected={isSelected}
+											>
+												<Badge count={<Icon type="check-circle" theme="filled" />} />
+												<Heading
+													content={service}
+													subheader={
+														<div>
+															{description} <p>Rp {pricer(cost[0].value)}</p>
+														</div>
+													}
+												/>
+											</CourierCol>
+										</Col>
+										{selectedCourier.code === "shopeecashless" && code === "shopeecashless" && (
+											<Col lg={12} xs={12}>
+												<Formik initialValues={{ online_booking: "" }}>
+													<Form layout="vertical">
+														<TextInput
+															name="online_booking"
+															label="Nomor online booking"
+															placeholder="Nomor online booking"
+															onChange={({ target }) =>
+																setShopeeInfo((prev) => ({
+																	...prev,
+																	online_booking: target.value
+																}))
+															}
+														/>
+														<SelectInput
+															name="expedition"
+															options={courierOptions}
+															label="Ekspedisi yg dipilih"
+															placeholder="Ekspedisi yg dipilih"
+															onChange={(value) =>
+																setShopeeInfo((prev) => ({
+																	...prev,
+																	expedition: value
+																}))
+															}
+														/>
+													</Form>
+												</Formik>
+											</Col>
+										)}
+									</>
 								)
 							})}
 						</Row>
