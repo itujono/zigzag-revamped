@@ -30,10 +30,9 @@ export default function Address({ data, handlers, initialLoading }) {
 	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptionsAuto)
 	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptionsAuto)
 	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptionsAuto)
-	const provinceList = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptions)
+	// const provinceList = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptions)
 	const userId = Number(localStorage.getItem("user_id"))
 	const isKoko = userId === ID_AKUN_KOKO
-	const [regionOptions, setRegionOptions] = useState(provinceList)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -53,15 +52,13 @@ export default function Address({ data, handlers, initialLoading }) {
 		return formData[property] ? formData[property] : user[property]
 	}
 
-	const handleRenderCities = (value) => {
+	const handleSelectProvince = (value) => {
 		value = Number(value)
-		dispatch(fetchCities(value))
 		setSelectedProvince(provinceOptions.find((item) => item.value === value) || {})
 	}
 
-	const handleRenderSubdistricts = (value) => {
+	const handleSelectCity = (value) => {
 		value = Number(value)
-		dispatch(fetchSubdistricts(value))
 		setSelectedCity(cityOptions.find((item) => item.value === value) || {})
 	}
 
@@ -98,14 +95,8 @@ export default function Address({ data, handlers, initialLoading }) {
 		push(url)
 	}
 
-	const handleLoadData = (selected) => {
-		const target = selected[selected.length - 1]
-		console.log({ target })
-	}
-
 	useEffect(() => {
 		dispatch(fetchAllRegions())
-		dispatch(fetchProvinces()).then(() => setRegionOptions(provinceList))
 	}, [dispatch])
 
 	if (initialLoading) return <Loading />
@@ -114,6 +105,7 @@ export default function Address({ data, handlers, initialLoading }) {
 		<Section paddingHorizontal="0">
 			<Heading content="Alamat kamu" subheader="Isi kontak dan alamat pengiriman nya" marginBottom="3em" />
 			<Formik
+				enableReinitialize
 				onSubmit={handleSaveAddress}
 				validationSchema={addressValidation}
 				initialValues={{
@@ -141,13 +133,18 @@ export default function Address({ data, handlers, initialLoading }) {
 					}
 
 					const handleChangeSelect = (name) => (value) => {
-						if (name === "province") return handleRenderCities(value)
-						if (name === "city") {
-							if (!values.city) dispatch(fetchCities(values.province_id))
-							return handleRenderSubdistricts(value)
-						}
+						if (name === "province") return handleSelectProvince(value)
+						if (name === "city") return handleSelectCity(value)
 						if (name === "subdistrict") return handleSelectSubdistrict(value)
+
 						setFormValues((formValues) => ({ ...formValues, [name]: value }))
+					}
+
+					const handleFocus = (handler, regionType) => {
+						const region = isNaN(values[regionType]) ? regionType + "_id" : regionType
+						return dispatch(
+							handler(typeof values[region] === "object" ? values[region].value : values[region])
+						)
 					}
 
 					return (
@@ -218,12 +215,10 @@ export default function Address({ data, handlers, initialLoading }) {
 											<Col lg={12} xs={24}>
 												<SelectInput
 													autocomplete
-													backfill
 													name="province"
 													placeholder="Provinsi kamu..."
 													options={provinceOptions}
 													onChange={handleChangeSelect("province")}
-													onFocus={() => console.log("province")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -233,7 +228,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kota/kabupaten kamu..."
 													options={cityOptions}
 													onChange={handleChangeSelect("city")}
-													onFocus={() => console.log("city")}
+													onFocus={() => handleFocus(fetchCities, "province")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -243,7 +238,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kecamatan kamu..."
 													options={subdistrictOptions}
 													onChange={handleChangeSelect("subdistrict")}
-													onFocus={() => console.log("subdistrict")}
+													onFocus={() => handleFocus(fetchSubdistricts, "city")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>

@@ -30,7 +30,6 @@ function SelectInput({ reverse, options, helpText, autocomplete, allowClear = tr
 			{autocomplete ? (
 				<AutoComplete
 					{...props}
-					// showArrow
 					allowClear={allowClear}
 					name={props.name}
 					dataSource={options}
