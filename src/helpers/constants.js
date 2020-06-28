@@ -13,3 +13,9 @@ export const Discount = {
 	NORMAL: 5000,
 	MORE_THAN_19: 10000
 }
+
+export const UserType = {
+	PARTNER: "partner",
+	REGULER: "reguler",
+	VIP: "vip"
+}

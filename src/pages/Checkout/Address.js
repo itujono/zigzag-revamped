@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { Section, Heading, Card, Loading, Button } from "components"
 import { Formik } from "formik"
 import { Form, Row, Col, Icon, Tooltip } from "antd"
@@ -6,10 +6,11 @@ import { useHistory } from "react-router-dom"
 import { TextInput, SelectInput } from "components/Fields"
 import styled from "styled-components"
 import { theme } from "styles"
-import { Switch } from "formik-antd"
+import { Switch, FormikDebug } from "formik-antd"
 import { addressValidation } from "./validation"
 import { mobile } from "helpers"
 import { useSelector, useDispatch } from "react-redux"
+import { ID_AKUN_KOKO, UserType } from "helpers/constants"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -28,6 +29,8 @@ export default function Address({ data, handlers, initialLoading }) {
 	const provinceOptions = useSelector(({ rajaOngkir }) => rajaOngkir.provinceOptionsAuto)
 	const cityOptions = useSelector(({ rajaOngkir }) => rajaOngkir.cityOptionsAuto)
 	const subdistrictOptions = useSelector(({ rajaOngkir }) => rajaOngkir.subdistrictOptionsAuto)
+	const userId = Number(localStorage.getItem("user_id"))
+	const isKoko = userId === ID_AKUN_KOKO
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -43,21 +46,17 @@ export default function Address({ data, handlers, initialLoading }) {
 	} = handlers
 	const { user, cartItems, cartTotal, selectedSubdistrict, selectedProvince, selectedCity } = data
 
-	console.log({ cartItems })
-
 	const renderInitialValues = (property) => {
 		return formData[property] ? formData[property] : user[property]
 	}
 
-	const handleRenderCities = (value) => {
+	const handleSelectProvince = (value) => {
 		value = Number(value)
-		dispatch(fetchCities(value))
 		setSelectedProvince(provinceOptions.find((item) => item.value === value) || {})
 	}
 
-	const handleRenderSubdistricts = (value) => {
+	const handleSelectCity = (value) => {
 		value = Number(value)
-		dispatch(fetchSubdistricts(value))
 		setSelectedCity(cityOptions.find((item) => item.value === value) || {})
 	}
 
@@ -100,6 +99,7 @@ export default function Address({ data, handlers, initialLoading }) {
 		<Section paddingHorizontal="0">
 			<Heading content="Alamat kamu" subheader="Isi kontak dan alamat pengiriman nya" marginBottom="3em" />
 			<Formik
+				enableReinitialize
 				onSubmit={handleSaveAddress}
 				validationSchema={addressValidation}
 				initialValues={{
@@ -119,7 +119,7 @@ export default function Address({ data, handlers, initialLoading }) {
 					jne_online_booking: renderInitialValues("jne_online_booking")
 				}}
 			>
-				{({ handleSubmit, values }) => {
+				{({ handleSubmit, values, setFieldValue }) => {
 					const { dropshipper_name, dropshipper_tele, jne_online_booking, ...restValues } = values
 					const handleChange = (e) => {
 						const name = e.target.name
@@ -127,17 +127,24 @@ export default function Address({ data, handlers, initialLoading }) {
 					}
 
 					const handleChangeSelect = (name) => (value) => {
-						if (name === "province") return handleRenderCities(value)
-						if (name === "city") return handleRenderSubdistricts(value)
+						if (name === "province") return handleSelectProvince(value)
+						if (name === "city") return handleSelectCity(value)
 						if (name === "subdistrict") return handleSelectSubdistrict(value)
-						setFormValues((formValues) => ({ ...formValues, [name]: value }))
+					}
+
+					const handleFocus = (handler, regionType, name) => {
+						const region = isNaN(values[regionType]) ? regionType + "_id" : regionType
+						setFieldValue(name, "")
+						return dispatch(
+							handler(typeof values[region] === "object" ? values[region].value : values[region])
+						)
 					}
 
 					return (
 						<Form layout="vertical" onSubmit={handleSubmit}>
-							{typeRemark === "partner" && (
+							{typeRemark === UserType.PARTNER && (
 								<Section paddingHorizontal="0">
-									<div style={{ marginBottom: "2em" }}>
+									<div className="mb0">
 										<Switch name="isSelfPickup" /> &nbsp; Saya bersedia jemput di gudang Zigzag
 										&nbsp;{" "}
 										<Tooltip title="Karena kamu adalah Partner Zigzag, jadi kamu hanya punya pilihan untuk ambil (jemput) barang yg kamu order langsung ke gudang Zigzag">
@@ -156,7 +163,7 @@ export default function Address({ data, handlers, initialLoading }) {
 								</Section>
 							)}
 
-							{!values.isSelfPickup && (
+							{(!values.isSelfPickup || !isKoko) && (
 								<>
 									<StyledCard noHover title="Info kontak">
 										<Row gutter={16}>
@@ -196,6 +203,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Provinsi kamu..."
 													options={provinceOptions}
 													onChange={handleChangeSelect("province")}
+													onFocus={() => setFieldValue("province", "")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -205,6 +213,7 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kota/kabupaten kamu..."
 													options={cityOptions}
 													onChange={handleChangeSelect("city")}
+													onFocus={() => handleFocus(fetchCities, "province", "city")}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>
@@ -214,6 +223,9 @@ export default function Address({ data, handlers, initialLoading }) {
 													placeholder="Kecamatan kamu..."
 													options={subdistrictOptions}
 													onChange={handleChangeSelect("subdistrict")}
+													onFocus={() =>
+														handleFocus(fetchSubdistricts, "city", "subdistrict")
+													}
 												/>
 											</Col>
 											<Col lg={12} xs={24}>

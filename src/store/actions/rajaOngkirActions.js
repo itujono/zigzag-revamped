@@ -3,17 +3,41 @@ import * as types from "store/types"
 import Axios from "axios"
 import { renderError, instance } from "helpers"
 
-const baseUrl = `https://pro.rajaongkir.com/api`
-const corsUrl = `https://cors-anywhere.herokuapp.com`
+// const baseUrl = `https://pro.rajaongkir.com/api`
+// const corsUrl = `https://cors-anywhere.herokuapp.com`
 // const rajaOngkirKey = `c03222c90f4b9b6ee35230d270d616ab`
-const tempUrl = `/order/province/list`
+// const tempUrl = `/order/province/list`
 
 const loadingRajaOngkir = () => ({ type: types.LOADING_RAJAONGKIR })
+
+const getProvince = () => {
+	return instance.get(`/order/province/list`)
+}
+const getCity = () => {
+	return instance.get(`/order/city/list`)
+}
+const getSubdis = () => {
+	return instance.get(`/order/subdistrict/list`)
+}
+
+export const fetchAllRegions = () => (dispatch) => {
+	return Promise.all([getProvince(), getCity(), getSubdis()]).then((result) => {
+		console.log({ result })
+		dispatch({
+			type: types.FETCH_ALL_REGIONS,
+			payload: {
+				provinces: result[0].data?.data?.provinces?.province,
+				cities: result[1].data?.data?.cities?.city,
+				subdistricts: result[2].data?.data?.subdistrict?.subdistrict
+			}
+		})
+	})
+}
 
 export const fetchProvinces = () => (dispatch) => {
 	dispatch(loadingRajaOngkir())
 	return instance
-		.get(`/order/province/list`, { params: { key: process.env.REACT_APP_RAJAONGKIR } })
+		.get(`/order/province/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_PROVINCES, payload: data.data.provinces.province }))
 		.catch((err) => renderError(err, dispatch, types.FETCH_PROVINCES_ERROR))
 }
