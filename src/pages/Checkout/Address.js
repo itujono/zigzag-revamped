@@ -117,7 +117,14 @@ export default function Address({ data, handlers, initialLoading }) {
 				}}
 			>
 				{({ handleSubmit, values, setFieldValue }) => {
-					const { dropshipper_name, dropshipper_tele, jne_online_booking, zip, ...restValues } = values
+					const {
+						dropshipper_name,
+						dropshipper_tele,
+						jne_online_booking,
+						zip,
+						isDropshipper,
+						...restValues
+					} = values
 
 					const handleChange = (e) => {
 						const name = e.target.name
@@ -138,6 +145,8 @@ export default function Address({ data, handlers, initialLoading }) {
 							handler(typeof values[region] === "object" ? values[region].value : values[region])
 						)
 					}
+
+					console.log({ restValues })
 
 					return (
 						<Form layout="vertical" onSubmit={handleSubmit}>
