@@ -39,7 +39,7 @@ function reducer(state = initial, action) {
 		case types.SAVE_COURIER_DETAILS:
 			return { ...state, courierDetails: action.payload, loading: false }
 		case types.SAVE_ORDER:
-			return { ...state, orderDetails: action.payload, loading: false }
+			return { ...state, loading: false }
 		case types.ORDER_CONFIRMATION:
 			return { ...state, loading: false }
 		case types.CANCEL_ORDER:
