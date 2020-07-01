@@ -116,7 +116,7 @@ export default function Address({ data, handlers, initialLoading }) {
 					jne_online_booking: renderInitialValues("jne_online_booking")
 				}}
 			>
-				{({ handleSubmit, values, setFieldValue }) => {
+				{({ handleSubmit, values, setFieldValue, errors }) => {
 					const {
 						dropshipper_name,
 						dropshipper_tele,
@@ -125,6 +125,7 @@ export default function Address({ data, handlers, initialLoading }) {
 						isDropshipper,
 						...restValues
 					} = values
+					const thereIsError = Object.keys(errors).length > 0
 
 					const handleChange = (e) => {
 						const name = e.target.name
@@ -145,8 +146,6 @@ export default function Address({ data, handlers, initialLoading }) {
 							handler(typeof values[region] === "object" ? values[region].value : values[region])
 						)
 					}
-
-					console.log({ restValues })
 
 					return (
 						<Form layout="vertical" onSubmit={handleSubmit}>
@@ -300,7 +299,7 @@ export default function Address({ data, handlers, initialLoading }) {
 								<Button
 									htmlType="submit"
 									type="primary"
-									disabled={Object.values(restValues).some((item) => !item)}
+									disabled={thereIsError || Object.values(restValues).some((item) => !item)}
 								>
 									Lanjut ke Ongkir <Icon type="right" />
 								</Button>

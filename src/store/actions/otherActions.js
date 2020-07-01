@@ -3,6 +3,7 @@ import { instance, renderError } from "helpers"
 import { message } from "antd"
 
 const loadingOther = () => ({ type: types.LOADING_OTHER })
+const loadingOrder = () => ({ type: types.LOADING_ORDER })
 
 export const setCartDrawerFromStore = (cartDrawer) => ({
 	type: types.SET_CART_DRAWER_FROM_STORE,
@@ -49,7 +50,7 @@ export const saveCourierDetails = (values, formData, push) => (dispatch) => {
 }
 
 export const saveOrder = (values, push) => (dispatch) => {
-	dispatch(loadingOther())
+	dispatch(loadingOrder())
 	return instance
 		.post(`/order/save`, values)
 		.then(() => dispatch({ type: types.SAVE_ORDER }))
@@ -61,7 +62,7 @@ export const saveOrder = (values, push) => (dispatch) => {
 }
 
 export const orderConfirmation = (values, push) => (dispatch) => {
-	dispatch(loadingOther())
+	dispatch(loadingOrder())
 	const formData = new FormData()
 	formData.append("order_code", values.order_code)
 	formData.append("bank_sender", values.bank_sender)

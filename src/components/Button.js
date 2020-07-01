@@ -34,8 +34,8 @@ const StyledSubmit = styled(SubmitButton).attrs(({ type, shape }) => ({
 	}
 `
 
-function Button(props) {
-	if (props.submit) return <StyledSubmit {...props} />
+function Button({ submit, ...props }) {
+	if (submit) return <StyledSubmit {...props} />
 	return <StyledButton {...props} />
 }
 

@@ -46,6 +46,7 @@ const StyledPopover = styled(Popover)`
 export default function Summary({ handlers: { saveOrder }, data: { user = {} } }) {
 	const { push } = useHistory()
 	const dispatch = useDispatch()
+	const loading = useSelector(({ other }) => other.loadingOrder)
 	const [confirmModal, setConfirmModal] = useState(false)
 	const [allGood, setAllGood] = useState(false)
 	const userId = localStorage.getItem("user_id")
@@ -117,7 +118,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 					content="Place order sekarang?"
 					subheader="Apa kamu yakin mau place order sekarang? Action ini tidak bisa di-undo lagi."
 				/>
-				<Button icon="check" onClick={handleSaveOrder}>
+				<Button loading={loading} icon="check" onClick={handleSaveOrder}>
 					Ya, place order sekarang
 				</Button>
 			</Modal>

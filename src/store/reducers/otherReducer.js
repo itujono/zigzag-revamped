@@ -6,10 +6,13 @@ const initial = {
 	orderCodeList: [],
 	bankAccounts: [],
 	courierDetails: {},
-	saveOrderError: null,
-	saveCourierDetailsError: null,
 	orderHistory: [],
 	orderCodeOptions: [],
+	loading: false,
+	loadingOrder: false,
+
+	saveOrderError: null,
+	saveCourierDetailsError: null,
 	orderHistoryError: null,
 	cancelOrderError: null,
 	orderConfirmationError: null
@@ -19,6 +22,8 @@ function reducer(state = initial, action) {
 	switch (action.type) {
 		case types.LOADING_OTHER:
 			return { ...state, loading: true }
+		case types.LOADING_ORDER:
+			return { ...state, loadingOrder: true }
 		case types.SET_CART_DRAWER_FROM_STORE:
 			return { ...state, cartDrawer: action.payload, loading: false }
 
@@ -39,9 +44,9 @@ function reducer(state = initial, action) {
 		case types.SAVE_COURIER_DETAILS:
 			return { ...state, courierDetails: action.payload, loading: false }
 		case types.SAVE_ORDER:
-			return { ...state, loading: false }
+			return { ...state, loadingOrder: false }
 		case types.ORDER_CONFIRMATION:
-			return { ...state, loading: false }
+			return { ...state, loadingOrder: false }
 		case types.CANCEL_ORDER:
 			return { ...state, cancelOrder: action.payload, loading: false }
 		case types.CANCEL_ORDER_ERROR:
@@ -75,9 +80,9 @@ function reducer(state = initial, action) {
 		case types.SAVE_COURIER_DETAILS_ERROR:
 			return { ...state, saveCourierDetailsError: action.payload, loading: false }
 		case types.ORDER_CONFIRMATION_ERROR:
-			return { ...state, orderConfirmationError: action.payload, loading: false }
+			return { ...state, orderConfirmationError: action.payload, loadingOrder: false }
 		case types.SAVE_ORDER_ERROR:
-			return { ...state, saveOrderError: action.payload, loading: false }
+			return { ...state, saveOrderError: action.payload, loadingOrder: false }
 		case types.FETCH_CUSTOMER_SERVICES:
 			return {
 				...state,
