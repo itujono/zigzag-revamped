@@ -117,6 +117,8 @@ export default function Ongkir({ data, handlers, loading }) {
 		(item) => item === "" || Object.keys(item).length === 0
 	)
 
+	const shopeeCodeNotFilledYet = selectedCourier.code === "shopeecashless" && !shopeeInfo.online_booking
+
 	const handleSelectCourier = (courier) => setSelectedCourier(courier)
 	const handleFetchCouriers = useCallback(() => {
 		const data = {
@@ -215,31 +217,33 @@ export default function Ongkir({ data, handlers, loading }) {
 										{selectedCourier.code === "shopeecashless" && code === "shopeecashless" && (
 											<Col lg={12} xs={12}>
 												<Formik initialValues={{ online_booking: "" }}>
-													<Form layout="vertical">
-														<TextInput
-															name="online_booking"
-															label="Nomor online booking"
-															placeholder="Nomor online booking"
-															onChange={({ target }) =>
-																setShopeeInfo((prev) => ({
-																	...prev,
-																	online_booking: target.value
-																}))
-															}
-														/>
-														<SelectInput
-															name="expedition"
-															options={courierOptions}
-															label="Ekspedisi yg dipilih"
-															placeholder="Ekspedisi yg dipilih"
-															onChange={(value) =>
-																setShopeeInfo((prev) => ({
-																	...prev,
-																	expedition: value
-																}))
-															}
-														/>
-													</Form>
+													{() => (
+														<Form layout="vertical">
+															<TextInput
+																name="online_booking"
+																label="Nomor online booking"
+																placeholder="Nomor online booking"
+																onChange={({ target }) =>
+																	setShopeeInfo((prev) => ({
+																		...prev,
+																		online_booking: target.value
+																	}))
+																}
+															/>
+															<SelectInput
+																name="expedition"
+																options={courierOptions}
+																label="Ekspedisi yg dipilih"
+																placeholder="Ekspedisi yg dipilih"
+																onChange={(value) =>
+																	setShopeeInfo((prev) => ({
+																		...prev,
+																		expedition: value
+																	}))
+																}
+															/>
+														</Form>
+													)}
 												</Formik>
 											</Col>
 										)}
@@ -252,7 +256,7 @@ export default function Ongkir({ data, handlers, loading }) {
 			})}
 
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button onClick={handleSaveCourier} disabled={courierNotSelectedYet}>
+				<Button onClick={handleSaveCourier} disabled={courierNotSelectedYet || shopeeCodeNotFilledYet}>
 					Lanjut ke Pembayaran <Icon type="right" />
 				</Button>
 			</Section>
