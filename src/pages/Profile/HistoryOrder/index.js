@@ -135,7 +135,7 @@ function HistoryOrder() {
 													<Heading
 														reverse
 														content="Penerima"
-														subheader={`${item.name} - ${(item.customers || {}).tele}`}
+														subheader={`${item.name} - ${item.tele}`}
 													/>
 													<Heading
 														reverse
