@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React from "react"
-import { Table, Avatar } from "antd"
+import { Table, Avatar, Typography } from "antd"
 import { pricer, mobile } from "helpers"
 
 export default function OrderItems({ data }) {
@@ -13,6 +13,15 @@ export default function OrderItems({ data }) {
 					<Avatar src={data.product_order_detail?.product_image.picture} />
 					&nbsp; {data.product_name}
 				</div>
+			)
+		},
+		{
+			title: "Warna/size",
+			key: "variation",
+			render: (i) => (
+				<Typography>
+					{i.product_color} {i.product_size ? `(size ${i.product_size})` : null}
+				</Typography>
 			)
 		},
 		{
