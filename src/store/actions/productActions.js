@@ -2,6 +2,7 @@ import React from "react"
 import * as types from "../types"
 import { instance, renderError } from "helpers"
 import { message } from "antd"
+import Axios from "axios"
 
 const loadingProduct = () => ({ type: types.LOADING_PRODUCT })
 const loadingCart = () => ({ type: types.LOADING_CART })
@@ -20,9 +21,9 @@ export const fetchProductItem = (id) => async (dispatch) => {
 
 export const fetchProducts = (category = 0, limit = 10) => async (dispatch) => {
 	dispatch(loadingProduct())
-	// const { data } = await Axios.get(`https://json.geoiplookup.io/`)
+	const { data } = await Axios.get(`https://json.geoiplookup.io/`)
 	return instance
-		.get(`/product/list?category=${category}&limit=${limit}`)
+		.get(`/product/list?category=${category}&limit=${limit}&ip=${data.ip}`)
 		.then(({ data }) => {
 			dispatch({ type: types.FETCH_PRODUCTS, payload: data.data.product_data })
 		})

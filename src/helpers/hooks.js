@@ -1,6 +1,7 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchUser } from "store/actions/userActions"
+import Axios from "axios"
 
 export function useUserDetails() {
 	const dispatch = useDispatch()
@@ -46,4 +47,19 @@ export function useHotKey(hotKeys, onMatch) {
 		window.addEventListener("keydown", listen)
 		return () => window.removeEventListener("keydown", listen)
 	})
+}
+
+export const useUserIp = () => {
+	const [userIp, setUserIp] = useState({})
+
+	const fetchUserIp = async () => {
+		const ipAddress = await Axios.get(`https://json.geoiplookup.io/`).then((res) => res.data)
+		setUserIp(ipAddress)
+	}
+
+	useEffect(() => {
+		fetchUserIp()
+	}, [])
+
+	return userIp
 }
