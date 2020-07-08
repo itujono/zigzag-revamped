@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom"
 import { connect } from "react-redux"
 import { fetchProductCategories } from "store/actions/productActions"
 import DynamicIcon from "./DynamicIcon"
+import { CategoryIcon } from "helpers/constants"
 
 const profileMenu = [
 	{ key: "basic", label: "Basic", url: "/profile/basic", icon: "icon-tubiaozhizuomoban6" },
@@ -49,17 +50,7 @@ function SidebarMenu({ page, fetchProductCategories, categories }) {
 					/>
 					<Menu>
 						{categories.map((item) => {
-							const theIcon =
-								item.id === 1
-									? "icon-diamond"
-									: item.id === 2
-									? "icon-high-heel-boot"
-									: item.id === 3
-									? "icon-wallet1"
-									: item.id === 4
-									? "icon-bodystocking"
-									: "icon-bag"
-
+							const theIcon = CategoryIcon[item.name.toLowerCase()]
 							return (
 								<Menu.Item key={item.id}>
 									<NavLink to={`/category/${item.id}-${item.name.toLowerCase()}`}>

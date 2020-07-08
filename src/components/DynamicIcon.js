@@ -5,7 +5,7 @@ import Icon from "antd/lib/icon"
 
 export default function DynamicIcon({ size, color, ...props }) {
 	const TheIcon = Icon.createFromIconfontCN({
-		scriptUrl: "//at.alicdn.com/t/font_1551588_1l4lmrruwky.js",
+		scriptUrl: "//at.alicdn.com/t/font_1551588_jb7lfemuxl.js",
 		extraCommonProps: { style: { fontSize: size || 20, color } }
 	})
 

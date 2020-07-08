@@ -1,8 +1,8 @@
 import React from "react"
-import { Layout as PageLayout, Breadcrumb, Menu } from "antd"
-import { Navbar, Logo, Heading } from "components"
+import { Layout as PageLayout, Breadcrumb } from "antd"
+import { Navbar, Logo } from "components"
 import styled from "styled-components"
-import { withRouter, NavLink } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import { media, mobile } from "helpers"
 import Headroom from "react-headroom"
 

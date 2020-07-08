@@ -101,7 +101,7 @@ function reducer(state = initialState, action) {
 				const product_image = sortImages(item.product_image)
 				return { ...item, product_price, product_image }
 			})
-			return { ...state, products, loading: false }
+			return { ...state, products, productsError: null, loading: false }
 
 		case types.FETCH_RESTOCK_PRODUCTS:
 			const restockProducts = action.payload.map((item) => {

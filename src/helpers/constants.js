@@ -19,3 +19,17 @@ export const UserType = {
 	REGULER: "reguler",
 	VIP: "vip"
 }
+
+export const ErrorMessage = {
+	NOT_FOUND: "Data produk tidak ditemukan."
+}
+
+export const CategoryIcon = {
+	lain: "icon-diamond",
+	sepatu: "icon-high-heel-boot",
+	dompet: "icon-wallet1",
+	lingerie: "icon-diamond",
+	tas: "icon-bag",
+	clothing: "icon-dress",
+	sale: "icon-diamond"
+}
