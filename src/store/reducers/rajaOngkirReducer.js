@@ -93,8 +93,8 @@ function reducer(state = initialStates, action) {
 					if (item.code === "gosend") {
 						item.costs = [
 							{
-								service: "GoSend -- bebas ongkir ",
-								description: "Khusus bayar di tempat",
+								service: "GoSend - Khusus Surabaya",
+								description: "Ongkir bayar cash ke GoSend",
 								cost: [{ value: 0, etd: "", note: "" }]
 							}
 						]
