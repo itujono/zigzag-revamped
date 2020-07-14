@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from "react"
 import { Section, Heading, Card, Button, Loading, Alert, Empty, Modal } from "components"
-import { Row, Col, Badge, Icon, Form, Typography } from "antd"
+import { Row, Col, Badge, Icon, Form, Typography, message } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
 import { useHistory, useLocation } from "react-router-dom"
@@ -58,10 +58,11 @@ const CourierCol = styled.div`
 	justify-content: center;
 	align-items: center;
 	height: 100%;
+	user-select: ${({ disabled }) => disabled && "none"};
+	cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
 	background-color: ${({ isSelected }) => isSelected && theme.greyColor[4]};
 	border: ${({ isSelected }) =>
 		(isSelected && `2px solid ${theme.primaryColor}`) || `2px solid ${theme.greyColor[3]}`};
-	cursor: pointer;
 	&:hover {
 		background-color: ${theme.greyColor[4]};
 	}
@@ -112,7 +113,9 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const { couriers = [], selectedCourier } = data
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
-	const { cartTotal = {}, subdistrict = {} } = formData
+	const { cartTotal = {}, subdistrict = {}, city = {} } = formData
+
+	const isSurabaya = Number(city.value) === 444
 	const courierOptions = couriers
 		.filter((item) => item.code !== "shopeecashless" && item.code !== "gosend")
 		.map((item) => ({ value: item.name, label: item.name }))
@@ -125,6 +128,9 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const handleSelectCourier = (courier) => {
 		if (courier.code !== "shopeecashless") setUnderstandShopee(false)
+		if (courier.code === "gosend" && !isSurabaya) {
+			return message.error("Kalo bukan tujuan Surabaya, kamu tidak bisa pilih GoSend")
+		}
 		setSelectedCourier(courier)
 	}
 
@@ -221,6 +227,7 @@ export default function Ongkir({ data, handlers, loading }) {
 											<CourierCol
 												onClick={() => handleSelectCourier({ code, details: item })}
 												isSelected={isSelected}
+												disabled={code === "gosend" && !isSurabaya}
 											>
 												<Badge count={<Icon type="check-circle" theme="filled" />} />
 												<Heading
