@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react"
+import React, { Suspense } from "react"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { Provider } from "react-redux"
 import { createAppStore } from "./store"
@@ -14,8 +14,6 @@ import Logout from "pages/auth/Logout"
 import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
 
 import ScrollToTop, { useIdle } from "helpers"
-import { message } from "antd"
-import { useHotKey } from "helpers/hooks"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -32,15 +30,13 @@ const NewPassword = React.lazy(() => import("pages/auth/NewPassword"))
 const SearchResult = React.lazy(() => import("pages/Home/SearchResult"))
 const DepositConfirmation = React.lazy(() => import("pages/Profile/Deposit/DepositConfirmation"))
 
-const sequence = ["ArrowUp", "ArrowDown", "x", "x", "x", "Enter"]
+const store = createAppStore()
 
 function App() {
 	const isIdle = useIdle({ timeToIdle: 60 * 1000 * 4, inactivityEvents: [] })
 
-	useHotKey(sequence, () => console.log("Last deployed: Jumat - 13:55"))
-
 	return (
-		<Provider store={createAppStore()}>
+		<Provider store={store}>
 			<BrowserRouter>
 				<Modal visible={isIdle} closable={false}>
 					<Heading
