@@ -268,7 +268,7 @@ export default function Ongkir({ data, handlers, loading }) {
 												) : (
 													<Alert
 														showIcon={!mobile}
-														className="mb0__mobile"
+														className="mb0__mobile h-100"
 														type="warning"
 														message="Ini kurir khusus"
 														description={
@@ -277,7 +277,10 @@ export default function Ongkir({ data, handlers, loading }) {
 																	Shopeecashless hanya digunakan untuk dropshipper
 																	Shopee
 																</Par>
-																<Button onClick={() => setUnderstandShopee(true)}>
+																<Button
+																	size="small"
+																	onClick={() => setUnderstandShopee(true)}
+																>
 																	Ya, saya mengerti
 																</Button>
 															</div>
