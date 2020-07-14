@@ -11,6 +11,10 @@ const StyledModal = styled(Pop)`
 	}
 `
 
-export default function Modal(props) {
+function Modal(props) {
 	return <StyledModal {...props} centered footer={false} />
 }
+
+Modal.confirm = Pop.confirm
+
+export default Modal

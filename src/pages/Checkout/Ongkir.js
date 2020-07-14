@@ -1,12 +1,9 @@
 import React, { useEffect, useCallback, useState } from "react"
-import { Section, Heading, Card, Button, Loading, Alert, Empty } from "components"
-import { Row, Col, Badge, Icon, Form } from "antd"
+import { Section, Heading, Card, Button, Loading, Alert, Empty, Modal } from "components"
+import { Row, Col, Badge, Icon, Form, Typography } from "antd"
 import styled from "styled-components"
 import { theme } from "styles"
 import { useHistory, useLocation } from "react-router-dom"
-// import jneLogo from "assets/images/jne-logo.svg"
-// import jntLogo from "assets/images/j&t-logo.jpeg"
-// import sicepatLogo from "assets/images/sicepat-logo.png"
 import { pricer, mobile, media } from "helpers"
 import { ORIGIN } from "helpers/constants"
 import { useDispatch } from "react-redux"
@@ -18,7 +15,7 @@ const StyledCard = styled(Card)`
 		margin-bottom: 2em;
 		box-shadow: ${theme.boxShadow.main};
 		border: none;
-		height: 200px;
+		height: auto;
 		.ant-card-head {
 			padding-left: 2em;
 		}
@@ -43,6 +40,10 @@ const StyledCard = styled(Card)`
 					-webkit-overflow-scrolling: touch;
 					&::-webkit-scrollbar {
 						display: none;
+					}
+					> .ant-col {
+						height: auto;
+						max-height: 240px;
 					}
 				}
 			}
@@ -98,11 +99,14 @@ const CourierLogo = styled.span`
 	z-index: 11;
 `
 
+const { Paragraph: Par } = Typography
+
 export default function Ongkir({ data, handlers, loading }) {
 	const { push } = useHistory()
 	const dispatch = useDispatch()
 	const { state = {} } = useLocation()
 	const [shopeeInfo, setShopeeInfo] = useState({ online_booking: "", expedition: "" })
+	const [understandShopee, setUnderstandShopee] = useState(false)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
@@ -119,7 +123,11 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const shopeeCodeNotFilledYet = selectedCourier.code === "shopeecashless" && !shopeeInfo.online_booking
 
-	const handleSelectCourier = (courier) => setSelectedCourier(courier)
+	const handleSelectCourier = (courier) => {
+		if (courier.code !== "shopeecashless") setUnderstandShopee(false)
+		setSelectedCourier(courier)
+	}
+
 	const handleFetchCouriers = useCallback(() => {
 		const data = {
 			origin: ORIGIN.cityId,
@@ -146,6 +154,17 @@ export default function Ongkir({ data, handlers, loading }) {
 			expedition_code: code,
 			expedition_company: code === "jne" ? "JNE" : code === "sicepat" ? "SiCepat" : code,
 			expedition_total: details.cost?.[0].value
+		}
+		if (code === "shopeecashless") {
+			return Modal.confirm({
+				centered: true,
+				title: "Kamu pilih Shopee Cashless",
+				content:
+					"Karena Shopee Cashless hanya untuk dropshipper Shopee yang memiliki Online Booking, apa kamu sudah yakin dengan Online Booking nya? Kalo Online Booking yang kamu input tidak valid, kami berhak membatalkan orderan kamu",
+				okText: "Yakin",
+				cancelText: "Batal deh",
+				onOk: () => dispatch(saveCourierDetails(order_detail, formData, push))
+			})
 		}
 		dispatch(saveCourierDetails(order_detail, formData, push))
 	}
@@ -215,36 +234,56 @@ export default function Ongkir({ data, handlers, loading }) {
 											</CourierCol>
 										</Col>
 										{selectedCourier.code === "shopeecashless" && code === "shopeecashless" && (
-											<Col lg={12} xs={12}>
-												<Formik initialValues={{ online_booking: "" }}>
-													{() => (
-														<Form layout="vertical">
-															<TextInput
-																name="online_booking"
-																label="Nomor online booking"
-																placeholder="Nomor online booking"
-																onChange={({ target }) =>
-																	setShopeeInfo((prev) => ({
-																		...prev,
-																		online_booking: target.value
-																	}))
-																}
-															/>
-															<SelectInput
-																name="expedition"
-																options={courierOptions}
-																label="Ekspedisi yg dipilih"
-																placeholder="Ekspedisi yg dipilih"
-																onChange={(value) =>
-																	setShopeeInfo((prev) => ({
-																		...prev,
-																		expedition: value
-																	}))
-																}
-															/>
-														</Form>
-													)}
-												</Formik>
+											<Col lg={12} xs={16}>
+												{understandShopee ? (
+													<Formik initialValues={{ online_booking: "" }}>
+														{() => (
+															<Form layout="vertical">
+																<TextInput
+																	name="online_booking"
+																	label="Nomor online booking"
+																	placeholder="Nomor online booking"
+																	onChange={({ target }) =>
+																		setShopeeInfo((prev) => ({
+																			...prev,
+																			online_booking: target.value
+																		}))
+																	}
+																/>
+																<SelectInput
+																	name="expedition"
+																	options={courierOptions}
+																	label="Ekspedisi yg dipilih"
+																	placeholder="Ekspedisi yg dipilih"
+																	onChange={(value) =>
+																		setShopeeInfo((prev) => ({
+																			...prev,
+																			expedition: value
+																		}))
+																	}
+																/>
+															</Form>
+														)}
+													</Formik>
+												) : (
+													<Alert
+														showIcon={!mobile}
+														className="mb0__mobile"
+														type="warning"
+														message="Ini kurir khusus"
+														description={
+															<div>
+																<Par>
+																	Shopeecashless hanya digunakan untuk dropshipper
+																	Shopee
+																</Par>
+																<Button onClick={() => setUnderstandShopee(true)}>
+																	Ya, saya mengerti
+																</Button>
+															</div>
+														}
+													/>
+												)}
 											</Col>
 										)}
 									</>
