@@ -80,7 +80,7 @@ export const addItemToCart = (item) => (dispatch) => {
 		.then(() => {
 			window.scrollTo(0, 0)
 			message.success("Produk berhasil ditambahkan ke cart")
-			navigator.vibrate([200, 200])
+			navigator.vibrate([200, 100, 200])
 		})
 		.catch((err) => renderError(err, dispatch, types.ADD_ITEM_TO_CART_ERROR))
 }
