@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from "react"
-import { connect } from "react-redux"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Formik } from "formik"
 import { SubmitButton } from "formik-antd"
 import { Link } from "react-router-dom"
@@ -17,66 +17,12 @@ import Empty from "components/Empty"
 import { fetchCartItems, updateCartItem, deleteCartItem } from "store/actions/productActions"
 import Loading from "components/Loading"
 
-const SubtotalSection = styled(Section).attrs({
-	paddingHorizontal: "0"
-})`
-	border-top: 1px solid ${theme.greyColor[3]};
-	position: sticky;
-	bottom: 0;
-	left: 0;
-	z-index: 2;
-	background-color: #fff;
-	.ant-typography {
-		h4 {
-			font-size: 1em;
-		}
-		> div {
-			font-size: 0.9em;
-			color: ${theme.greyColor[1]};
-		}
-	}
-	.discount {
-		h4 {
-			color: ${theme.greenColor};
-		}
-	}
-	.price {
-		font-weight: bold;
-		> p {
-			margin-bottom: 0;
-		}
-		> div {
-			font-weight: normal;
-		}
-	}
-`
-
-const CartItem = styled(List.Item)`
-	padding-bottom: 2em;
-	padding-top: 2em;
-	.ant-list-item-meta-avatar {
-		margin-right: 24px;
-		.product-photo {
-			width: 60px;
-			height: 80px;
-		}
-	}
-	.ant-list-item-meta-title {
-		.delete {
-			cursor: pointer;
-		}
-	}
-	.price-weight {
-		font-weight: bold;
-		span {
-			font-weight: normal;
-		}
-	}
-`
-
-function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...props }) {
-	const { cartDrawer, setCartDrawer, setCartDrawerFromStore, cartDrawerFromStore } = onCartDrawer
-	const { fetchCartItems, deleteCartItem, updateCartItem } = props
+function CartDrawer({ onCartDrawer }) {
+	const { cartDrawer, setCartDrawer, setCartDrawerFromStore } = onCartDrawer
+	const dispatch = useDispatch()
+	const cartItems = useSelector(({ product }) => product.cartItems)
+	const cartTotal = useSelector(({ product }) => product.cartTotal)
+	const loading = useSelector(({ product }) => product.loadingCart)
 
 	const token = localStorage.getItem("access_token")
 
@@ -100,20 +46,16 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 		setCartDrawer(false)
 	}
 
-	const handleDeleteCart = (cart_id, name) => deleteCartItem({ cart_id }, name)
+	const handleDeleteCart = (cart_id, name) => dispatch(deleteCartItem({ cart_id }, name))
 
 	const handleGoToCheckout = () => {
 		setCartDrawer(false)
 		localStorage.setItem("cartDrawerFromStore", false)
 	}
 
-	const handleFetchCartItems = useCallback(() => {
-		if (token) fetchCartItems()
-	}, [fetchCartItems, token])
-
 	useEffect(() => {
-		handleFetchCartItems()
-	}, [handleFetchCartItems])
+		if (token) dispatch(fetchCartItems())
+	}, [dispatch, token])
 
 	return (
 		<Drawer
@@ -161,7 +103,7 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 								return message.error("Stock nggak cukup")
 							}
 
-							updateCartItem(values, name).finally(() => setSubmitting(false))
+							dispatch(updateCartItem(values, name)).finally(() => setSubmitting(false))
 						}
 
 						return (
@@ -256,10 +198,61 @@ function CartDrawer({ onCartDrawer, handler, cartItems, cartTotal, loading, ...p
 	)
 }
 
-const mapState = ({ product }) => ({
-	cartItems: product.cartItems,
-	cartTotal: product.cartTotal,
-	loading: product.loadingCart
-})
+export default CartDrawer
 
-export default connect(mapState, { fetchCartItems, updateCartItem, deleteCartItem })(CartDrawer)
+const SubtotalSection = styled(Section).attrs({
+	paddingHorizontal: "0"
+})`
+	border-top: 1px solid ${theme.greyColor[3]};
+	position: sticky;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	background-color: #fff;
+	.ant-typography {
+		h4 {
+			font-size: 1em;
+		}
+		> div {
+			font-size: 0.9em;
+			color: ${theme.greyColor[1]};
+		}
+	}
+	.discount {
+		h4 {
+			color: ${theme.greenColor};
+		}
+	}
+	.price {
+		font-weight: bold;
+		> p {
+			margin-bottom: 0;
+		}
+		> div {
+			font-weight: normal;
+		}
+	}
+`
+
+const CartItem = styled(List.Item)`
+	padding-bottom: 2em;
+	padding-top: 2em;
+	.ant-list-item-meta-avatar {
+		margin-right: 24px;
+		.product-photo {
+			width: 60px;
+			height: 80px;
+		}
+	}
+	.ant-list-item-meta-title {
+		.delete {
+			cursor: pointer;
+		}
+	}
+	.price-weight {
+		font-weight: bold;
+		span {
+			font-weight: normal;
+		}
+	}
+`
