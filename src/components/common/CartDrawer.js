@@ -205,10 +205,10 @@ const SubtotalSection = styled(Section).attrs({
 })`
 	border-top: 1px solid ${theme.greyColor[3]};
 	position: sticky;
-	bottom: 0;
+	bottom: -30px;
 	left: 0;
 	z-index: 2;
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.9);
 	.ant-typography {
 		h4 {
 			font-size: 1em;
