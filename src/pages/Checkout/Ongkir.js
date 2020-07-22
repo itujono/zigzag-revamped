@@ -159,7 +159,12 @@ export default function Ongkir({ data, handlers, loading }) {
 			expedition_remark,
 			expedition_code: code,
 			expedition_company: code === "jne" ? "JNE" : code === "sicepat" ? "SiCepat" : code,
-			expedition_total: details.cost?.[0].value
+			expedition_total: details.cost?.[0].value,
+			origin: ORIGIN.cityId,
+			originType: "city",
+			destination: subdistrict.value,
+			destinationType: subdistrict.value ? "subdistrict" : "city",
+			weight: cartTotal.roundedWeight
 		}
 		if (code === "shopeecashless") {
 			return Modal.confirm({

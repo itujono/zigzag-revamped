@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom"
 import { theme } from "styles"
 import { pricer, media, mobile } from "helpers"
 import { useDispatch, useSelector } from "react-redux"
-import { ID_AKUN_KOKO } from "helpers/constants"
+import { ID_AKUN_KOKO, UserType } from "helpers/constants"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -55,7 +55,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_remark: role = "" } = accountType
-	const isPartner = role.toLowerCase() === "partner"
+	const isPartner = role.toLowerCase() === UserType.PARTNER
 	const { customer_service: cs = {} } = user
 	const csWhatsappNumber = (cs.whatsapp || "").startsWith("0") && "62" + (cs.whatsapp || "").slice(1)
 	const uniqueCode = formData.payment?.value === "deposit" ? 0 : Number(formData.unique_code || 0)

@@ -95,12 +95,6 @@ export const cancelOrder = (values) => (dispatch) => {
 		.post(`/order/cancel_order`, values)
 		.then(({ data }) => dispatch({ type: types.CANCEL_ORDER, payload: data.data }))
 		.then(() => dispatch(fetchOrderHistory()))
-		.then(() => {
-			message
-				.loading("Memproses batal order...")
-				.then(() =>
-					message.success("Oke, orderan ini telah di-cancel. Silakan cek email untuk info pembatalannya")
-				)
-		})
+		.then(() => message.success("Oke, orderan ini telah di-cancel. Silakan cek email untuk info pembatalannya"))
 		.catch((err) => renderError(err, dispatch, types.CANCEL_ORDER_ERROR))
 }
