@@ -12,106 +12,7 @@ import { fetchUser } from "store/actions/userActions"
 import CartDrawer from "./common/CartDrawer"
 import DynamicIcon from "./DynamicIcon"
 import { mobile, pricer } from "helpers"
-
-const Nav = styled.nav`
-	width: inherit;
-	background-color: #fff;
-	padding-left: 1em;
-	padding-right: 1em;
-`
-
-const StyledButton = styled((props) => <Button {...props} />)`
-	&& {
-		.anticon {
-			margin-right: 0;
-		}
-	}
-`
-
-const StyledMenu = styled(Menu)`
-	&& {
-		border-bottom: transparent;
-		padding-top: 5px;
-		line-height: 4;
-		> .ant-menu-submenu,
-		.ant-menu-item,
-		.ant-menu-submenu-selected {
-			border-bottom: 2px solid transparent;
-			&:hover {
-				border-bottom: 2px solid transparent;
-			}
-		}
-	}
-`
-
-const StyledSubmenu = styled(Menu.SubMenu)`
-	&& {
-		.dropdown-menu {
-			display: block;
-		}
-		> .ant-menu {
-			width: 200px;
-			padding-left: 10px;
-			.ant-menu-item {
-				margin-left: 8px;
-			}
-		}
-	}
-`
-
-const StyledCartIcon = styled(Badge)`
-	&& {
-		> .anticon {
-			margin-right: 3px;
-		}
-	}
-`
-
-const StyledLeftMenu = styled(Col)`
-	.search-icon {
-		font-weight: bold;
-		font-size: 18px;
-		position: relative;
-		top: 5px;
-		left: 5px;
-	}
-`
-
-const StyledMobileMenu = styled(Menu)`
-	&& {
-		padding: 2em 1.5em;
-		width: 220px;
-		border-radius: 10px;
-		.ant-dropdown-menu-item {
-			padding-bottom: 1em;
-			i {
-				margin-right: 8px;
-			}
-		}
-	}
-`
-
-const BottomBar = styled(Row)`
-	background-color: #fff;
-	border-top: 1px solid #eee;
-	margin-top: 1em;
-	padding: 1.5em 0;
-	.scrolling-bar {
-		flex-wrap: nowrap;
-		overflow-x: scroll;
-		width: auto;
-		-webkit-overflow-scrolling: touch;
-		&::-webkit-scrollbar {
-			display: none;
-		}
-		a {
-			color: #999;
-		}
-		.ant-col {
-			line-height: 2;
-		}
-	}
-`
+import { CategoryIcon } from "helpers/constants"
 
 function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categories, ...props }) {
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
@@ -178,13 +79,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 					<Col lg={24} xs={24}>
 						<Row type="flex" gutter={16} className="scrolling-bar">
 							{categories.map(({ id, name }) => {
-								const theIcon =
-									(id === 1 && "icon-diamond") ||
-									(id === 2 && "icon-high-heel-boot") ||
-									(id === 3 && "icon-wallet1") ||
-									(id === 4 && "icon-bodystocking") ||
-									"icon-bag"
-
+								const theIcon = CategoryIcon[name.toLowerCase()]
 								return (
 									<Col key={id} className="ta-center">
 										<NavLink to={`/category/${id}-${name.toLowerCase()}`}>
@@ -385,3 +280,103 @@ const actions = {
 
 // prettier-ignore
 export default withRouter(connect(mapState, actions)(Navbar))
+
+const Nav = styled.nav`
+	width: inherit;
+	background-color: #fff;
+	padding-left: 1em;
+	padding-right: 1em;
+`
+
+const StyledButton = styled((props) => <Button {...props} />)`
+	&& {
+		.anticon {
+			margin-right: 0;
+		}
+	}
+`
+
+const StyledMenu = styled(Menu)`
+	&& {
+		border-bottom: transparent;
+		padding-top: 5px;
+		line-height: 4;
+		> .ant-menu-submenu,
+		.ant-menu-item,
+		.ant-menu-submenu-selected {
+			border-bottom: 2px solid transparent;
+			&:hover {
+				border-bottom: 2px solid transparent;
+			}
+		}
+	}
+`
+
+const StyledSubmenu = styled(Menu.SubMenu)`
+	&& {
+		.dropdown-menu {
+			display: block;
+		}
+		> .ant-menu {
+			width: 200px;
+			padding-left: 10px;
+			.ant-menu-item {
+				margin-left: 8px;
+			}
+		}
+	}
+`
+
+const StyledCartIcon = styled(Badge)`
+	&& {
+		> .anticon {
+			margin-right: 3px;
+		}
+	}
+`
+
+const StyledLeftMenu = styled(Col)`
+	.search-icon {
+		font-weight: bold;
+		font-size: 18px;
+		position: relative;
+		top: 5px;
+		left: 5px;
+	}
+`
+
+const StyledMobileMenu = styled(Menu)`
+	&& {
+		padding: 2em 1.5em;
+		width: 220px;
+		border-radius: 10px;
+		.ant-dropdown-menu-item {
+			padding-bottom: 1em;
+			i {
+				margin-right: 8px;
+			}
+		}
+	}
+`
+
+const BottomBar = styled(Row)`
+	background-color: #fff;
+	border-top: 1px solid #eee;
+	margin-top: 1em;
+	padding: 1.5em 0;
+	.scrolling-bar {
+		flex-wrap: nowrap;
+		overflow-x: scroll;
+		width: auto;
+		-webkit-overflow-scrolling: touch;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		a {
+			color: #999;
+		}
+		.ant-col {
+			line-height: 2;
+		}
+	}
+`

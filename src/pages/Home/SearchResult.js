@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Section, Heading, Button, Layout, Empty } from "components"
-import { Row, Col, Input, List, Avatar, Icon } from "antd"
+import { Row, Col, Input, List, Avatar, Icon, Tag } from "antd"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 import { searchProduct } from "store/actions/productActions"
-import { media, pricer, mobile } from "helpers"
+import { media, pricer, mobile, isOutOfStock } from "helpers"
 
 const CartItem = styled(List.Item)`
 	.ant-list-item-meta-avatar {
@@ -40,7 +40,7 @@ function SearchResult({ searchProduct, searchList, loading }) {
 	const keywordFromNavbar = localStorage.getItem("keywordFromNavbar")
 
 	const handleSearch = useCallback(
-		value => {
+		(value) => {
 			if (value !== "") {
 				setKeyword(value)
 				searchProduct(value || keywordFromNavbar)
@@ -78,10 +78,11 @@ function SearchResult({ searchProduct, searchList, loading }) {
 							dataSource={searchList}
 							locale={{ emptyText: <Empty isEmptyItems description="Ayo cari apa saja!" /> }}
 							loading={loading}
-							renderItem={item => {
+							renderItem={(item) => {
 								const picture = (item.product_image || [])[0] || {}
 								const colorArr = item.product_detail.map(({ color }) => color)
 								const colors = colorArr.length > 1 ? colorArr.join(", ") : colorArr
+								const outOfStock = isOutOfStock(item.product_detail)
 
 								return (
 									<CartItem>
@@ -97,22 +98,20 @@ function SearchResult({ searchProduct, searchList, loading }) {
 												<p style={{ marginBottom: 0 }}>
 													<Link to={`/product/${item.id}-${item.name}`}>{item.name}</Link>{" "}
 													&middot;{" "}
-													<span>
-														Rp {pricer((item.product_price || {}).price)} / pcs &middot;
-														&nbsp; &nbsp;
-													</span>
+													<span>Rp {pricer((item.product_price || {}).price)} / pcs</span>
 												</p>
 											}
 											description={
 												<Row>
 													<Col lg={24}>
-														<p className="price-weight">
+														<p className="price-weight mb1em">
 															Kategori <strong>{(item.categories || {}).name}</strong>{" "}
 															&middot;{" "}
 															<span>
 																Warna <strong>{colors}</strong>
 															</span>
 														</p>
+														{outOfStock && <Tag color="orange">Stok habis</Tag>}
 													</Col>
 												</Row>
 											}
