@@ -193,9 +193,8 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 						className="mb0"
 						description={
 							<Typography>
-								Kalo nanti setelah sudah berhasil place order kamu belum melakukan konfirmasi pembayaran
-								lebih dari <Text mark> 2 jam </Text>, maka orderan kamu akan{" "}
-								<Text mark>dibatalkan otomatis</Text> oleh sistem
+								Bata pembayaran dan konfirmasi adalah <Text mark>2 jam</Text>, lebih dari itu orderan
+								kamu akan <Text mark>dibatalkan secara otomatis</Text> oleh sistem
 							</Typography>
 						}
 					/>
