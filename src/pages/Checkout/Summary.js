@@ -193,7 +193,7 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 						className="mb0"
 						description={
 							<Typography>
-								Bata pembayaran dan konfirmasi adalah <Text mark>2 jam</Text>, lebih dari itu orderan
+								Batas pembayaran dan konfirmasi adalah <Text mark>2 jam</Text>, lebih dari itu orderan
 								kamu akan <Text mark>dibatalkan secara otomatis</Text> oleh sistem
 							</Typography>
 						}
