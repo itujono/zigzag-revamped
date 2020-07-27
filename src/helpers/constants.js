@@ -1,3 +1,6 @@
+import bcaLogo from "assets/images/bca-logo.jpeg"
+import mandiriLogo from "assets/images/mandiri-logo.png"
+
 export const ID_AKUN_KOKO = 40
 export const URL_ZIZGAG = "https://zigzagfashion.id"
 
@@ -32,4 +35,9 @@ export const CategoryIcon = {
 	tas: "icon-bag",
 	clothing: "icon-dress",
 	sale: "icon-diamond"
+}
+
+export const BankLogo = {
+	BCA: bcaLogo,
+	MANDIRI: mandiriLogo
 }

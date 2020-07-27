@@ -67,7 +67,7 @@ function CheckoutSuccess() {
 	const withDeposit = state.paymentMethod && state.paymentMethod === "deposit"
 
 	useEffect(() => {
-		// if (!state.isSuccess) push("/404")
+		if (!state.isSuccess) push("/404")
 		dispatch(fetchBankAccounts())
 	}, [dispatch, push, state.isSuccess])
 

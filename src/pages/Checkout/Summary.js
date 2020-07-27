@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { Section, Heading, Card, Button, Modal } from "components"
+import { Section, Heading, Card, Button, Modal, Alert } from "components"
 import styled from "styled-components"
-import { Row, Col, Checkbox, Popover } from "antd"
+import { Row, Col, Checkbox, Popover, Typography } from "antd"
 import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"
@@ -42,6 +42,8 @@ const StyledPopover = styled(Popover)`
 		text-align: center;
 	}
 `
+
+const { Text } = Typography
 
 export default function Summary({ handlers: { saveOrder }, data: { user = {} } }) {
 	const { push } = useHistory()
@@ -184,8 +186,21 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 							/>
 						</Col>
 					</StyledRow>
+					<Alert
+						type="warning"
+						showIcon
+						message="HARAP DIPERHATIKAN!"
+						className="mb0"
+						description={
+							<Typography>
+								Kalo nanti setelah sudah berhasil place order kamu belum melakukan konfirmasi pembayaran
+								lebih dari <Text mark> 2 jam </Text>, maka orderan kamu akan{" "}
+								<Text mark>dibatalkan otomatis</Text> oleh sistem
+							</Typography>
+						}
+					/>
 				</Section>
-				<Row style={{ marginBottom: "2em" }}>
+				<Row className="mb2em">
 					<Col lg={24} xs={24}>
 						<Checkbox name="allGood" checked={allGood} onChange={() => setAllGood(!allGood)} /> &nbsp; Saya
 						sudah lihat, dan saya sadar bahwa semua data sudah benar.{" "}

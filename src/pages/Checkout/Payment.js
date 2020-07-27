@@ -3,10 +3,11 @@ import { Section, Heading, Card, Button } from "components"
 import { Row, Col, Icon, message } from "antd"
 import styled from "styled-components"
 import { useHistory, Link } from "react-router-dom"
-import mandiriLogo from "assets/images/mandiri-logo.png"
-import bcaLogo from "assets/images/bca-logo.jpeg"
 import { theme } from "styles"
 import { randomCode, pricer } from "helpers"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchBankAccounts } from "store/actions/otherActions"
+import { BankLogo } from "helpers/constants"
 
 const StyledCard = styled(Card)`
 	&& {
@@ -41,10 +42,11 @@ const random = randomCode()
 
 export default function Payment({ data, handlers }) {
 	const { push } = useHistory()
+	const dispatch = useDispatch()
+	const bankAccounts = useSelector(({ other }) => other.bankAccounts)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
-	// prettier-ignore
 	const { selectedPayment } = data
 	const { setSelectedPayment } = handlers
 
@@ -69,7 +71,8 @@ export default function Payment({ data, handlers }) {
 
 	useEffect(() => {
 		if (!formData.order_detail) push("/404")
-	}, [push])
+		dispatch(fetchBankAccounts())
+	}, [push, dispatch])
 
 	return (
 		<Section paddingHorizontal="0">
@@ -85,12 +88,11 @@ export default function Payment({ data, handlers }) {
 				isSelected={selectedPayment.value === "transfer"}
 			>
 				<Row gutter={32} style={{ marginBottom: "2em" }}>
-					<Col lg={4} xs={12}>
-						<img src={bcaLogo} alt="BCA" width="100%" />
-					</Col>
-					<Col lg={4} xs={12}>
-						<img src={mandiriLogo} alt="Mandiri" width="100%" />
-					</Col>
+					{bankAccounts.map((item) => (
+						<Col lg={4} xs={12} key={item.id}>
+							<img src={BankLogo[item.bank_name?.toUpperCase()]} alt={item.bank_name} width="100%" />
+						</Col>
+					))}
 				</Row>
 				<Row gutter={32}>
 					<Col lg={18}>
