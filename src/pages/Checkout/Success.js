@@ -1,10 +1,10 @@
 import React, { useEffect } from "react"
-import { Section, Card, Success, Heading, Alert, ButtonLink } from "components"
-import { Row, Col } from "antd"
+import { Row, Col, Typography } from "antd"
 import styled from "styled-components/macro"
-import { connect } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link, useLocation, useHistory } from "react-router-dom"
 
+import { Section, Card, Success, Heading, Alert, ButtonLink } from "components"
 import { fetchBankAccounts } from "store/actions/otherActions"
 import { theme } from "styles"
 import { mobile, media } from "helpers"
@@ -56,16 +56,20 @@ const bankAccountText = (bankAccounts) => (
 	</ul>
 )
 
-function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
+const { Paragraph: Par, Text } = Typography
+
+function CheckoutSuccess() {
 	const { state = {} } = useLocation()
 	const { push } = useHistory()
+	const dispatch = useDispatch()
+	const bankAccounts = useSelector(({ other }) => other.bankAccounts)
 
 	const withDeposit = state.paymentMethod && state.paymentMethod === "deposit"
 
 	useEffect(() => {
-		if (!state.isSuccess) push("/404")
-		fetchBankAccounts()
-	}, [fetchBankAccounts, push, state.isSuccess])
+		// if (!state.isSuccess) push("/404")
+		dispatch(fetchBankAccounts())
+	}, [dispatch, push, state.isSuccess])
 
 	return (
 		<Section centered width={mobile ? "100%" : "75%"} textAlign="center">
@@ -88,14 +92,22 @@ function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
 						)}
 						{!withDeposit && (
 							<Alert
-								type="info"
+								type="warning"
 								showIcon
-								message={
-									<span>
+								message="HARAP DIPERHATIKAN!"
+								description={
+									<Typography>
 										Kalo kamu belum melakukan{" "}
-										<Link to="/order/confirmation">konfirmasi pembayaran</Link> lebih dari 2 jam,
-										maka orderan kamu akan <strong>dibatalkan otomatis</strong> oleh sistem
-									</span>
+										<Link to="/order/confirmation">konfirmasi pembayaran</Link> lebih dari{" "}
+										<Text mark underline>
+											2 jam
+										</Text>
+										, maka orderan kamu akan{" "}
+										<Text mark underline>
+											dibatalkan otomatis
+										</Text>{" "}
+										oleh sistem
+									</Typography>
 								}
 							/>
 						)}
@@ -120,8 +132,4 @@ function CheckoutSuccess({ bankAccounts, fetchBankAccounts }) {
 	)
 }
 
-const mapState = ({ other }) => ({
-	bankAccounts: other.bankAccounts
-})
-
-export default connect(mapState, { fetchBankAccounts })(CheckoutSuccess)
+export default CheckoutSuccess
