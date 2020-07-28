@@ -157,6 +157,10 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 	)
 
 	const handleUpdate = (values, { setSubmitting }) => {
+		if (typeof values.province === "string") values.province = values.province_id
+		if (typeof values.city === "string") values.city = values.city_id
+		if (typeof values.subdistrict === "string") values.subdistrict = values.subdistrict_id
+
 		updateUserProfile(values).finally(() => setSubmitting(false))
 	}
 
@@ -205,11 +209,15 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 						</Row>
 					</Form.Item>
 					<Formik
+						enableReinitialize
 						initialValues={{
 							...user,
 							province: user.province_name,
 							city: user.city_name,
-							subdistrict: user.subdistrict_name
+							subdistrict: user.subdistrict_name,
+							province_id: user.province,
+							city_id: user.city,
+							subdistrict_id: user.subdistrict
 						}}
 						onSubmit={handleUpdate}
 						render={({ handleSubmit }) => (
