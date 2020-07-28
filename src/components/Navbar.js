@@ -39,9 +39,9 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 
 	useEffect(() => {
 		if (cartDrawerFromStore) setCartDrawer(true)
-		if (token) fetchUser()
+		if (token) fetchUser(push)
 		fetchProductCategories()
-	}, [cartDrawerFromStore, fetchProductCategories, fetchUser, token])
+	}, [cartDrawerFromStore, fetchProductCategories, fetchUser, push, token])
 
 	return (
 		<Nav>

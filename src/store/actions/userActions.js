@@ -4,25 +4,31 @@ import { message } from "antd"
 
 const loadingUser = () => ({ type: types.LOADING_USER })
 
-export const fetchUser = () => dispatch => {
+export const fetchUser = (push) => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.get(`/customer/view`)
-		.then(({ data }) => dispatch({ type: types.FETCH_USER, payload: data.data.account_customer }))
-		.catch(err => renderError(err, dispatch, types.FETCH_USER, true))
+		.then(({ data }) => {
+			data = data.data?.account_customer
+			if (!data.city_name || !data.province_name || !data.subdistrict_name) {
+				push("/profile/basic?error=missing_location")
+			}
+			dispatch({ type: types.FETCH_USER, payload: data })
+		})
+		.catch((err) => renderError(err, dispatch, types.FETCH_USER, true))
 }
 
-export const updateUserProfile = values => dispatch => {
+export const updateUserProfile = (values) => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.put(`/customer/update_profile`, values)
 		.then(({ data }) => dispatch({ type: types.UPDATE_USER_PROFILE, payload: data.data }))
 		.then(() => dispatch(fetchUser()))
 		.then(() => message.success("Profil kamu berhasil di-update"))
-		.catch(err => renderError(err, dispatch, types.UPDATE_USER_PROFILE_ERROR))
+		.catch((err) => renderError(err, dispatch, types.UPDATE_USER_PROFILE_ERROR))
 }
 
-export const changeProfilePassword = values => dispatch => {
+export const changeProfilePassword = (values) => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.post(`/customer/change_password`, values)
@@ -30,10 +36,10 @@ export const changeProfilePassword = values => dispatch => {
 		.then(() => {
 			message.loading("Mohon tunggu...").then(() => message.success("Password kamu sudah berhasil terganti"))
 		})
-		.catch(err => renderError(err, dispatch, types.CHANGE_PROFILE_PASSWORD_ERROR))
+		.catch((err) => renderError(err, dispatch, types.CHANGE_PROFILE_PASSWORD_ERROR))
 }
 
-export const changeAvatar = photoFile => dispatch => {
+export const changeAvatar = (photoFile) => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.post(`/customer/upload_photo_profile`, photoFile)
@@ -42,20 +48,20 @@ export const changeAvatar = photoFile => dispatch => {
 		})
 		.then(() => message.loading("Mohon tunggu...").then(() => dispatch(fetchUser())))
 		.then(() => message.success("Avatar kamu sudah berhasil terganti"))
-		.catch(err => renderError(err, dispatch, types.CHANGE_AVATAR_ERROR))
+		.catch((err) => renderError(err, dispatch, types.CHANGE_AVATAR_ERROR))
 }
 
-export const fetchListDeposit = () => dispatch => {
+export const fetchListDeposit = () => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.get(`/customer/list_deposit`)
 		.then(({ data }) => {
 			dispatch({ type: types.FETCH_LIST_DEPOSIT, payload: data.data.deposit_data })
 		})
-		.catch(err => renderError(err, dispatch, types.FETCH_LIST_DEPOSIT_ERROR))
+		.catch((err) => renderError(err, dispatch, types.FETCH_LIST_DEPOSIT_ERROR))
 }
 
-export const addNewDeposit = amount => dispatch => {
+export const addNewDeposit = (amount) => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.post(`/customer/deposit`, amount)
@@ -64,10 +70,10 @@ export const addNewDeposit = amount => dispatch => {
 		})
 		.then(() => dispatch(fetchListDeposit()))
 		.then(() => message.success("Kamu sudah berhasil melakukan permintaan deposit"))
-		.catch(err => renderError(err, dispatch, types.ADD_NEW_DEPOSIT_ERROR))
+		.catch((err) => renderError(err, dispatch, types.ADD_NEW_DEPOSIT_ERROR))
 }
 
-export const depositConfirmation = (values, push) => dispatch => {
+export const depositConfirmation = (values, push) => (dispatch) => {
 	dispatch(loadingUser())
 	const formData = new FormData()
 	formData.append("deposit_code", values.deposit_code)
@@ -87,10 +93,10 @@ export const depositConfirmation = (values, push) => dispatch => {
 				.loading("Memverifikasi data...", 1)
 				.then(() => push({ pathname: "/deposit/confirmation_success", state: { isSuccess: true } }))
 		})
-		.catch(err => renderError(err, dispatch, types.DEPOSIT_CONFIRMATION_ERROR))
+		.catch((err) => renderError(err, dispatch, types.DEPOSIT_CONFIRMATION_ERROR))
 }
 
-export const upgradeConfirmation = (values, push) => dispatch => {
+export const upgradeConfirmation = (values, push) => (dispatch) => {
 	dispatch(loadingUser())
 	const formData = new FormData()
 	formData.append("order_code", values.order_code)
@@ -109,10 +115,10 @@ export const upgradeConfirmation = (values, push) => dispatch => {
 				.loading("Memverifikasi data...", 1)
 				.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
 		})
-		.catch(err => renderError(err, dispatch, types.UPGRADE_CONFIRMATION_ERROR))
+		.catch((err) => renderError(err, dispatch, types.UPGRADE_CONFIRMATION_ERROR))
 }
 
-export const upgradeAccount = push => dispatch => {
+export const upgradeAccount = (push) => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.get(`/customer/upgrade`)
@@ -121,12 +127,12 @@ export const upgradeAccount = push => dispatch => {
 			dispatch({ type: types.UPGRADE_ACCOUNT, payload: data.data })
 		})
 		.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
-		.catch(err => {
+		.catch((err) => {
 			renderError(err, dispatch, types.UPGRADE_ACCOUNT_ERROR)
 		})
 }
 
-export const fetchUpgradeCodeList = push => dispatch => {
+export const fetchUpgradeCodeList = (push) => (dispatch) => {
 	dispatch(loadingUser())
 	return instance
 		.get(`/customer/confirmation_upgrade_account/order_code/list`)
@@ -135,7 +141,7 @@ export const fetchUpgradeCodeList = push => dispatch => {
 			dispatch({ type: types.FETCH_UPGRADE_CODE_LIST, payload: data.data.upgrade_account })
 		})
 		.then(() => push({ pathname: "/upgrade/sent", state: { isSuccess: true } }))
-		.catch(err => {
+		.catch((err) => {
 			renderError(err, dispatch, types.FETCH_UPGRADE_CODE_LIST_ERROR)
 		})
 }
