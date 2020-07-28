@@ -11,7 +11,8 @@ export const fetchUser = (push) => (dispatch) => {
 		.then(({ data }) => {
 			data = data.data?.account_customer
 			if (!data.city_name || !data.province_name || !data.subdistrict_name) {
-				push("/profile/basic?error=missing_location")
+				push("/profile/basic")
+				message.error("Kamu harus isi data Provinsi, Kota, dan Kecamatan nya ya")
 			}
 			dispatch({ type: types.FETCH_USER, payload: data })
 		})

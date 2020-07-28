@@ -3,7 +3,7 @@ import { Formik } from "formik"
 import { Form, Divider, Button, Row, Col, Avatar, Affix, Upload, Icon, message } from "antd"
 import { connect } from "react-redux"
 import styled from "styled-components/macro"
-import { Link, useLocation, useHistory } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { ResetButton, SubmitButton } from "formik-antd"
 
 import { Section, Heading, Loading, Card, ButtonLink, Alert, DynamicIcon } from "components"
@@ -104,9 +104,6 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 	const { customer_service: cs = {}, customer_upgrade = {} } = user
 	const upgradeStatus = (customer_upgrade.status || {}).status_id || 0
 	const [media, setMedia] = useState({})
-	const { search } = useLocation()
-	const { push } = useHistory()
-	const params = new URLSearchParams(search)
 
 	const handleRenderCities = (value) => fetchCities(value)
 	const handleRenderSubdistricts = (value) => fetchSubdistricts(value)
@@ -160,9 +157,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 	)
 
 	const handleUpdate = (values, { setSubmitting }) => {
-		updateUserProfile(values)
-			.then(() => push("/profile/basic"))
-			.finally(() => setSubmitting(false))
+		updateUserProfile(values).finally(() => setSubmitting(false))
 	}
 
 	const handleBeforeUpload = (media) => {
@@ -177,11 +172,6 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 	}
 
 	useEffect(() => {
-		const error = params.get("error")
-		if (error && error === "missing_location") {
-			message.error("Kamu harus isi data Provinsi, Kota, dan Kabupaten nya ya")
-		}
-
 		fetchUser()
 		fetchProvinces()
 	}, [fetchProvinces, fetchUser])
