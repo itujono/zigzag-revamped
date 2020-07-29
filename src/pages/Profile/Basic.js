@@ -4,7 +4,7 @@ import { Form, Divider, Button, Row, Col, Avatar, Affix, Upload, Icon, message }
 import { connect } from "react-redux"
 import styled from "styled-components/macro"
 import { Link } from "react-router-dom"
-import { ResetButton, SubmitButton } from "formik-antd"
+import { ResetButton, SubmitButton, FormikDebug } from "formik-antd"
 
 import { Section, Heading, Loading, Card, ButtonLink, Alert, DynamicIcon } from "components"
 import { TextInput, SelectInput } from "components/Fields"
@@ -157,9 +157,9 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 	)
 
 	const handleUpdate = (values, { setSubmitting }) => {
-		if (typeof values.province === "string") values.province = values.province_id
-		if (typeof values.city === "string") values.city = values.city_id
-		if (typeof values.subdistrict === "string") values.subdistrict = values.subdistrict_id
+		values.province = isNaN(Number(values.province)) ? values.province_id : values.province
+		values.city = isNaN(Number(values.city)) ? values.city_id : values.city
+		values.subdistrict = isNaN(Number(values.subdistrict)) ? values.subdistrict_id : values.subdistrict
 
 		updateUserProfile(values).finally(() => setSubmitting(false))
 	}
@@ -277,7 +277,7 @@ function Basic({ provinceOptions, cityOptions, subdistrictOptions, user, loading
 					/>
 				</Col>
 				<Col lg={8}>
-					<Affix offset={mobile ? -20 : 30}>
+					<Affix offsetTop={mobile ? -20 : 30}>
 						<CsCard>
 							<Row type="flex" gutter={mobile ? 32 : 0}>
 								<Col lg={12} xs={10}>
