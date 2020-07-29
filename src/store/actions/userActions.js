@@ -16,7 +16,7 @@ export const fetchUser = (push) => (dispatch) => {
 			}
 			dispatch({ type: types.FETCH_USER, payload: data })
 		})
-		.catch((err) => renderError(err, dispatch, types.FETCH_USER, true))
+		.catch((err) => renderError(err, dispatch, types.FETCH_USER_ERROR, true))
 }
 
 export const updateUserProfile = (values) => (dispatch) => {

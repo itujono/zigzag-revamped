@@ -6,6 +6,7 @@ const initialState = {
 	error: null,
 	depositList: [],
 	upgradeResponse: "",
+	userError: null,
 	depositError: null,
 	upgradeError: null,
 	changeAvatarError: null,
@@ -59,6 +60,8 @@ function reducer(state = initialState, action) {
 		case types.FETCH_UPGRADE_CODE_LIST:
 			return { ...state, upgradeCodeList: action.payload, loading: false }
 
+		case types.FETCH_USER_ERROR:
+			return { ...state, userError: action.payload, loading: false }
 		case types.UPDATE_USER_PROFILE_ERROR:
 			return { ...state, error: action.payload, loading: false }
 		case types.CHANGE_PROFILE_PASSWORD_ERROR:
