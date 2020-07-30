@@ -22,27 +22,28 @@ const LogoRow = styled(Row)`
 function DepositConfirmation({ bankAccountOptions, depositCodeOptions, ...props }) {
 	const { push } = useHistory()
 	const { state = {} } = useLocation()
+	const [file, setFile] = useState({})
 
 	const { fetchBankAccounts, depositConfirmation, fetchListDeposit } = props
-	const [file, setFile] = useState({})
 
 	const uploadProps = {
 		multiple: false,
 		name: "file",
+		accept: "image/*,.pdf",
+		showUploadList: false,
 		beforeUpload(file) {
-			setFile(file)
-			return false
+			const lowerThan2mb = file.size / 1024 / 1024 < 2
+			if (!lowerThan2mb) {
+				message.error("File image nya gak boleh lebih dari 2 MB ya")
+				setFile({})
+			} else setFile(file)
+			return lowerThan2mb
 		},
 		onChange(info) {
 			const { status } = info.file
-			if (status !== "uploading") {
-				console.log(info.file, info.fileList)
-			}
-			if (status === "done") {
-				message.success(`${info.file.name} file uploaded successfully.`)
-			} else if (status === "error") {
-				message.error(`${info.file.name} file upload failed.`)
-			}
+			if (status !== "uploading") console.log(info.file, info.fileList)
+			if (status === "done") message.success(`${info.file.name} file uploaded successfully.`)
+			else if (status === "error") message.error(`${info.file.name} file upload failed.`)
 		}
 	}
 

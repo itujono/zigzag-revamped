@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Section, Heading, Card, ButtonLink, Logo } from "components"
+import { Section, Heading, Card, ButtonLink, Logo, Empty, Button } from "components"
 import { TextInput, DateInput, SelectInput } from "components/Fields"
 import { Row, Col, Form, Upload, message, Icon } from "antd"
 import { connect } from "react-redux"
@@ -28,8 +28,12 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 		multiple: false,
 		name: "file",
 		beforeUpload(file) {
-			setFile(file)
-			return false
+			const lowerThan2mb = file.size / 1024 / 1024 < 2
+			if (!lowerThan2mb) {
+				message.error("File image nya gak boleh lebih dari 2 MB ya")
+				setFile({})
+			} else setFile(file)
+			return lowerThan2mb
 		},
 		onChange(info) {
 			const { status } = info.file
@@ -56,6 +60,33 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 		fetchOrderCodeList()
 	}, [fetchBankAccounts, fetchOrderCodeList])
 
+	if (orderCodeOptions.length === 0) {
+		return (
+			<Section centered width="75%">
+				<Card noHover padding={mobile ? "1.5em" : "4em"}>
+					<LogoRow type="flex" justify="center">
+						<Col lg={24}>
+							<Logo width="90" />
+						</Col>
+					</LogoRow>
+					<Row>
+						<Col lg={24}>
+							<Heading
+								bold
+								content="Konfirmasi pembayaran"
+								subheader="Konfirmasi pembayaran kamu di sini supaya cepat kami proses"
+								marginBottom="3em"
+							/>
+							<Empty description="Tidak ada yang perlu dikonfirmasi untuk sekarang">
+								<Button onClick={() => push("/")}>Balik ke Home</Button>
+							</Empty>
+						</Col>
+					</Row>
+				</Card>
+			</Section>
+		)
+	}
+
 	return (
 		<Section centered width="75%">
 			<Card noHover padding={mobile ? "1.5em" : "4em"}>
@@ -75,7 +106,7 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 						<Formik
 							onSubmit={handleSubmitConfirmation}
 							validationSchema={confirmationSchema}
-							render={({ handleSubmit }) => (
+							render={({ handleSubmit, isValid }) => (
 								<Form layout="vertical" onSubmit={handleSubmit}>
 									<SelectInput
 										name="order_code"
@@ -106,7 +137,7 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 										placeholder="Pilih tanggal ketika kamu transfer"
 									/>
 									<Form.Item name="evidence_file" label="Bukti transfer">
-										<Upload.Dragger {...uploadProps}>
+										<Upload.Dragger {...uploadProps} showUploadList={false} accept="image/*,.pdf">
 											<p className="ant-upload-drag-icon">
 												<Icon type="inbox" />
 											</p>
@@ -118,7 +149,9 @@ function PaymentConfirmation({ bankAccountOptions, orderCodeOptions, ...props })
 											</p>
 										</Upload.Dragger>
 									</Form.Item>
-									<SubmitButton>Konfirmasi sekarang</SubmitButton>
+									<SubmitButton disabled={!isValid || Object.keys(file).length === 0}>
+										Konfirmasi sekarang
+									</SubmitButton>
 								</Form>
 							)}
 						/>
