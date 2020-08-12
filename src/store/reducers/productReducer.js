@@ -41,6 +41,9 @@ const renderPrice = (productPrice) => {
 }
 
 const roundupWeight = (number) => {
+	if (!number || number === "0") return 0
+	if (Number(number) < 1000) return 1000
+
 	let prefix = number.slice(0, number.length - 3)
 	let suffix = number.slice(-3)
 	if (Number(suffix[0]) > 3) {
