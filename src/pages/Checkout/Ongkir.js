@@ -108,6 +108,7 @@ export default function Ongkir({ data, handlers, loading }) {
 	const { state = {} } = useLocation()
 	const [shopeeInfo, setShopeeInfo] = useState({ online_booking: "", expedition: "" })
 	const [understandShopee, setUnderstandShopee] = useState(false)
+	const [understandTokped, setUnderstandTokped] = useState(false)
 
 	const formData = JSON.parse(localStorage.getItem("formData")) || {}
 
@@ -128,6 +129,7 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const handleSelectCourier = (courier) => {
 		if (courier.code !== "shopeecashless") setUnderstandShopee(false)
+		if (courier.code !== "tokopedia") setUnderstandTokped(false)
 		if (courier.code === "gosend" && !isSurabaya) {
 			return message.error("Kalo bukan tujuan Surabaya, kamu tidak bisa pilih GoSend")
 		}
@@ -292,6 +294,62 @@ export default function Ongkir({ data, handlers, loading }) {
 																<Button
 																	size="small"
 																	onClick={() => setUnderstandShopee(true)}
+																>
+																	Ya, saya mengerti
+																</Button>
+															</div>
+														}
+													/>
+												)}
+											</Col>
+										)}
+										{selectedCourier.code === "tokopedia" && code === "tokopedia" && (
+											<Col lg={12} xs={16}>
+												{understandTokped ? (
+													<Formik initialValues={{ online_booking: "" }}>
+														{() => (
+															<Form layout="vertical">
+																<TextInput
+																	name="online_booking"
+																	label="Nomor online booking"
+																	placeholder="Nomor online booking"
+																	onChange={({ target }) =>
+																		setShopeeInfo((prev) => ({
+																			...prev,
+																			online_booking: target.value
+																		}))
+																	}
+																/>
+																<SelectInput
+																	name="expedition"
+																	options={courierOptions}
+																	label="Ekspedisi yg dipilih"
+																	placeholder="Ekspedisi yg dipilih"
+																	onChange={(value) =>
+																		setShopeeInfo((prev) => ({
+																			...prev,
+																			expedition: value
+																		}))
+																	}
+																/>
+															</Form>
+														)}
+													</Formik>
+												) : (
+													<Alert
+														showIcon={!mobile}
+														className="mb0__mobile h-100"
+														type="warning"
+														message="Ini kurir khusus"
+														description={
+															<div>
+																<Par>
+																	Tokopedia hanya digunakan untuk dropshipper
+																	Tokopedia
+																</Par>
+																<Button
+																	size="small"
+																	onClick={() => setUnderstandTokped(true)}
 																>
 																	Ya, saya mengerti
 																</Button>

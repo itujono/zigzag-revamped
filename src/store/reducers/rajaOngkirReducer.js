@@ -90,6 +90,15 @@ function reducer(state = initialStates, action) {
 							}
 						]
 					}
+					if (item.code === "tokopedia") {
+						item.costs = [
+							{
+								service: "Tokopedia",
+								description: "Wajib isi nomor Online Booking",
+								cost: [{ value: 0, etd: "", note: "" }]
+							}
+						]
+					}
 					if (item.code === "gosend") {
 						item.costs = [
 							{
