@@ -9,7 +9,7 @@ import Drawer from "components/Drawer"
 import Heading from "components/Heading"
 import styled from "styled-components/macro"
 import Button from "components/Button"
-import { pricer, mobile } from "helpers"
+import { pricer, mobile, media } from "helpers"
 import Section from "components/Section"
 import { theme } from "styles"
 import { TextInput } from "components/Fields"
@@ -66,19 +66,20 @@ function CartDrawer({ onCartDrawer }) {
 			visible={cartDrawer}
 			css={`
 				.ant-drawer-body {
-					padding: 2em 3em;
+					padding: 2em 0;
 					height: 100%;
 					overflow-y: auto;
 				}
 			`}
 		>
-			<Heading content={`Cart kamu ${itemCount}`} level={4} bold />
+			<Heading bold content={`Cart kamu ${itemCount}`} level={4} className="px3em px1em__mobile" />
 			{loading ? (
 				<Loading />
 			) : (
 				<List
 					itemLayout="horizontal"
 					dataSource={cartItems}
+					className="px3em px1em__mobile"
 					locale={{
 						emptyText: <Empty isEmptyItems description="Masih belum ada apa-apa di cart kamu nih" />
 					}}
@@ -201,9 +202,11 @@ function CartDrawer({ onCartDrawer }) {
 export default CartDrawer
 
 const SubtotalSection = styled(Section).attrs({
-	paddingHorizontal: "0"
+	paddingHorizontal: "3em"
 })`
 	border-top: 1px solid ${theme.greyColor[3]};
+	backdrop-filter: blur(10px);
+	padding: 2em 3em;
 	position: sticky;
 	bottom: -30px;
 	left: 0;
@@ -232,6 +235,12 @@ const SubtotalSection = styled(Section).attrs({
 			font-weight: normal;
 		}
 	}
+
+	${media.mobile`
+		&& {
+			padding: 2em 1em;
+		}
+	`}
 `
 
 const CartItem = styled(List.Item)`
