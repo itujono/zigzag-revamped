@@ -57,7 +57,7 @@ function ProductCard({ data, mode, loading = false, ...props }) {
 
 	return (
 		<Link to={data.to} onClick={handleClick}>
-			<Cardee {...props} mode={mode} hoverable cover={<img alt={data.title} src={data.src} />}>
+			<Cardee {...props} mode={mode} hoverable cover={<img alt={data.title} src={data.src} loading="lazy" />}>
 				{loading ? (
 					<p style={{ textAlign: "center" }}>Mohon tunggu...</p>
 				) : (
