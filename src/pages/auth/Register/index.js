@@ -322,6 +322,7 @@ function Register({ csOptions, error, loading, isPartner, ...props }) {
 			customer_service_id: isPartner ? 6 : values.customer_service_id,
 			name: `${values.first_name} ${values.last_name}`
 		}
+		setSubmitting(false)
 		const { repeat_password, first_name, last_name, ...theValues } = values
 		Modal.confirm({
 			title: "Daftar sekarang?",

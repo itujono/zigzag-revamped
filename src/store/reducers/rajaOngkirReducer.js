@@ -1,5 +1,7 @@
 import * as types from "store/types"
 
+// TODO: Tunggu kabar pusat siCepat buat matikan Reguler
+
 const initialStates = {
 	provinces: [],
 	cities: [],
@@ -81,9 +83,13 @@ function reducer(state = initialStates, action) {
 			const couriers = action.payload
 				.filter((item) => item.costs.length > 0)
 				.map((item) => {
-					if (item.code === "sicepat") {
-						item.costs = item.costs.filter((cost) => cost.service !== "REG")
-					}
+					/**
+					 * Tunggu kabar pusat Sicepat
+					 */
+
+					// if (item.code === "sicepat") {
+					// 	item.costs = item.costs.filter((cost) => cost.service !== "REG")
+					// }
 					if (item.code === "shopeecashless") {
 						item.costs = [
 							{
