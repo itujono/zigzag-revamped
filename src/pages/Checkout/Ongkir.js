@@ -119,7 +119,7 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const isSurabaya = Number(city.value) === 444
 	const courierOptions = couriers
-		.filter((item) => item.code !== "shopeecashless" && item.code !== "gosend")
+		.filter((item) => item.code !== "shopeecashless" && item.code !== "gosend" && item.code !== "tokopedia")
 		.map((item) => ({ value: item.name, label: item.name }))
 
 	const courierNotSelectedYet = Object.values(selectedCourier).some(
@@ -127,6 +127,7 @@ export default function Ongkir({ data, handlers, loading }) {
 	)
 
 	const shopeeCodeNotFilledYet = selectedCourier.code === "shopeecashless" && !shopeeInfo.online_booking
+	const tokpedNotFilledYet = selectedCourier.code === "tokopedia" && !tokpedInfo.online_booking
 
 	const handleSelectCourier = (courier) => {
 		if (courier.code !== "shopeecashless") setUnderstandShopee(false)
@@ -153,14 +154,14 @@ export default function Ongkir({ data, handlers, loading }) {
 
 	const handleSaveCourier = () => {
 		const withOnlineBooking = {
-			shopeecashless: "Shopee Cashless",
-			tokopedia: "Tokopedia"
+			shopeecashless: { text: "Shopee Cashless", infoKey: shopeeInfo },
+			tokopedia: { text: "Tokopedia", infoKey: tokpedInfo }
 		}
 		const { code, details = {} } = selectedCourier
 		const remarkData = `${details.service} - ${details.description}`
 		const expedition_remark =
-			code === "shopeecashless"
-				? `${remarkData}; Online booking: ${shopeeInfo.online_booking}; Ekspedisi: ${shopeeInfo.expedition}`
+			code === "shopeecashless" || code === "tokopedia"
+				? `${remarkData}; Online booking: ${withOnlineBooking?.[code]?.infoKey.online_booking}; Ekspedisi: ${withOnlineBooking?.[code]?.infoKey.expedition}`
 				: remarkData
 		const order_detail = {
 			expedition_remark,
@@ -176,7 +177,7 @@ export default function Ongkir({ data, handlers, loading }) {
 		if (code === "shopeecashless" || code === "tokopedia") {
 			return Modal.confirm({
 				centered: true,
-				title: `Kamu pilih ${withOnlineBooking[code]}`,
+				title: `Kamu pilih ${withOnlineBooking?.[code]?.text}`,
 				content: `Karena Tokopedia/Shopee Cashless hanya untuk dropshipper Tokopedia/Shopee yang memiliki Online Booking, apa kamu sudah yakin dengan Online Booking nya? Kalo Online Booking yang kamu input tidak valid, kami berhak membatalkan orderan kamu`,
 				okText: "Yakin",
 				cancelText: "Batal deh",
@@ -372,7 +373,10 @@ export default function Ongkir({ data, handlers, loading }) {
 			})}
 
 			<Section textAlign="right" paddingHorizontal="0">
-				<Button onClick={handleSaveCourier} disabled={courierNotSelectedYet || shopeeCodeNotFilledYet}>
+				<Button
+					onClick={handleSaveCourier}
+					disabled={courierNotSelectedYet || shopeeCodeNotFilledYet || tokpedNotFilledYet}
+				>
 					Lanjut ke Pembayaran <Icon type="right" />
 				</Button>
 			</Section>
