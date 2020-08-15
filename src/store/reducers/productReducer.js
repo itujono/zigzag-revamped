@@ -109,14 +109,16 @@ function reducer(state = initialState, action) {
 		case types.FETCH_RESTOCK_PRODUCTS:
 			const restockProducts = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
-				return { ...item, product_price }
+				const product_image = sortImages(item.product_image)
+				return { ...item, product_price, product_image }
 			})
 			return { ...state, restockProducts, loading: false }
 
 		case types.FETCH_PROMO_PRODUCTS:
 			const promoProducts = action.payload.map((item) => {
 				const { product_price } = renderPrice(item.product_price)
-				return { ...item, product_price }
+				const product_image = sortImages(item.product_image)
+				return { ...item, product_price, product_image }
 			})
 			return { ...state, promoProducts, loading: false }
 
