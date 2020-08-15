@@ -107,6 +107,7 @@ export default function Ongkir({ data, handlers, loading }) {
 	const dispatch = useDispatch()
 	const { state = {} } = useLocation()
 	const [shopeeInfo, setShopeeInfo] = useState({ online_booking: "", expedition: "" })
+	const [tokpedInfo, setTokpedInfo] = useState({ online_booking: "", expedition: "" })
 	const [understandShopee, setUnderstandShopee] = useState(false)
 	const [understandTokped, setUnderstandTokped] = useState(false)
 
@@ -151,6 +152,10 @@ export default function Ongkir({ data, handlers, loading }) {
 	}, [subdistrict.value, cartTotal.roundedWeight, dispatch, fetchCouriers])
 
 	const handleSaveCourier = () => {
+		const withOnlineBooking = {
+			shopeecashless: "Shopee Cashless",
+			tokopedia: "Tokopedia"
+		}
 		const { code, details = {} } = selectedCourier
 		const remarkData = `${details.service} - ${details.description}`
 		const expedition_remark =
@@ -168,12 +173,11 @@ export default function Ongkir({ data, handlers, loading }) {
 			destinationType: subdistrict.value ? "subdistrict" : "city",
 			weight: cartTotal.roundedWeight
 		}
-		if (code === "shopeecashless") {
+		if (code === "shopeecashless" || code === "tokopedia") {
 			return Modal.confirm({
 				centered: true,
-				title: "Kamu pilih Shopee Cashless",
-				content:
-					"Karena Shopee Cashless hanya untuk dropshipper Shopee yang memiliki Online Booking, apa kamu sudah yakin dengan Online Booking nya? Kalo Online Booking yang kamu input tidak valid, kami berhak membatalkan orderan kamu",
+				title: `Kamu pilih ${withOnlineBooking[code]}`,
+				content: `Karena Tokopedia/Shopee Cashless hanya untuk dropshipper Tokopedia/Shopee yang memiliki Online Booking, apa kamu sudah yakin dengan Online Booking nya? Kalo Online Booking yang kamu input tidak valid, kami berhak membatalkan orderan kamu`,
 				okText: "Yakin",
 				cancelText: "Batal deh",
 				onOk: () => dispatch(saveCourierDetails(order_detail, formData, push))
@@ -314,7 +318,7 @@ export default function Ongkir({ data, handlers, loading }) {
 																	label="Nomor online booking"
 																	placeholder="Nomor online booking"
 																	onChange={({ target }) =>
-																		setShopeeInfo((prev) => ({
+																		setTokpedInfo((prev) => ({
 																			...prev,
 																			online_booking: target.value
 																		}))
@@ -326,7 +330,7 @@ export default function Ongkir({ data, handlers, loading }) {
 																	label="Ekspedisi yg dipilih"
 																	placeholder="Ekspedisi yg dipilih"
 																	onChange={(value) =>
-																		setShopeeInfo((prev) => ({
+																		setTokpedInfo((prev) => ({
 																			...prev,
 																			expedition: value
 																		}))
