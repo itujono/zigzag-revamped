@@ -98,3 +98,11 @@ export const cancelOrder = (values) => (dispatch) => {
 		.then(() => message.success("Oke, orderan ini telah di-cancel. Silakan cek email untuk info pembatalannya"))
 		.catch((err) => renderError(err, dispatch, types.CANCEL_ORDER_ERROR))
 }
+
+export const fetchBanners = () => (dispatch) => {
+	dispatch(loadingOther())
+	return instance
+		.get(`/banner/list`)
+		.then(({ data }) => dispatch({ type: types.FETCH_BANNERS, payload: data.data.bannersMap }))
+		.catch((err) => renderError(err, dispatch, types.FETCH_BANNERS_ERROR))
+}

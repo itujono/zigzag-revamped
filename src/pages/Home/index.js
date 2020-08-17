@@ -1,47 +1,50 @@
-import React, { useEffect } from "react"
-import { Section, Heading, Layout, ProductCard, ButtonLink, Carousel } from "components"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchProducts, fetchRestockProducts } from "store/actions/productActions"
 import { Row, Col, Icon } from "antd"
-import { mobile, isOutOfStock } from "helpers"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+
+import { Section, Heading, Layout, ProductCard, ButtonLink } from "components"
+import { fetchProducts, fetchRestockProducts } from "store/actions/productActions"
+import { mobile, isOutOfStock } from "helpers"
+import { fetchBanners } from "store/actions/otherActions"
+import Banners from "./Banners"
 
 const SelengkapButton = styled(ButtonLink)`
 	margin-right: 0;
 `
 
 function Home() {
+	const [photoIndex, setPhotoIndex] = useState(-1)
 	const dispatch = useDispatch()
 	const products = useSelector(({ product }) => product.products)
 	const restockProducts = useSelector(({ product }) => product.restockProducts)
+	const banners = useSelector(({ other }) => other.banners)
 
 	useEffect(() => {
 		dispatch(fetchProducts(0, 12))
 		dispatch(fetchRestockProducts(0, 12))
+		dispatch(fetchBanners())
 	}, [dispatch])
 
 	return (
 		<Layout sidebar>
 			<Section paddingHorizontal="1.5em">
-				<Heading bold content="Ini Homepage" subheader="Kamu adalah apa yang kamu makan, eheheh" />
-				<Carousel className="center mb2em" slidesToShow={mobile ? 1 : 3}>
-					<div>
-						<img src="https://source.unsplash.com/600x300" alt="Disclaimer" />
-					</div>
-					<div>
-						<img src="https://source.unsplash.com/600x299" alt="Welcome to Zigzag" />
-					</div>
-					<div>
-						<img src="https://source.unsplash.com/599x299" alt="Welcome to Zigzag" />
-					</div>
-					<div>
-						<img src="https://source.unsplash.com/599x300" alt="Welcome to Zigzag" />
-					</div>
-					<div>
-						<img src="https://source.unsplash.com/599x301" alt="599x301" />
-					</div>
-				</Carousel>
+				<Heading
+					bold
+					content="Cari fashion kamu"
+					subheader={
+						<span>
+							Zigzag adalah gudang nya fashion murah meriah mewah{" "}
+							<span role="img" aria-label="dress">
+								👗
+							</span>
+						</span>
+					}
+				/>
+
+				<Banners data={banners} onPhotoIndex={{ photoIndex, setPhotoIndex }} />
+
 				<Row className="mt4m mb4em" gutter={64}>
 					<Col lg={24} style={{ marginBottom: mobile && "2em" }}>
 						<Row

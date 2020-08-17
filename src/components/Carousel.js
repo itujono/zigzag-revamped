@@ -5,11 +5,11 @@ import { theme } from "styles"
 import { media } from "helpers"
 
 const StyledCarousel = styled(_Carousel).attrs({
-	infinite: true,
+	// infinite: true,
 	pauseOnFocus: true,
 	pauseOnHover: true,
-	autoPlay: true,
-	adaptiveHeight: true
+	autoPlay: true
+	// adaptiveHeight: true
 })`
 	&& {
 		/* .slick-list {
