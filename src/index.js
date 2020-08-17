@@ -1,6 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import moment from "moment"
+import "react-image-lightbox/style.css"
 import "antd/dist/antd.css"
 import "./styles/index.less"
 import App from "./App"

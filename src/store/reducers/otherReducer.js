@@ -8,6 +8,7 @@ const initial = {
 	courierDetails: {},
 	orderHistory: [],
 	orderCodeOptions: [],
+	banners: [],
 	loading: false,
 	loadingOrder: false,
 
@@ -15,7 +16,8 @@ const initial = {
 	saveCourierDetailsError: null,
 	orderHistoryError: null,
 	cancelOrderError: null,
-	orderConfirmationError: null
+	orderConfirmationError: null,
+	bannerError: null
 }
 
 function reducer(state = initial, action) {
@@ -93,6 +95,11 @@ function reducer(state = initial, action) {
 				})),
 				loading: false
 			}
+
+		case types.FETCH_BANNERS:
+			return { ...state, banners: action.payload, loading: false }
+		case types.FETCH_BANNERS_ERROR:
+			return { ...state, bannerError: action.payload, loading: false }
 		default:
 			return state
 	}
