@@ -143,6 +143,28 @@
 		padding-left: 1em;
 		padding-right: 1em;
 	}
+
+	.IwZVs.IwZVs {
+		&.px0__mobile.px0__mobile {
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+
+	.px0__mobile.px0__mobile {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.p0__mobile.p0__mobile {
+		padding: 0;
+	}
+
+	.IwZVs.IwZVs {
+		&.p0__mobile.p0__mobile {
+			padding: 0;
+		}
+	}
 }
 
 // ███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗
@@ -291,6 +313,9 @@ li.ant-menu-item {
 		-webkit-overflow-scrolling: touch;
 		&::-webkit-scrollbar {
 			display: none;
+		}
+		.ant-col {
+			scroll-snap-align: center;
 		}
 		img {
 			height: 100%;

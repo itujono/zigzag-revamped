@@ -28,11 +28,17 @@ export default function Banners({ onPhotoIndex, data }) {
 
 	return (
 		<SimpleReactLightbox>
-			<Section noPadding>
+			<Section noPadding className="p0__mobile">
 				<SRLWrapper options={{ progressBar }}>
 					<Row gutter={16} type="flex" className="scrolling-row mb3em">
 						{data.map((banner, idx) => (
-							<Col lg={10} key={banner.id} className="cursor-pointer" onClick={() => setPhotoIndex(idx)}>
+							<Col
+								lg={10}
+								xs={24}
+								key={banner.id}
+								className="cursor-pointer"
+								onClick={() => setPhotoIndex(idx)}
+							>
 								<img src={banner.picture} width="100%" alt={banner.title} loading="lazy" />
 							</Col>
 						))}
