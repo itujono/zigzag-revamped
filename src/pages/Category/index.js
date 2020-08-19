@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Section, Heading, ProductCard, Layout, Empty } from "components"
+import { Section, Heading, ProductCard, Layout, Empty, Loading } from "components"
 import { Row, Col } from "antd"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
@@ -38,7 +38,9 @@ function Category() {
 					marginBottom="3em"
 				/>
 				<Row gutter={16} type="flex">
-					{notFound ? (
+					{loading ? (
+						<Loading />
+					) : notFound ? (
 						<Section centered>
 							<Empty />
 						</Section>
