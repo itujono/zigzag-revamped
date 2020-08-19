@@ -1,5 +1,6 @@
 import bcaLogo from "assets/images/bca-logo.jpeg"
 import mandiriLogo from "assets/images/mandiri-logo.png"
+import { theme } from "styles"
 
 export const ID_AKUN_KOKO = 40
 export const URL_ZIZGAG = "https://zigzagfashion.id"
@@ -40,4 +41,14 @@ export const CategoryIcon = {
 export const BankLogo = {
 	BCA: bcaLogo,
 	MANDIRI: mandiriLogo
+}
+
+export const LIGHTBOX_SETTING = {
+	progressBar: { fillColor: theme.primaryColor },
+	settings: {
+		transitionSpeed: 300,
+		slideAnimationType: "slide",
+		lightboxTransitionSpeed: 0.12,
+		lightboxTransitionTimingFunction: "easeInOut"
+	}
 }
