@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal, Carousel, ScrollingRow } from "components"
-import { Row, Col, Tag, Divider, Typography, message, Input } from "antd"
+import { Row, Col, Tag, Divider, Typography, message, Input, Icon } from "antd"
 import styled from "styled-components/macro"
 import { useParams, Link, useHistory, useLocation } from "react-router-dom"
 import { connect } from "react-redux"
@@ -14,7 +14,8 @@ import {
 	updateCartItem
 } from "store/actions/productActions"
 import { theme } from "styles"
-import { URL_ZIZGAG } from "helpers/constants"
+import { URL_ZIZGAG, LIGHTBOX_SETTING } from "helpers/constants"
+import Lightbox, { SRLWrapper } from "simple-react-lightbox"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -52,27 +53,29 @@ const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize 
 	}
 `
 
-const PhotoModal = styled(Modal)`
-	&& {
-		.ant-modal-body {
-			padding: 0;
-			.ant-typography {
-				position: absolute;
-				bottom: 20px;
-				left: 20px;
-				color: #fff;
-			}
-		}
-	}
-`
-
 const StyledScrolling = styled(ScrollingRow)`
 	position: relative;
 	.ant-col {
 		height: 240px;
+		max-height: 400px;
+		transition: all 0.2s ease;
+		.ant-tag {
+			opacity: 0;
+			pointer-events: none;
+			transition: all 0.2s ease;
+		}
 		img {
 			height: 100%;
 			object-fit: cover;
+		}
+
+		&:hover {
+			img {
+				filter: brightness(0.5);
+			}
+			.ant-tag {
+				opacity: 1;
+			}
 		}
 	}
 `
@@ -217,48 +220,37 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				</Button>
 			</Modal>
 
-			{/* {mobile && (
-				<PhotoModal visible={Object.keys(selectedPhoto).length} onCancel={() => setSelectedPhoto({})}>
-					<img src={selectedPhoto.picture} alt={selectedPhoto.caption} width="100%" />
-					<Typography.Paragraph>{selectedPhoto.caption}</Typography.Paragraph>
-				</PhotoModal>
-			)} */}
-
 			<Section>
 				<Row gutter={64} type="flex">
 					<Col lg={14} xs={24}>
-						{mobile ? (
-							<StyledScrolling alwaysSnapStop height="300px">
-								{(product.product_image || []).map((item) => (
-									<Col xs={24} key={item.id}>
-										<img
-											src={item.picture}
-											alt={item.caption}
-											width="100%"
-											height="100%"
-											className="mb2em"
-											onClick={() => setSelectedPhoto(item)}
-										/>
-										<Text type="secondary">{item.caption}</Text>
-									</Col>
-								))}
-							</StyledScrolling>
-						) : (
-							<Carousel className="mb2em">
-								{(product.product_image || []).map((item) => (
-									<>
-										<img
+						<Lightbox>
+							<SRLWrapper options={LIGHTBOX_SETTING}>
+								<StyledScrolling alwaysSnapStop height={mobile ? "300px" : "600px"}>
+									{(product.product_image || []).map((item) => (
+										<Col
+											xs={24}
+											lg={24}
 											key={item.id}
-											src={item.picture}
-											alt={item.caption}
-											width="100%"
-											className="mb2em"
-										/>
-										<Text type="secondary">{item.caption}</Text>
-									</>
-								))}
-							</Carousel>
-						)}
+											className={`cursor-pointer ${!mobile && "h-100"}`}
+											onClick={() => setSelectedPhoto(item)}
+										>
+											<Tag className="br-10 center-absolute" color="black">
+												<Icon type="fullscreen" />
+												&nbsp; Perbesar
+											</Tag>
+											<img
+												src={item.picture}
+												alt={item.caption}
+												width="100%"
+												height="100%"
+												className="mb2em br-10"
+											/>
+											<Text type="secondary">{item.caption}</Text>
+										</Col>
+									))}
+								</StyledScrolling>
+							</SRLWrapper>
+						</Lightbox>
 					</Col>
 					<Col lg={10} xs={24}>
 						<Row>
@@ -301,7 +293,6 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 								style={{ textAlign: "left", marginBottom: "2em" }}
 							/>
 						)}
-						{/* <Heading reverse content="Rating" subheader={productRating} marginBottom="2em" /> */}
 						<Stats>
 							<Row type="flex">
 								<Col lg={8} xs={12}>
@@ -329,19 +320,6 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 									/>
 								</Col>
 							</Row>
-
-							{/* <Row>
-								<Col lg={12}>
-									{selectedColor && Object.keys(selectedColor).length > 0 && (
-										<Heading
-											reverse
-											content={`Stok warna ${selectedColor.color}`}
-											subheader={`${productStock} pcs`}
-											marginBottom="0"
-										/>
-									)}
-								</Col>
-							</Row> */}
 						</StyledSection>
 						<Divider />
 						<StyledSection paddingHorizontal="0" marginBottom="0">
