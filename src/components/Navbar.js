@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Row, Col, Menu, Icon, Typography, Input, message, Badge, Dropdown } from "antd"
 import { Logo, Heading, Button } from "components"
 import styled from "styled-components/macro"
-import { Link, withRouter, useHistory, NavLink } from "react-router-dom"
+import { Link, withRouter, useHistory, NavLink, useLocation } from "react-router-dom"
 import { connect } from "react-redux"
 
 import { setCartDrawerFromStore } from "store/actions/otherActions"
@@ -100,6 +100,8 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 function RightMenu({ data, handlers }) {
 	const { token, user, typeId, cartItems } = data
 	const { handleLogout, handleSetCardDrawer, handleSearch } = handlers
+	const { pathname } = useLocation()
+	const isSearchPage = pathname === "/search"
 
 	const menuMobile = (
 		<StyledMobileMenu>
@@ -157,15 +159,17 @@ function RightMenu({ data, handlers }) {
 
 		return (
 			<StyledMenu mode="horizontal">
-				<Menu.Item key="search">
-					<Input.Search
-						allowClear
-						name="search"
-						placeholder="Cari apa saja..."
-						style={{ width: 200 }}
-						onSearch={handleSearch}
-					/>
-				</Menu.Item>
+				{!isSearchPage && (
+					<Menu.Item key="search">
+						<Input.Search
+							allowClear
+							name="search"
+							placeholder="Cari apa saja..."
+							style={{ width: 200 }}
+							onSearch={handleSearch}
+						/>
+					</Menu.Item>
+				)}
 				<Menu.Item
 					key="notifications"
 					style={{ paddingLeft: "2em", paddingRight: 0 }}
@@ -217,38 +221,29 @@ function RightMenu({ data, handlers }) {
 				<StyledCartIcon dot={cartItems.length > 0} onClick={handleSetCardDrawer}>
 					<Icon type="shopping-cart" />
 				</StyledCartIcon>
-				{/* <Dropdown
-					overlay={ */}
-				{/* <Menu>
-					<Menu.Item key="login" style={{ paddingRight: 0 }}> */}
 				<Link to="/login">
 					<Button type="primary" style={{ marginLeft: "1em" }}>
 						Login&nbsp;
 						<Icon type="user" style={{ marginRight: 0 }} />
 					</Button>
 				</Link>
-				{/* </Menu.Item>
-				</Menu> */}
-				{/* // 	}
-				// 	trigger={["click"]}
-				// >
-				// 	<Button type="primary" icon="more" shape="circle" size="large" style={{ marginLeft: "1.5em" }} />
-				// </Dropdown> */}
 			</>
 		)
 	}
 
 	return (
 		<StyledMenu mode="horizontal">
-			<Menu.Item key="search">
-				<Input.Search
-					allowClear
-					name="search"
-					placeholder="Cari apa saja..."
-					style={{ width: 200 }}
-					onSearch={handleSearch}
-				/>
-			</Menu.Item>
+			{!isSearchPage && (
+				<Menu.Item key="search">
+					<Input.Search
+						allowClear
+						name="search"
+						placeholder="Cari apa saja..."
+						style={{ width: 200 }}
+						onSearch={handleSearch}
+					/>
+				</Menu.Item>
+			)}
 			<Menu.Item key="login" style={{ paddingRight: 0 }}>
 				<Link to="/login">
 					<Button shape="circle" type="primary">
