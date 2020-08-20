@@ -86,6 +86,7 @@ function ProductDetail() {
 	const { push } = useHistory()
 	const { pathname } = useLocation()
 	const dispatch = useDispatch()
+	const couriers = useSelector(({ rajaOngkir }) => rajaOngkir.couriers)
 	const sortedFromCheapest = useSelector(({ rajaOngkir }) => rajaOngkir.cheapest)
 	const user = useSelector(({ user }) => user.user)
 	const product = useSelector(({ product }) => product.product)
@@ -209,7 +210,7 @@ function ProductDetail() {
 	// 	})
 	// }
 
-	const handleFetchCouriers = useCallback(() => {
+	const handleFetchCouriers = () => {
 		const data = {
 			origin: ORIGIN.cityId,
 			destination: user.subdistrict,
@@ -220,14 +221,24 @@ function ProductDetail() {
 		}
 
 		dispatch(fetchCouriers(data))
-	}, [user.subdistrict, product.weight, dispatch])
+	}
 
 	useEffect(() => {
 		dispatch(fetchProductItem(Number(productId)))
 		if (token) {
-			dispatch(fetchUser()).then(() => handleFetchCouriers())
+			dispatch(fetchUser())
+			const data = {
+				origin: ORIGIN.cityId,
+				destination: user.subdistrict,
+				weight: product.weight,
+				destinationType: user.subdistrict ? "subdistrict" : "city",
+				originType: "city",
+				courier: COURIER_LIST
+			}
+
+			dispatch(fetchCouriers(data))
 		}
-	}, [dispatch, productId, token, handleFetchCouriers])
+	}, [dispatch, product.weight, productId, token, user.subdistrict])
 
 	return (
 		<Layout sidebar>
@@ -284,7 +295,7 @@ function ProductDetail() {
 							<Alert message={marketingText} type="info" showIcon className="ta-left mb1em" />
 						)}
 
-						<PanelOngkir data={{ sortedFromCheapest, user }} />
+						<PanelOngkir data={{ sortedFromCheapest, user, couriers, product }} />
 
 						<Stats>
 							<Row type="flex">
@@ -375,7 +386,13 @@ function SectionPrice({ product, price, isVip, setModalShare }) {
 }
 
 function PanelOngkir({ data }) {
-	const { sortedFromCheapest, user } = data
+	let { sortedFromCheapest, user, couriers, product } = data
+
+	couriers = couriers.filter(
+		(item) => item.code !== "shopeecashless" && item.code !== "tokopedia" && item.code !== "gosend"
+	)
+
+	const gosendPotential = user.city === Number(ORIGIN.cityId)
 
 	return (
 		<Collapse bordered={false} expandIconPosition="right" className="mb2em">
@@ -397,7 +414,37 @@ function PanelOngkir({ data }) {
 					</Row>
 				}
 			>
-				Eheehehh cool kan?
+				<Row gutter={16} type="flex" justify="space-between">
+					<Col lg={8}>
+						<Text type="secondary">Dikirim dari</Text>
+						<Paragraph className="mb0">{ORIGIN.city}</Paragraph>
+					</Col>
+					<Col lg={8} className="ta-right">
+						<Text type="secondary">Berat</Text>
+						<Paragraph className="mb0">{product.weight} gr</Paragraph>
+					</Col>
+				</Row>
+				<Divider />
+				{gosendPotential && (
+					<Alert type="success" showIcon message="Pengiriman ini bisa pake GoSend (express delivery)" />
+				)}
+				<Paragraph>
+					<ul>
+						{couriers.map((courier) => (
+							<li key={courier.code}>
+								<Paragraph className="mb0">{courier.name}</Paragraph>
+								<ul>
+									{courier.costs.map((cost) => (
+										<li key={cost.service}>
+											<Text type="secondary">{cost.service}</Text>: Rp{" "}
+											{pricer(cost.cost[0]?.value)}
+										</li>
+									))}
+								</ul>
+							</li>
+						))}
+					</ul>
+				</Paragraph>
 			</Collapse.Panel>
 		</Collapse>
 	)
