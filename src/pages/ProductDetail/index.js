@@ -210,19 +210,6 @@ function ProductDetail() {
 	// 	})
 	// }
 
-	const handleFetchCouriers = () => {
-		const data = {
-			origin: ORIGIN.cityId,
-			destination: user.subdistrict,
-			weight: product.weight,
-			destinationType: user.subdistrict ? "subdistrict" : "city",
-			originType: "city",
-			courier: COURIER_LIST
-		}
-
-		dispatch(fetchCouriers(data))
-	}
-
 	useEffect(() => {
 		dispatch(fetchProductItem(Number(productId)))
 		if (token) {
@@ -295,7 +282,7 @@ function ProductDetail() {
 							<Alert message={marketingText} type="info" showIcon className="ta-left mb1em" />
 						)}
 
-						<PanelOngkir data={{ sortedFromCheapest, user, couriers, product }} />
+						{token && <PanelOngkir data={{ sortedFromCheapest, user, couriers, product }} />}
 
 						<Stats>
 							<Row type="flex">
