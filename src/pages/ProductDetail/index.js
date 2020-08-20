@@ -386,10 +386,10 @@ function PanelOngkir({ data }) {
 			<Collapse.Panel
 				header={
 					<Row gutter={16}>
-						<Col lg={4}>
+						<Col lg={4} xs={4}>
 							<DynamicIcon type="icon-Delivery" size={40} />
 						</Col>
-						<Col lg={20}>
+						<Col lg={20} xs={20}>
 							<Text>Ongkos kirim mulai dari Rp {pricer(sortedFromCheapest[0] || 0)}</Text>
 							<Paragraph className="mb0">
 								Ke{" "}
