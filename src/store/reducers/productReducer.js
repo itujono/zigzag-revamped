@@ -93,8 +93,8 @@ function reducer(state = initialState, action) {
 
 			return {
 				...state,
-				product: { ...action.payload, product_image: imagesSorted },
 				productPrice,
+				product: { ...action.payload, product_image: imagesSorted },
 				loading: false
 			}
 

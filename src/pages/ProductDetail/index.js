@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from "react"
-import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal, Carousel, ScrollingRow } from "components"
-import { Row, Col, Tag, Divider, Typography, message, Input, Icon } from "antd"
+import React, { useEffect, useState, useCallback } from "react"
+import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal, ScrollingRow, DynamicIcon } from "components"
+import { Row, Col, Tag, Divider, Typography, message, Input, Icon, Collapse } from "antd"
 import styled from "styled-components/macro"
 import { useParams, Link, useHistory, useLocation } from "react-router-dom"
-import { connect } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import { pricer, media, shareToSocialMedia, mobile } from "helpers"
-import {
-	fetchProductItem,
-	addItemToCart,
-	addItemToWishlist,
-	addRating,
-	updateCartItem
-} from "store/actions/productActions"
 import { theme } from "styles"
-import { URL_ZIZGAG, LIGHTBOX_SETTING } from "helpers/constants"
+import { URL_ZIZGAG, LIGHTBOX_SETTING, TEXT_STOCK_HABIS, ORIGIN, COURIER_LIST } from "helpers/constants"
 import Lightbox, { SRLWrapper } from "simple-react-lightbox"
+import { addItemToCart, addItemToWishlist, fetchProductItem } from "store/actions/productActions"
+import { fetchCouriers } from "store/actions/rajaOngkirActions"
+import { fetchUser } from "store/actions/userActions"
 
 const Stats = styled.div`
 	padding: 1.5em;
@@ -82,15 +78,23 @@ const StyledScrolling = styled(ScrollingRow)`
 
 const { Paragraph, Text } = Typography
 
-function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading, cartItems, ...props }) {
+function ProductDetail() {
 	const [selectedColor, setSelectedColor] = useState({})
 	const [selectedSize, setSelectedSize] = useState({})
 	const [modalShare, setModalShare] = useState(false)
-	const [selectedPhoto, setSelectedPhoto] = useState({})
 	const { id: productId } = useParams()
 	const { push } = useHistory()
 	const { pathname } = useLocation()
-	const { fetchProductItem, addItemToCart, addItemToWishlist, loadingCart } = props
+	const dispatch = useDispatch()
+	const sortedFromCheapest = useSelector(({ rajaOngkir }) => rajaOngkir.cheapest)
+	const user = useSelector(({ user }) => user.user)
+	const product = useSelector(({ product }) => product.product)
+	// const cartItems = useSelector(({ product }) => product.cartItems)
+	const productPrice = useSelector(({ product }) => product.productPrice)
+	const loadingCart = useSelector(({ product }) => product.loadingCart)
+	const loading = useSelector(({ product }) => product.loading)
+	const vipPrice = (product.product_price || []).find((item) => item.price_type === "VIP")?.price || 0
+	const regulerPrice = (product.product_price || []).find((item) => item.price_type === "REGULER")?.price || 0
 
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const { account_type_id: typeId } = accountType
@@ -110,11 +114,11 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 		(token && isVip && "Great! Kamu berhak dapat harga spesial karena kamu adalah member VIP kami! 🎉")
 
 	const handleSelectColor = (color, stock, isShoes) => {
-		if (!isShoes && (stock === "STOCK HABIS" || stock === 0)) return
+		if (!isShoes && (stock === TEXT_STOCK_HABIS || stock === 0)) return
 		setSelectedColor(color)
 	}
 	const handleSelectSize = (size, stock) => {
-		if (stock === "STOCK HABIS" || stock === 0) return
+		if (stock === TEXT_STOCK_HABIS || stock === 0) return
 		setSelectedSize(size)
 	}
 
@@ -169,7 +173,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				total_price: productPrice * 1
 			}
 
-			addItemToCart(item)
+			dispatch(addItemToCart(item))
 		}
 	}
 
@@ -183,7 +187,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 				size: (selectedColor.product_more || [])[0].size
 			}
 
-			addItemToWishlist(item)
+			dispatch(addItemToWishlist(item))
 		}
 	}
 
@@ -205,9 +209,25 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	// 	})
 	// }
 
+	const handleFetchCouriers = useCallback(() => {
+		const data = {
+			origin: ORIGIN.cityId,
+			destination: user.subdistrict,
+			weight: product.weight,
+			destinationType: user.subdistrict ? "subdistrict" : "city",
+			originType: "city",
+			courier: COURIER_LIST
+		}
+
+		dispatch(fetchCouriers(data))
+	}, [user.subdistrict, product.weight, dispatch])
+
 	useEffect(() => {
-		fetchProductItem(Number(productId))
-	}, [fetchProductItem, product.rating_product, productId])
+		dispatch(fetchProductItem(Number(productId)))
+		if (token) {
+			dispatch(fetchUser()).then(() => handleFetchCouriers())
+		}
+	}, [dispatch, productId, token, handleFetchCouriers])
 
 	return (
 		<Layout sidebar>
@@ -232,7 +252,6 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 											lg={24}
 											key={item.id}
 											className={`cursor-pointer ${!mobile && "h-100"}`}
-											onClick={() => setSelectedPhoto(item)}
 										>
 											<Tag className="br-10 center-absolute" color="black">
 												<Icon type="fullscreen" />
@@ -252,51 +271,25 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 							</SRLWrapper>
 						</Lightbox>
 					</Col>
+
 					<Col lg={10} xs={24}>
-						<Row>
-							<Col lg={24} xs={12}>
-								<Heading
-									bold
-									content={product.name}
-									subheader={
-										<Paragraph>
-											{isVip ? (
-												<>
-													<Text delete disabled>
-														Rp {pricer(regulerPrice)}
-													</Text>{" "}
-													&nbsp; Rp {pricer(productPrice)}
-												</>
-											) : (
-												`Rp ${pricer(productPrice)}`
-											)}
-										</Paragraph>
-									}
-								/>
-							</Col>
-							{mobile && (
-								<Col lg={12} className="ta-right">
-									<Button
-										icon="more"
-										type="ghost"
-										shape="circle"
-										onClick={() => setModalShare(true)}
-									/>
-								</Col>
-							)}
-						</Row>
+						<SectionPrice
+							setModalShare={setModalShare}
+							isVip={isVip}
+							product={product}
+							price={{ regulerPrice, productPrice }}
+						/>
+
 						{typeId && typeId !== 3 && (
-							<Alert
-								message={marketingText}
-								type="info"
-								showIcon
-								style={{ textAlign: "left", marginBottom: "2em" }}
-							/>
+							<Alert message={marketingText} type="info" showIcon className="ta-left mb1em" />
 						)}
+
+						<PanelOngkir data={{ sortedFromCheapest, user }} />
+
 						<Stats>
 							<Row type="flex">
 								<Col lg={8} xs={12}>
-									<Heading content="Kategori" subheader={(product.categories || {}).name} reverse />
+									<Heading content="Kategori" subheader={product.categories?.name} reverse />
 								</Col>
 								<Col lg={6} xs={12}>
 									<Heading content="Berat" subheader={`${product.weight} gr`} reverse />
@@ -306,6 +299,7 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 								</Col>
 							</Row>
 						</Stats>
+
 						<StyledSection paddingHorizontal="0" marginBottom="0">
 							<Row gutter={32}>
 								<Col lg={12}>
@@ -315,13 +309,15 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 									<Heading
 										reverse
 										content="Ukuran"
-										subheader={size((product.categories || {}).id)}
+										subheader={size(product.categories?.id)}
 										marginBottom="0"
 									/>
 								</Col>
 							</Row>
 						</StyledSection>
+
 						<Divider />
+
 						<StyledSection paddingHorizontal="0" marginBottom="0">
 							<Button
 								type="primary"
@@ -344,21 +340,67 @@ function ProductDetail({ product, productPrice, vipPrice, regulerPrice, loading,
 	)
 }
 
-const mapState = ({ product }) => {
-	const vipPrice = (product.product.product_price || []).find((item) => item.price_type === "VIP") || {}
-	const regulerPrice = (product.product.product_price || []).find((item) => item.price_type === "REGULER") || {}
+function SectionPrice({ product, price, isVip, setModalShare }) {
+	const { regulerPrice, productPrice } = price
 
-	return {
-		product: product.product,
-		cartItems: product.cartItems,
-		productPrice: product.productPrice,
-		vipPrice: vipPrice.price || 0,
-		regulerPrice: regulerPrice.price || 0,
-		loading: product.loading,
-		loadingCart: product.loadingCart
-	}
+	return (
+		<Row>
+			<Col lg={24} xs={12}>
+				<Heading
+					bold
+					content={product.name}
+					subheader={
+						<Paragraph>
+							{isVip ? (
+								<>
+									<Text delete disabled>
+										Rp {pricer(regulerPrice)}
+									</Text>{" "}
+									&nbsp; Rp {pricer(productPrice)}
+								</>
+							) : (
+								`Rp ${pricer(productPrice)}`
+							)}
+						</Paragraph>
+					}
+				/>
+			</Col>
+			{mobile && (
+				<Col lg={12} className="ta-right">
+					<Button icon="more" type="ghost" shape="circle" onClick={() => setModalShare(true)} />
+				</Col>
+			)}
+		</Row>
+	)
 }
 
-const actions = { fetchProductItem, addItemToCart, addItemToWishlist, addRating, updateCartItem }
+function PanelOngkir({ data }) {
+	const { sortedFromCheapest, user } = data
 
-export default connect(mapState, actions)(ProductDetail)
+	return (
+		<Collapse bordered={false} expandIconPosition="right" className="mb2em">
+			<Collapse.Panel
+				header={
+					<Row gutter={16}>
+						<Col lg={4}>
+							<DynamicIcon type="icon-Delivery" size={40} />
+						</Col>
+						<Col lg={20}>
+							<Text>Ongkos kirim mulai dari Rp {pricer(sortedFromCheapest[0] || 0)}</Text>
+							<Paragraph className="mb0">
+								Ke{" "}
+								<Text strong>
+									{user.subdistrict_name || user.city_name}, {user.province_name}
+								</Text>
+							</Paragraph>
+						</Col>
+					</Row>
+				}
+			>
+				Eheehehh cool kan?
+			</Collapse.Panel>
+		</Collapse>
+	)
+}
+
+export default ProductDetail

@@ -5,6 +5,8 @@ import { theme } from "styles"
 export const ID_AKUN_KOKO = 40
 export const URL_ZIZGAG = "https://zigzagfashion.id"
 
+export const COURIER_LIST = "jne:pos:tiki:rpx:pcp:sicepat:jnt:sap:jet:ncs:star:ninja:lion:idl"
+
 export const TEXT_STOCK_HABIS = "STOCK HABIS"
 export const TEXT_FEATURED = "FEATURED"
 export const ORIGIN = {

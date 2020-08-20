@@ -17,6 +17,7 @@ const initialStates = {
 	cityOnSidebar: () => null,
 	subdistrictOnSidebar: () => null,
 	allRegions: {},
+	cheapest: [],
 
 	airwayBillError: null,
 	couriersError: null,
@@ -82,6 +83,7 @@ function reducer(state = initialStates, action) {
 				.filter((item) => item.costs.length > 0)
 				.map((item) => {
 					if (item.code === "sicepat") {
+						// Turning off SiCepat Reguler 🔥🔥🔥🔥🔥
 						item.costs = item.costs.filter((cost) => cost.service !== "REG")
 					}
 					if (item.code === "shopeecashless") {
@@ -114,7 +116,15 @@ function reducer(state = initialStates, action) {
 
 					return item
 				})
-			return { ...state, couriers, loading: false }
+
+			let cheapest = action.payload
+				.filter((item) => item.costs.length > 0)
+				.map((item) => item.costs)
+				.flat()
+				.map((item) => item.cost[0])
+				.filter((item) => item.value !== 0)
+			cheapest = cheapest.sort((a, b) => a.value - b.value).map((item) => item.value)
+			return { ...state, couriers, cheapest, loading: false }
 
 		case types.FETCH_ALL_REGIONS:
 			return { ...state, allRegions: action.payload, loading: false }

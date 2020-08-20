@@ -4,12 +4,16 @@ import { media } from "helpers"
 
 const StyledSection = styled.section`
 	&& {
-		padding: ${({ paddingHorizontal, noPadding }) =>
-			(paddingHorizontal && `2em ${paddingHorizontal}`) || (noPadding && "0") || `2em 4em`};
+		padding: ${({ paddingHorizontal, noPadding, padding }) =>
+			(padding && padding) ||
+			(paddingHorizontal && `2em ${paddingHorizontal}`) ||
+			(noPadding && "0") ||
+			`2em 4em`};
 		text-align: ${({ textAlign }) => textAlign || "left"};
 		margin-bottom: ${({ marginBottom }) => marginBottom || "1em"};
 		width: ${({ width }) => width || "100%"};
 		margin: ${({ centered }) => centered && "0 auto"};
+		background: ${({ bg }) => bg && bg};
 	}
 
 	${media.mobile`
