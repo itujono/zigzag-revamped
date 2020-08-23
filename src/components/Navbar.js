@@ -18,7 +18,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 	const accountType = JSON.parse(localStorage.getItem("account_type")) || {}
 	const token = localStorage.getItem("access_token")
 
-	const [cartDrawer, setCartDrawer] = useState(cartDrawerFromStore)
+	const [cartDrawer, setCartDrawer] = useState(false)
 	const { push } = useHistory()
 	const { setCartDrawerFromStore, fetchUser, updateCartItem, deleteCartItem, fetchProductCategories } = props
 	const typeId = accountType.account_type_id
@@ -28,7 +28,7 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 	}
 
 	const handleSetCardDrawer = () => {
-		setCartDrawerFromStore(true)
+		// setCartDrawerFromStore(true)
 		setCartDrawer(true)
 	}
 
@@ -38,10 +38,10 @@ function Navbar({ user, role, cartDrawerFromStore, cartItems, cartTotal, categor
 	}
 
 	useEffect(() => {
-		if (cartDrawerFromStore) setCartDrawer(true)
+		// if (cartDrawerFromStore) setCartDrawer(true)
 		if (token) fetchUser(push)
 		fetchProductCategories()
-	}, [cartDrawerFromStore, fetchProductCategories, fetchUser, push, token])
+	}, [fetchProductCategories, fetchUser, push, token])
 
 	return (
 		<Nav>

@@ -24,7 +24,7 @@ function CartDrawer({ onCartDrawer }) {
 	const cartTotal = useSelector(({ product }) => product.cartTotal)
 	const loading = useSelector(({ product }) => product.loadingCart)
 
-	const token = localStorage.getItem("access_token")
+	// const token = localStorage.getItem("access_token")
 
 	const itemCount = cartTotal && cartTotal.qty > 0 ? `(${cartTotal.qty} item)` : `(masih kosong)`
 	const subtotal = cartItems.length === 0 ? 0 : cartTotal.price - (cartTotal.discount || 0)
@@ -42,7 +42,7 @@ function CartDrawer({ onCartDrawer }) {
 	)
 
 	const handleClose = () => {
-		setCartDrawerFromStore(false)
+		// setCartDrawerFromStore(false)
 		setCartDrawer(false)
 	}
 
@@ -50,12 +50,24 @@ function CartDrawer({ onCartDrawer }) {
 
 	const handleGoToCheckout = () => {
 		setCartDrawer(false)
-		localStorage.setItem("cartDrawerFromStore", false)
+		// localStorage.setItem("cartDrawerFromStore", false)
 	}
 
-	useEffect(() => {
-		if (token) dispatch(fetchCartItems())
-	}, [dispatch, token])
+	const handleUpdateCart = (item, { stock, price, name }) => (values, { setSubmitting }) => {
+		values = {
+			qty: values.qty,
+			cart_id: item.cart_id,
+			weight: item.weight_per_pcs * values.qty,
+			total_price: values.qty * price
+		}
+
+		if (values.qty > stock) {
+			setSubmitting(false)
+			return message.error("Stock nggak cukup")
+		}
+
+		dispatch(updateCartItem(values, name)).finally(() => setSubmitting(false))
+	}
 
 	return (
 		<Drawer
@@ -91,22 +103,6 @@ function CartDrawer({ onCartDrawer }) {
 						const name = item.product_name || "-"
 						const stock = product_data.product_detail?.stock
 
-						const handleUpdateCart = (values, { setSubmitting }) => {
-							values = {
-								qty: values.qty,
-								cart_id: item.cart_id,
-								weight: item.weight_per_pcs * values.qty,
-								total_price: values.qty * price
-							}
-
-							if (values.qty > stock) {
-								setSubmitting(false)
-								return message.error("Stock nggak cukup")
-							}
-
-							dispatch(updateCartItem(values, name)).finally(() => setSubmitting(false))
-						}
-
 						return (
 							<CartItem>
 								<List.Item.Meta
@@ -127,7 +123,7 @@ function CartDrawer({ onCartDrawer }) {
 										<Row>
 											<Col lg={24}>
 												<Formik
-													onSubmit={handleUpdateCart}
+													onSubmit={handleUpdateCart(item, { stock, price, name })}
 													initialValues={{ qty: Number(item.product_qty) }}
 												>
 													{({ handleSubmit }) => (

@@ -2,7 +2,7 @@ import React, { useEffect, useState, Suspense } from "react"
 import { Section, Layout, Heading, ButtonLink, Empty, Loading } from "components"
 import { Switch, Route, Redirect, Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { Row, Col, Divider, List, Avatar, Collapse } from "antd"
+import { Row, Col, Divider, List, Avatar, Collapse, Icon } from "antd"
 import styled from "styled-components/macro"
 
 import { fetchProvinces, fetchCities, fetchSubdistricts, fetchCouriers } from "store/actions/rajaOngkirActions"
@@ -80,19 +80,18 @@ function Checkout() {
 		return formValues[prop] || formData[prop] || user[prop] || "-"
 	}
 
-	const updatedCartTotal = JSON.stringify({ ...formData, cartTotal })
-
 	useEffect(() => {
+		const updatedCartTotal = JSON.stringify({ ...formData, cartTotal })
 		const handleUpdateCartTotal = () => localStorage.setItem("formData", updatedCartTotal)
 
 		setSelectedProvince({ value: province.value, text: province.text })
 		setSelectedCity({ value: city.value, text: city.text })
 		setSelectedSubdistrict({ value: subdistrict.value, text: subdistrict.text })
 
-		dispatch(fetchProvinces())
+		// dispatch(fetchProvinces())
 		dispatch(fetchCartItems()).then(() => handleUpdateCartTotal())
 		dispatch(fetchUser()).then(() => setInitialLoading(false))
-	}, [dispatch, updatedCartTotal])
+	}, [dispatch])
 
 	return (
 		<Layout sidebar page="checkout">
@@ -176,7 +175,15 @@ function Checkout() {
 							/>
 
 							<Collapse bordered={false} defaultActiveKey={["shipping"]}>
-								<Collapse.Panel key="cartItems" header="Cart kamu">
+								<Collapse.Panel
+									key="cartItems"
+									header={
+										<span>
+											<Icon type="shopping-cart" />
+											&nbsp; Cart kamu
+										</span>
+									}
+								>
 									<List
 										itemLayout="horizontal"
 										dataSource={cartItems}
@@ -242,7 +249,15 @@ function Checkout() {
 									/>
 								</Collapse.Panel>
 
-								<Collapse.Panel key="shipping" header="Detail pengiriman">
+								<Collapse.Panel
+									key="shipping"
+									header={
+										<span>
+											<Icon type="align-left" />
+											&nbsp; Detail pengiriman
+										</span>
+									}
+								>
 									<Row gutter={16}>
 										<Col lg={12}>
 											<Heading reverse content="Nama" subheader={renderFormValues("name")} />
