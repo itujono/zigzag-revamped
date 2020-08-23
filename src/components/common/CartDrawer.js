@@ -18,7 +18,7 @@ import { fetchCartItems, updateCartItem, deleteCartItem } from "store/actions/pr
 import Loading from "components/Loading"
 
 function CartDrawer({ onCartDrawer }) {
-	const { cartDrawer, setCartDrawer, setCartDrawerFromStore } = onCartDrawer
+	const { cartDrawer, setCartDrawer } = onCartDrawer
 	const dispatch = useDispatch()
 	const cartItems = useSelector(({ product }) => product.cartItems)
 	const cartTotal = useSelector(({ product }) => product.cartTotal)
@@ -42,7 +42,6 @@ function CartDrawer({ onCartDrawer }) {
 	)
 
 	const handleClose = () => {
-		// setCartDrawerFromStore(false)
 		setCartDrawer(false)
 	}
 
@@ -50,7 +49,6 @@ function CartDrawer({ onCartDrawer }) {
 
 	const handleGoToCheckout = () => {
 		setCartDrawer(false)
-		// localStorage.setItem("cartDrawerFromStore", false)
 	}
 
 	const handleUpdateCart = (item, { stock, price, name }) => (values, { setSubmitting }) => {
@@ -68,6 +66,10 @@ function CartDrawer({ onCartDrawer }) {
 
 		dispatch(updateCartItem(values, name)).finally(() => setSubmitting(false))
 	}
+
+	useEffect(() => {
+		dispatch(fetchCartItems())
+	}, [dispatch])
 
 	return (
 		<Drawer
