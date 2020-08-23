@@ -88,7 +88,7 @@ function Checkout() {
 		setSelectedCity({ value: city.value, text: city.text })
 		setSelectedSubdistrict({ value: subdistrict.value, text: subdistrict.text })
 
-		// dispatch(fetchProvinces())
+		dispatch(fetchProvinces())
 		dispatch(fetchCartItems()).then(() => handleUpdateCartTotal())
 		dispatch(fetchUser()).then(() => setInitialLoading(false))
 	}, [dispatch])
