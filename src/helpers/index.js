@@ -67,7 +67,7 @@ export function renderError(err, dispatch, type, noShow = false) {
 	}
 
 	if (error) {
-		if (noShow) return
+		if (noShow) console.error("")
 		else {
 			console.log({ error })
 			message.error(error)

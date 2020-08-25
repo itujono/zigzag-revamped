@@ -206,11 +206,11 @@ function reducer(state = initialState, action) {
 		case types.ADD_RATING_ERROR:
 			return { ...state, productError: action.payload, loading: false }
 		case types.FETCH_CART_ITEMS_ERROR:
-			return { ...state, cartError: action.payload, loading: false }
+			return { ...state, cartError: action.payload, loadingCart: false }
 		case types.UPDATE_CART_ITEM_ERROR:
-			return { ...state, cartError: action.payload, loading: false }
+			return { ...state, cartError: action.payload, loadingCart: false }
 		case types.DELETE_CART_ITEM_ERROR:
-			return { ...state, cartError: action.payload, loading: false }
+			return { ...state, cartError: action.payload, loadingCart: false }
 		case types.FETCH_PROMO_PRODUCTS_ERROR:
 			return { ...state, promoProductsError: action.payload, loading: false }
 		case types.FETCH_PRODUCT_CATEGORIES_ERROR:
