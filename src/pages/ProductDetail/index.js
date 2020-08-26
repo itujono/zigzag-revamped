@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState } from "react"
 import { Section, Layout, Heading, Button, ButtonLink, Alert, Modal, ScrollingRow, DynamicIcon } from "components"
 import { Row, Col, Tag, Divider, Typography, message, Input, Icon, Collapse } from "antd"
 import styled from "styled-components/macro"
@@ -37,7 +37,7 @@ const StyledSection = styled(Section)`
 	}
 `
 
-const StyledTag = styled(Tag).attrs(({ id, isShoes, selectedColor, selectedSize }) => ({
+const StyledTag = styled(Tag).attrs(({ id, selectedColor, selectedSize }) => ({
 	color: (id === selectedColor.id && "#2db7f5") || (id === selectedSize.id && "#87d068")
 }))`
 	&& {
@@ -90,7 +90,6 @@ function ProductDetail() {
 	const sortedFromCheapest = useSelector(({ rajaOngkir }) => rajaOngkir.cheapest)
 	const user = useSelector(({ user }) => user.user)
 	const product = useSelector(({ product }) => product.product)
-	// const cartItems = useSelector(({ product }) => product.cartItems)
 	const productPrice = useSelector(({ product }) => product.productPrice)
 	const loadingCart = useSelector(({ product }) => product.loadingCart)
 	const loading = useSelector(({ product }) => product.loading)
@@ -140,19 +139,23 @@ function ProductDetail() {
 	})
 
 	const size = (catId) => {
-		if (catId === 2 || catId === 7)
-			return (selectedColor.product_more || []).map((item) => (
-				<StyledTag
-					key={item.id}
-					id={item.id}
-					isShoes={isShoes}
-					selectedColor={selectedColor}
-					selectedSize={selectedSize}
-					onClick={() => handleSelectSize(item, item.stock)}
-				>
-					{item.size} <span className="stock-text">({item.stock || ""})</span>
-				</StyledTag>
-			))
+		if (catId === 2 || catId === 7) {
+			return selectedColor.product_more?.map((item) => {
+				if (item.size === 0) return null
+				return (
+					<StyledTag
+						key={item.id}
+						id={item.id}
+						isShoes={isShoes}
+						selectedColor={selectedColor}
+						selectedSize={selectedSize}
+						onClick={() => handleSelectSize(item, item.stock)}
+					>
+						{item.size} <span className="stock-text">({item.stock || ""})</span>
+					</StyledTag>
+				)
+			})
+		}
 
 		return "-"
 	}
