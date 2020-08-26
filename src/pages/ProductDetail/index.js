@@ -139,8 +139,8 @@ function ProductDetail() {
 		)
 	})
 
-	const size = (typeId) => {
-		if (typeId === 2)
+	const size = (catId) => {
+		if (catId === 2 || catId === 7)
 			return (selectedColor.product_more || []).map((item) => (
 				<StyledTag
 					key={item.id}
