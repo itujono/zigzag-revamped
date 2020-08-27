@@ -100,7 +100,8 @@ function ProductDetail() {
 	const { account_type_id: typeId } = accountType
 	const token = localStorage.getItem("access_token")
 	const isVip = typeId && typeId === 2
-	const isShoes = (product.categories || {}).id === 2
+	const isShoes = product.categories?.id === 2
+	const isSale = product.categories?.id === 7
 	const sizeIsNotSelected = Object.keys(selectedSize).length === 0
 	const colorIsNotSelected = Object.keys(selectedColor).length === 0
 
@@ -162,37 +163,37 @@ function ProductDetail() {
 
 	const handleAddToCart = () => {
 		if (!token) {
-			message.loading("Mengalihkan ke Login...", 1).then(() => {
+			return message.loading("Mengalihkan ke Login...", 1).then(() => {
 				push({ pathname: "/login", state: { previousUrl: pathname } })
 				message.error("Kamu harus login dulu ya")
 			})
-		} else {
-			const item = {
-				product_id: Number(productId),
-				product_more_detail_id: isShoes ? selectedSize.id : (selectedColor.product_more || [])[0].id,
-				weight: product.weight,
-				qty: 1,
-				color: selectedColor.color,
-				size: isShoes ? selectedSize.size : (selectedColor.product_more || [])[0].size,
-				total_price: productPrice * 1
-			}
-
-			dispatch(addItemToCart(item))
 		}
+		const saleAndAlsoShoes = isSale && selectedSize.size > 0
+		const item = {
+			product_id: Number(productId),
+			product_more_detail_id: isShoes || saleAndAlsoShoes ? selectedSize.id : selectedColor.product_more?.[0]?.id,
+			weight: product.weight,
+			qty: 1,
+			color: selectedColor.color,
+			size: isShoes || saleAndAlsoShoes ? selectedSize.size : selectedColor.product_more?.[0]?.size,
+			total_price: productPrice * 1
+		}
+
+		dispatch(addItemToCart(item))
 	}
 
 	const handleAddToWishlist = () => {
-		if (!selectedColor || Object.keys(selectedColor).length === 0) message.error("Jangan lupa pilih warna nya ya")
-		else {
-			const item = {
-				product_id: Number(productId),
-				product_more_detail_id: (selectedColor.product_more || [])[0].id,
-				color: selectedColor.color,
-				size: (selectedColor.product_more || [])[0].size
-			}
-
-			dispatch(addItemToWishlist(item))
+		if (!selectedColor || Object.keys(selectedColor).length === 0) {
+			return message.error("Jangan lupa pilih warna nya ya")
 		}
+		const item = {
+			product_id: Number(productId),
+			product_more_detail_id: (selectedColor.product_more || [])[0].id,
+			color: selectedColor.color,
+			size: (selectedColor.product_more || [])[0].size
+		}
+
+		dispatch(addItemToWishlist(item))
 	}
 
 	const handleShare = () => {
