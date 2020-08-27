@@ -17,6 +17,7 @@ const Stats = styled.div`
 	padding: 1.5em;
 	background-color: #f9f9f9;
 	border-radius: 8px;
+	border: 2px solid #ddd;
 	.ant-typography {
 		margin-bottom: 0;
 	}
@@ -104,6 +105,7 @@ function ProductDetail() {
 	const isSale = product.categories?.id === 7
 	const sizeIsNotSelected = Object.keys(selectedSize).length === 0
 	const colorIsNotSelected = Object.keys(selectedColor).length === 0
+	const seenText = product.product_viewer === 0 ? "Belum pernah dilihat" : "Dilihat " + product.product_viewer + "x"
 
 	const marketingText =
 		((!token || typeId === 1) && (
@@ -207,13 +209,6 @@ function ProductDetail() {
 		)
 	}
 
-	// const handleCopy = () => {
-	// 	return navigator.clipboard.readText().then(text => {
-	// 		text = URL_ZIZGAG + pathname
-	// 		return text
-	// 	})
-	// }
-
 	useEffect(() => {
 		dispatch(fetchProductItem(Number(productId)))
 		if (token) {
@@ -281,6 +276,12 @@ function ProductDetail() {
 							product={product}
 							price={{ regulerPrice, productPrice }}
 						/>
+
+						{product.product_viewer ? (
+							<Paragraph type="secondary">
+								<Icon type="eye" /> {seenText}
+							</Paragraph>
+						) : null}
 
 						{typeId && typeId !== 3 && (
 							<Alert message={marketingText} type="info" showIcon className="ta-left mb1em" />
