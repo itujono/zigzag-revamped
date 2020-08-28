@@ -91,7 +91,7 @@ function Checkout() {
 		dispatch(fetchProvinces())
 		dispatch(fetchCartItems()).then(() => handleUpdateCartTotal())
 		dispatch(fetchUser()).then(() => setInitialLoading(false))
-	}, [dispatch])
+	}, [dispatch, cartTotal.price, cartTotal.weight, cartTotal.qty, cartTotal.discount, cartTotal.roundedWeight])
 
 	return (
 		<Layout sidebar page="checkout">
@@ -99,9 +99,7 @@ function Checkout() {
 				noPadding
 				marginBottom="0"
 				css={`
-					&& {
-						padding-left: 2em;
-					}
+					padding-left: 2em;
 				`}
 			>
 				<Row gutter={32} type="flex">

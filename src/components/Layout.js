@@ -16,7 +16,7 @@ const Header = styled(PageLayout.Header)`
 		border-bottom: 1px solid #eee;
 
 		.headroom {
-			z-index: 11;
+			z-index: 20;
 		}
 
 		${media.mobile`

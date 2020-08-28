@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Section, Heading, Card, Button, Modal, Alert } from "components"
 import styled from "styled-components"
-import { Row, Col, Checkbox, Popover, Typography } from "antd"
+import { Row, Col, Checkbox, Popover, Typography, message } from "antd"
 import { useHistory } from "react-router-dom"
 
 import { theme } from "styles"
@@ -71,6 +71,13 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 		Number(cartTotal.discount || 0)
 
 	const handleSaveOrder = () => {
+		// prettier-ignore
+		const { cartItems, cartTotal, province, province_id, city, city_id, subdistrict, subdistrict_id, order_detail = {}, address, payment, deposit, ...restValues } = formData
+
+		if (cartTotal?.price === 0) {
+			return message.error("Sepertinya ada yg salah dengan totalan nya. Silakan refresh dan coba lagi ya.")
+		}
+
 		const adjustedCartItems = formData.cartItems.map(({ product_price, product_total_price, ...item }) => {
 			if (Array.isArray(product_price)) {
 				if (isKoko) {
@@ -88,9 +95,6 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 			const { cart_id, weight_per_pcs, product_data, ...restCart } = item
 			return { ...restCart, product_price: product_price?.price, product_total_price }
 		})
-
-		// prettier-ignore
-		const { cartItems, cartTotal, province, province_id, city, city_id, subdistrict, subdistrict_id, order_detail = {}, address, payment, deposit, ...restValues } = formData
 
 		const values = {
 			...restValues,
