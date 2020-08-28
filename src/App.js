@@ -1,6 +1,7 @@
 import React, { Suspense } from "react"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { Provider } from "react-redux"
+import { Offline } from "react-detect-offline"
 import { createAppStore } from "./store"
 import { Loading, Modal, Heading, Button } from "components"
 import RegisterSuccess from "pages/auth/Register/RegisterSuccess"
@@ -14,6 +15,7 @@ import Logout from "pages/auth/Logout"
 import DepositSuccess from "pages/Profile/Deposit/DepositSuccess"
 
 import ScrollToTop, { useIdle } from "helpers"
+import { message, Icon, Alert, Affix } from "antd"
 
 const Home = React.lazy(() => import("pages/Home"))
 const ProductDetail = React.lazy(() => import("pages/ProductDetail"))
@@ -49,6 +51,16 @@ function App() {
 					</Button>
 				</Modal>
 				<ScrollToTop />
+				<Offline>
+					<Affix>
+						<Alert
+							banner
+							type="warning"
+							showIcon
+							message="Oops, kamu lagi offline. Coba cek internet nya dulu ya."
+						/>
+					</Affix>
+				</Offline>
 				<Suspense fallback={<Loading />}>
 					<Switch>
 						<Redirect exact from="/profile" to="/profile/basic" />

@@ -117,7 +117,7 @@ export default function Ongkir({ data, handlers, loading }) {
 	const { setSelectedCourier, fetchCouriers, saveCourierDetails } = handlers
 	const { cartTotal = {}, subdistrict = {}, city = {} } = formData
 
-	const isSurabaya = Number(city.value) === 444
+	const isSurabaya = Number(city.value) === Number(ORIGIN.cityId)
 	const courierOptions = couriers
 		.filter((item) => item.code !== "shopeecashless" && item.code !== "gosend" && item.code !== "tokopedia")
 		.map((item) => ({ value: item.name, label: item.name }))
