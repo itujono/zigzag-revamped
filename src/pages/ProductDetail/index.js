@@ -127,16 +127,19 @@ function ProductDetail() {
 
 	const color = (product.product_detail || []).map((item) => {
 		const stock = item.product_more[0].stock || 0
+		const saleAndAlsoShoes = isSale && product.name.includes("SPD")
+		const shoes = isShoes || saleAndAlsoShoes
+
 		return (
 			<StyledTag
 				key={item.id}
 				id={item.id}
-				isShoes={isShoes}
+				isShoes={shoes}
 				selectedColor={selectedColor}
 				selectedSize={selectedSize}
-				onClick={() => handleSelectColor(item, stock, isShoes)}
+				onClick={() => handleSelectColor(item, stock, shoes)}
 			>
-				{item.color} {!isShoes && `(${stock})`}
+				{item.color} {shoes ? null : `(${stock})`}
 			</StyledTag>
 		)
 	})

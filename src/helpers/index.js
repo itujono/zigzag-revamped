@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from "axios"
 import { useState, useEffect } from "react"
 import { css } from "styled-components"
@@ -8,9 +9,14 @@ import { message } from "antd"
 import { TEXT_STOCK_HABIS } from "./constants"
 import { useLocation } from "react-router"
 
+const baseURL =
+	process.env.NODE_ENV === "production"
+		? "https://api.zigzagfashion.id/api/v1/frontend"
+		: "https://api.zigzagfashion.id/api/v1/frontend"
+
 const instance = axios.create({
 	// baseURL: "http://localhost/buildfe/api/v1/frontend", // ==> Testing only 🎪
-	baseURL: "https://api.zigzagfashion.id/api/v1/frontend",
+	baseURL,
 	headers: {
 		api_key: "3c72dde0-c72f-ZIGZAG-4656-8143-ee95e52f58b4",
 		Accept: "*/*"
