@@ -106,6 +106,7 @@ function ProductDetail() {
 	const sizeIsNotSelected = Object.keys(selectedSize).length === 0
 	const colorIsNotSelected = Object.keys(selectedColor).length === 0
 	const seenText = product.product_viewer === 0 ? "Belum pernah dilihat" : "Dilihat " + product.product_viewer + "x"
+	const soldText = product.totalProductSold === 0 ? "Belum terjual" : "Terjual " + product.totalProductSold + "x"
 
 	const marketingText =
 		((!token || typeId === 1) && (
@@ -280,11 +281,14 @@ function ProductDetail() {
 							price={{ regulerPrice, productPrice }}
 						/>
 
-						{product.product_viewer ? (
-							<Paragraph type="secondary">
-								<Icon type="eye" /> {seenText}
-							</Paragraph>
-						) : null}
+						<Row gutter={16}>
+							<Col lg={8} xs={12}>
+								<Paragraph type="secondary">{seenText}</Paragraph>
+							</Col>
+							<Col lg={8} xs={12}>
+								<Paragraph type="secondary">{soldText}</Paragraph>
+							</Col>
+						</Row>
 
 						{typeId && typeId !== 3 && (
 							<Alert message={marketingText} type="info" showIcon className="ta-left mb1em" />
