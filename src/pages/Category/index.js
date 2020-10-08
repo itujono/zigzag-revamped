@@ -38,9 +38,7 @@ function Category() {
 					marginBottom="3em"
 				/>
 				<Row gutter={16} type="flex">
-					{loading ? (
-						<Loading />
-					) : notFound ? (
+					{notFound ? (
 						<Section centered>
 							<Empty />
 						</Section>
