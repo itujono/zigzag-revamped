@@ -126,8 +126,10 @@ export default function Ongkir({ data, handlers, loading }) {
 		(item) => item === "" || Object.keys(item).length === 0
 	)
 
-	const shopeeCodeNotFilledYet = selectedCourier.code === "shopeecashless" && !shopeeInfo.online_booking
-	const tokpedNotFilledYet = selectedCourier.code === "tokopedia" && !tokpedInfo.online_booking
+	const shopeeCodeNotFilledYet =
+		selectedCourier.code === "shopeecashless" && (!shopeeInfo.online_booking || !shopeeInfo.expedition)
+	const tokpedNotFilledYet =
+		selectedCourier.code === "tokopedia" && (!tokpedInfo.online_booking || !tokpedInfo.expedition)
 
 	const handleSelectCourier = (courier) => {
 		if (courier.code !== "shopeecashless") setUnderstandShopee(false)
