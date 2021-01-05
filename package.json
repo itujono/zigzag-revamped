@@ -7,7 +7,7 @@
 		"@lottiefiles/lottie-player": "^0.3.0-rc2",
 		"activity-detector": "^3.0.0",
 		"antd": "3.26",
-		"axios": "^0.19.0",
+		"axios": "^0.21.1",
 		"babel-plugin-import": "^1.11.0",
 		"customize-cra": "^0.2.11",
 		"formik": "^1.5.7",
