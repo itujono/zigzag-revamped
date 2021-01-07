@@ -24,9 +24,7 @@ export const unauthUser = (push = null) => (dispatch) => {
 	return instance
 		.get(`/customer/logout`)
 		.then(({ data }) => dispatch({ type: types.UNAUTH_USER, payload: data }))
-		.then(() => {
-			localStorage.clear()
-		})
+		.then(() => localStorage.clear())
 		.then(() => {
 			message
 				.loading("Mohon tunggu...")

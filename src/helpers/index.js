@@ -7,7 +7,7 @@ import createActivityDetector from "activity-detector"
 import { unauthUser } from "store/actions/authActions"
 import { message } from "antd"
 import { TEXT_STOCK_HABIS } from "./constants"
-import { useLocation } from "react-router"
+import { useHistory, useLocation } from "react-router"
 
 const baseURL =
 	process.env.NODE_ENV === "production"
@@ -66,9 +66,10 @@ export const isOutOfStock = (product_detail = []) => {
 export function renderError(err, dispatch, type, noShow = false) {
 	const errResponse = err.response || {}
 	const error = (errResponse.data || {}).message || ""
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	// const { push } = useHistory()
 
 	if (localStorage.getItem("access_token") && errResponse.status === 401) {
-		localStorage.clear()
 		dispatch(unauthUser())
 		return
 	}
