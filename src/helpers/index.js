@@ -67,7 +67,7 @@ export function renderError(err, dispatch, type, noShow = false) {
 	const errResponse = err.response || {}
 	const error = (errResponse.data || {}).message || ""
 
-	if (localStorage.getItem("access_token") && errResponse.status === 401) {
+	if (!localStorage.getItem("access_token") || errResponse.status === 401) {
 		localStorage.clear()
 		dispatch(unauthUser())
 		return

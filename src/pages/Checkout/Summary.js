@@ -112,7 +112,9 @@ export default function Summary({ handlers: { saveOrder }, data: { user = {} } }
 			zip: formData.zip || 0
 		}
 
-		dispatch(saveOrder(values, push))
+		// dispatch(saveOrder(values, push))
+
+		console.log({ values })
 	}
 
 	if (!isPartner && !formData.payment) push("/404")
