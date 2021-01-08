@@ -24,8 +24,11 @@ const ListItem = styled(List.Item)`
 
 const OrderItem = styled.div`
 	display: flex;
-	padding-top: 2rem;
 	justify-content: space-between;
+	padding-top: 2.5rem;
+	&.first-item {
+		padding-top: 0.5rem;
+	}
 	.section-text {
 		display: flex;
 		.heading {
@@ -135,7 +138,7 @@ function HistoryOrder() {
 
 						return (
 							<>
-								<OrderItem key={item.id}>
+								<OrderItem key={item.id} className={idx === 0 && "first-item"}>
 									<section className="section-text">
 										{mobile ? null : (
 											<div>
@@ -240,135 +243,6 @@ function HistoryOrder() {
 					}}
 				/>
 			)}
-			{/* <List
-				itemLayout="horizontal"
-				dataSource={orderHistory}
-				loading={loading}
-				locale={{
-					emptyText: (
-						<Empty
-							isEmptyItems
-							description="Kamu belum ada belanja sama sekali"
-							button={{ to: "/", text: "Belanja sekarang" }}
-						/>
-					)
-				}}
-				renderItem={(item) => {
-					const { order_code, ekspedition_data: courier = {}, grandtotal_order, status_order } = item
-					const isSelected = order_code === selectedItem.order_code
-					const isNotPaid = status_order.status_id === 1
-					const zip = item.zip === 0 ? "(tidak ada kode pos)" : item.zip
-
-					const handleCancelOrder = (values, { setSubmitting }) => {
-						values = { ...values, order_id: item.id }
-						dispatch(cancelOrder(values)).finally(() => setSubmitting(false))
-					}
-
-					return (
-						<div style={{ marginBottom: "1.5em" }}>
-							<ListItem
-								selectedItem={selectedItem.order_code}
-								orderNumber={order_code}
-								actions={[
-									<ButtonLink
-										key={order_code}
-										icon={isSelected ? "up" : "down"}
-										onClick={() => handleSelect(item)}
-									>
-										{isSelected ? "Tutup detail" : "Lihat detail"}
-									</ButtonLink>
-								]}
-							>
-								<List.Item.Meta
-									avatar={
-										mobile ? null : (
-											<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-										)
-									}
-									title={order_code}
-									description={
-										<Typography>
-											<Typography.Text>
-												<Icon type="clock-circle" />
-												&nbsp; {moment(item.created_date).format("ddd, DD MMM YYYY HH:mm")}
-											</Typography.Text>{" "}
-											{!mobile && <>&nbsp; &middot; &nbsp;</>}
-											<Typography.Text className="display-block__mobile">
-												<Icon type="dollar" />
-												&nbsp; Rp {pricer(grandtotal_order)}
-											</Typography.Text>
-										</Typography>
-									}
-								/>
-							</ListItem>
-							{isSelected && (
-								<ContentDetail>
-									<Tabs tabPosition={mobile ? "top" : "left"} style={{ marginBottom: "2em" }}>
-										<Tabs.TabPane key="details" tab="Detail">
-											<Row gutter={32}>
-												<Col lg={8}>
-													<Heading
-														reverse
-														content="Metode pembayaran"
-														subheader={item.payment_method}
-													/>
-													<Heading
-														reverse
-														content="Alamat pengiriman"
-														subheader={`${item.shipping_address}, ${item.province_name}, ${item.city_name}, ${item.subdistrict_name} ${zip}`}
-													/>
-												</Col>
-												<Col lg={8}>
-													<Heading
-														reverse
-														content="Penerima"
-														subheader={`${item.name} - ${item.tele}`}
-													/>
-													<Heading
-														reverse
-														content="Nomor resi"
-														subheader={item.resi_order || "-"}
-													/>
-												</Col>
-												<Col lg={8}>
-													<Heading
-														reverse
-														content="Status orderan"
-														subheader={status_order.status_remark || "-"}
-													/>
-													<Heading
-														reverse
-														content="Ekspedisi"
-														subheader={`${courier.ekspedition_company} (${courier.ekspedition_remark})`}
-													/>
-												</Col>
-											</Row>
-										</Tabs.TabPane>
-										<Tabs.TabPane key="items" tab="Barang belanjaan">
-											<OrderItems data={item.orders_detail} />
-										</Tabs.TabPane>
-										<Tabs.TabPane key="status" tab="Status barang">
-											<Waybill data={airwayBill} />
-										</Tabs.TabPane>
-										<Tabs.TabPane key="cancel" tab="Batal order" className="cancel">
-											<CancelOrder data={item} cancelOrder={handleCancelOrder} />
-										</Tabs.TabPane>
-									</Tabs>
-									{isNotPaid && (
-										<div>
-											Sudah melakukan pembayaran?{" "}
-											<Link to="/order/confirmation">
-												Konfirmasi pembayaran sekarang&nbsp;
-												<Icon type="right" />
-											</Link>
-										</div>
-									)}
-								</ContentDetail>
-							)}
-						</div>
-					)
-				}}
-			/> */}
 		</Section>
 	)
 }
