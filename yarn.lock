@@ -1865,6 +1865,18 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
+"@virtuoso.dev/react-urx@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@virtuoso.dev/react-urx/-/react-urx-0.2.3.tgz#b336adcfaadf7526f568f0bb2482f28e5fe81e40"
+  integrity sha512-8U8Vjebv/Itkc2tXvLVystMXimsTAHaDSauqzy1xrSDvWybdWxkRmTOjykK8gYUfLVIDNuC2NHXOBSocNcAx8w==
+  dependencies:
+    "@virtuoso.dev/urx" "^0.2.3"
+
+"@virtuoso.dev/urx@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@virtuoso.dev/urx/-/urx-0.2.3.tgz#31b8a09cceb76567115ecbdad5355d0c9e44c23c"
+  integrity sha512-GrsPotsF4I9ZSmdGsy1Uv5qdsiOdbYYWbE0WGeTfWnB1BGS2ANSeprAROZFv9FEW+ZKTYbqGWCzrY8CdfJxn4Q==
+
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.8.5.tgz#51b1c5fe6576a34953bf4b253df9f0d490d9e359"
@@ -10325,6 +10337,16 @@ react-use@^15.1.0:
     throttle-debounce "^2.1.0"
     ts-easing "^0.2.0"
     tslib "^2.0.0"
+
+react-virtuoso@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-1.2.4.tgz#37d491744d6384410c956c80fd64005e0ab46fd3"
+  integrity sha512-EwLKCsMvL47XGYlByMYX0O/Rs1FANUOrIIXbiT6t6v33Rq4+xA79x4vjykNURQoyIUvriph/bMrIsyr038ZXIQ==
+  dependencies:
+    "@virtuoso.dev/react-urx" "^0.2.3"
+    "@virtuoso.dev/urx" "^0.2.3"
+    react-app-polyfill "^1.0.6"
+    resize-observer-polyfill "^1.5.1"
 
 react@^16.8.2:
   version "16.12.0"
