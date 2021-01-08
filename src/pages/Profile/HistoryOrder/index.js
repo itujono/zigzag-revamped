@@ -50,7 +50,7 @@ const OrderItem = styled.div`
 `
 
 const ContentDetail = styled.div`
-	padding: 1.5em;
+	padding: 0.5rem 1rem;
 	margin-left: 4.5rem;
 	margin-bottom: 2rem;
 	margin-top: 2rem;
