@@ -1,9 +1,10 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from "react"
-import { Section, Heading, ButtonLink, Empty, Button } from "components"
-import { List, Icon, Avatar, Row, Col, Tabs, Typography } from "antd"
+import { Section, Heading, Empty, Button, Loading } from "components"
+import { Icon, Avatar, Row, Col, Tabs, Typography, Input } from "antd"
 import styled from "styled-components/macro"
 import { useDispatch, useSelector } from "react-redux"
+import Fuse from "fuse.js"
 
 import { fetchOrderHistory, cancelOrder } from "store/actions/otherActions"
 import { fetchAirwayBill } from "store/actions/rajaOngkirActions"
@@ -15,12 +16,7 @@ import CancelOrder from "./CancelOrder"
 import moment from "moment"
 import { Link } from "react-router-dom"
 import { Virtuoso } from "react-virtuoso"
-
-const ListItem = styled(List.Item)`
-	&&& {
-		border-bottom: none;
-	}
-`
+import { useCallback } from "react"
 
 const OrderItem = styled.div`
 	display: flex;
@@ -73,17 +69,33 @@ const Footer = styled.div`
 	align-items: center;
 `
 
+const searchKeys = ["name", "order_code", "province_name", "city_name", "subdistrict_name"]
+
 function HistoryOrder() {
 	const [selectedItem, setSelectedItem] = useState({})
+	const [query, setQuery] = useState("")
 	const dispatch = useDispatch()
+	// const [initialLoading, setInitialLoading] = useState(true)
 	const orderHistory = useSelector(({ other }) => other.orderHistory)
-	const loading = useSelector(({ other }) => other.loading)
+	// const loading = useSelector(({ other }) => other.loadingOrder)
 	const airwayBill = useSelector(({ rajaOngkir }) => rajaOngkir.airwayBill)
 
-	const handleSelect = (item) => {
-		if (selectedItem.order_code === item.order_code) setSelectedItem({})
-		else setSelectedItem(item)
-	}
+	const fuse = new Fuse(orderHistory, {
+		keys: searchKeys,
+		minMatchCharLength: 4,
+		threshold: 0.4
+	})
+
+	const searchResult = fuse.search(query)
+	const data = Object.keys(searchResult).length ? searchResult.map((item) => item.item) : orderHistory
+
+	const handleSelect = useCallback(
+		(item) => {
+			if (selectedItem.order_code === item.order_code) setSelectedItem({})
+			else setSelectedItem(item)
+		},
+		[selectedItem.order_code]
+	)
 
 	useEffect(() => {
 		dispatch(fetchOrderHistory())
@@ -93,9 +105,22 @@ function HistoryOrder() {
 		}
 	}, [dispatch, selectedItem.ekspedition_data, selectedItem.resi_order])
 
+	console.log({ searchResult })
+
 	return (
 		<Section width="100%" centered>
-			<Heading content="History Order" marginBottom="3em" bold />
+			<Row type="flex" justify="space-between" align="middle" className="mb3em">
+				<Col lg={6}>
+					<Heading content="History Order" bold />
+				</Col>
+				<Col lg={6} className="ta-right">
+					<Input
+						name="search"
+						placeholder="Cari data history order..."
+						onChange={(e) => setQuery(e.target.value)}
+					/>
+				</Col>
+			</Row>
 			{orderHistory.length === 0 ? (
 				<div className="ta-center">
 					<Empty
@@ -107,7 +132,7 @@ function HistoryOrder() {
 			) : (
 				<Virtuoso
 					style={{ height: "130vh" }}
-					data={orderHistory}
+					data={data}
 					components={{
 						Footer: () => (
 							<Footer>

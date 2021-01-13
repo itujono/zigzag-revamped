@@ -74,7 +74,7 @@ function reducer(state = initial, action) {
 
 					return item
 				})
-			return { ...state, orderHistory, loading: false }
+			return { ...state, orderHistory, loadingOrder: false }
 		}
 
 		case types.FETCH_ORDER_HISTORY_ERROR:

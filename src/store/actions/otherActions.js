@@ -82,7 +82,7 @@ export const orderConfirmation = (values, push) => (dispatch) => {
 }
 
 export const fetchOrderHistory = () => (dispatch) => {
-	dispatch(loadingOther())
+	dispatch(loadingOrder())
 	return instance
 		.get(`/order/history_order/list`)
 		.then(({ data }) => dispatch({ type: types.FETCH_ORDER_HISTORY, payload: data.data.order_data }))

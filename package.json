@@ -12,6 +12,7 @@
 		"customize-cra": "^0.2.11",
 		"formik": "^1.5.7",
 		"formik-antd": "^1.6.0",
+		"fuse.js": "^6.4.6",
 		"less": "^3.9.0",
 		"less-loader": "^4.1.0",
 		"moment": "^2.24.0",
