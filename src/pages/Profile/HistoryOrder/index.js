@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from "react"
-import { Section, Heading, Empty, Button, Loading } from "components"
+import { Section, Heading, Empty, Button } from "components"
 import { Icon, Avatar, Row, Col, Tabs, Typography, Input } from "antd"
 import styled from "styled-components/macro"
 import { useDispatch, useSelector } from "react-redux"
@@ -17,6 +17,7 @@ import moment from "moment"
 import { Link } from "react-router-dom"
 import { Virtuoso } from "react-virtuoso"
 import { useCallback } from "react"
+import { useDebounce } from "helpers/hooks"
 
 const OrderItem = styled.div`
 	display: flex;
@@ -80,13 +81,15 @@ function HistoryOrder() {
 	// const loading = useSelector(({ other }) => other.loadingOrder)
 	const airwayBill = useSelector(({ rajaOngkir }) => rajaOngkir.airwayBill)
 
+	const debouncedQuery = useDebounce(query)
+
 	const fuse = new Fuse(orderHistory, {
 		keys: searchKeys,
-		minMatchCharLength: 4,
+		minMatchCharLength: 3,
 		threshold: 0.4
 	})
 
-	const searchResult = fuse.search(query)
+	const searchResult = fuse.search(debouncedQuery)
 	const data = Object.keys(searchResult).length ? searchResult.map((item) => item.item) : orderHistory
 
 	const handleSelect = useCallback(
@@ -105,13 +108,11 @@ function HistoryOrder() {
 		}
 	}, [dispatch, selectedItem.ekspedition_data, selectedItem.resi_order])
 
-	console.log({ searchResult })
-
 	return (
 		<Section width="100%" centered>
 			<Row type="flex" justify="space-between" align="middle" className="mb3em">
 				<Col lg={6}>
-					<Heading content="History Order" bold />
+					<Heading content="History Order" bold marginBottom="0" />
 				</Col>
 				<Col lg={6} className="ta-right">
 					<Input

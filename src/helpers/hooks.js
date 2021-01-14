@@ -9,7 +9,7 @@ export function useUserDetails() {
 
 	useEffect(() => {
 		dispatch(fetchUser())
-	}, [])
+	}, [dispatch])
 
 	return data
 }
@@ -62,4 +62,22 @@ export const useUserIp = () => {
 	}, [])
 
 	return userIp
+}
+
+export function useDebounce(value, delay = 800) {
+	const [debouncedValue, setDebouncedValue] = useState(value)
+
+	useEffect(
+		() => {
+			const handler = setTimeout(() => {
+				setDebouncedValue(value)
+			}, delay)
+			return () => {
+				clearTimeout(handler)
+			}
+		},
+		[value, delay] // Only re-call effect if value or delay changes
+	)
+
+	return debouncedValue
 }
