@@ -55,12 +55,14 @@ function reducer(state = initial, action) {
 			return { ...state, cancelOrderError: action.payload, loading: false }
 
 		case types.FETCH_ORDER_HISTORY: {
+			const userId = JSON.parse(localStorage.getItem("user_id"))
+
 			const orderHistory = action.payload
 				.sort((a, b) => Date.parse(b.created_date) - Date.parse(a.created_date))
 				.map((item) => {
-					const { customers, orders_detail } = item
+					const { orders_detail } = item
 
-					if (customers.id === ID_AKUN_KOKO) {
+					if (Number(userId) === ID_AKUN_KOKO) {
 						return {
 							...item,
 							grandtotal_order: "-",
@@ -74,6 +76,7 @@ function reducer(state = initial, action) {
 
 					return item
 				})
+
 			return { ...state, orderHistory, loadingOrder: false }
 		}
 
