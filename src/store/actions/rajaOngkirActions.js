@@ -2,6 +2,7 @@
 import * as types from "store/types"
 import Axios from "axios"
 import { renderError, instance } from "helpers"
+import { COURIER_LIST } from "helpers/constants"
 
 // const baseUrl = `https://pro.rajaongkir.com/api`
 // const corsUrl = `https://cors-anywhere.herokuapp.com`
@@ -58,13 +59,18 @@ export const fetchSubdistricts = (city_id) => (dispatch) => {
 		.catch((err) => renderError(err, dispatch, types.FETCH_SUBDISTRICTS_ERROR))
 }
 
-export const fetchCouriers = ({ origin, originType, destination, destinationType, weight }) => (dispatch) => {
-	dispatch(loadingRajaOngkir())
-	return instance
-		.get(`/order/expedition-cost`, { params: { origin, originType, destination, destinationType, weight } })
-		.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.data.pushData }))
-		.catch((err) => renderError(err, dispatch, types.FETCH_COURIERS_ERROR))
-}
+export const fetchCouriers =
+	({ origin, originType, destination, destinationType, weight }) =>
+	(dispatch) => {
+		dispatch(loadingRajaOngkir())
+		const courier = COURIER_LIST
+		return instance
+			.get(`/order/expedition-cost`, {
+				params: { origin, originType, destination, destinationType, weight, courier }
+			})
+			.then(({ data }) => dispatch({ type: types.FETCH_COURIERS, payload: data.data.pushData }))
+			.catch((err) => renderError(err, dispatch, types.FETCH_COURIERS_ERROR))
+	}
 
 export const fetchCouriersBackend = () => (dispatch) => {
 	dispatch(loadingRajaOngkir())
@@ -74,9 +80,11 @@ export const fetchCouriersBackend = () => (dispatch) => {
 		.catch((err) => renderError(err, dispatch, types.FETCH_COURIERS_BACKEND_ERROR))
 }
 
-export const fetchAirwayBill = ({ waybill, courier }) => (dispatch) => {
-	dispatch(loadingRajaOngkir())
-	return instance(`/order/airwaybill`, { waybill, courier })
-		.then(({ data }) => dispatch({ type: types.FETCH_AIRWAY_BILL, payload: data.data.airwayBill }))
-		.catch((err) => renderError(err, dispatch, types.FETCH_AIRWAY_BILL_ERROR))
-}
+export const fetchAirwayBill =
+	({ waybill, courier }) =>
+	(dispatch) => {
+		dispatch(loadingRajaOngkir())
+		return instance(`/order/airwaybill`, { waybill, courier })
+			.then(({ data }) => dispatch({ type: types.FETCH_AIRWAY_BILL, payload: data.data.airwayBill }))
+			.catch((err) => renderError(err, dispatch, types.FETCH_AIRWAY_BILL_ERROR))
+	}

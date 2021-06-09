@@ -147,8 +147,7 @@ export default function Ongkir({ data, handlers, loading }) {
 
 			weight: cartTotal.roundedWeight,
 			destinationType: subdistrict.value ? "subdistrict" : "city",
-			originType: "city",
-			courier: "jne:pos:tiki:rpx:pcp:sicepat:jnt:sap:jet:ncs:star:ninja:lion:idl"
+			originType: "city"
 		}
 
 		dispatch(fetchCouriers(data))

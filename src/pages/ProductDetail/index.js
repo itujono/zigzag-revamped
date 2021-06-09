@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { pricer, media, shareToSocialMedia, mobile } from "helpers"
 import { theme } from "styles"
-import { URL_ZIZGAG, LIGHTBOX_SETTING, TEXT_STOCK_HABIS, ORIGIN, COURIER_LIST } from "helpers/constants"
+import { URL_ZIZGAG, LIGHTBOX_SETTING, TEXT_STOCK_HABIS, ORIGIN } from "helpers/constants"
 import Lightbox, { SRLWrapper } from "simple-react-lightbox"
 import { addItemToCart, addItemToWishlist, fetchProductItem } from "store/actions/productActions"
 import { fetchCouriers } from "store/actions/rajaOngkirActions"
@@ -222,8 +222,7 @@ function ProductDetail() {
 				destination: user.subdistrict,
 				weight: product.weight,
 				destinationType: user.subdistrict ? "subdistrict" : "city",
-				originType: "city",
-				courier: COURIER_LIST
+				originType: "city"
 			}
 
 			dispatch(fetchCouriers(data))
